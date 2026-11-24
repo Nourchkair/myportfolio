@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" role="img" aria-label="Portrait placeholder">
+  <defs>
+    <radialGradient id="bgGlow" cx="42%" cy="32%" r="72%">
+      <stop offset="0" stop-color="#6f5b47"/>
+      <stop offset=".48" stop-color="#2c2a28"/>
+      <stop offset="1" stop-color="#111515"/>
+    </radialGradient>
+    <linearGradient id="rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f6d6a2" stop-opacity=".9"/>
+      <stop offset=".5" stop-color="#d4a46b" stop-opacity=".34"/>
+      <stop offset="1" stop-color="#d4a46b" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="body" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#30383a"/>
+      <stop offset=".62" stop-color="#171e21"/>
+      <stop offset="1" stop-color="#0b1012"/>
+    </linearGradient>
+    <linearGradient id="face" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#71543f"/>
+      <stop offset=".52" stop-color="#3c2b23"/>
+      <stop offset="1" stop-color="#181312"/>
+    </linearGradient>
+    <filter id="soft" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="12"/>
+    </filter>
+    <filter id="softSmall" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="grain">
+      <feTurbulence type="fractalNoise" baseFrequency=".78" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope=".16"/></feComponentTransfer>
+    </filter>
+  </defs>
+
+  <rect width="900" height="600" fill="url(#bgGlow)"/>
+  <g filter="url(#soft)" opacity=".55">
+    <circle cx="160" cy="150" r="100" fill="#c89256" opacity=".23"/>
+    <circle cx="755" cy="132" r="120" fill="#597277" opacity=".3"/>
+    <circle cx="810" cy="420" r="160" fill="#0c1214" opacity=".55"/>
+    <rect x="0" y="420" width="900" height="180" fill="#111617" opacity=".62"/>
+  </g>
+  <g filter="url(#softSmall)" opacity=".5">
+    <circle cx="705" cy="260" r="14" fill="#e0b47a" opacity=".6"/>
+    <circle cx="748" cy="240" r="8" fill="#e0b47a" opacity=".4"/>
+    <circle cx="132" cy="318" r="10" fill="#d3ab77" opacity=".32"/>
+  </g>
+
+  <ellipse cx="450" cy="535" rx="285" ry="58" fill="#05090a" opacity=".32"/>
+  <path d="M245 600c0-130 80-211 205-211s205 81 205 211Z" fill="url(#body)"/>
+  <path d="M383 362v89c0 37 29 63 67 63s67-26 67-63v-89Z" fill="#3d2d25"/>
+  <ellipse cx="450" cy="271" rx="105" ry="126" fill="url(#face)"/>
+  <path d="M348 263c0-84 46-139 102-139s102 55 102 139c0 23-4 43-12 61-20-6-34-23-40-48-17 28-48 44-84 44-22 0-41-5-55-14-9-13-13-27-13-43Z" fill="#171311"/>
+  <path d="M546 190c31 31 44 77 34 122-7 31-23 57-47 75" fill="none" stroke="url(#rim)" stroke-width="5" opacity=".7"/>
+  <path d="M335 420c-45 33-70 91-76 180" fill="none" stroke="url(#rim)" stroke-width="3" opacity=".3"/>
+  <path d="M561 430c43 33 66 91 72 170" fill="none" stroke="#78979a" stroke-width="2" opacity=".22"/>
+  <circle cx="594" cy="270" r="12" fill="#5d4434" opacity=".6"/>
+
+  <rect width="900" height="600" filter="url(#grain)" opacity=".6"/>
+</svg>

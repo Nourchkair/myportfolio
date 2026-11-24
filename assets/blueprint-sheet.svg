@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1280" role="img" aria-label="Technical project blueprint">
+  <defs>
+    <pattern id="fine" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#d6eeff" stroke-opacity=".1" stroke-width=".7"/>
+    </pattern>
+    <pattern id="major" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#fine)"/>
+      <path d="M100 0H0V100" fill="none" stroke="#d6eeff" stroke-opacity=".23" stroke-width="1.1"/>
+    </pattern>
+    <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a3454"/>
+      <stop offset=".52" stop-color="#082b48"/>
+      <stop offset="1" stop-color="#06233c"/>
+    </linearGradient>
+    <filter id="cyanGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="brassGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1600" height="1280" fill="url(#sheet)"/>
+  <rect x="18" y="18" width="1564" height="1244" fill="url(#major)"/>
+  <rect x="18" y="18" width="1564" height="1244" fill="none" stroke="#d8efff" stroke-opacity=".38" stroke-width="2"/>
+
+  <!-- edge measurement ticks -->
+  <g fill="#b9d8e8" font-family="ui-monospace,Menlo,monospace" font-size="14" opacity=".62">
+    <g>
+      <path d="M18 20V98M188 18v28M358 18v28M528 18v28M698 18v28M868 18v28M1038 18v28M1208 18v28M1378 18v28M1548 18v28M1582 20V98" stroke="#b9d8e8" stroke-width="1"/>
+      <text x="86" y="44">10</text><text x="256" y="44">20</text><text x="426" y="44">30</text><text x="596" y="44">40</text><text x="766" y="44">50</text><text x="936" y="44">60</text><text x="1106" y="44">70</text><text x="1276" y="44">80</text><text x="1438" y="44">90</text>
+    </g>
+    <g>
+      <path d="M18 20h28M18 140h28M18 260h28M18 380h28M18 500h28M18 620h28M18 740h28M18 860h28M18 980h28M18 1100h28M18 1238h28" stroke="#b9d8e8" stroke-width="1"/>
+      <text x="26" y="176">10</text><text x="26" y="296">20</text><text x="26" y="416">30</text><text x="26" y="536">40</text><text x="26" y="656">50</text><text x="26" y="776">60</text><text x="26" y="896">70</text><text x="26" y="1016">80</text><text x="26" y="1136">90</text>
+    </g>
+    <g transform="translate(1600 0) scale(-1 1)">
+      <path d="M18 20h28M18 140h28M18 260h28M18 380h28M18 500h28M18 620h28M18 740h28M18 860h28M18 980h28M18 1100h28M18 1238h28" stroke="#b9d8e8" stroke-width="1"/>
+      <text x="26" y="176">10</text><text x="26" y="296">20</text><text x="26" y="416">30</text><text x="26" y="536">40</text><text x="26" y="656">50</text><text x="26" y="776">60</text><text x="26" y="896">70</text><text x="26" y="1016">80</text><text x="26" y="1136">90</text>
+    </g>
+  </g>
+
+  <!-- title block -->
+  <g font-family="ui-monospace,Menlo,monospace">
+    <text x="76" y="98" fill="#e4f6ff" font-size="22" letter-spacing="5">NC / SYSTEM BLUEPRINT</text>
+    <text x="76" y="126" fill="#91c6dd" font-size="13" letter-spacing="2">PORTFOLIO  /  PRODUCT ARCHITECTURE  /  REV 03</text>
+    <rect x="1288" y="62" width="236" height="72" fill="none" stroke="#8bc5dc" stroke-opacity=".55"/>
+    <text x="1310" y="91" fill="#d9effb" font-size="12">DRAWING</text>
+    <text x="1310" y="114" fill="#e0aa62" font-size="23">NC-001 / A</text>
+  </g>
+
+  <!-- technical drawing -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="126" y="206" width="1000" height="792" rx="8" stroke="#b9dbeb" stroke-opacity=".26" stroke-width="1.5"/>
+    <path d="M126 330h1000M126 874h1000M330 206v792M922 206v792" stroke="#b9dbeb" stroke-opacity=".18"/>
+
+    <!-- system backbone -->
+    <path d="M268 690H594V510H906V390H1174" stroke="#9fe2f2" stroke-opacity=".65" stroke-width="2.5" stroke-dasharray="8 7"/>
+    <path d="M594 690v174H948v113" stroke="#e0aa62" stroke-opacity=".66" stroke-width="2" stroke-dasharray="4 8"/>
+    <path d="M906 510v-240h244" stroke="#9fe2f2" stroke-opacity=".34" stroke-width="1.5"/>
+    <path d="M268 690v-284h154" stroke="#e0aa62" stroke-opacity=".4" stroke-width="1.5"/>
+
+    <!-- core node -->
+    <g filter="url(#cyanGlow)">
+      <rect x="714" y="414" width="254" height="150" rx="12" fill="#09283d" stroke="#9fe2f2" stroke-width="2"/>
+      <path d="M756 454h168M756 480h130M756 506h148" stroke="#bfeaf6" stroke-opacity=".58" stroke-width="2"/>
+      <circle cx="742" cy="440" r="5" fill="#e0aa62"/>
+    </g>
+    <text x="744" y="398" fill="#e5f7fc" font-family="ui-monospace,Menlo,monospace" font-size="18" letter-spacing="2">CORE SYSTEM</text>
+
+    <!-- project nodes -->
+    <g font-family="ui-monospace,Menlo,monospace" font-size="16">
+      <g filter="url(#brassGlow)">
+        <rect x="196" y="358" width="148" height="64" rx="7" fill="#0a2a43" stroke="#e0aa62" stroke-width="1.8"/>
+        <circle cx="216" cy="378" r="4" fill="#e0aa62"/>
+        <text x="230" y="386" fill="#f1e2c8">SAFIY</text>
+        <text x="214" y="408" fill="#8fb8c7" font-size="11">LOCAL / AI</text>
+      </g>
+      <g filter="url(#brassGlow)">
+        <rect x="930" y="342" width="170" height="64" rx="7" fill="#0a2a43" stroke="#e0aa62" stroke-width="1.8"/>
+        <circle cx="950" cy="362" r="4" fill="#e0aa62"/>
+        <text x="964" y="370" fill="#f1e2c8">TRACKIT</text>
+        <text x="948" y="392" fill="#8fb8c7" font-size="11">NATIVE / MACOS</text>
+      </g>
+      <g filter="url(#brassGlow)">
+        <rect x="196" y="872" width="168" height="64" rx="7" fill="#0a2a43" stroke="#9fe2f2" stroke-width="1.3"/>
+        <circle cx="216" cy="892" r="4" fill="#9fe2f2"/>
+        <text x="230" y="900" fill="#dff5fb">ACADEMIA</text>
+        <text x="214" y="922" fill="#8fb8c7" font-size="11">LOCAL-FIRST</text>
+      </g>
+      <g filter="url(#brassGlow)">
+        <rect x="874" y="928" width="182" height="64" rx="7" fill="#0a2a43" stroke="#9fe2f2" stroke-width="1.3"/>
+        <circle cx="894" cy="948" r="4" fill="#9fe2f2"/>
+        <text x="908" y="956" fill="#dff5fb">AFUNTIME</text>
+        <text x="892" y="978" fill="#8fb8c7" font-size="11">OPS / BOOKING</text>
+      </g>
+    </g>
+
+    <!-- dimension lines -->
+    <g stroke="#b9dbeb" stroke-opacity=".45" stroke-width="1">
+      <path d="M126 1022h1000M126 1014v16M1126 1014v16"/>
+      <path d="M1160 206v792M1152 206h16M1152 998h16"/>
+    </g>
+    <g fill="#9fc637" font-family="ui-monospace,Menlo,monospace" font-size="13" opacity=".68">
+      <text x="560" y="1044">SYSTEM WIDTH / 1000</text>
+      <text x="1172" y="620" transform="rotate(90 1172 620)">HEIGHT / 792</text>
+    </g>
+
+    <!-- holographic reticle -->
+    <g transform="translate(1110 710)" opacity=".55" filter="url(#cyanGlow)">
+      <circle r="68" stroke="#9fe2f2" stroke-opacity=".36"/>
+      <circle r="42" stroke="#9fe2f2" stroke-opacity=".45" stroke-dasharray="3 7"/>
+      <path d="M-92 0H92M0-92V92" stroke="#9fe2f2" stroke-opacity=".27"/>
+      <circle r="5" fill="#e0aa62"/>
+    </g>
+
+    <!-- callout leader -->
+    <path d="M584 518l-76-74H350" stroke="#e0aa62" stroke-opacity=".55" stroke-width="1.3"/>
+    <text x="356" y="458" fill="#e9ca99" font-family="ui-monospace,Menlo,monospace" font-size="12">ACTION LAYER</text>
+    <path d="M880 540l84 102h154" stroke="#9fe2f2" stroke-opacity=".5" stroke-width="1.2"/>
+    <text x="986" y="662" fill="#b9e7f2" font-family="ui-monospace,Menlo,monospace" font-size="12">DATA / REVIEW</text>
+  </g>
+
+  <!-- sheet corner marks -->
+  <g stroke="#e0aa62" stroke-opacity=".75" stroke-width="2" fill="none">
+    <path d="M48 48h58M48 48v58M1552 48h-58M1552 48v58M48 1232h58M48 1232v-58M1552 1232h-58M1552 1232v-58"/>
+  </g>
+  <g fill="#8fb8c7" font-family="ui-monospace,Menlo,monospace" font-size="12" opacity=".65">
+    <text x="76" y="1218">NOUR CHKAIR / PORTFOLIO SYSTEM / 2026</text>
+    <text x="1320" y="1218">SHEET 01 OF 01</text>
+  </g>
+</svg>

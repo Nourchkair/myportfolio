@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 900" role="img" aria-label="Technical blueprint work pad">
+  <defs>
+    <pattern id="fine" width="20" height="20" patternUnits="userSpaceOnUse">
+      <path d="M20 0H0V20" fill="none" stroke="#d6eeff" stroke-opacity=".07" stroke-width=".7"/>
+    </pattern>
+    <pattern id="major" width="100" height="100" patternUnits="userSpaceOnUse">
+      <rect width="100" height="100" fill="url(#fine)"/>
+      <path d="M100 0H0V100" fill="none" stroke="#d6eeff" stroke-opacity=".16" stroke-width="1"/>
+    </pattern>
+    <linearGradient id="sheet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0b3a5b"/>
+      <stop offset=".48" stop-color="#082c47"/>
+      <stop offset="1" stop-color="#062338"/>
+    </linearGradient>
+    <linearGradient id="sheen" x1="0" y1="0" x2=".8" y2="1">
+      <stop offset="0" stop-color="#bfe4ff" stop-opacity=".1"/>
+      <stop offset=".4" stop-color="#bfe4ff" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="pool" cx=".72" cy=".38" r=".55">
+      <stop offset="0" stop-color="#9fe2f2" stop-opacity=".07"/>
+      <stop offset="1" stop-color="#9fe2f2" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="cyanGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="4" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="brassGlow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <rect width="2000" height="900" fill="url(#sheet)"/>
+  <rect x="16" y="16" width="1968" height="868" fill="url(#major)"/>
+  <rect x="16" y="16" width="1968" height="868" fill="url(#sheen)"/>
+  <rect x="16" y="16" width="1968" height="868" fill="url(#pool)"/>
+  <rect x="16" y="16" width="1968" height="868" fill="none" stroke="#cfeaff" stroke-opacity=".26" stroke-width="1.6"/>
+  <rect x="32" y="32" width="1936" height="836" fill="none" stroke="#cfeaff" stroke-opacity=".1" stroke-width="1"/>
+
+  <!-- perimeter ticks -->
+  <g stroke="#b9d8e8" stroke-opacity=".42" stroke-width="1" font-family="ui-monospace,Menlo,monospace" font-size="11" fill="#b9d8e8" opacity=".7">
+    <g>
+      <path d="M16 16v22M116 16v32M216 16v32M316 16v32M416 16v32M516 16v32M616 16v32M716 16v32M816 16v32M916 16v32M1016 16v32M1116 16v32M1216 16v32M1316 16v32M1416 16v32M1516 16v32M1616 16v32M1716 16v32M1816 16v32M1916 16v32M1984 16v22"/>
+      <text x="112" y="28">10</text><text x="312" y="28">30</text><text x="512" y="28">50</text><text x="712" y="28">70</text><text x="912" y="28">90</text><text x="1112" y="28">110</text><text x="1312" y="28">130</text><text x="1512" y="28">150</text><text x="1712" y="28">170</text><text x="1892" y="28">190</text>
+    </g>
+    <g>
+      <path d="M16 16h22M16 116h32M16 216h32M16 316h32M16 416h32M16 516h32M16 616h32M16 716h32M16 816h32M16 884h22"/>
+      <text x="30" y="112">10</text><text x="30" y="212">30</text><text x="30" y="412">50</text><text x="30" y="612">70</text><text x="30" y="812">90</text>
+    </g>
+    <g transform="translate(2000 0) scale(-1 1)">
+      <path d="M16 16h22M16 116h32M16 216h32M16 316h32M16 416h32M16 516h32M16 616h32M16 716h32M16 816h32M16 884h22"/>
+      <text x="30" y="112">10</text><text x="30" y="212">30</text><text x="30" y="412">50</text><text x="30" y="612">70</text><text x="30" y="812">90</text>
+    </g>
+  </g>
+
+  <!-- left schematic -->
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <g opacity=".34">
+      <path d="M70 240h250v120h210" stroke="#9fe2f2" stroke-width="1.4" stroke-dasharray="5 6"/>
+      <path d="M70 500h190v-90h250" stroke="#e0aa62" stroke-width="1.2" stroke-dasharray="4 7"/>
+      <path d="M70 700h300v-60h170" stroke="#9fe2f2" stroke-width="1.1" stroke-dasharray="3 7"/>
+      <circle cx="320" cy="240" r="4" fill="#e0aa62" stroke="none"/>
+      <circle cx="530" cy="360" r="4" fill="#9fe2f2" stroke="none"/>
+      <circle cx="260" cy="500" r="4" fill="#e0aa62" stroke="none"/>
+      <circle cx="370" cy="640" r="4" fill="#9fe2f2" stroke="none"/>
+      <rect x="86" y="318" width="132" height="46" rx="4" stroke="#9fe2f2" stroke-opacity=".4"/>
+      <text x="98" y="338" fill="#b9dce8" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1.5">INPUT LAYER</text>
+      <text x="98" y="352" fill="#7fa8b8" font-family="ui-monospace,Menlo,monospace" font-size="7.5">LOGIC / ROUTES</text>
+    </g>
+
+    <!-- reticle -->
+    <g transform="translate(255 790)" opacity=".2" filter="url(#cyanGlow)">
+      <circle r="64" stroke="#9fe2f2" stroke-opacity=".45"/>
+      <circle r="40" stroke="#9fe2f2" stroke-opacity=".4" stroke-dasharray="3 7"/>
+      <path d="M-88 0H88M0-88V88" stroke="#9fe2f2" stroke-opacity=".3"/>
+      <circle r="4" fill="#e0aa62" stroke="none"/>
+    </g>
+
+    <!-- right schematic -->
+    <g opacity=".3" transform="translate(2000 0) scale(-1 1)">
+      <path d="M70 240h250v120h210" stroke="#9fe2f2" stroke-width="1.4" stroke-dasharray="5 6"/>
+      <path d="M70 500h190v-90h250" stroke="#e0aa62" stroke-width="1.2" stroke-dasharray="4 7"/>
+      <path d="M70 700h300v-60h170" stroke="#9fe2f2" stroke-width="1.1" stroke-dasharray="3 7"/>
+      <circle cx="320" cy="240" r="4" fill="#e0aa62" stroke="none"/>
+      <circle cx="530" cy="360" r="4" fill="#9fe2f2" stroke="none"/>
+      <circle cx="260" cy="500" r="4" fill="#e0aa62" stroke="none"/>
+      <circle cx="370" cy="640" r="4" fill="#9fe2f2" stroke="none"/>
+      <rect x="86" y="318" width="132" height="46" rx="4" stroke="#9fe2f2" stroke-opacity=".4"/>
+      <text x="98" y="338" fill="#b9dce8" font-family="ui-monospace,Menlo,monospace" font-size="9" letter-spacing="1.5">OUTPUT LAYER</text>
+      <text x="98" y="352" fill="#7fa8b8" font-family="ui-monospace,Menlo,monospace" font-size="7.5">SYNC / REVIEW</text>
+    </g>
+  </g>
+
+  <!-- large central construction geometry, deliberately very faint -->
+  <g fill="none" stroke="#bfe4ff" stroke-opacity=".055" stroke-width="1">
+    <circle cx="1000" cy="460" r="300"/>
+    <circle cx="1000" cy="460" r="210" stroke-dasharray="4 10"/>
+    <path d="M620 460h760M1000 80v760"/>
+    <path d="M760 220h480v480H760z"/>
+  </g>
+
+  <!-- dimension line bottom -->
+  <g stroke="#9fc0d2" stroke-opacity=".3" stroke-width="1" fill="#9fc0d2" font-family="ui-monospace,Menlo,monospace" font-size="9" opacity=".8">
+    <path d="M620 838h760M620 830v16M1380 830v16"/>
+    <text x="946" y="858" letter-spacing="2">WORK SURFACE / 2000</text>
+    <path d="M1930 240v420M1922 240h16M1922 660h16"/>
+    <text x="1944" y="456" transform="rotate(90 1944 456)" letter-spacing="2">HEIGHT / 900</text>
+  </g>
+
+  <!-- screen-safe note and coordinates -->
+  <g font-family="ui-monospace,Menlo,monospace" font-size="9" fill="#7eafc2" opacity=".55" letter-spacing="1.6">
+    <text x="62" y="852">NOUR CHKAIR / PORTFOLIO SYSTEM / 2026</text>
+    <text x="1704" y="852">SHEET 01 OF 01</text>
+  </g>
+
+  <!-- corner registration -->
+  <g stroke="#e0aa62" stroke-opacity=".6" stroke-width="1.6" fill="none">
+    <path d="M44 44h42M44 44v42M1956 44h-42M1956 44v42M44 856h42M44 856v-42M1956 856h-42M1956 856v-42"/>
+  </g>
+</svg>

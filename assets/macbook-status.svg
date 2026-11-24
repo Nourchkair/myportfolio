@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" preserveAspectRatio="none" role="img" aria-label="Build status and release pipeline">
+  <defs>
+    <pattern id="dots" width="28" height="28" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.4" fill="#26343d"/>
+    </pattern>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0e151b"/>
+      <stop offset="1" stop-color="#080c10"/>
+    </linearGradient>
+    <linearGradient id="bar" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#ff6d5a"/>
+      <stop offset="1" stop-color="#e0aa62"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="480" fill="url(#bg)"/>
+  <rect width="800" height="480" fill="url(#dots)" opacity=".6"/>
+  <rect x="0" y="0" width="800" height="54" fill="#101820"/>
+  <text x="28" y="34" fill="#eef7fa" font-family="ui-monospace,Menlo,monospace" font-size="19" letter-spacing="2.5">BUILD / OPS</text>
+  <circle cx="675" cy="27" r="6" fill="#7be0b6"/>
+  <text x="690" y="33" fill="#9fb4bc" font-family="ui-monospace,Menlo,monospace" font-size="13" letter-spacing="1.5">LIVE</text>
+  <line x1="0" y1="54" x2="800" y2="54" stroke="#2b3a43"/>
+
+  <text x="28" y="88" fill="#7f969f" font-family="Helvetica,Arial,sans-serif" font-size="12" letter-spacing="1.2">SHIP QUEUE</text>
+  <g font-family="Helvetica,Arial,sans-serif">
+    <text x="28" y="122" fill="#f4f8fa" font-size="20" font-weight="600">Safiy / beta</text>
+    <text x="700" y="122" fill="#e0aa62" font-size="15" text-anchor="end">0.9.4</text>
+    <rect x="28" y="134" width="660" height="8" rx="4" fill="#1e2a31"/>
+    <rect x="28" y="134" width="541" height="8" rx="4" fill="url(#bar)"/>
+
+    <text x="28" y="178" fill="#f4f8fa" font-size="20" font-weight="600">TrackIt / 1.10</text>
+    <text x="700" y="178" fill="#7be0b6" font-size="15" text-anchor="end">SHIPPED</text>
+    <rect x="28" y="190" width="660" height="8" rx="4" fill="#1e2a31"/>
+    <rect x="28" y="190" width="660" height="8" rx="4" fill="#7be0b6" opacity=".8"/>
+
+    <text x="28" y="234" fill="#f4f8fa" font-size="20" font-weight="600">Academia OS / alpha</text>
+    <text x="700" y="234" fill="#9fe2f2" font-size="15" text-anchor="end">0.6.2</text>
+    <rect x="28" y="246" width="660" height="8" rx="4" fill="#1e2a31"/>
+    <rect x="28" y="246" width="422" height="8" rx="4" fill="#9fe2f2"/>
+  </g>
+
+  <line x1="28" y1="282" x2="772" y2="282" stroke="#26343d"/>
+  <text x="28" y="312" fill="#7f969f" font-family="Helvetica,Arial,sans-serif" font-size="12" letter-spacing="1.2">SYSTEM HEALTH</text>
+
+  <g font-family="ui-monospace,Menlo,monospace" font-size="13" fill="#9fb4bc">
+    <text x="28" y="348">API          99.98%</text>
+    <text x="28" y="374">WORKERS      24 / 24</text>
+    <text x="28" y="400">QUEUE        0.4s</text>
+    <text x="420" y="348">CRON         OK</text>
+    <text x="420" y="374">STORAGE      68%</text>
+    <text x="420" y="400">LAST DEPLOY  2m ago</text>
+  </g>
+
+  <g>
+    <rect x="28" y="424" width="744" height="32" rx="16" fill="#111c22" stroke="#2b3a43"/>
+    <circle cx="48" cy="440" r="4" fill="#7be0b6"/>
+    <text x="62" y="445" fill="#bcd8e0" font-family="ui-monospace,Menlo,monospace" font-size="11" letter-spacing="1.4">ALL SYSTEMS NOMINAL · BUILD 1183</text>
+  </g>
+</svg>
