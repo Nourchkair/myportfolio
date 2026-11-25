@@ -4782,6 +4782,57 @@
   }
   #projectFlow.pw-flow:before{content:none!important}
   .pw-flow-crm-note{top:545px}
+
+  /* ============================================================
+     CUSTOMER ACQUISITION — business impact case study
+     ============================================================ */
+  .pw-overview-impact{margin-top:20px;padding-top:17px;border-top:1px solid rgba(255,255,255,.14)}
+  .pw-impact-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;row-gap:6px;margin-bottom:10px}
+  .pw-impact-head h3{margin:0;font-size:19px;line-height:1.1;letter-spacing:-.035em;font-weight:650;color:#fff}
+  .pw-impact-tag{
+    flex:none;padding:3px 7px;border:1px solid rgba(255,210,161,.26);border-radius:999px;
+    background:rgba(255,210,161,.06);font-family:var(--mono);font-size:6.2px;letter-spacing:.1em;
+    text-transform:uppercase;color:rgba(255,225,194,.72);white-space:nowrap
+  }
+  .pw-impact-case b{display:block;font-size:11.4px;font-weight:650;letter-spacing:.01em;color:rgba(255,255,255,.84)}
+  .pw-impact-case p{margin:4px 0 0;font-size:11.4px;line-height:1.5;color:rgba(255,255,255,.55)}
+  .pw-impact-grid{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:14px 0 0;padding:0;
+    border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)
+  }
+  .pw-impact-metric{min-width:0;padding:12px 13px 12px 0}
+  .pw-impact-metric:nth-child(even){padding-left:14px;border-left:1px solid rgba(255,255,255,.1)}
+  .pw-impact-metric:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.1)}
+  .pw-impact-metric dt{
+    font-size:clamp(25px,2.2vw,31px);line-height:.95;font-weight:650;letter-spacing:-.05em;
+    color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums
+  }
+  .pw-impact-metric dd{margin:5px 0 0;font-size:9.8px;line-height:1.38;color:rgba(255,255,255,.52);overflow-wrap:break-word}
+  .pw-impact-note{margin:10px 0 0;font-size:8px;line-height:1.5;letter-spacing:.015em;color:rgba(255,255,255,.42)}
+  @media(max-width:420px){
+    .pw-overview-impact{margin-top:17px;padding-top:14px}
+    .pw-impact-head h3{font-size:18px}
+    .pw-impact-metric{padding:11px 10px 11px 0}
+    .pw-impact-metric:nth-child(even){padding-left:11px}
+    .pw-impact-metric dt{font-size:25px}
+    .pw-impact-metric dd{font-size:9.2px}
+    .pw-impact-case p{font-size:11px}
+  }
+
+  /* ============================================================
+     CUSTOMER ACQUISITION — readable flow callouts
+     ============================================================ */
+  .pw-flow-label{
+    padding:5px 10px;font-size:9px;font-weight:600;letter-spacing:.08em;
+    border-color:rgba(255,210,161,.4);background:rgba(7,13,17,.82);
+    color:rgba(255,232,208,.92);text-shadow:0 1px 3px rgba(0,0,0,.7)
+  }
+  .pw-flow-label--shortcut{
+    color:rgba(255,255,255,.76);border-color:rgba(255,255,255,.32);
+  }
+  @media(max-width:760px){
+    .pw-flow-label{padding:4px 8px;font-size:8.2px;letter-spacing:.06em}
+  }
 </style>
 </head>
 <body data-mode="home">
@@ -5085,6 +5136,19 @@ const PROJECTS=[
         'A more scalable customer acquisition process.'
       ],
       valueNote:'Intended business benefits. These are not measured outcomes.',
+      impact:{
+        heading:'Business impact',
+        tag:'Anonymized case study',
+        client:'Service Referral Company',
+        description:'Implemented to reduce prospecting costs, expand outreach capacity and improve customer acquisition.',
+        note:'Retrospective estimates from an anonymized engagement. Not verified measurements.',
+        metrics:[
+          {value:'~80%',label:'reduction in prospect research time'},
+          {value:'~60%',label:'reduction in prospect research costs'},
+          {value:'~4×',label:'prospecting capacity'},
+          {value:'~30%',label:'personalized demo open rate'}
+        ]
+      },
       cta:'Understand how it works'
     },
     flow:{
@@ -6562,6 +6626,24 @@ function projectOverviewBriefHTML(p){
     </div>
   </section>`;
 }
+function projectImpactHTML(o){
+  const impact=o.impact;
+  if(!impact) return '';
+  return `<section class="pw-overview-impact" aria-labelledby="pwImpactTitle">
+    <div class="pw-impact-head">
+      <h3 id="pwImpactTitle">${escHTML(impact.heading)}</h3>
+      <span class="pw-impact-tag">${escHTML(impact.tag)}</span>
+    </div>
+    <div class="pw-impact-case">
+      <b>${escHTML(impact.client)}</b>
+      <p>${escHTML(impact.description)}</p>
+    </div>
+    <dl class="pw-impact-grid">
+      ${impact.metrics.map(m=>`<div class="pw-impact-metric"><dt>${escHTML(m.value)}</dt><dd>${escHTML(m.label)}</dd></div>`).join('')}
+    </dl>
+    <p class="pw-impact-note">${escHTML(impact.note)}</p>
+  </section>`;
+}
 function projectOverviewValueHTML(p){
   const o=p.overview;
   return `<section class="pw-window pw-overview-window pw-overview-value" aria-labelledby="pwOverviewValueTitle">
@@ -6570,6 +6652,7 @@ function projectOverviewValueHTML(p){
       <h2 id="pwOverviewValueTitle">Business value</h2>
       <ul class="pw-overview-list pw-overview-list--value">${o.value.map(item=>`<li>${escHTML(item)}</li>`).join('')}</ul>
       <p class="pw-overview-note">${escHTML(o.valueNote)}</p>
+      ${projectImpactHTML(o)}
     </div>
     <footer class="pw-overview-foot">
       <button class="pw-overview-cta" type="button" data-project-flow>${escHTML(o.cta)} <span aria-hidden="true">→</span></button>
