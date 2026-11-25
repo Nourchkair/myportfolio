@@ -4505,7 +4505,6 @@
     border:1px solid rgba(255,210,161,.55);background:rgba(255,210,161,.16)
   }
   .pw-overview-list--value li:before{border-color:rgba(255,210,161,.75);background:var(--accent);box-shadow:0 0 8px var(--accent-soft)}
-  .pw-overview-note{margin:16px 0 0;font-size:9.4px;line-height:1.5;letter-spacing:.015em;color:rgba(255,255,255,.36)}
   .pw-overview-foot{flex:none;padding:14px 18px 18px;border-top:1px solid rgba(255,255,255,.1)}
   .pw-overview-cta{
     display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;height:46px;padding:0 10px 0 17px;
@@ -4794,8 +4793,8 @@
     background:rgba(255,210,161,.06);font-family:var(--mono);font-size:6.2px;letter-spacing:.1em;
     text-transform:uppercase;color:rgba(255,225,194,.72);white-space:nowrap
   }
-  .pw-impact-case b{display:block;font-size:11.4px;font-weight:650;letter-spacing:.01em;color:rgba(255,255,255,.84)}
-  .pw-impact-case p{margin:4px 0 0;font-size:11.4px;line-height:1.5;color:rgba(255,255,255,.55)}
+  .pw-impact-case b{display:block;font-size:13.4px;line-height:1.3;font-weight:650;letter-spacing:.005em;color:rgba(255,255,255,.86)}
+  .pw-impact-case p{margin:5px 0 0;font-size:13.2px;line-height:1.52;color:rgba(255,255,255,.6)}
   .pw-impact-grid{
     display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:14px 0 0;padding:0;
     border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)
@@ -4808,7 +4807,6 @@
     color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums
   }
   .pw-impact-metric dd{margin:5px 0 0;font-size:9.8px;line-height:1.38;color:rgba(255,255,255,.52);overflow-wrap:break-word}
-  .pw-impact-note{margin:10px 0 0;font-size:8px;line-height:1.5;letter-spacing:.015em;color:rgba(255,255,255,.42)}
   @media(max-width:420px){
     .pw-overview-impact{margin-top:17px;padding-top:14px}
     .pw-impact-head h3{font-size:18px}
@@ -4816,7 +4814,7 @@
     .pw-impact-metric:nth-child(even){padding-left:11px}
     .pw-impact-metric dt{font-size:25px}
     .pw-impact-metric dd{font-size:9.2px}
-    .pw-impact-case p{font-size:11px}
+    .pw-impact-case p{font-size:13px}
   }
 
   /* ============================================================
@@ -5135,13 +5133,11 @@ const PROJECTS=[
         'More consistent follow-up and opportunity management.',
         'A more scalable customer acquisition process.'
       ],
-      valueNote:'Intended business benefits. These are not measured outcomes.',
       impact:{
         heading:'Business impact',
         tag:'Anonymized case study',
         client:'Service Referral Company',
         description:'Implemented to reduce prospecting costs, expand outreach capacity and improve customer acquisition.',
-        note:'Retrospective estimates from an anonymized engagement. Not verified measurements.',
         metrics:[
           {value:'~80%',label:'reduction in prospect research time'},
           {value:'~60%',label:'reduction in prospect research costs'},
@@ -6641,7 +6637,6 @@ function projectImpactHTML(o){
     <dl class="pw-impact-grid">
       ${impact.metrics.map(m=>`<div class="pw-impact-metric"><dt>${escHTML(m.value)}</dt><dd>${escHTML(m.label)}</dd></div>`).join('')}
     </dl>
-    <p class="pw-impact-note">${escHTML(impact.note)}</p>
   </section>`;
 }
 function projectOverviewValueHTML(p){
@@ -6651,7 +6646,6 @@ function projectOverviewValueHTML(p){
     <div class="pw-overview-body">
       <h2 id="pwOverviewValueTitle">Business value</h2>
       <ul class="pw-overview-list pw-overview-list--value">${o.value.map(item=>`<li>${escHTML(item)}</li>`).join('')}</ul>
-      <p class="pw-overview-note">${escHTML(o.valueNote)}</p>
       ${projectImpactHTML(o)}
     </div>
     <footer class="pw-overview-foot">
