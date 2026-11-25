@@ -37,7 +37,11 @@ Legacy aliases canonicalize to `#/me` or `#/professional`: `#/about`, `#/about-m
 
 ## Projects
 
-The Projects deck contains eight showcases in the approved order: Customer Acquisition, Dispatch, AI Customer Communications, Sales & Referrals, Business Knowledge Assistant, Safiy, AFunTime and Academia OS. Each case uses the same spatial workspace: identity card, Brief, selectable System stages, and Demonstrations / Components / Technology folds.
+The Projects deck contains eight showcases in the approved order: Customer Acquisition, Dispatch, AI Customer Communications, Sales & Referrals, Business Knowledge Assistant, Safiy, AFunTime and Academia OS.
+
+Customer Acquisition uses the revised project experience: a four-panel overview (identity card, What it is, Business challenges, Business value) and one prominent **Understand how it works** action. The process view presents nine fixed-size glass steps on a horizontally scrollable canvas. Target definition branches into new-prospect discovery and existing-data improvement, converges at prioritization, then continues through demonstrations, outreach, conditional follow-up, replies/bookings and CRM. Hover, focus or tap a step for an anchored explanation; **Back to project** restores the overview. This is a business-process view, not a technical workflow editor. The five value items are intended benefits, not measured outcomes.
+
+The remaining seven projects retain the existing Brief / System / Demonstrations / Components / Technology workspace. The overview and flow are data-driven so the same presentation can be adopted selectively for those projects later.
 
 Five covers and all eight demonstration diagrams are original local SVG illustrations. They are visibly labeled as conceptual system views or sample scenarios. Safiy, AFunTime and Academia OS retain their existing representative cover artwork. No live workflow, messaging, booking or CRM integration is connected to the portfolio, and no measured business results are claimed. Replace labeled sample visuals with approved product captures as they become available.
 
@@ -53,6 +57,7 @@ Five covers and all eight demonstration diagrams are original local SVG illustra
 - Local clock (no weather or IP-based location requests)
 - LinkedIn and GitHub contact links
 - Responsive layouts with a flat fallback below 1020px
+- Data-driven project overview and horizontal process flow for Customer Acquisition
 
 ## Structure
 
