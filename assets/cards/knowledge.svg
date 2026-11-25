@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-label="Business Knowledge Assistant conceptual workflow illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2140"/><stop offset=".62" stop-color="#11111d"/><stop offset="1" stop-color="#080d11"/></linearGradient>
+    <radialGradient id="glow" cx=".76" cy=".2" r=".55"><stop offset="0" stop-color="#d9c6ff" stop-opacity=".34"/><stop offset="1" stop-color="#d9c6ff" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="46" height="46" patternUnits="userSpaceOnUse"><path d="M46 0H0V46" fill="none" stroke="rgba(255,255,255,.055)" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="900" height="1200" fill="url(#bg)"/>
+  <rect width="900" height="1200" fill="url(#glow)"/>
+  <rect width="900" height="1200" fill="url(#grid)" opacity=".7"/>
+  <g fill="none" stroke="#d9c6ff" stroke-opacity=".26"><circle cx="760" cy="700" r="230"/><circle cx="760" cy="700" r="150"/><circle cx="760" cy="700" r="76"/></g>
+  <g font-family="SFMono-Regular, Menlo, monospace" font-size="19" letter-spacing="3.5" fill="#d9c6ff">
+    <text x="72" y="112">PROJECTS / CASE 05</text>
+  </g>
+  <g font-family="SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="2.2" fill="rgba(255,255,255,.42)">
+    <text x="72" y="160">H2OPS BRAIN</text>
+  </g>
+  <text x="72" y="240" fill="#f7fbfc" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="70" font-weight="650" letter-spacing="-3">Business Knowledge</text><text x="72" y="318" fill="#f7fbfc" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="70" font-weight="650" letter-spacing="-3">Assistant</text>
+  <text x="72" y="470" fill="rgba(255,255,255,.55)" font-family="Inter, -apple-system, sans-serif" font-size="24">Library → Source</text>
+  <g><path d="M204 812 H246 M414 812 H456" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-dasharray="5 6"/><g>
+          <rect x="36" y="760" width="168" height="104" rx="20" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <text x="120" y="802" fill="rgba(255,255,255,.92)" font-family="Inter, -apple-system, sans-serif" font-size="23" font-weight="650" text-anchor="middle">Library</text>
+          <text x="120" y="832" fill="rgba(255,255,255,.46)" font-family="Inter, -apple-system, sans-serif" font-size="16" text-anchor="middle">owned guidance</text>
+        </g><g>
+          <rect x="246" y="760" width="168" height="104" rx="20" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <text x="330" y="802" fill="rgba(255,255,255,.92)" font-family="Inter, -apple-system, sans-serif" font-size="23" font-weight="650" text-anchor="middle">Question</text>
+          <text x="330" y="832" fill="rgba(255,255,255,.46)" font-family="Inter, -apple-system, sans-serif" font-size="16" text-anchor="middle">scoped retrieval</text>
+        </g><g>
+          <rect x="456" y="760" width="168" height="104" rx="20" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <text x="540" y="802" fill="rgba(255,255,255,.92)" font-family="Inter, -apple-system, sans-serif" font-size="23" font-weight="650" text-anchor="middle">Source</text>
+          <text x="540" y="832" fill="rgba(255,255,255,.46)" font-family="Inter, -apple-system, sans-serif" font-size="16" text-anchor="middle">reader checks</text>
+        </g></g>
+  <g font-family="SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2.4" fill="rgba(255,255,255,.34)">
+    <text x="72" y="974">ILLUSTRATION / CONCEPTUAL SYSTEM VIEW</text>
+  </g>
+  <rect x="72" y="1004" width="756" height="1" fill="rgba(255,255,255,.14)"/>
+  <text x="72" y="1060" fill="#d9c6ff" font-family="SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2.4">H2OPS BRAIN / PORTFOLIO CASE</text>
+</svg>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 620" role="img" aria-label="From prospect signal to next action sample scenario illustration">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3b281b"/><stop offset=".7" stop-color="#111a20"/><stop offset="1" stop-color="#070c10"/></linearGradient>
+    <radialGradient id="glow" cx=".82" cy=".12" r=".6"><stop offset="0" stop-color="#ffd2a1" stop-opacity=".28"/><stop offset="1" stop-color="#ffd2a1" stop-opacity="0"/></radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1"/></pattern>
+  </defs>
+  <rect width="1000" height="620" fill="url(#bg)"/>
+  <rect width="1000" height="620" fill="url(#glow)"/>
+  <rect width="1000" height="620" fill="url(#grid)" opacity=".75"/>
+  <text x="70" y="150" fill="#f7fbfc" font-family="Inter, -apple-system, sans-serif" font-size="44" font-weight="650" letter-spacing="-1.4">From prospect signal to next action</text>
+  <text x="70" y="196" fill="rgba(255,255,255,.54)" font-family="Inter, -apple-system, sans-serif" font-size="20">A fictional HVAC prospect, shown as a sample workflow.</text>
+  <g><g>
+          <rect x="70" y="300" width="270" height="184" rx="22" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <circle cx="100" cy="332" r="9" fill="#ffd2a1" opacity=".85"/>
+          <text x="120" y="338" fill="#ffd2a1" font-family="SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2.4">01</text>
+          <text x="96" y="392" fill="#f6fbfc" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="650">Target</text>
+          <foreignObject x="96" y="406" width="218" height="64">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,-apple-system,sans-serif;font-size:17px;line-height:1.42;color:rgba(255,255,255,.52)">Trade, geography and a hiring signal</div>
+          </foreignObject>
+        </g><path d="M344 392 H360" stroke="rgba(255,255,255,.28)" stroke-width="2"/><path d="m356 386 8 6-8 6" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/><g>
+          <rect x="364" y="300" width="270" height="184" rx="22" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <circle cx="394" cy="332" r="9" fill="#ffd2a1" opacity=".85"/>
+          <text x="414" y="338" fill="#ffd2a1" font-family="SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2.4">02</text>
+          <text x="390" y="392" fill="#f6fbfc" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="650">Demo</text>
+          <foreignObject x="390" y="406" width="218" height="64">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,-apple-system,sans-serif;font-size:17px;line-height:1.42;color:rgba(255,255,255,.52)">Fictional contractor scenario</div>
+          </foreignObject>
+        </g><path d="M638 392 H654" stroke="rgba(255,255,255,.28)" stroke-width="2"/><path d="m650 386 8 6-8 6" fill="none" stroke="rgba(255,255,255,.4)" stroke-width="1.6"/><g>
+          <rect x="658" y="300" width="270" height="184" rx="22" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>
+          <circle cx="688" cy="332" r="9" fill="#ffd2a1" opacity=".85"/>
+          <text x="708" y="338" fill="#ffd2a1" font-family="SFMono-Regular, Menlo, monospace" font-size="15" letter-spacing="2.4">03</text>
+          <text x="684" y="392" fill="#f6fbfc" font-family="Inter, -apple-system, sans-serif" font-size="26" font-weight="650">Next action</text>
+          <foreignObject x="684" y="406" width="218" height="64">
+            <div xmlns="http://www.w3.org/1999/xhtml" style="font-family:Inter,-apple-system,sans-serif;font-size:17px;line-height:1.42;color:rgba(255,255,255,.52)">Reply or booking changes the path</div>
+          </foreignObject>
+        </g></g>
+  <rect x="70" y="524" width="860" height="1" fill="rgba(255,255,255,.14)"/>
+  <text x="70" y="568" fill="rgba(255,255,255,.55)" font-family="Inter, -apple-system, sans-serif" font-size="18">Engagement is a follow-up signal. Replies and bookings are separate decisions.</text>
+  <text x="930" y="568" text-anchor="end" fill="#ffd2a1" font-family="SFMono-Regular, Menlo, monospace" font-size="13" letter-spacing="2">NOT A LIVE DEMO</text>
+</svg>
