@@ -4726,6 +4726,62 @@
   @media(max-width:700px){
     #project.project-has-overview .pw-project-frame .card-art img{object-position:center top}
   }
+
+  /* ============================================================
+     CUSTOMER ACQUISITION — free-floating process view
+     ============================================================ */
+  .pw-flow{display:block!important;justify-content:initial!important}
+  .pw-flow-shell{
+    position:absolute!important;inset:0!important;width:auto!important;height:auto!important;min-height:0!important;
+    display:block!important;border:0!important;border-radius:0!important;
+    background:none!important;box-shadow:none!important;overflow:visible!important;
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important
+  }
+  .pw-flow-bar{
+    position:absolute!important;top:0!important;left:0!important;right:0!important;bottom:auto!important;
+    z-index:7!important;min-height:0!important;padding:14px 24px!important;
+    border:0!important;background:none!important;pointer-events:none
+  }
+  .pw-flow-back{
+    pointer-events:auto;
+    background:rgba(7,13,17,.62)!important;border-color:rgba(255,255,255,.3)!important;
+    -webkit-backdrop-filter:blur(16px) saturate(1.2);backdrop-filter:blur(16px) saturate(1.2);
+    box-shadow:0 10px 28px rgba(0,0,0,.24)
+  }
+  .pw-flow-heading,.pw-flow-eyebrow,.pw-flow-hint{text-shadow:0 2px 14px rgba(0,0,0,.8),0 1px 3px rgba(0,0,0,.6)}
+  .pw-flow-hint{color:rgba(255,255,255,.58)!important}
+  .pw-flow-stage{position:absolute!important;inset:0!important}
+  .pw-flow-viewport{
+    padding:84px 28px 64px!important;background:none!important;
+    scrollbar-color:rgba(255,255,255,.42) transparent
+  }
+  .pw-flow-viewport::-webkit-scrollbar-thumb{background:rgba(255,255,255,.38)!important}
+  .pw-flow-canvas{margin-block:0!important;background:none!important}
+  .pw-flow-canvas-mark{display:none!important}
+  .pw-flow-link{filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))}
+  .pw-flow-spine,.pw-flow-spine-tick{stroke:rgba(255,255,255,.3);filter:drop-shadow(0 1px 2px rgba(0,0,0,.55))}
+  .pw-flow-crm-note{
+    padding:4px 9px;border:1px solid rgba(255,255,255,.14);border-radius:999px;
+    background:rgba(7,13,17,.48);color:rgba(255,255,255,.5);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);text-shadow:0 1px 3px rgba(0,0,0,.7)
+  }
+  .pw-flow-foot{
+    position:absolute!important;left:26px!important;right:26px!important;bottom:13px!important;z-index:5!important;
+    padding:0!important;border:0!important;background:none!important;pointer-events:none;
+    color:rgba(255,255,255,.44)!important;text-shadow:0 1px 8px rgba(0,0,0,.8)
+  }
+  .pw-flow-node{box-shadow:0 18px 40px rgba(0,0,0,.36),inset 0 1px 0 rgba(255,255,255,.16)}
+  @media(max-width:1020px){
+    .pw-flow-bar{padding:10px 14px!important}
+    .pw-flow-viewport{padding:70px 16px 56px!important}
+    .pw-flow-foot{left:14px!important;right:14px!important;bottom:10px!important}
+  }
+  @media(max-width:420px){
+    .pw-flow-bar{padding:9px 10px!important}
+    .pw-flow-viewport{padding:66px 12px 52px!important}
+  }
+  #projectFlow.pw-flow:before{content:none!important}
+  .pw-flow-crm-note{top:545px}
 </style>
 </head>
 <body data-mode="home">
@@ -5064,7 +5120,7 @@ const PROJECTS=[
         {text:'Reply or booking',x:1515,y:132,kind:'shortcut'}
       ],
       spine:{from:'target',to:'crm',label:'CRM context supports the full process'},
-      hint:'Scroll horizontally · Hover or focus a step',
+      hint:'Scroll in any direction · Hover or focus a step',
       viewportLabel:'Customer Acquisition horizontal process flow',
       scopeNote:'Business process view · Underlying components may operate as separate workflows.'
     },
