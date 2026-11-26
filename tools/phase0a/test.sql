@@ -1,0 +1,17 @@
+DELETE FROM action_ledger; DELETE FROM sessions; DELETE FROM rate_limits; DELETE FROM bookings; DELETE FROM ops_events; DELETE FROM cost_events;
+INSERT INTO action_ledger(action_key,action_type,status,payload,created_at) VALUES('inquiry:abc','inquiry','succeeded','{"id":"abc"}',1000);
+INSERT INTO action_ledger(action_key,action_type,status,payload,created_at) VALUES('inquiry:abc','inquiry','succeeded','{"id":"abc"}',1001) ON CONFLICT(action_key) DO NOTHING;
+SELECT 'idempotency_rows', COUNT(*) FROM action_ledger WHERE action_key='inquiry:abc';
+INSERT INTO sessions(id,state,expires_at) VALUES('s1','{"turn":1}',2000),('s2','{"turn":2}',500);
+SELECT 'active_sessions', COUNT(*) FROM sessions WHERE expires_at > 1000;
+INSERT INTO rate_limits(bucket,count,window_start) VALUES('ip:test',1,1000);
+UPDATE rate_limits SET count=count+1 WHERE bucket='ip:test';
+SELECT 'rate_count', count FROM rate_limits WHERE bucket='ip:test';
+INSERT INTO bookings(id,start_utc,end_utc,status,calendar_event_id,created_at) VALUES('b1',1000,1600,'reserved',NULL,900);
+SELECT 'overlap_exact', COUNT(*) FROM bookings WHERE status='reserved' AND start_utc < 1600 AND end_utc > 1000;
+SELECT 'overlap_inside', COUNT(*) FROM bookings WHERE status='reserved' AND start_utc < 1300 AND end_utc > 1100;
+SELECT 'overlap_after', COUNT(*) FROM bookings WHERE status='reserved' AND start_utc < 1800 AND end_utc > 1600;
+INSERT INTO ops_events(level,event,detail,created_at) VALUES('error','tool.failed','{"tool":"openProject"}',1000);
+INSERT INTO cost_events(provider,capability,usd_micros,created_at) VALUES('test','text',1234,1000);
+SELECT 'old_events', COUNT(*) FROM ops_events WHERE created_at < 9999999999999 - (30*86400*1000);
+SELECT 'cost_micros', SUM(usd_micros) FROM cost_events;

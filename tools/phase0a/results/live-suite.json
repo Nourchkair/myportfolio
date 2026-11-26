@@ -1,0 +1,154 @@
+{
+  "sessions": [
+    {
+      "name": "english",
+      "transcript": "Nour works across commercial strategy, sales, and technology from Ottawa. Safiy is a contextual AI assistant that captures conversations and workplace knowledge.",
+      "audioBytes": 485280,
+      "firstAudioMs": 7394,
+      "turnCompleteMs": 17507,
+      "usage": {
+        "prompt": 807,
+        "response": 258,
+        "total": 1065,
+        "promptDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 438
+          },
+          {
+            "modality": "AUDIO",
+            "tokenCount": 342
+          }
+        ],
+        "responseDetails": [
+          {
+            "modality": "AUDIO",
+            "tokenCount": 258
+          }
+        ]
+      },
+      "toolCalls": [],
+      "events": [
+        {
+          "type": "open",
+          "ms": 103
+        },
+        {
+          "type": "setup",
+          "ms": 285
+        },
+        {
+          "type": "turnComplete",
+          "ms": 17507
+        }
+      ]
+    },
+    {
+      "name": "french",
+      "transcript": "Nour travaille à Ottawa en stratégie commerciale, vente et technologie. Safiy est notre assistant IA contextuel qui capture les conversations et les connaissances en milieu de travail.",
+      "audioBytes": 544802,
+      "firstAudioMs": 5908,
+      "turnCompleteMs": 17190,
+      "usage": {
+        "prompt": 808,
+        "response": 290,
+        "total": 1098,
+        "promptDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 440
+          },
+          {
+            "modality": "AUDIO",
+            "tokenCount": 341
+          }
+        ],
+        "responseDetails": [
+          {
+            "modality": "AUDIO",
+            "tokenCount": 290
+          }
+        ]
+      },
+      "toolCalls": [],
+      "events": [
+        {
+          "type": "open",
+          "ms": 76
+        },
+        {
+          "type": "setup",
+          "ms": 241
+        },
+        {
+          "type": "turnComplete",
+          "ms": 17190
+        }
+      ]
+    },
+    {
+      "name": "tool-call",
+      "transcript": "I've opened the Safiy project, which is the contextual AI assistant that captures conversations and workplace knowledge.",
+      "audioBytes": 307200,
+      "firstAudioMs": 3886,
+      "turnCompleteMs": 10369,
+      "usage": {
+        "prompt": 798,
+        "response": 166,
+        "total": 964,
+        "promptDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 458
+          },
+          {
+            "modality": "AUDIO",
+            "tokenCount": 269
+          }
+        ],
+        "responseDetails": [
+          {
+            "modality": "AUDIO",
+            "tokenCount": 166
+          }
+        ]
+      },
+      "toolCalls": [
+        {
+          "name": "openProject",
+          "args": {
+            "projectId": "safiy"
+          }
+        }
+      ],
+      "events": [
+        {
+          "type": "open",
+          "ms": 84
+        },
+        {
+          "type": "setup",
+          "ms": 238
+        },
+        {
+          "type": "toolCall",
+          "names": [
+            "openProject"
+          ]
+        },
+        {
+          "type": "turnComplete",
+          "ms": 3258
+        },
+        {
+          "type": "turnComplete",
+          "ms": 10369
+        }
+      ]
+    }
+  ],
+  "ephemeralToken": {
+    "created": true,
+    "tokenLength": 76
+  }
+}

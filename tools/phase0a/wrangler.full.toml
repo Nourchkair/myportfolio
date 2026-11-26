@@ -1,0 +1,15 @@
+name = "ai-nour-phase0a-dev"
+main = "worker-full.mjs"
+compatibility_date = "2026-11-26"
+workers_dev = true
+
+[triggers]
+crons = ["*/5 * * * *"]
+
+[vars]
+DAILY_SPEND_CAP_USD_MICROS = "1000000"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-nour-phase0a"
+database_id = "99d4cd29-fbf6-4880-8d79-eb3c7a1b3450"

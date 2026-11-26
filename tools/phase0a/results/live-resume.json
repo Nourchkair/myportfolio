@@ -1,0 +1,19 @@
+{
+  "handleReceived": false,
+  "transcript1": "",
+  "transcript2": "That sounds like a wonderful project to be passionate about.I do not have access to your past conversations or preferences, so I don't know which project is your favorite.",
+  "events": [
+    "setup",
+    {
+      "resumable": true,
+      "handlePresent": true
+    },
+    "resumedTurnComplete",
+    "setup",
+    {
+      "resumable": true,
+      "handlePresent": true
+    },
+    "resumedTurnComplete"
+  ]
+}

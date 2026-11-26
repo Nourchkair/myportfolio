@@ -1,0 +1,28 @@
+{
+  "name": "ai-nour-phase0a-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Reproducible Phase 0A integration and security harnesses for AI Nour",
+  "scripts": {
+    "audio": "bash prepare-audio.sh",
+    "retrieval": "node retrieval-eval2.mjs",
+    "google": "node google-suite.mjs",
+    "crm:check": "node crm-setup.mjs",
+    "crm:apply": "node crm-setup.mjs --apply",
+    "live": "node live-suite.mjs",
+    "barge": "node live-barge.mjs",
+    "context": "node live-context.mjs",
+    "resume": "node live-resume.mjs",
+    "security": "node security-checks.mjs",
+    "worker:test": "node worker-tests.mjs",
+    "browser": "node browser-live/server.mjs",
+    "deploy:dev": "wrangler deploy --config wrangler.full.toml"
+  },
+  "dependencies": {
+    "@google/genai": "3.6.1"
+  },
+  "devDependencies": {
+    "wrangler": "^4.168.0"
+  }
+}
