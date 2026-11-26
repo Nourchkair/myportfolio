@@ -126,3 +126,77 @@ img{max-width:100%;display:block}
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
 }
+
+/* ============================================================
+   READABILITY PASS — one clear reading hierarchy
+   ============================================================ */
+.reading-brand b{font-size:13px}
+.reading-brand small{font-size:10px;color:rgba(255,255,255,.64)}
+.reading-nav a{font-size:11px;color:rgba(255,255,255,.76)}
+.reading-exit{font-size:10.4px}
+.reading-kicker{font-size:10px}
+.reading-hero h1{max-width:18ch;font-size:clamp(42px,6.2vw,72px)}
+.reading-lead{font-size:clamp(18px,2.1vw,22px);line-height:1.58;color:rgba(255,255,255,.9)}
+.reading-prose p{font-size:17px;line-height:1.72;color:rgba(255,255,255,.82)}
+.reading-role{padding:12px 14px}
+.reading-role span{font-size:9px;color:rgba(255,225,194,.94)}
+.reading-role b{font-size:14.5px}
+.reading-role small{font-size:9.5px;color:rgba(255,255,255,.66)}
+.reading-subblock h4,.reading-project-block h4,.reading-flow-links h5{font-size:10px;color:rgba(255,255,255,.64)}
+.reading-list li{font-size:15px;line-height:1.6;color:rgba(255,255,255,.82)}
+.reading-skills{font-size:15px;line-height:1.65;color:rgba(255,255,255,.82)}
+.reading-direction{font-size:16px;line-height:1.62;color:rgba(255,255,255,.92)}
+.reading-direction span{font-size:9px}
+.reading-index a{font-size:10px;color:rgba(255,255,255,.74)}
+.reading-project-desc{font-size:17px;line-height:1.68;color:rgba(255,255,255,.8)}
+.reading-project-block p{font-size:15.5px;line-height:1.68;color:rgba(255,255,255,.82)}
+.reading-contribution-row b{font-size:9px}
+.reading-contribution-row p{font-size:15px;color:rgba(255,255,255,.82)}
+.reading-flow summary{font-size:12px}
+.reading-flow-nodes h5{font-size:15px}
+.reading-flow-nodes p{font-size:14px;line-height:1.6;color:rgba(255,255,255,.74)}
+.reading-flow-nodes .reading-flow-visible{color:rgba(255,225,194,.9)}
+.reading-flow-links li{font-size:13px;line-height:1.55;color:rgba(255,255,255,.7)}
+.reading-flow-links li span{font-size:9px;color:rgba(255,255,255,.52)}
+.reading-note{font-size:13.5px;line-height:1.6;color:rgba(255,255,255,.62)}
+.reading-foot{font-size:10px;color:rgba(255,255,255,.52)}
+.reading-foot a{color:rgba(255,255,255,.74)}
+
+/* Measured impact — prominent numbers, quieter labels */
+.reading-milestone-block{
+  margin:20px 0 22px;padding:16px 18px 17px;border:1px solid rgba(255,210,161,.22);
+  border-radius:14px;background:rgba(255,210,161,.05)
+}
+.reading-milestone-kicker{
+  display:block;margin-bottom:12px;font-family:var(--mono);font-size:10px;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(255,225,194,.92)
+}
+.reading-milestones{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;
+  margin:0;padding:0;border:0
+}
+.reading-milestone{padding-left:13px;border-left:1px solid rgba(255,210,161,.32)}
+.reading-milestone b{
+  display:block;font-size:clamp(28px,3vw,36px);line-height:1;font-weight:650;
+  letter-spacing:-.05em;color:var(--accent);font-variant-numeric:tabular-nums
+}
+.reading-milestone.is-primary b{font-size:clamp(38px,4.4vw,52px)}
+.reading-milestone b.is-wide{font-size:22px;line-height:1.2;letter-spacing:-.02em}
+.reading-milestone.is-primary b.is-wide{font-size:30px}
+.reading-milestone span{
+  display:block;margin-top:7px;font-family:var(--mono);font-size:9.5px;line-height:1.5;
+  letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.72)
+}
+
+@media(max-width:760px){
+  .reading-nav a{font-size:9.8px;color:rgba(255,255,255,.8)}
+  .reading-exit{font-size:9.4px}
+  .reading-prose p{font-size:16px;line-height:1.7}
+  .reading-project-block p,.reading-contribution-row p{font-size:14.8px}
+  .reading-milestone-block{padding:14px 15px}
+  .reading-milestone b{font-size:30px}
+  .reading-milestone.is-primary b{font-size:40px}
+  .reading-milestone b.is-wide{font-size:20px}
+  .reading-milestone.is-primary b.is-wide{font-size:26px}
+  .reading-milestone span{font-size:9px}
+}
