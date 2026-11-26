@@ -4864,60 +4864,13 @@
     #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:62%}
   }
 
-  /* Dispatch overview proportions and flow plane width */
-  #project[data-project="h2ops"].project-has-overview .pw-overview-what{flex:1 1 0}
-  #project[data-project="h2ops"].project-has-overview .pw-overview-challenges{flex:1 1 0}
+  /* flow plane width */
   #projectFlow .pw-flow-canvas{min-width:0!important}
-
-  /* compact desktop overview for the denser Dispatch content */
-  @media(min-width:1021px) and (max-height:860px){
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body{padding:16px 20px 16px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:30px;margin-bottom:10px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13.2px;line-height:1.5}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:8px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:8px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12.2px;line-height:1.45}
-  }
-
-  /* denser Dispatch content stacks before the three-column layout becomes cramped */
-  @media(min-width:1021px) and (max-width:1240px){
-    #project[data-project="h2ops"].project-has-overview .pw-canvas{overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px}
-    #project[data-project="h2ops"].project-has-overview .pw-stage{
-      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
-      width:100%;transform:none!important
-    }
-    #project[data-project="h2ops"].project-has-overview .pw-left-slot{display:block!important}
-    #project[data-project="h2ops"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
-    #project[data-project="h2ops"].project-has-overview .pw-right{display:flex!important;height:auto!important}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what,
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges,
-    #project[data-project="h2ops"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body{overflow:visible}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:27px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
-    #project[data-project="h2ops"].project-has-overview .pw-project-frame{margin:0 auto}
-  }
-  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
-  }
 
   /* Dispatch flow header legibility over the scene, without adding a panel */
   #project[data-project="h2ops"] .pw-flow-bar:before{
     content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
     background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
-  }
-
-  /* keep both middle panels content-sized when the overview stacks */
-  @media(max-width:1020px){
-    #project[data-project="h2ops"].project-has-overview .pw-overview-what,
-    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges{
-      flex:none!important;height:auto!important;min-height:0!important
-    }
   }
 
   /* ============================================================
@@ -4945,32 +4898,6 @@
     .pw-impact-achievement-head{gap:7px}
     .pw-impact-achievement-head b{font-size:12px;padding-top:2px}
     .pw-impact-achievement p{font-size:10.8px}
-  }
-
-  /* compact the qualitative impact with the rest of the short-desktop overview */
-  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
-    #project[data-project="h2ops"] .pw-overview-impact{margin-top:14px;padding-top:13px}
-    #project[data-project="h2ops"] .pw-impact-head h3{font-size:18px}
-    #project[data-project="h2ops"] .pw-impact-case b{font-size:13px}
-    #project[data-project="h2ops"] .pw-impact-case p{font-size:12.6px}
-    #project[data-project="h2ops"] .pw-impact-achievement{padding:11px 12px 11px 0}
-    #project[data-project="h2ops"] .pw-impact-achievement:nth-child(even){padding-left:12px}
-    #project[data-project="h2ops"] .pw-impact-achievement-icon{width:25px;height:25px}
-    #project[data-project="h2ops"] .pw-impact-achievement-head b{font-size:12.4px}
-    #project[data-project="h2ops"] .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
-  }
-
-  /* flatten the 3D stage when Dispatch stacks in the intermediate desktop range */
-  @media(min-width:1021px) and (max-width:1240px){
-    #project[data-project="h2ops"].project-has-overview .pw-canvas{perspective:none!important}
-    #project[data-project="h2ops"].project-has-overview .pw-left,
-    #project[data-project="h2ops"].project-has-overview .pw-middle,
-    #project[data-project="h2ops"].project-has-overview .pw-right,
-    #project[data-project="h2ops"].project-has-overview .pw-project-card,
-    #project[data-project="h2ops"].project-has-overview .pw-project-frame,
-    #project[data-project="h2ops"].project-has-overview .pw-brief,
-    #project[data-project="h2ops"].project-has-overview .pw-system,
-    #project[data-project="h2ops"].project-has-overview .pw-left-slot{transform:none!important}
   }
 
   /* ============================================================
@@ -5004,46 +4931,6 @@
     border-color:rgba(255,210,161,.36);background:rgba(255,210,161,.08);color:var(--accent)
   }
 
-  /* Communications overview stacks before its denser middle column becomes cramped */
-  @media(min-width:1021px) and (max-width:1240px){
-    #project[data-project="communications"].project-has-overview .pw-canvas{
-      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px;perspective:none!important
-    }
-    #project[data-project="communications"].project-has-overview .pw-stage{
-      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
-      width:100%;transform:none!important
-    }
-    #project[data-project="communications"].project-has-overview .pw-left,
-    #project[data-project="communications"].project-has-overview .pw-middle,
-    #project[data-project="communications"].project-has-overview .pw-right,
-    #project[data-project="communications"].project-has-overview .pw-project-card,
-    #project[data-project="communications"].project-has-overview .pw-project-frame,
-    #project[data-project="communications"].project-has-overview .pw-brief,
-    #project[data-project="communications"].project-has-overview .pw-system,
-    #project[data-project="communications"].project-has-overview .pw-left-slot{transform:none!important}
-    #project[data-project="communications"].project-has-overview .pw-left-slot{display:block!important}
-    #project[data-project="communications"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
-    #project[data-project="communications"].project-has-overview .pw-right{display:flex!important;height:auto!important}
-    #project[data-project="communications"].project-has-overview .pw-overview-what,
-    #project[data-project="communications"].project-has-overview .pw-overview-challenges,
-    #project[data-project="communications"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
-    #project[data-project="communications"].project-has-overview .pw-overview-body{overflow:visible}
-    #project[data-project="communications"].project-has-overview .pw-overview-body h2{font-size:27px}
-    #project[data-project="communications"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
-    #project[data-project="communications"].project-has-overview .pw-project-frame{margin:0 auto}
-  }
-  /* short and narrower desktop range: compact type, with the middle split rebalanced */
-  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
-    #project[data-project="communications"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
-    #project[data-project="communications"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
-    #project[data-project="communications"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
-    #project[data-project="communications"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
-    #project[data-project="communications"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
-    #project[data-project="communications"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
-    #project[data-project="communications"].project-has-overview .pw-overview-what{flex:.9 1 0}
-    #project[data-project="communications"].project-has-overview .pw-overview-challenges{flex:1.1 1 0}
-    #project[data-project="communications"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:40%}
-  }
   /* flow header readability over the environment */
   #project[data-project="communications"] .pw-flow-bar:before{
     content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
@@ -5058,19 +4945,6 @@
     background:rgba(255,210,161,.055);font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;
     text-transform:uppercase;color:rgba(255,225,194,.72)
   }
-  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
-    #project[data-project="communications"] .pw-overview-impact{margin-top:14px;padding-top:13px}
-    #project[data-project="communications"] .pw-impact-head h3{font-size:18px}
-    #project[data-project="communications"] .pw-impact-case b{font-size:13px}
-    #project[data-project="communications"] .pw-impact-case p{font-size:12.6px}
-    #project[data-project="communications"] .pw-impact-intent{margin-top:7px;font-size:6.1px}
-    #project[data-project="communications"] .pw-impact-achievement{padding:11px 12px 11px 0}
-    #project[data-project="communications"] .pw-impact-achievement:nth-child(even){padding-left:12px}
-    #project[data-project="communications"] .pw-impact-achievement-icon{width:25px;height:25px}
-    #project[data-project="communications"] .pw-impact-achievement-head b{font-size:12.4px}
-    #project[data-project="communications"] .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
-  }
-
   /* ============================================================
      B.R.A.I.N. — business knowledge overview and flow
      ============================================================ */
@@ -5111,66 +4985,45 @@
     background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
   }
 
-  /* B.R.A.I.N. is the densest overview: stack before the three columns become cramped */
-  @media(min-width:1021px) and (max-width:1240px){
-    #project[data-project="knowledge"].project-has-overview .pw-canvas{
-      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px;perspective:none!important
-    }
-    #project[data-project="knowledge"].project-has-overview .pw-stage{
-      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
-      width:100%;transform:none!important
-    }
-    #project[data-project="knowledge"].project-has-overview .pw-left,
-    #project[data-project="knowledge"].project-has-overview .pw-middle,
-    #project[data-project="knowledge"].project-has-overview .pw-right,
-    #project[data-project="knowledge"].project-has-overview .pw-project-card,
-    #project[data-project="knowledge"].project-has-overview .pw-project-frame,
-    #project[data-project="knowledge"].project-has-overview .pw-brief,
-    #project[data-project="knowledge"].project-has-overview .pw-system,
-    #project[data-project="knowledge"].project-has-overview .pw-left-slot{transform:none!important}
-    #project[data-project="knowledge"].project-has-overview .pw-left-slot{display:block!important}
-    #project[data-project="knowledge"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
-    #project[data-project="knowledge"].project-has-overview .pw-right{display:flex!important;height:auto!important}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-what,
-    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges,
-    #project[data-project="knowledge"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-body{overflow:visible}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-body h2{font-size:27px}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
-    #project[data-project="knowledge"].project-has-overview .pw-project-frame{margin:0 auto}
-  }
-  /* three-column B.R.A.I.N. overview uses a slightly tighter type rhythm */
-  @media(min-width:1241px){
-    #project[data-project="knowledge"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-what{flex:.95 1 0}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges{flex:1.05 1 0}
-  }
+  /* Same three-column desktop overview as Customer Acquisition for the denser projects.
+     Use content-height columns and a scrollable workspace instead of changing layout. */
   @media(min-width:1021px){
-    #project[data-project="knowledge"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:48%}
-  }
-  @media(max-width:1020px){
-    #project[data-project="knowledge"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
-  }
-
-  /* B.R.A.I.N. keeps the same three-column overview on shorter desktops; the canvas scrolls instead of stacking. */
-  @media(min-width:1241px) and (max-width:1399px),(min-width:1241px) and (max-height:879px){
-    #project[data-project="knowledge"].project-has-overview .pw-canvas{
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-canvas{
       overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
     }
-    #project[data-project="knowledge"].project-has-overview .pw-stage{
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-stage{
       height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
     }
-    #project[data-project="knowledge"].project-has-overview .pw-middle{height:auto!important}
-    #project[data-project="knowledge"].project-has-overview .pw-overview-what,
-    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges{
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-middle{height:auto!important}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-what,
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-challenges{
       flex:none!important;height:auto!important;min-height:0
     }
-    #project[data-project="knowledge"].project-has-overview .pw-overview-body{overflow:visible!important}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-body{
+      overflow:visible!important
+    }
+  }
+  @media(min-width:1021px){
+    #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:48%}
+  }
+  @media(max-width:1020px){
+    #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
+  }
+
+  /* Compact the impacts of the dense projects while keeping the same three-column overview. */
+  @media(min-width:1021px){
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-overview-impact{
+      margin-top:14px;padding-top:13px
+    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-head h3{font-size:18px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case b{font-size:13px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case p{font-size:12.6px}
+    #project[data-project="communications"] .pw-impact-intent{margin-top:7px;font-size:6.1px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement{padding:11px 12px 11px 0}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement:nth-child(even){padding-left:12px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-icon{width:25px;height:25px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-head b{font-size:12.4px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
   }
 </style>
 </head>
@@ -5817,6 +5670,18 @@ const PROJECTS_ALL=[
         'Company-specific AI assistance.',
         'Better preservation of institutional knowledge.'
       ],
+      impact:{
+        heading:'Business impact',
+        tag:'Anonymized case study',
+        client:'Service Referral Company',
+        description:'Designed to centralize organizational knowledge and make internal business information more accessible.',
+        achievements:[
+          {icon:'layers',title:'Centralized business knowledge',description:'Organized operating procedures, business strategies and internal documentation.'},
+          {icon:'search',title:'Intelligent information access',description:'Prototyped AI-assisted retrieval of relevant business knowledge.'},
+          {icon:'clipboard',title:'Operational standardization',description:'Structured playbooks and procedures to support consistent execution.'},
+          {icon:'book',title:'Knowledge preservation',description:'Documented business decisions, established practices and organizational experience.'}
+        ]
+      },
       cta:'Understand how it works'
     },
     flow:{
@@ -7742,7 +7607,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&(active.id==='knowledge'||window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240))) return;
+  if(active&&active.overview&&(window.innerWidth<=1020||active.id==='h2ops'||active.id==='communications'||active.id==='knowledge')) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;
