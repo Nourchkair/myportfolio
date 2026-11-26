@@ -4831,6 +4831,94 @@
   @media(max-width:760px){
     .pw-flow-label{padding:4px 8px;font-size:8.2px;letter-spacing:.06em}
   }
+
+  /* ============================================================
+     SERVICE DISPATCH — dual-flow overview and process view
+     ============================================================ */
+  .pw-overview-lead+.pw-overview-lead{margin-top:11px}
+
+  .pw-flow-link--demand{stroke:rgba(255,210,161,.42)}
+  .pw-flow-link--supply{stroke:rgba(182,211,225,.42)}
+  .pw-flow-link--exception{stroke:rgba(255,255,255,.24);stroke-dasharray:3 6}
+  .pw-flow-label--demand,.pw-flow-label--supply{
+    padding:4px 9px;font-size:7.6px;letter-spacing:.13em;background:rgba(7,13,17,.74)
+  }
+  .pw-flow-label--demand{color:rgba(255,232,208,.86);border-color:rgba(255,210,161,.3)}
+  .pw-flow-label--supply{color:rgba(205,226,235,.8);border-color:rgba(190,220,235,.24)}
+  .pw-flow-label--exception{
+    padding:4px 8px;font-size:7.4px;letter-spacing:.06em;color:rgba(255,255,255,.5);
+    border-color:rgba(255,255,255,.18);background:rgba(7,13,17,.72)
+  }
+  .pw-flow-node[data-tone="exception"]{border-style:dashed;border-color:rgba(255,255,255,.22)}
+  .pw-flow-node[data-tone="exception"]:hover,
+  .pw-flow-node[data-tone="exception"].is-active{border-style:solid;border-color:rgba(255,210,161,.58)}
+
+  /* the hero card now carries the project's full title and full description */
+  #project.project-has-overview .pw-project-frame .os-card .card-body .card-desc{
+    display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important;height:auto!important
+  }
+  @media(max-width:1020px){
+    #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:50%}
+  }
+  @media(max-width:700px){
+    #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:62%}
+  }
+
+  /* Dispatch overview proportions and flow plane width */
+  #project[data-project="h2ops"].project-has-overview .pw-overview-what{flex:1 1 0}
+  #project[data-project="h2ops"].project-has-overview .pw-overview-challenges{flex:1 1 0}
+  #projectFlow .pw-flow-canvas{min-width:0!important}
+
+  /* compact desktop overview for the denser Dispatch content */
+  @media(min-width:1021px) and (max-height:860px){
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body{padding:16px 20px 16px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:30px;margin-bottom:10px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13.2px;line-height:1.5}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:8px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:8px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12.2px;line-height:1.45}
+  }
+
+  /* denser Dispatch content stacks before the three-column layout becomes cramped */
+  @media(min-width:1021px) and (max-width:1240px){
+    #project[data-project="h2ops"].project-has-overview .pw-canvas{overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px}
+    #project[data-project="h2ops"].project-has-overview .pw-stage{
+      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
+      width:100%;transform:none!important
+    }
+    #project[data-project="h2ops"].project-has-overview .pw-left-slot{display:block!important}
+    #project[data-project="h2ops"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
+    #project[data-project="h2ops"].project-has-overview .pw-right{display:flex!important;height:auto!important}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what,
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges,
+    #project[data-project="h2ops"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body{overflow:visible}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:27px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
+    #project[data-project="h2ops"].project-has-overview .pw-project-frame{margin:0 auto}
+  }
+  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
+  }
+
+  /* Dispatch flow header legibility over the scene, without adding a panel */
+  #project[data-project="h2ops"] .pw-flow-bar:before{
+    content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
+  }
+
+  /* keep both middle panels content-sized when the overview stacks */
+  @media(max-width:1020px){
+    #project[data-project="h2ops"].project-has-overview .pw-overview-what,
+    #project[data-project="h2ops"].project-has-overview .pw-overview-challenges{
+      flex:none!important;height:auto!important;min-height:0!important
+    }
+  }
 </style>
 </head>
 <body data-mode="home">
@@ -5206,11 +5294,79 @@ const PROJECTS=[
     technology:'n8n coordinates prospecting, enrichment and follow-up. Outscraper, Apify and Hunter support lead research, while OpenAI agents handle different demo scenarios and help draft outreach. Workflow versions track activity in Google Sheets, Airtable or the Supabase-backed H2Ops CRM.'
   },
   {
-    id:'h2ops', num:'02', title:'Dispatch', project:'H2Ops Dispatch', category:'Business & Operations',
-    description:'A service operations platform that matches customer demand with eligible contractors and tracks each job through offer and confirmation.',
-    capabilities:['Supply and demand coordination','Contractor activation','Dispatch automation'],
+    id:'h2ops', num:'02', title:'Dispatch', fullTitle:'Service Dispatch & Contractor Operations', project:'H2Ops Dispatch', category:'Business & Operations',
+    description:'A service operations platform connecting customer demand with contractor supply through coordinated matching, communication and booking management.',
+    capabilities:['Supply & Demand Coordination','Operations Automation','Service Management'],
     cover:'assets/cards/h2ops.svg',
     coverAlt:'Illustration of a dispatch workflow moving from service request to contractor offer and customer confirmation.',
+    overview:{
+      whatItIs:[
+        'A service operations platform designed for businesses that connect customers with independent service providers.',
+        'The system combines customer intake, contractor acquisition and onboarding, service coverage, job matching, communication and booking confirmation into a coordinated operational process.',
+        'Its objective is to help businesses manage both sides of a service marketplace while reducing manual coordination and improving operational visibility.'
+      ],
+      challenges:[
+        'Time-consuming manual coordination between customers and contractors.',
+        'Difficulty identifying suitable and available service providers.',
+        'Fragmented communication and inconsistent follow-ups.',
+        'Limited visibility into contractor readiness and service coverage.',
+        'Customer requests becoming delayed or unresolved.',
+        'Difficulty scaling operations without increasing administrative workload.'
+      ],
+      value:[
+        'More efficient coordination of supply and demand.',
+        'Reduced administrative and operational workload.',
+        'Better utilization of contractor networks.',
+        'Greater visibility into service requests and their progression.',
+        'More consistent customer and contractor experiences.',
+        'A more scalable service delivery model.'
+      ],
+      cta:'Understand how it works'
+    },
+    flow:{
+      eyebrow:'Service Dispatch / Business process',
+      title:'How Service Dispatch works',
+      intro:'Customer demand and contractor supply converge at matching, then move through communication and booking, with a secondary path for exceptions.',
+      nodes:[
+        {id:'customer',num:'01',title:'Customer request',visible:'Understand what the customer needs.',icon:'message',x:60,y:100,explanation:'Customers submit a service request describing the work they need, their location and relevant preferences. This creates a structured starting point for the business instead of relying on scattered messages or phone conversations.'},
+        {id:'assess',num:'02',title:'Assess requirements',visible:'Understand the job requirements.',icon:'clipboard',x:330,y:100,explanation:'Organize the customer’s request into actionable information, including the type of service, job scope, location and scheduling requirements. This helps the business understand what kind of contractor is needed.'},
+        {id:'coverage',num:'03',title:'Check service coverage',visible:'Determine whether demand can be served.',icon:'map',x:600,y:100,explanation:'Evaluate whether the business has suitable service coverage for the customer’s location and requirements. Requests outside current coverage can help identify opportunities for contractor recruitment and future market expansion.'},
+        {id:'acquire',num:'04',title:'Contractor acquisition',visible:'Expand the service provider network.',icon:'contact',x:60,y:390,explanation:'Identify and recruit contractors based on the services and geographic markets the business wants to support. This helps align contractor acquisition with actual or anticipated customer demand.'},
+        {id:'onboard',num:'05',title:'Contractor onboarding',visible:'Understand each contractor’s capabilities.',icon:'id',x:330,y:390,explanation:'Collect relevant contractor information, including offered services, geographic coverage, availability and operating preferences. Structured contractor profiles provide the information needed to identify suitable service providers.'},
+        {id:'activate',num:'06',title:'Contractor activation',visible:'Establish contractor readiness.',icon:'check',x:600,y:390,explanation:'Distinguish contractors who are potential partners from those who are ready to receive service opportunities. This helps the business understand its usable service capacity rather than relying solely on the size of its contractor database.'},
+        {id:'match',num:'07',title:'Match supply & demand',visible:'Connect the request with suitable contractors.',icon:'link',x:870,y:245,explanation:'Identify eligible contractors based on the customer’s service requirements, location and contractor readiness. This reduces manual searching and helps allocate available service capacity more effectively.'},
+        {id:'communicate',num:'08',title:'Coordinate communication',visible:'Manage offers and responses.',icon:'message',x:1140,y:245,explanation:'Coordinate communication between customers, contractors and the dispatch team. Contractors receive relevant opportunities and can respond, while the business tracks the progression of each request.'},
+        {id:'confirm',num:'09',title:'Confirm the booking',visible:'Establish a clear service commitment.',icon:'calendar',x:1410,y:245,explanation:'Track contractor acceptance and customer confirmation as distinct steps. This gives the business greater visibility into whether a service opportunity has progressed into a confirmed arrangement.'},
+        {id:'exception',num:'10',title:'Exception management',visible:'Resolve requests that need attention.',icon:'alert',x:1275,y:540,tone:'exception',explanation:'Identify requests that cannot progress because of unavailable contractors, expired offers, unanswered communications or coverage limitations. These requests can be reviewed, reassigned where appropriate or handled by the operations team.'},
+        {id:'operations',num:'11',title:'Operations management',visible:'Maintain visibility across the business.',icon:'pipeline',x:1680,y:245,explanation:'Centralize customer requests, contractor profiles, communication and booking progression. Give the operations team a clearer understanding of current demand, available supply and outstanding operational decisions.'}
+      ],
+      connections:[
+        {from:'customer',to:'assess',kind:'demand'},
+        {from:'assess',to:'coverage',kind:'demand'},
+        {from:'coverage',to:'match',kind:'demand'},
+        {from:'acquire',to:'onboard',kind:'supply'},
+        {from:'onboard',to:'activate',kind:'supply'},
+        {from:'activate',to:'match',kind:'supply'},
+        {from:'match',to:'communicate',kind:'main'},
+        {from:'communicate',to:'confirm',kind:'main'},
+        {from:'confirm',to:'operations',kind:'main'},
+        {from:'communicate',to:'exception',kind:'exception',path:'M1245 395 C1245 480, 1330 480, 1330 540'},
+        {from:'confirm',to:'exception',kind:'exception',path:'M1515 395 C1515 480, 1430 480, 1430 540'},
+        {from:'exception',to:'match',kind:'exception',path:'M1275 615 C1090 615, 975 520, 975 395'},
+        {from:'exception',to:'operations',kind:'exception',path:'M1485 615 C1600 615, 1600 320, 1680 320'}
+      ],
+      canvas:{width:2130,height:800},
+      labels:[
+        {text:'Customer demand',x:165,y:86,kind:'demand'},
+        {text:'Contractor supply',x:165,y:376,kind:'supply'},
+        {text:'Exception path',x:1380,y:526,kind:'exception'}
+      ],
+      spine:{from:'customer',to:'operations',label:'Operations supports the full process',labelX:975,labelY:695},
+      hint:'Scroll in any direction · Hover or focus a step',
+      viewportLabel:'Service Dispatch horizontal business process flow',
+      scopeNote:'Business process view · Not a verified live integration.',
+      start:'match'
+    },
     brief:{
       contribution:'I built and refined the public intake flow, including which request details dispatch receives and how customers receive a confirmation reference.',
       challenge:'Taking a request creates an expectation. The operation can fulfil it only when coverage, contractor eligibility and availability line up.',
@@ -6607,11 +6763,12 @@ function projectIndexFor(id){ return Math.max(0,PROJECTS.findIndex(p=>p.id===id)
 /* ---------- Customer Acquisition overview + process view ---------- */
 function projectOverviewBriefHTML(p){
   const o=p.overview;
+  const what=Array.isArray(o.whatItIs)?o.whatItIs:[o.whatItIs];
   return `<section class="pw-window pw-overview-window pw-overview-what" aria-labelledby="pwOverviewWhatTitle">
     <div class="pw-winbar"><span class="pw-winlabel">Project overview</span><span class="pw-winmeta">Context</span></div>
     <div class="pw-overview-body">
       <h2 id="pwOverviewWhatTitle">What it is</h2>
-      <p class="pw-overview-lead">${escHTML(o.whatItIs)}</p>
+      ${what.map(t=>`<p class="pw-overview-lead">${escHTML(t)}</p>`).join('')}
     </div>
   </section>
   <section class="pw-window pw-overview-window pw-overview-challenges" aria-labelledby="pwOverviewChallengesTitle">
@@ -6663,6 +6820,12 @@ function flowIcon(name){
   if(name==='message') return `<svg ${attrs}><rect x="3.5" y="5" width="17" height="12" rx="3"/><path d="m6 17-2.5 3v-3.8"/><path d="M7.5 9.5h9M7.5 13h6"/></svg>`;
   if(name==='repeat') return `<svg ${attrs}><path d="M5 8.5A4.5 4.5 0 0 1 9.5 4H19l-3-3M19 15.5a4.5 4.5 0 0 1-4.5 4.5H5l3 3"/><path d="M19 4v4h-4M5 20v-4h4"/></svg>`;
   if(name==='calendar') return `<svg ${attrs}><rect x="3.5" y="5.5" width="17" height="15" rx="2.5"/><path d="M7.5 3v5M16.5 3v5M3.5 10h17"/><path d="m8.5 15 2.2 2.2 4.8-4.7"/></svg>`;
+  if(name==='clipboard') return `<svg ${attrs}><rect x="5" y="4.5" width="14" height="16.5" rx="2.5"/><path d="M9 4.5V3h6v1.5M8.5 9h7M8.5 13h7M8.5 17h4"/></svg>`;
+  if(name==='map') return `<svg ${attrs}><path d="m3.5 6 5-2 7 2 5-2v14l-5 2-7-2-5 2Z"/><path d="M8.5 4v14M15.5 6v14"/></svg>`;
+  if(name==='id') return `<svg ${attrs}><rect x="3.5" y="5" width="17" height="14" rx="3"/><circle cx="9" cy="11" r="2.2"/><path d="M5.8 16.5c.4-1.7 1.5-2.6 3.2-2.6s2.8.9 3.2 2.6M14.5 10h3M14.5 13.5h3"/></svg>`;
+  if(name==='check') return `<svg ${attrs}><circle cx="12" cy="12" r="8"/><path d="m8.3 12.2 2.3 2.3 5.1-5"/></svg>`;
+  if(name==='link') return `<svg ${attrs}><path d="M9.8 14.2 14.2 9.8"/><path d="M7.4 16.6 5.8 18.2a3.4 3.4 0 0 1-4.8-4.8l3.2-3.2a3.4 3.4 0 0 1 4.8 0"/><path d="m16.6 7.4 1.6-1.6a3.4 3.4 0 0 1 4.8 4.8l-3.2 3.2a3.4 3.4 0 0 1-4.8 0"/></svg>`;
+  if(name==='alert') return `<svg ${attrs}><path d="M12 3.5 21 20H3Z"/><path d="M12 9v5M12 17.2v.1"/></svg>`;
   return `<svg ${attrs}><path d="M4 19V5M4 19h16"/><path d="M7 16v-4M11 16V8M15 16v-6M19 16V6"/></svg>`;
 }
 function flowConnectionPath(a,b,kind){
@@ -6681,13 +6844,17 @@ function projectFlowHTML(p){
   const paths=f.connections.map(c=>{
     const a=map[c.from], b=map[c.to];
     if(!a||!b) return '';
-    return `<path class="pw-flow-link pw-flow-link--${c.kind}" data-from="${c.from}" data-to="${c.to}" d="${flowConnectionPath(a,b,c.kind)}"/>`;
+    const d=c.path||flowConnectionPath(a,b,c.kind);
+    return `<path class="pw-flow-link pw-flow-link--${c.kind}" data-from="${c.from}" data-to="${c.to}" d="${d}"/>`;
   }).join('');
   const canvasW=f.canvas?.width||2220, canvasH=f.canvas?.height||640;
   const spineFrom=f.spine?map[f.spine.from]:null, spineTo=f.spine?map[f.spine.to]:null;
   const spine=(spineFrom&&spineTo)?`<path class="pw-flow-spine" d="M${spineFrom.x+105} ${canvasH-65} H${spineTo.x+105}"/><path class="pw-flow-spine-tick" d="M${spineTo.x+105} ${canvasH-65} V${spineTo.y+150}"/>`:'';
   const labels=(f.labels||[]).map(l=>`<span class="pw-flow-label pw-flow-label--${escHTML(l.kind||'note')}" style="left:${l.x}px;top:${l.y}px">${escHTML(l.text)}</span>`).join('');
-  const nodes=f.nodes.map((n,i)=>`<button class="pw-flow-node" type="button" data-flow-node="${n.id}" data-flow-index="${i}" style="left:${n.x}px;top:${n.y}px" aria-describedby="projectFlowTip">
+  const spineLabelStyle=f.spine&&(f.spine.labelX!=null||f.spine.labelY!=null)
+    ?` style="${f.spine.labelX!=null?`left:${f.spine.labelX}px;`:''}${f.spine.labelY!=null?`top:${f.spine.labelY}px;`:''}"`:'';
+  const spineLabel=f.spine?`<span class="pw-flow-crm-note"${spineLabelStyle}>${escHTML(f.spine.label)}</span>`:'';
+  const nodes=f.nodes.map((n,i)=>`<button class="pw-flow-node" type="button" data-flow-node="${n.id}" data-flow-index="${i}"${n.tone?` data-tone="${escHTML(n.tone)}"`:''} style="left:${n.x}px;top:${n.y}px" aria-describedby="projectFlowTip">
     <span class="pw-flow-node-top"><span class="pw-flow-node-num">${escHTML(n.num)}</span><span class="pw-flow-node-icon">${flowIcon(n.icon)}</span></span>
     <b>${escHTML(n.title)}</b>
     <span class="pw-flow-node-desc">${escHTML(n.visible)}</span>
@@ -6712,7 +6879,7 @@ function projectFlowHTML(p){
           </svg>
           ${labels}
           ${nodes}
-          ${f.spine?`<span class="pw-flow-crm-note">${escHTML(f.spine.label)}</span>`:''}
+          ${spineLabel}
         </div>
       </div>
       <div class="pw-flow-tip" id="projectFlowTip" role="status" aria-live="polite" hidden></div>
@@ -6729,6 +6896,7 @@ function projectHeroHTML(p,id){
     .replace(/ data-deck-index="[^"]*"/,'')
     .replace(/ data-card="[^"]*"/,'')
     .replace('tabindex="0"','tabindex="-1"');
+  if(p.fullTitle) card=card.replace(`<h2>${escHTML(p.title)}</h2>`,`<h2>${escHTML(p.fullTitle)}</h2>`);
   card=card.replace('<button','<span').replace('</button>','</span>');
   return `<div class="pw-project-frame">${card}</div>`;
 }
@@ -6907,7 +7075,7 @@ function openProjectFlow(){
   const alignFlowStart=()=>{
     const viewport=$('projectFlowViewport');
     if(!viewport) return;
-    const first=p.flow.nodes[0];
+    const first=p.flow.nodes.find(n=>n.id===p.flow.start)||p.flow.nodes[0];
     const center=first?first.y+75:viewport.scrollHeight/2;
     const max=Math.max(0,viewport.scrollHeight-viewport.clientHeight);
     viewport.scrollLeft=0;
@@ -6999,9 +7167,11 @@ function bindProjectFlowControls(){
     if(e.target.closest('#projectFlowBack')){ e.preventDefault(); closeProjectFlow(); return; }
     const node=e.target.closest('[data-flow-node]');
     if(node){
+      const id=node.dataset.flowNode;
       const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
       node.scrollIntoView({behavior:reduced?'auto':'smooth',block:'nearest',inline:'center'});
-      showFlowTip(node.dataset.flowNode);
+      showFlowTip(id);
+      if(!reduced) setTimeout(()=>{ if(activeFlowNodeId===id) showFlowTip(id); },520);
       return;
     }
     if(e.target.closest('#projectFlow')) clearFlowActiveNode();
@@ -7148,7 +7318,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&window.innerWidth<=1020) return;
+  if(active&&active.overview&&(window.innerWidth<=1020||(active.id==='h2ops'&&window.innerWidth<=1240))) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;
@@ -7314,6 +7484,7 @@ function openProject(id,opts={}){
   bindProjectFolds();
   resetProjectWorkspace(p,wasOpen);
   $('project').classList.toggle('project-has-overview',!!p.overview);
+  $('project').dataset.project=p.id;
   requestAnimationFrame(activateVisibleProjectMedia);
   $('project').classList.toggle('entering',willAnimate);
   $('project').classList.add('open');
@@ -7362,6 +7533,7 @@ function closeProject(opts={}){
     if(left){ left.getAnimations().forEach(a=>a.cancel()); left.style.transform=''; }
     if(card){ card.getAnimations().forEach(a=>a.cancel()); card.style.borderRadius=''; }
     overlay.classList.remove('open','closing','entering','project-flow-mode','project-has-overview');
+    delete overlay.dataset.project;
     overlay.setAttribute('aria-hidden','true');
     document.body.classList.remove('project-open','project-reveal','project-closing');
     syncUtilityToggleLabel();

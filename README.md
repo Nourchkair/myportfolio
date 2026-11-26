@@ -41,7 +41,9 @@ The Projects deck contains eight showcases in the approved order: Customer Acqui
 
 Customer Acquisition uses the revised project experience: a four-panel overview (identity card, What it is, Business challenges, Business value) and one prominent **Understand how it works** action. The process view places nine fixed-size glass steps and their connections directly over the environment, with no enclosing panel or canvas. The free-floating process plane scrolls in any direction. Target definition branches into new-prospect discovery and existing-data improvement, converges at prioritization, then continues through demonstrations, outreach, conditional follow-up, replies/bookings and CRM. Hover, focus or tap a step for an anchored explanation; **Back to project** restores the overview. A Business impact subsection within the Business value panel presents an anonymized service-referral case study with four metrics. This is a business-process view, not a technical workflow editor. The five value items are intended benefits, not measured outcomes.
 
-The remaining seven projects retain the existing Brief / System / Demonstrations / Components / Technology workspace. The overview and flow are data-driven so the same presentation can be adopted selectively for those projects later.
+Dispatch (Service Dispatch & Contractor Operations) uses the same overview and free-floating process architecture. Customer demand and contractor supply run as two labelled branches that converge at matching; communication and booking continue into operations management, with a secondary exception path that returns unresolved work to matching or operational review. Its eleven steps, branch labels and exception explanations are data-driven. No numerical impact metrics or case study are presented for Dispatch.
+
+The remaining six projects retain the existing Brief / System / Demonstrations / Components / Technology workspace. The overview and flow are data-driven so the same presentation can be adopted selectively for those projects later.
 
 Five covers and all eight demonstration diagrams are original local SVG illustrations. They are visibly labeled as conceptual system views or sample scenarios. Safiy, AFunTime and Academia OS retain their existing representative cover artwork. No live workflow, messaging, booking or CRM integration is connected to the portfolio, and no measured business results are claimed. Replace labeled sample visuals with approved product captures as they become available.
 
@@ -57,7 +59,7 @@ Five covers and all eight demonstration diagrams are original local SVG illustra
 - Local clock (no weather or IP-based location requests)
 - LinkedIn and GitHub contact links
 - Responsive layouts with a flat fallback below 1020px
-- Data-driven project overview and horizontal process flow for Customer Acquisition
+- Data-driven project overview and free-floating process flow for Customer Acquisition and Dispatch
 
 ## Structure
 
