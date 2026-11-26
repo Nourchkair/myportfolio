@@ -5063,8 +5063,11 @@
   }
 
   /* ============================================================
-     MY JOURNEY — split card + panel layout
+     MY JOURNEY — floating timeline + smaller chapter panel
      ============================================================ */
+  .about-journey-float{display:none}
+  .about-overlay.journey-open .about-intro{display:none}
+
   @media(min-width:901px){
     .about-overlay.journey-open .about-stage{
       grid-template-columns:minmax(250px,320px) minmax(0,1fr);
@@ -5075,14 +5078,40 @@
     }
     .about-overlay.journey-open .about-left{display:flex;align-items:center}
     .about-overlay.journey-open .about-right{
-      height:100%;align-items:stretch;justify-content:flex-start;
+      display:flex;flex-direction:column;justify-content:center;align-items:center;
+      gap:14px;width:100%;max-width:940px;height:100%;margin-inline:auto;
       transform:translateZ(-12px) rotateY(-5deg);transform-origin:0 50%
     }
-    .about-overlay.journey-open .about-detail{position:absolute;inset:0}
+    .about-overlay.journey-open .about-journey-float{
+      display:flex;flex-direction:column;gap:12px;width:100%;flex:none
+    }
+    .about-overlay.journey-open .about-detail{
+      position:relative;inset:auto;flex:0 1 590px;width:100%;min-height:0;max-height:590px;margin:0 auto
+    }
     .about-overlay.journey-open .about-detail-body{padding:0;overflow-y:auto}
     .about-overlay.journey-open .professional-view{
-      padding:26px clamp(20px,2.3vw,34px) 32px
+      padding:20px clamp(18px,2.2vw,28px) 24px
     }
+    .about-overlay.journey-open .pro-chapter{padding-top:0}
+    .about-overlay.journey-open .pro-float-head{padding:0 4px 10px}
+    .about-overlay.journey-open .pro-float-head .pro-eyebrow{margin-bottom:6px;font-size:7.4px}
+    .about-overlay.journey-open .pro-float-head h1{
+      margin:0 0 4px;font-size:clamp(30px,3vw,40px);line-height:1;
+      letter-spacing:-.055em;font-weight:650;color:#fff
+    }
+    .about-overlay.journey-open .pro-float-head .pro-tagline{
+      margin:0;font-size:13.6px;line-height:1.45;color:rgba(255,222,189,.88)
+    }
+    .about-overlay.journey-open .pro-timeline{
+      margin:0;padding:14px 10px 10px;border:1px solid rgba(255,255,255,.16);border-radius:20px;
+      background:linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.025)),rgba(12,20,25,.34);
+      -webkit-backdrop-filter:blur(18px) saturate(1.1);backdrop-filter:blur(18px) saturate(1.1);
+      box-shadow:0 20px 44px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.2)
+    }
+    .about-overlay.journey-open .pro-timeline-rail{left:8%;right:8%;top:14px}
+    .about-overlay.journey-open .pro-step{padding:24px 4px 8px}
+    .about-overlay.journey-open .pro-step-label{font-size:9.8px;max-width:12ch}
+    .about-overlay.journey-open .pro-step-period{font-size:5.8px}
   }
   @media(min-width:901px) and (max-width:1180px){
     .about-overlay.journey-open .pro-chapter-grid{grid-template-columns:1fr;gap:18px}
@@ -5090,9 +5119,30 @@
       display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start
     }
     .about-overlay.journey-open .pro-visual-card{min-height:210px}
-    .about-overlay.journey-open .pro-step-label{font-size:9px;max-width:10ch}
-    .about-overlay.journey-open .pro-step-period{font-size:5.4px}
+    .about-overlay.journey-open .pro-step-label{font-size:8.8px;max-width:9ch}
+    .about-overlay.journey-open .pro-step-period{font-size:5.2px}
     .about-overlay.journey-open .pro-narrative p{font-size:13.4px;line-height:1.62}
+  }
+  @media(max-width:900px){
+    .about-overlay.journey-open .about-right{
+      display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;
+      gap:12px;width:100%;height:100%;max-width:none;margin:0;overflow-y:auto;transform:none
+    }
+    .about-overlay.journey-open .about-journey-float{
+      display:flex;flex-direction:column;gap:10px;width:100%;flex:none;padding:16px 16px 0
+    }
+    .about-overlay.journey-open .about-detail{
+      position:relative;inset:auto;flex:none;width:100%;height:auto;max-height:none
+    }
+    .about-overlay.journey-open .about-detail-body{padding:0;overflow:visible}
+    .about-overlay.journey-open .professional-view{padding:16px 16px 18px}
+    .about-overlay.journey-open .pro-chapter{padding-top:0}
+    .about-overlay.journey-open .pro-float-head h1{font-size:31px}
+    .about-overlay.journey-open .pro-float-head .pro-tagline{font-size:13px}
+    .about-overlay.journey-open .pro-timeline{
+      padding:12px 8px 8px;border-radius:18px
+    }
+    .about-overlay.journey-open .pro-timeline-rail{left:9%;right:9%;top:12px}
   }
 
   /* Match the card's visible actions to the deck card during the return flight. */
@@ -5289,6 +5339,7 @@
             <div class="about-me-content" id="aboutMeContent" aria-live="polite"></div>
           </div>
         </section>
+        <div class="about-journey-float" id="aboutJourneyFloat" aria-hidden="true"></div>
         <section class="pw-window about-panel about-detail" id="aboutDetail" aria-hidden="true" aria-label="My Journey details">
           <div class="about-detail-body" id="aboutDetailBody" tabindex="0" aria-label="My Journey details"></div>
         </section>
@@ -6699,15 +6750,14 @@ function scrollProfessionalChapter(){
   }
 }
 function selectProfessionalChapter(id,opts={}){
-  const view=document.querySelector('.professional-view--merged');
-  if(!view) return;
+  const float=$('aboutJourneyFloat'), body=$('aboutDetailBody');
+  const timeline=float?.querySelector('.pro-timeline');
+  const host=body?.querySelector('#proChapter');
+  if(!timeline||!host) return;
   const index=PROFESSIONAL_CHAPTERS.findIndex(chapter=>chapter.id===id);
   if(index<0) return;
   const chapter=PROFESSIONAL_CHAPTERS[index];
   professionalChapterId=chapter.id;
-  const timeline=view.querySelector('.pro-timeline');
-  const host=view.querySelector('#proChapter');
-  if(!timeline||!host) return;
   const buttons=[...timeline.querySelectorAll('[data-pro-chapter]')];
   buttons.forEach(btn=>{
     const on=btn.dataset.proChapter===chapter.id;
@@ -6719,10 +6769,10 @@ function selectProfessionalChapter(id,opts={}){
   timeline.style.setProperty('--pro-progress',`${(index/(PROFESSIONAL_CHAPTERS.length-1))*100}%`);
   host.setAttribute('aria-labelledby',`proTab-${chapter.id}`);
   host.innerHTML=professionalChapterHTML(chapter,index);
+  body.scrollTop=0;
   if(opts.animate!==false&&!matchMedia('(prefers-reduced-motion: reduce)').matches){
     host.animate([{opacity:.25,transform:'translateY(7px)'},{opacity:1,transform:'none'}],{duration:260,easing:PROJECT_OPEN_EASE});
   }
-  if(opts.scroll) scrollProfessionalChapter();
   if(opts.announce!==false) announce(`${chapter.num} ${chapter.title}`);
   if(opts.focusChapter) setTimeout(()=>{
     if(professionalChapterId!==chapter.id) return;
@@ -6730,22 +6780,23 @@ function selectProfessionalChapter(id,opts={}){
   },opts.animate===false?0:60);
 }
 function renderProfessionalView(body){
+  const float=$('aboutJourneyFloat');
+  if(!float) return;
   const steps=PROFESSIONAL_CHAPTERS.map((chapter,i)=>`<button class="pro-step" type="button" role="tab" id="proTab-${chapter.id}" data-pro-chapter="${chapter.id}" aria-label="${chapter.num} ${escHTML(chapter.title)} — ${escHTML(chapter.period)}" aria-selected="${i===0?'true':'false'}" aria-controls="proChapter" tabindex="${i===0?'0':'-1'}"><span class="pro-step-dot" aria-hidden="true"></span><span class="pro-step-num">${chapter.num}</span><span class="pro-step-label">${escHTML(chapter.label)}</span><span class="pro-step-period">${escHTML(chapter.period)}</span></button>`).join('');
-  body.innerHTML=`<div class="professional-view professional-view--merged">
-    <header class="pro-section-head">
+  float.innerHTML=`<header class="pro-float-head">
       <span class="pro-eyebrow">My Journey / Professional experience</span>
       <h1>My Journey</h1>
       <p class="pro-tagline">A career built across customers, commerce and systems.</p>
-      <div class="pro-intro">${PROFESSIONAL_INTRO.map(p=>`<p>${escHTML(p)}</p>`).join('')}</div>
     </header>
-    <div class="pro-timeline" id="proTimeline" role="tablist" aria-label="My Journey chapters" style="--pro-progress:0%">
+    <div class="pro-timeline pro-timeline--float" id="proTimeline" role="tablist" aria-label="My Journey chapters" style="--pro-progress:0%">
       <div class="pro-timeline-rail" aria-hidden="true"><span class="pro-timeline-track"><span class="pro-timeline-fill"></span></span></div>
       ${steps}
-    </div>
+    </div>`;
+  float.setAttribute('aria-hidden','false');
+  body.innerHTML=`<div class="professional-view professional-view--merged pro-journey-body">
     <section class="pro-chapter" id="proChapter" role="tabpanel" tabindex="0"></section>
   </div>`;
-  const view=body.querySelector('.professional-view--merged');
-  const timeline=view.querySelector('.pro-timeline');
+  const timeline=float.querySelector('.pro-timeline');
   timeline.addEventListener('click',e=>{
     const btn=e.target.closest('[data-pro-chapter]');
     if(btn) selectProfessionalChapter(btn.dataset.proChapter,{animate:true});
@@ -6763,11 +6814,11 @@ function renderProfessionalView(body){
     if(e.key==='End') next=buttons.length-1;
     selectProfessionalChapter(buttons[next].dataset.proChapter,{animate:true,focus:true});
   });
-  view.querySelector('#proChapter').addEventListener('click',e=>{
+  body.querySelector('#proChapter').addEventListener('click',e=>{
     const btn=e.target.closest('[data-pro-prev],[data-pro-next]');
     if(!btn) return;
     const id=btn.dataset.proPrev||btn.dataset.proNext;
-    if(id) selectProfessionalChapter(id,{animate:true,scroll:true,focusChapter:true});
+    if(id) selectProfessionalChapter(id,{animate:true,focusChapter:true});
   });
   selectProfessionalChapter(PROFESSIONAL_CHAPTERS[0].id,{animate:false,announce:false});
 }
@@ -6871,6 +6922,7 @@ function resetAboutPanels(){
   removeAboutLeftGhost();
   resetAboutMeWorkspace();
   $('aboutView')?.classList.remove('actions-hidden','journey-open');
+  $('aboutJourneyFloat')?.setAttribute('aria-hidden','true');
   setAboutReading(false);
   const intro=$('aboutIntro'), detail=$('aboutDetail');
   if(intro){ intro.classList.remove('is-hidden','is-content-hidden'); intro.setAttribute('aria-hidden','false'); }
@@ -7001,6 +7053,7 @@ function restoreAboutIntro(){
   cancelAboutPanelFlight();
   removeAboutLeftGhost();
   $('aboutView')?.classList.remove('journey-open');
+  $('aboutJourneyFloat')?.setAttribute('aria-hidden','true');
   setAboutReading(false);
   const profile=aboutLiveProfileCard();
   if(profile){
