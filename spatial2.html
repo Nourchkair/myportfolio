@@ -4972,6 +4972,83 @@
     #project[data-project="h2ops"].project-has-overview .pw-system,
     #project[data-project="h2ops"].project-has-overview .pw-left-slot{transform:none!important}
   }
+
+  /* ============================================================
+     AI CUSTOMER COMMUNICATIONS — parallel channel process
+     ============================================================ */
+  .pw-flow-link--entry{stroke:rgba(255,255,255,.3)}
+  .pw-flow-link--channel{stroke:rgba(255,210,161,.52);stroke-width:1.6}
+  .pw-flow-link--outcome{stroke:rgba(182,211,225,.42)}
+  .pw-flow-label--entry{
+    padding:4px 8px;font-size:7px;letter-spacing:.11em;color:rgba(255,255,255,.56);
+    border-color:rgba(255,255,255,.2);background:rgba(7,13,17,.74)
+  }
+  .pw-flow-label--channel{
+    padding:4px 9px;font-size:7.6px;letter-spacing:.11em;color:rgba(255,232,208,.9);
+    border-color:rgba(255,210,161,.34);background:rgba(7,13,17,.74)
+  }
+  .pw-flow-label--outcome{
+    padding:4px 8px;font-size:7.4px;letter-spacing:.08em;color:rgba(205,226,235,.8);
+    border-color:rgba(190,220,235,.25);background:rgba(7,13,17,.72)
+  }
+  .pw-flow-node[data-tone="channel"]{
+    border-color:rgba(255,210,161,.4);
+    background:
+      radial-gradient(ellipse at 16% 0%,rgba(255,210,161,.12),transparent 66%),
+      linear-gradient(155deg,rgba(255,255,255,.12),rgba(255,255,255,.025)),
+      rgba(12,20,25,.84);
+    box-shadow:0 22px 48px rgba(0,0,0,.36),0 0 0 1px rgba(255,210,161,.08),inset 0 1px 0 rgba(255,255,255,.2)
+  }
+  .pw-flow-node[data-tone="channel"] .pw-flow-node-num{color:rgba(255,225,194,.95)}
+  .pw-flow-node[data-tone="channel"] .pw-flow-node-icon{
+    border-color:rgba(255,210,161,.36);background:rgba(255,210,161,.08);color:var(--accent)
+  }
+
+  /* Communications overview stacks before its denser middle column becomes cramped */
+  @media(min-width:1021px) and (max-width:1240px){
+    #project[data-project="communications"].project-has-overview .pw-canvas{
+      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px;perspective:none!important
+    }
+    #project[data-project="communications"].project-has-overview .pw-stage{
+      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
+      width:100%;transform:none!important
+    }
+    #project[data-project="communications"].project-has-overview .pw-left,
+    #project[data-project="communications"].project-has-overview .pw-middle,
+    #project[data-project="communications"].project-has-overview .pw-right,
+    #project[data-project="communications"].project-has-overview .pw-project-card,
+    #project[data-project="communications"].project-has-overview .pw-project-frame,
+    #project[data-project="communications"].project-has-overview .pw-brief,
+    #project[data-project="communications"].project-has-overview .pw-system,
+    #project[data-project="communications"].project-has-overview .pw-left-slot{transform:none!important}
+    #project[data-project="communications"].project-has-overview .pw-left-slot{display:block!important}
+    #project[data-project="communications"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
+    #project[data-project="communications"].project-has-overview .pw-right{display:flex!important;height:auto!important}
+    #project[data-project="communications"].project-has-overview .pw-overview-what,
+    #project[data-project="communications"].project-has-overview .pw-overview-challenges,
+    #project[data-project="communications"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
+    #project[data-project="communications"].project-has-overview .pw-overview-body{overflow:visible}
+    #project[data-project="communications"].project-has-overview .pw-overview-body h2{font-size:27px}
+    #project[data-project="communications"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
+    #project[data-project="communications"].project-has-overview .pw-project-frame{margin:0 auto}
+  }
+  /* short and narrower desktop range: compact type, with the middle split rebalanced */
+  @media(min-width:1241px) and (max-width:1439px),(min-width:1241px) and (max-height:899px){
+    #project[data-project="communications"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
+    #project[data-project="communications"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
+    #project[data-project="communications"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
+    #project[data-project="communications"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
+    #project[data-project="communications"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
+    #project[data-project="communications"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
+    #project[data-project="communications"].project-has-overview .pw-overview-what{flex:.9 1 0}
+    #project[data-project="communications"].project-has-overview .pw-overview-challenges{flex:1.1 1 0}
+    #project[data-project="communications"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:40%}
+  }
+  /* flow header readability over the environment */
+  #project[data-project="communications"] .pw-flow-bar:before{
+    content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
+  }
 </style>
 </head>
 <body data-mode="home">
@@ -5455,10 +5532,74 @@ const PROJECTS=[
   },
   {
     id:'communications', num:'03', title:'AI Customer Communications', project:'H2Ops', category:'AI Solutions',
-    description:'AI voice receptionist and SMS workflows for service businesses, covering inquiry triage, customer replies and appointment management.',
-    capabilities:['AI voice agents','SMS agents','Inquiry triage and booking'],
+    description:'An AI-powered communication system that manages customer inquiries, conversational interactions, appointment scheduling and customer reactivation.',
+    capabilities:['Conversational AI','Customer Experience','Communication Automation'],
     cover:'assets/cards/communications.svg',
     coverAlt:'Illustration of separate inquiry handling and appointment communication lanes.',
+    overview:{
+      whatItIs:[
+        'An AI-powered customer communication system that combines intelligent inquiry management, conversational voice and SMS agents, appointment scheduling and customer reactivation.',
+        'The system helps businesses respond to customer needs, capture opportunities and manage routine conversations while reducing dependence on manual intervention.'
+      ],
+      challenges:[
+        'Missed calls and unanswered customer inquiries.',
+        'Slow response times resulting in missed opportunities.',
+        'Repetitive conversations consuming employee time.',
+        'Limited customer service availability outside business hours.',
+        'Time-consuming manual appointment management.',
+        'Underutilized customer databases.',
+        'Fragmented communication across multiple channels.'
+      ],
+      value:[
+        'Faster and more consistent customer responses.',
+        'Extended customer communication availability.',
+        'Reduced administrative workload.',
+        'Better utilization of existing customer databases.',
+        'More efficient appointment management.',
+        'Increased communication capacity without proportional staffing increases.'
+      ],
+      cta:'Understand how it works'
+    },
+    flow:{
+      eyebrow:'AI Customer Communications / Business process',
+      title:'How AI Customer Communications works',
+      intro:'Incoming inquiries and customer reactivation converge into a shared understanding stage, then branch into parallel voice and SMS conversations before next actions and CRM tracking.',
+      nodes:[
+        {id:'inquiries',num:'01',title:'Incoming inquiries',visible:'Capture new customer interest.',icon:'message',x:60,y:80,explanation:'Collect incoming customer inquiries and relevant contact information, including the source of the inquiry where available. This helps businesses organize incoming demand and reduce the likelihood of overlooking potential opportunities.'},
+        {id:'reactivation',num:'02',title:'Customer reactivation',visible:'Reconnect with existing prospects.',icon:'repeat',x:60,y:400,explanation:'Identify previous customers and inactive prospects who may still benefit from the business’s services. Initiate relevant conversations to uncover opportunities within the existing customer database instead of relying exclusively on new customer acquisition.'},
+        {id:'understand',num:'03',title:'Understand customer needs',visible:'Qualify and prioritize inquiries.',icon:'search',x:330,y:240,explanation:'Evaluate the nature, intent and relevance of each inquiry. Determine what the customer needs and which communication or follow-up approach is appropriate, allowing the business to allocate attention more effectively.'},
+        {id:'voice',num:'04',title:'AI voice agent',visible:'Handle natural phone conversations.',icon:'phone',x:600,y:120,tone:'channel',explanation:'Enable customers to interact with an AI-powered voice receptionist capable of understanding inquiries and supporting routine customer interactions, including appointment-related requests. This reduces dependence on staff availability for routine telephone conversations.'},
+        {id:'sms',num:'05',title:'AI SMS agent',visible:'Engage customers through text.',icon:'message',x:600,y:380,tone:'channel',explanation:'Use conversational AI to interpret customer messages, provide relevant responses and continue interactions through SMS. Customers can communicate asynchronously while the business maintains a more consistent response process.'},
+        {id:'next',num:'06',title:'Determine next action',visible:'Turn conversations into decisions.',icon:'filter',x:870,y:240,explanation:'Identify the appropriate next step based on the customer’s request, conversation and available information. This may involve answering a question, managing an appointment, continuing the conversation or identifying a need for human assistance.'},
+        {id:'appointment',num:'07',title:'Appointment management',visible:'Book, reschedule or cancel.',icon:'calendar',x:1140,y:120,explanation:'Support appointment-related requests by checking calendar availability and managing bookings, rescheduling or cancellations. This reduces administrative work and helps customers complete routine scheduling tasks more conveniently.'},
+        {id:'followup',num:'08',title:'Follow-up & human handoff',visible:'Continue or escalate conversations.',icon:'contact',x:1140,y:380,explanation:'Identify conversations requiring additional attention and determine whether further communication or human involvement is appropriate. The objective is to prevent opportunities from being overlooked while recognizing the limits of automated communication.'},
+        {id:'crm',num:'09',title:'CRM & communication tracking',visible:'Maintain customer interaction visibility.',icon:'pipeline',x:1410,y:240,explanation:'Organize customer information, inquiry status, communication history and appointment activity. Give the business a clearer understanding of ongoing conversations and outstanding customer needs.'}
+      ],
+      connections:[
+        {from:'inquiries',to:'understand',kind:'entry'},
+        {from:'reactivation',to:'understand',kind:'entry'},
+        {from:'understand',to:'voice',kind:'channel'},
+        {from:'understand',to:'sms',kind:'channel'},
+        {from:'voice',to:'next',kind:'channel'},
+        {from:'sms',to:'next',kind:'channel'},
+        {from:'next',to:'appointment',kind:'outcome'},
+        {from:'next',to:'followup',kind:'outcome'},
+        {from:'appointment',to:'crm',kind:'outcome'},
+        {from:'followup',to:'crm',kind:'outcome'}
+      ],
+      canvas:{width:1720,height:720},
+      labels:[
+        {text:'Entry point A',x:165,y:66,kind:'entry'},
+        {text:'Entry point B',x:165,y:386,kind:'entry'},
+        {text:'Parallel conversational channels',x:705,y:104,kind:'channel'},
+        {text:'Outcome paths',x:1245,y:104,kind:'outcome'}
+      ],
+      spine:{from:'inquiries',to:'crm',label:'CRM supports the full communication lifecycle',labelX:840,labelY:615},
+      hint:'Scroll in any direction · Hover or focus a step',
+      viewportLabel:'AI Customer Communications horizontal business process flow',
+      scopeNote:'Business process view · Complementary workflows, not a single verified integration.',
+      start:'understand'
+    },
     brief:{
       contribution:null,
       challenge:'Speed matters when a customer is comparing providers. A rushed reply can still send the inquiry to the wrong place or promise a slot the business cannot deliver.',
@@ -6902,6 +7043,7 @@ function flowIcon(name){
   if(name==='link') return `<svg ${attrs}><path d="M9.8 14.2 14.2 9.8"/><path d="M7.4 16.6 5.8 18.2a3.4 3.4 0 0 1-4.8-4.8l3.2-3.2a3.4 3.4 0 0 1 4.8 0"/><path d="m16.6 7.4 1.6-1.6a3.4 3.4 0 0 1 4.8 4.8l-3.2 3.2a3.4 3.4 0 0 1-4.8 0"/></svg>`;
   if(name==='layers') return `<svg ${attrs}><path d="m12 3 8.5 4.5L12 12 3.5 7.5Z"/><path d="m3.5 12 8.5 4.5 8.5-4.5"/><path d="m3.5 16.5 8.5 4.5 8.5-4.5"/></svg>`;
   if(name==='eye') return `<svg ${attrs}><path d="M2.5 12s3.4-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.4 5.5-9.5 5.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></svg>`;
+  if(name==='phone') return `<svg ${attrs}><path d="M6.5 3.5h2.9l1.4 3.9-2 1.4a14.2 14.2 0 0 0 6.4 6.4l1.4-2 3.9 1.4v2.9a2.5 2.5 0 0 1-2.8 2.5C10.3 20.1 3.9 13.7 4 6.3a2.5 2.5 0 0 1 2.5-2.8Z"/></svg>`;
   if(name==='alert') return `<svg ${attrs}><path d="M12 3.5 21 20H3Z"/><path d="M12 9v5M12 17.2v.1"/></svg>`;
   return `<svg ${attrs}><path d="M4 19V5M4 19h16"/><path d="M7 16v-4M11 16V8M15 16v-6M19 16V6"/></svg>`;
 }
@@ -7395,7 +7537,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&(window.innerWidth<=1020||(active.id==='h2ops'&&window.innerWidth<=1240))) return;
+  if(active&&active.overview&&(window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240))) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;

@@ -43,7 +43,9 @@ Customer Acquisition uses the revised project experience: a four-panel overview 
 
 Dispatch (Service Dispatch & Contractor Operations) uses the same overview and free-floating process architecture. Customer demand and contractor supply run as two labelled branches that converge at matching; communication and booking continue into operations management, with a secondary exception path that returns unresolved work to matching or operational review. Its eleven steps, branch labels and exception explanations are data-driven. A Business impact subsection within the Business value panel presents an anonymized service-referral case study with four qualitative achievements. No numerical impact metrics are presented for Dispatch.
 
-The remaining six projects retain the existing Brief / System / Demonstrations / Components / Technology workspace. The overview and flow are data-driven so the same presentation can be adopted selectively for those projects later.
+AI Customer Communications uses the same overview and free-floating process architecture. Incoming inquiries and customer reactivation converge into a shared needs-assessment stage, then branch into parallel AI voice and SMS channels before next actions and CRM tracking. The CRM baseline represents support across the communication lifecycle. The flow is a conceptual process of complementary workflows, not a single verified integration. No Business Impact metrics or case study are presented for this project.
+
+The remaining five projects retain the existing Brief / System / Demonstrations / Components / Technology workspace. The overview and flow are data-driven so the same presentation can be adopted selectively for those projects later.
 
 Five covers and all eight demonstration diagrams are original local SVG illustrations. They are visibly labeled as conceptual system views or sample scenarios. Safiy, AFunTime and Academia OS retain their existing representative cover artwork. No live workflow, messaging, booking or CRM integration is connected to the portfolio, and no measured business results are claimed. Replace labeled sample visuals with approved product captures as they become available.
 
@@ -59,7 +61,7 @@ Five covers and all eight demonstration diagrams are original local SVG illustra
 - Local clock (no weather or IP-based location requests)
 - LinkedIn and GitHub contact links
 - Responsive layouts with a flat fallback below 1020px
-- Data-driven project overview and free-floating process flow for Customer Acquisition and Dispatch
+- Data-driven project overview and free-floating process flow for Customer Acquisition, Dispatch and AI Customer Communications
 
 ## Structure
 
