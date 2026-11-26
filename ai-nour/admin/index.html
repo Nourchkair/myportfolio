@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Nour — Phase 1 admin</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">
+      <strong>AI Nour</strong>
+      <span>Phase 1 admin</span>
+    </div>
+    <nav>
+      <button data-tab="overview" class="active">Overview</button>
+      <button data-tab="controls">Controls</button>
+      <button data-tab="persona">Personality</button>
+      <button data-tab="cost">Usage &amp; cost</button>
+      <button data-tab="sessions">Sessions</button>
+      <button data-tab="knowledge">Knowledge</button>
+      <button data-tab="integrations">Integrations</button>
+      <button data-tab="crm">CRM &amp; appointments</button>
+      <button data-tab="audit">Audit</button>
+    </nav>
+    <p class="local-note">Local-only surface. Bind to 127.0.0.1. Do not expose this port publicly.</p>
+  </aside>
+  <main>
+    <header>
+      <div>
+        <h1 id="page-title">Overview</h1>
+        <p id="worker-note">Connecting to the local Phase 1 Worker…</p>
+      </div>
+      <button id="refresh" class="secondary">Refresh</button>
+    </header>
+    <div id="error" class="error hidden"></div>
+
+    <section id="tab-overview" class="panel">
+      <div id="overview-cards" class="cards"></div>
+      <div id="overview-flags" class="block"></div>
+    </section>
+
+    <section id="tab-controls" class="panel hidden">
+      <h2>Feature controls</h2>
+      <p class="muted">Changes take effect immediately and are audited. Google writes remain disabled by default.</p>
+      <div id="flag-controls" class="controls"></div>
+      <button id="save-flags">Save controls</button>
+      <p id="flags-result" class="muted"></p>
+    </section>
+
+    <section id="tab-persona" class="panel hidden">
+      <h2>Personality and instructions</h2>
+      <p class="muted">This instruction is applied server-side to text and Live prompts.</p>
+      <textarea id="persona" rows="10"></textarea>
+      <button id="save-persona">Save personality</button>
+      <p id="persona-result" class="muted"></p>
+    </section>
+
+    <section id="tab-cost" class="panel hidden">
+      <h2>Usage and cost</h2>
+      <div id="cost-summary" class="cards"></div>
+      <div id="cost-events" class="table-wrap"></div>
+    </section>
+
+    <section id="tab-sessions" class="panel hidden">
+      <h2>Conversation sessions</h2>
+      <div id="session-list" class="table-wrap"></div>
+      <h3>Selected session</h3>
+      <pre id="session-detail" class="detail">Select a session.</pre>
+    </section>
+
+    <section id="tab-knowledge" class="panel hidden">
+      <h2>Knowledge</h2>
+      <div id="knowledge-meta" class="cards"></div>
+      <div class="row">
+        <input id="knowledge-query" placeholder="Search the public corpus…">
+        <button id="knowledge-search">Search</button>
+      </div>
+      <div id="knowledge-results" class="table-wrap"></div>
+      <h3>Admin overrides</h3>
+      <div id="knowledge-overrides" class="table-wrap"></div>
+    </section>
+
+    <section id="tab-integrations" class="panel hidden">
+      <h2>Integrations</h2>
+      <p class="muted">Read-only status. Synthetic write tests are available only when explicitly enabled.</p>
+      <button id="refresh-integrations" class="secondary">Refresh integration status</button>
+      <div id="integration-status" class="cards"></div>
+      <div class="row">
+        <button id="synthetic-test" class="danger" disabled>Run synthetic write test</button>
+      </div>
+      <pre id="synthetic-result" class="detail"></pre>
+    </section>
+
+    <section id="tab-crm" class="panel hidden">
+      <h2>CRM &amp; appointments</h2>
+      <div id="crm-summary" class="cards"></div>
+      <h3>D1 appointments</h3>
+      <div id="booking-list" class="table-wrap"></div>
+    </section>
+
+    <section id="tab-audit" class="panel hidden">
+      <h2>Audit and operations</h2>
+      <h3>Admin audit</h3>
+      <div id="audit-list" class="table-wrap"></div>
+      <h3>Operational events</h3>
+      <div id="ops-list" class="table-wrap"></div>
+    </section>
+  </main>
+  <script type="module" src="/admin.js"></script>
+</body>
+</html>

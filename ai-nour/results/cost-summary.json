@@ -1,0 +1,233 @@
+{
+  "budget": {
+    "dailyUsdMicros": 34559,
+    "cumulativeUsdMicros": 34559,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 965441,
+    "cumulativeRemainingUsdMicros": 6965441,
+    "allowed": true
+  },
+  "events": [
+    {
+      "id": 19,
+      "request_id": "6ddbfa5c-bc2d-4bc5-a5a0-51fb57a64c36:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1455,
+      "output_tokens": 16,
+      "usd_micros": 153,
+      "created_at": 1795721706398
+    },
+    {
+      "id": 20,
+      "request_id": "6ddbfa5c-bc2d-4bc5-a5a0-51fb57a64c36:text:2",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_tool_followup",
+      "input_tokens": 1492,
+      "output_tokens": 38,
+      "usd_micros": 166,
+      "created_at": 1795721706398
+    },
+    {
+      "id": 18,
+      "request_id": "3b7fc3dd-e00a-4de3-88b6-3a2d41f0483b:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1485,
+      "output_tokens": 49,
+      "usd_micros": 169,
+      "created_at": 1795721705649
+    },
+    {
+      "id": 17,
+      "request_id": "1f7c86e5-6a9b-4d7b-9014-60dd4d4a8f72:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1137,
+      "output_tokens": 28,
+      "usd_micros": 126,
+      "created_at": 1795721704943
+    },
+    {
+      "id": 16,
+      "request_id": "631f29b5-cbe2-4aef-a598-3e2df1cd50e6:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1100,
+      "output_tokens": 35,
+      "usd_micros": 125,
+      "created_at": 1795721704289
+    },
+    {
+      "id": 15,
+      "request_id": "3ee27c45-9913-457e-8b7d-42e1c71823a8:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1268,
+      "output_tokens": 30,
+      "usd_micros": 139,
+      "created_at": 1795721703674
+    },
+    {
+      "id": 14,
+      "request_id": "6d8d870e-a8d6-4750-9a5c-519e74802543:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1249,
+      "output_tokens": 23,
+      "usd_micros": 135,
+      "created_at": 1795721674927
+    },
+    {
+      "id": 13,
+      "request_id": "a9eae822-483e-4829-859c-2100be1bad2b:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1035,
+      "output_tokens": 31,
+      "usd_micros": 117,
+      "created_at": 1795721667873
+    },
+    {
+      "id": 12,
+      "request_id": "e359b46f-65d0-40dd-9d29-07795ca77532:live",
+      "provider": "gemini",
+      "model": "gemini-3.8-live",
+      "capability": "live_voice",
+      "input_tokens": 1025,
+      "output_tokens": 234,
+      "usd_micros": 4014,
+      "created_at": 1795721602128
+    },
+    {
+      "id": 11,
+      "request_id": "da8c9249-3504-495d-9e76-83815ef4f6f1:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 969,
+      "output_tokens": 27,
+      "usd_micros": 108,
+      "created_at": 1795721589168
+    },
+    {
+      "id": 10,
+      "request_id": "ed5c5c3c-7688-4466-8b1c-57b826134452:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 969,
+      "output_tokens": 34,
+      "usd_micros": 111,
+      "created_at": 1795721569450
+    },
+    {
+      "id": 9,
+      "request_id": "4ae78658-cc55-4db7-9f23-11a5bdec1ee8:live",
+      "provider": "gemini",
+      "model": "gemini-3.8-live",
+      "capability": "live_voice",
+      "input_tokens": 1078,
+      "output_tokens": 75,
+      "usd_micros": 2145,
+      "created_at": 1795721258026
+    },
+    {
+      "id": 7,
+      "request_id": "72d37097-e975-4c6c-acac-99a2ed9101c6:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1156,
+      "output_tokens": 16,
+      "usd_micros": 123,
+      "created_at": 1795721241062
+    },
+    {
+      "id": 8,
+      "request_id": "72d37097-e975-4c6c-acac-99a2ed9101c6:text:2",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_tool_followup",
+      "input_tokens": 1193,
+      "output_tokens": 13,
+      "usd_micros": 126,
+      "created_at": 1795721241062
+    },
+    {
+      "id": 6,
+      "request_id": "2c5c6752-540a-48ab-a90d-d8c9fdddbe62:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 966,
+      "output_tokens": 42,
+      "usd_micros": 114,
+      "created_at": 1795721240314
+    },
+    {
+      "id": 5,
+      "request_id": "c1728fbd-9f75-491d-92e3-ebe192b3ead3:live",
+      "provider": "gemini",
+      "model": "gemini-3.8-live",
+      "capability": "live_voice",
+      "input_tokens": 915,
+      "output_tokens": 0,
+      "usd_micros": 1123,
+      "created_at": 1795720806905
+    },
+    {
+      "id": 3,
+      "request_id": "5fc6a96b-2c23-4260-a698-e7dd10d53503:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1115,
+      "output_tokens": 16,
+      "usd_micros": 119,
+      "created_at": 1795720730906
+    },
+    {
+      "id": 4,
+      "request_id": "5fc6a96b-2c23-4260-a698-e7dd10d53503:text:2",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_tool_followup",
+      "input_tokens": 1152,
+      "output_tokens": 10,
+      "usd_micros": 121,
+      "created_at": 1795720730906
+    },
+    {
+      "id": 2,
+      "request_id": "e959e417-4c36-458f-ad24-235beeb115a5:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 914,
+      "output_tokens": 48,
+      "usd_micros": 112,
+      "created_at": 1795720730154
+    },
+    {
+      "id": 1,
+      "request_id": "phase0a-carryover",
+      "provider": "gemini",
+      "model": "phase0a-validation",
+      "capability": "carryover",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usd_micros": 25213,
+      "created_at": 1795720706000
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "status": 200,
+  "result": {
+    "ok": true,
+    "result": {
+      "sheets": {
+        "ok": true,
+        "created": true,
+        "rows": 2,
+        "recordPresent": true,
+        "cleanedUp": true
+      },
+      "calendar": {
+        "ok": true,
+        "meetLinkPresent": true,
+        "cancelled": true
+      },
+      "drive": {
+        "ok": true,
+        "uploaded": true,
+        "downloaded": true,
+        "decryptsExactly": true,
+        "cleanedUp": true
+      },
+      "gmail": {
+        "ok": true,
+        "created": true,
+        "read": true,
+        "cleanedUp": true
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "ai-nour-phase1",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "AI Nour Phase 1 prototype: modular Cloudflare Worker, Gemini adapters, Google integrations, and local admin surface",
+  "scripts": {
+    "build:knowledge": "node scripts/build-knowledge.mjs",
+    "build:ui": "node scripts/build-ui.mjs",
+    "build": "npm run build:knowledge && npm run build:ui",
+    "dev": "wrangler dev --local --port 8789",
+    "db:migrate:local": "wrangler d1 migrations apply ai-nour-phase1-dev --local",
+    "db:migrate:remote": "wrangler d1 migrations apply ai-nour-phase1-dev --remote",
+    "test": "node --test tests/*.test.mjs",
+    "test:api": "node scripts/test-api.mjs",
+    "admin": "node scripts/admin-server.mjs",
+    "retrieval": "node tests/retrieval-benchmark.mjs",
+    "test:security": "node scripts/security-api.mjs",
+    "test:real": "node scripts/real-smoke.mjs",
+    "test:fr": "node scripts/real-french.mjs",
+    "test:recovery": "node scripts/recovery-test.mjs",
+    "google:synthetic": "node scripts/google-synthetic.mjs"
+  },
+  "dependencies": {
+    "@google/genai": "3.6.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "wrangler": "^4.168.0"
+  }
+}

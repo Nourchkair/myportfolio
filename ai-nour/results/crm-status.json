@@ -1,0 +1,22 @@
+{
+  "configured": true,
+  "crm": {
+    "title": "AI Nour CRM",
+    "tabs": [
+      "Contacts",
+      "Inquiries",
+      "Pipeline",
+      "Appointments",
+      "Follow-ups",
+      "Consent"
+    ],
+    "counts": {
+      "Contacts": 0,
+      "Inquiries": 0,
+      "Pipeline": 0,
+      "Appointments": 0,
+      "Follow-ups": 0,
+      "Consent": 0
+    }
+  }
+}

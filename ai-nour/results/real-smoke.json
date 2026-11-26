@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-11-26T19:27:20.258Z",
+  "model": "gemini-3.8-live",
+  "checks": {
+    "session": true,
+    "textChat": true,
+    "textGrounded": true,
+    "textReply": "Safiy is a local-first AI workplace assistant that captures conversations, organizes professional knowledge, and provides contextual assistance across connected applications. It bridges the gap between everyday workplace discussions and business execution to streamline your workflow.",
+    "toolNavigation": true,
+    "toolReply": "I've opened the Safiy project case study for you.",
+    "liveToken": true,
+    "liveConfigTools": true,
+    "liveSetup": true,
+    "liveAudio": true,
+    "liveToolCall": true,
+    "liveTranscript": true,
+    "liveTurnPersisted": true,
+    "sharedContext": true
+  },
+  "usage": {},
+  "costs": {
+    "textChatUsdMicros": 114,
+    "toolChatUsdMicros": 249,
+    "liveTurnUsdMicros": 2145
+  },
+  "live": {
+    "events": [
+      "open",
+      "setup",
+      "toolCall",
+      "turnComplete",
+      "output-transcript",
+      "output-transcript",
+      "output-transcript",
+      "turnComplete"
+    ],
+    "transcript": "AI Nour: I've opened the Safiy \nAI Nour: project case study for\nAI Nour:  you.",
+    "audioBytes": 133920,
+    "toolCalls": [
+      {
+        "name": "openProject",
+        "args": {
+          "projectId": "safiy"
+        }
+      }
+    ],
+    "usage": {
+      "promptTokenCount": 1323,
+      "responseTokenCount": 75,
+      "totalTokenCount": 1398,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 884
+        },
+        {
+          "modality": "AUDIO",
+          "tokenCount": 194
+        }
+      ],
+      "responseTokensDetails": [
+        {
+          "modality": "AUDIO",
+          "tokenCount": 75
+        }
+      ],
+      "thoughtsTokenCount": 63
+    }
+  },
+  "session": {
+    "id": "25006f8a-440b-459c-8cae-7362ed7bfa47",
+    "messages": 6,
+    "summary": false
+  },
+  "passed": 12,
+  "failed": 0
+}

@@ -1,0 +1,2379 @@
+{
+  "generatedAt": "2026-11-26T19:38:30.043Z",
+  "source": "src/data/{projects,journey,profile,site}.js",
+  "version": 1,
+  "contentHash": "28b5ce19a31bd891",
+  "chunks": [
+    {
+      "id": "acquisition:identity",
+      "type": "project",
+      "title": "Customer Acquisition — H2Ops",
+      "text": "Customer Acquisition H2Ops Revenue & Growth AI-powered sales intelligence and customer acquisition automation. Sales Strategy AI Automation Revenue Growth",
+      "route": "/projects/acquisition",
+      "tags": [
+        "acquisition",
+        "H2Ops",
+        "Revenue & Growth",
+        "Sales Strategy",
+        "AI Automation",
+        "Revenue Growth",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ],
+      "keywords": [
+        "Customer Acquisition",
+        "H2Ops",
+        "acquisition",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:what",
+      "type": "project",
+      "title": "Customer Acquisition — what it is",
+      "text": "An AI-assisted customer acquisition system that combines market research, prospect intelligence, personalized demonstrations, intelligent outreach and automated follow-ups to help businesses identify and engage potential customers more effectively.",
+      "route": "/projects/acquisition",
+      "tags": [
+        "project",
+        "acquisition",
+        "overview"
+      ],
+      "keywords": [
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:challenges",
+      "type": "project",
+      "title": "Customer Acquisition — challenges",
+      "text": "Sales teams waste time researching unsuitable prospects. Generic outreach struggles to communicate relevant value. Manual prospecting limits sales capacity. Inconsistent follow-ups result in missed opportunities. Fragmented customer information reduces pipeline visibility.",
+      "route": "/projects/acquisition",
+      "tags": [
+        "project",
+        "acquisition",
+        "challenges"
+      ],
+      "keywords": [
+        "probleme",
+        "defi",
+        "challenge",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:value",
+      "type": "project",
+      "title": "Customer Acquisition — value",
+      "text": "Better allocation of sales resources. More relevant and personalized customer engagement. Reduced repetitive prospecting work. More consistent follow-up and opportunity management. A more scalable customer acquisition process.",
+      "route": "/projects/acquisition",
+      "tags": [
+        "project",
+        "acquisition",
+        "value"
+      ],
+      "keywords": [
+        "valeur",
+        "benefice",
+        "impact",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:contribution",
+      "type": "project",
+      "title": "Customer Acquisition — contribution",
+      "text": "I worked across the commercial logic and the demo/follow-up layer, from defining who to target to connecting demo engagement with the next sales action. Problem: Generic outreach made it difficult for a prospect to see how the offer applied to their business, while the team needed replies and bookings to drive the next step. What I did: Defined the target segments, qualification criteria and follow-up rules used to prioritize prospects. Built parts of the H2Ops demo follow-up engine, including inbox sync and booking detection, and set up the contractor demo interface. Scope: I worked across strategy and implementation within a wider H2Ops acquisition workflow that also included lead sourcing, enrichment and outreach.",
+      "route": "/projects/acquisition",
+      "tags": [
+        "project",
+        "acquisition",
+        "contribution",
+        "role"
+      ],
+      "keywords": [
+        "role",
+        "contribution",
+        "ce que nour a fait",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:intro",
+      "type": "flow",
+      "title": "Customer Acquisition — process overview",
+      "text": "A connected sales process from target definition to pipeline visibility. Replies and bookings can happen during initial outreach or later follow-up.",
+      "route": "/projects/acquisition/flow",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "process"
+      ],
+      "keywords": [
+        "processus",
+        "etapes",
+        "fonctionnement",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:target",
+      "type": "flow",
+      "title": "Customer Acquisition — Define the target customer",
+      "text": "Define the target customer Identify the ideal customer. Define the ideal customer based on industry, location, company characteristics and business needs. This establishes where the sales team should focus its resources.",
+      "route": "/projects/acquisition/flow/target",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "target"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Define the target customer",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:find",
+      "type": "flow",
+      "title": "Customer Acquisition — Find new prospects",
+      "text": "Find new prospects Discover potential buyers. Identify businesses that match the target customer profile, creating a structured list of potential sales opportunities without relying exclusively on manual research.",
+      "route": "/projects/acquisition/flow/find",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "find"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Find new prospects",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:improve",
+      "type": "flow",
+      "title": "Customer Acquisition — Improve existing prospect data",
+      "text": "Improve existing prospect data Identify who to contact. Improve existing company records by identifying decision-makers, contact information and relevant business details, while reducing incomplete or duplicate records.",
+      "route": "/projects/acquisition/flow/improve",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "improve"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Improve existing prospect data",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:prioritize",
+      "type": "flow",
+      "title": "Customer Acquisition — Prioritize opportunities",
+      "text": "Prioritize opportunities Focus on promising prospects. Evaluate prospects against the target profile and available business signals, such as relevant hiring activity, to determine which opportunities warrant greater attention.",
+      "route": "/projects/acquisition/flow/prioritize",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "prioritize"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Prioritize opportunities",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:demo",
+      "type": "flow",
+      "title": "Customer Acquisition — AI-powered demonstrations",
+      "text": "AI-powered demonstrations Show personalized business value. Generate personalized demonstration websites and AI experiences based on the prospect’s business, helping them understand how the proposed solution could work in their own environment.",
+      "route": "/projects/acquisition/flow/demo",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "demo"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "AI-powered demonstrations",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:outreach",
+      "type": "flow",
+      "title": "Customer Acquisition — Intelligent outreach",
+      "text": "Intelligent outreach Create relevant sales messages. Use business information and prospect context to prepare personalized messages that communicate relevant value rather than relying on generic sales pitches.",
+      "route": "/projects/acquisition/flow/outreach",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "outreach"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Intelligent outreach",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:nurture",
+      "type": "flow",
+      "title": "Customer Acquisition — Nurturing & follow-ups",
+      "text": "Nurturing & follow-ups Adapt to customer engagement. Adapt subsequent communication based on demo activity, engagement and responses. Avoid unnecessary follow-ups when a prospect replies or books.",
+      "route": "/projects/acquisition/flow/nurture",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "nurture"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Nurturing & follow-ups",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:replies",
+      "type": "flow",
+      "title": "Customer Acquisition — Replies & bookings",
+      "text": "Replies & bookings Capture sales opportunities. Identify replies and scheduled appointments so promising conversations can be handed to the sales team and the appropriate next action can be recorded.",
+      "route": "/projects/acquisition/flow/replies",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "replies"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Replies & bookings",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "acquisition:flow:crm",
+      "type": "flow",
+      "title": "Customer Acquisition — CRM & pipeline management",
+      "text": "CRM & pipeline management Maintain sales visibility. Centralize prospect information, outreach history, engagement and opportunity status. Give the sales team a clearer understanding of where prospects stand and what requires attention.",
+      "route": "/projects/acquisition/flow/crm",
+      "tags": [
+        "project",
+        "acquisition",
+        "flow",
+        "crm"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "CRM & pipeline management",
+        "acquisition client",
+        "prospection",
+        "ventes",
+        "automatisation",
+        "revenus"
+      ]
+    },
+    {
+      "id": "h2ops:identity",
+      "type": "project",
+      "title": "Dispatch — H2Ops Dispatch",
+      "text": "Dispatch H2Ops Dispatch Business & Operations A service operations platform connecting customer demand with contractor supply through coordinated matching, communication and booking management. Supply & Demand Coordination Operations Automation Service Management",
+      "route": "/projects/h2ops",
+      "tags": [
+        "h2ops",
+        "H2Ops Dispatch",
+        "Business & Operations",
+        "Supply & Demand Coordination",
+        "Operations Automation",
+        "Service Management",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ],
+      "keywords": [
+        "Dispatch",
+        "H2Ops Dispatch",
+        "h2ops",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:what",
+      "type": "project",
+      "title": "Dispatch — what it is",
+      "text": "A service operations platform designed for businesses that connect customers with independent service providers. The system combines customer intake, contractor acquisition and onboarding, service coverage, job matching, communication and booking confirmation into a coordinated operational process. Its objective is to help businesses manage both sides of a service marketplace while reducing manual coordination and improving operational visibility.",
+      "route": "/projects/h2ops",
+      "tags": [
+        "project",
+        "h2ops",
+        "overview"
+      ],
+      "keywords": [
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:challenges",
+      "type": "project",
+      "title": "Dispatch — challenges",
+      "text": "Time-consuming manual coordination between customers and contractors. Difficulty identifying suitable and available service providers. Fragmented communication and inconsistent follow-ups. Limited visibility into contractor readiness and service coverage. Customer requests becoming delayed or unresolved. Difficulty scaling operations without increasing administrative workload.",
+      "route": "/projects/h2ops",
+      "tags": [
+        "project",
+        "h2ops",
+        "challenges"
+      ],
+      "keywords": [
+        "probleme",
+        "defi",
+        "challenge",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:value",
+      "type": "project",
+      "title": "Dispatch — value",
+      "text": "More efficient coordination of supply and demand. Reduced administrative and operational workload. Better utilization of contractor networks. Greater visibility into service requests and their progression. More consistent customer and contractor experiences. A more scalable service delivery model.",
+      "route": "/projects/h2ops",
+      "tags": [
+        "project",
+        "h2ops",
+        "value"
+      ],
+      "keywords": [
+        "valeur",
+        "benefice",
+        "impact",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:contribution",
+      "type": "project",
+      "title": "Dispatch — contribution",
+      "text": "I worked on the front door of the dispatch process: how a service request enters the system and how the customer receives a reference. Problem: A request creates an expectation, but dispatch can only fulfil it when coverage, contractor readiness and availability line up. What I did: Built and refined the public intake flow: which request details dispatch receives, how the request is validated, and how the customer receives a confirmation reference. Scope: I worked on the intake-to-queue handoff; coverage, contractor activation and offer/confirmation sat within the wider Dispatch system.",
+      "route": "/projects/h2ops",
+      "tags": [
+        "project",
+        "h2ops",
+        "contribution",
+        "role"
+      ],
+      "keywords": [
+        "role",
+        "contribution",
+        "ce que nour a fait",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:intro",
+      "type": "flow",
+      "title": "Dispatch — process overview",
+      "text": "Customer demand and contractor supply converge at matching, then move through communication and booking, with a secondary path for exceptions.",
+      "route": "/projects/h2ops/flow",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "process"
+      ],
+      "keywords": [
+        "processus",
+        "etapes",
+        "fonctionnement",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:customer",
+      "type": "flow",
+      "title": "Dispatch — Customer request",
+      "text": "Customer request Understand what the customer needs. Customers submit a service request describing the work they need, their location and relevant preferences. This creates a structured starting point for the business instead of relying on scattered messages or phone conversations.",
+      "route": "/projects/h2ops/flow/customer",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "customer"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Customer request",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:assess",
+      "type": "flow",
+      "title": "Dispatch — Assess requirements",
+      "text": "Assess requirements Understand the job requirements. Organize the customer’s request into actionable information, including the type of service, job scope, location and scheduling requirements. This helps the business understand what kind of contractor is needed.",
+      "route": "/projects/h2ops/flow/assess",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "assess"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Assess requirements",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:coverage",
+      "type": "flow",
+      "title": "Dispatch — Check service coverage",
+      "text": "Check service coverage Determine whether demand can be served. Evaluate whether the business has suitable service coverage for the customer’s location and requirements. Requests outside current coverage can help identify opportunities for contractor recruitment and future market expansion.",
+      "route": "/projects/h2ops/flow/coverage",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "coverage"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Check service coverage",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:acquire",
+      "type": "flow",
+      "title": "Dispatch — Contractor acquisition",
+      "text": "Contractor acquisition Expand the service provider network. Identify and recruit contractors based on the services and geographic markets the business wants to support. This helps align contractor acquisition with actual or anticipated customer demand.",
+      "route": "/projects/h2ops/flow/acquire",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "acquire"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Contractor acquisition",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:onboard",
+      "type": "flow",
+      "title": "Dispatch — Contractor onboarding",
+      "text": "Contractor onboarding Understand each contractor’s capabilities. Collect relevant contractor information, including offered services, geographic coverage, availability and operating preferences. Structured contractor profiles provide the information needed to identify suitable service providers.",
+      "route": "/projects/h2ops/flow/onboard",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "onboard"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Contractor onboarding",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:activate",
+      "type": "flow",
+      "title": "Dispatch — Contractor activation",
+      "text": "Contractor activation Establish contractor readiness. Distinguish contractors who are potential partners from those who are ready to receive service opportunities. This helps the business understand its usable service capacity rather than relying solely on the size of its contractor database.",
+      "route": "/projects/h2ops/flow/activate",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "activate"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Contractor activation",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:match",
+      "type": "flow",
+      "title": "Dispatch — Match supply & demand",
+      "text": "Match supply & demand Connect the request with suitable contractors. Identify eligible contractors based on the customer’s service requirements, location and contractor readiness. This reduces manual searching and helps allocate available service capacity more effectively.",
+      "route": "/projects/h2ops/flow/match",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "match"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Match supply & demand",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:communicate",
+      "type": "flow",
+      "title": "Dispatch — Coordinate communication",
+      "text": "Coordinate communication Manage offers and responses. Coordinate communication between customers, contractors and the dispatch team. Contractors receive relevant opportunities and can respond, while the business tracks the progression of each request.",
+      "route": "/projects/h2ops/flow/communicate",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "communicate"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Coordinate communication",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:confirm",
+      "type": "flow",
+      "title": "Dispatch — Confirm the booking",
+      "text": "Confirm the booking Establish a clear service commitment. Track contractor acceptance and customer confirmation as distinct steps. This gives the business greater visibility into whether a service opportunity has progressed into a confirmed arrangement.",
+      "route": "/projects/h2ops/flow/confirm",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "confirm"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Confirm the booking",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:exception",
+      "type": "flow",
+      "title": "Dispatch — Exception management",
+      "text": "Exception management Resolve requests that need attention. Identify requests that cannot progress because of unavailable contractors, expired offers, unanswered communications or coverage limitations. These requests can be reviewed, reassigned where appropriate or handled by the operations team.",
+      "route": "/projects/h2ops/flow/exception",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "exception"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Exception management",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "h2ops:flow:operations",
+      "type": "flow",
+      "title": "Dispatch — Operations management",
+      "text": "Operations management Maintain visibility across the business. Centralize customer requests, contractor profiles, communication and booking progression. Give the operations team a clearer understanding of current demand, available supply and outstanding operational decisions.",
+      "route": "/projects/h2ops/flow/operations",
+      "tags": [
+        "project",
+        "h2ops",
+        "flow",
+        "operations"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Operations management",
+        "dispatch",
+        "repartition",
+        "entrepreneurs",
+        "livraison",
+        "contrats"
+      ]
+    },
+    {
+      "id": "communications:identity",
+      "type": "project",
+      "title": "AI Customer Communications — H2Ops",
+      "text": "AI Customer Communications H2Ops AI Solutions An AI-powered communication system that manages customer inquiries, conversational interactions, appointment scheduling and customer reactivation. Conversational AI Customer Experience Communication Automation",
+      "route": "/projects/communications",
+      "tags": [
+        "communications",
+        "H2Ops",
+        "AI Solutions",
+        "Conversational AI",
+        "Customer Experience",
+        "Communication Automation",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ],
+      "keywords": [
+        "AI Customer Communications",
+        "H2Ops",
+        "communications",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:what",
+      "type": "project",
+      "title": "AI Customer Communications — what it is",
+      "text": "An AI-powered customer communication system that combines intelligent inquiry management, conversational voice and SMS agents, appointment scheduling and customer reactivation. The system helps businesses respond to customer needs, capture opportunities and manage routine conversations while reducing dependence on manual intervention.",
+      "route": "/projects/communications",
+      "tags": [
+        "project",
+        "communications",
+        "overview"
+      ],
+      "keywords": [
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:challenges",
+      "type": "project",
+      "title": "AI Customer Communications — challenges",
+      "text": "Missed calls and unanswered customer inquiries. Slow response times resulting in missed opportunities. Repetitive conversations consuming employee time. Limited customer service availability outside business hours. Time-consuming manual appointment management. Underutilized customer databases. Fragmented communication across multiple channels.",
+      "route": "/projects/communications",
+      "tags": [
+        "project",
+        "communications",
+        "challenges"
+      ],
+      "keywords": [
+        "probleme",
+        "defi",
+        "challenge",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:value",
+      "type": "project",
+      "title": "AI Customer Communications — value",
+      "text": "Faster and more consistent customer responses. Extended customer communication availability. Reduced administrative workload. Better utilization of existing customer databases. More efficient appointment management. Increased communication capacity without proportional staffing increases.",
+      "route": "/projects/communications",
+      "tags": [
+        "project",
+        "communications",
+        "value"
+      ],
+      "keywords": [
+        "valeur",
+        "benefice",
+        "impact",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:contribution",
+      "type": "project",
+      "title": "AI Customer Communications — contribution",
+      "text": "I led the project end-to-end, from the initial communication problem through planning, implementation, testing and release. Problem: Slow or inconsistent responses were losing inquiries, while booking commitments needed to respect service duration and calendar availability. What I did: Defined the inquiry triage and appointment rules: how inquiries were captured, prioritized and routed, and when a voice or SMS response could offer or change a time. Built and tested the AI voice and SMS workflows, including booking, rescheduling and cancellation paths, then prepared the system for release. Scope: The voice, SMS and reactivation examples were separate workflows within one communication system; I owned the project from idea through shipping.",
+      "route": "/projects/communications",
+      "tags": [
+        "project",
+        "communications",
+        "contribution",
+        "role"
+      ],
+      "keywords": [
+        "role",
+        "contribution",
+        "ce que nour a fait",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:intro",
+      "type": "flow",
+      "title": "AI Customer Communications — process overview",
+      "text": "Incoming inquiries and customer reactivation converge into a shared understanding stage, then branch into parallel voice and SMS conversations before next actions and CRM tracking.",
+      "route": "/projects/communications/flow",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "process"
+      ],
+      "keywords": [
+        "processus",
+        "etapes",
+        "fonctionnement",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:inquiries",
+      "type": "flow",
+      "title": "AI Customer Communications — Incoming inquiries",
+      "text": "Incoming inquiries Capture new customer interest. Collect incoming customer inquiries and relevant contact information, including the source of the inquiry where available. This helps businesses organize incoming demand and reduce the likelihood of overlooking potential opportunities.",
+      "route": "/projects/communications/flow/inquiries",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "inquiries"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Incoming inquiries",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:reactivation",
+      "type": "flow",
+      "title": "AI Customer Communications — Customer reactivation",
+      "text": "Customer reactivation Reconnect with existing prospects. Identify previous customers and inactive prospects who may still benefit from the business’s services. Initiate relevant conversations to uncover opportunities within the existing customer database instead of relying exclusively on new customer acquisition.",
+      "route": "/projects/communications/flow/reactivation",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "reactivation"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Customer reactivation",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:understand",
+      "type": "flow",
+      "title": "AI Customer Communications — Understand customer needs",
+      "text": "Understand customer needs Qualify and prioritize inquiries. Evaluate the nature, intent and relevance of each inquiry. Determine what the customer needs and which communication or follow-up approach is appropriate, allowing the business to allocate attention more effectively.",
+      "route": "/projects/communications/flow/understand",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "understand"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Understand customer needs",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:voice",
+      "type": "flow",
+      "title": "AI Customer Communications — AI voice agent",
+      "text": "AI voice agent Handle natural phone conversations. Enable customers to interact with an AI-powered voice receptionist capable of understanding inquiries and supporting routine customer interactions, including appointment-related requests. This reduces dependence on staff availability for routine telephone conversations.",
+      "route": "/projects/communications/flow/voice",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "voice"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "AI voice agent",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:sms",
+      "type": "flow",
+      "title": "AI Customer Communications — AI SMS agent",
+      "text": "AI SMS agent Engage customers through text. Use conversational AI to interpret customer messages, provide relevant responses and continue interactions through SMS. Customers can communicate asynchronously while the business maintains a more consistent response process.",
+      "route": "/projects/communications/flow/sms",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "sms"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "AI SMS agent",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:next",
+      "type": "flow",
+      "title": "AI Customer Communications — Determine next action",
+      "text": "Determine next action Turn conversations into decisions. Identify the appropriate next step based on the customer’s request, conversation and available information. This may involve answering a question, managing an appointment, continuing the conversation or identifying a need for human assistance.",
+      "route": "/projects/communications/flow/next",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "next"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Determine next action",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:appointment",
+      "type": "flow",
+      "title": "AI Customer Communications — Appointment management",
+      "text": "Appointment management Book, reschedule or cancel. Support appointment-related requests by checking calendar availability and managing bookings, rescheduling or cancellations. This reduces administrative work and helps customers complete routine scheduling tasks more conveniently.",
+      "route": "/projects/communications/flow/appointment",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "appointment"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Appointment management",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:followup",
+      "type": "flow",
+      "title": "AI Customer Communications — Follow-up & human handoff",
+      "text": "Follow-up & human handoff Continue or escalate conversations. Identify conversations requiring additional attention and determine whether further communication or human involvement is appropriate. The objective is to prevent opportunities from being overlooked while recognizing the limits of automated communication.",
+      "route": "/projects/communications/flow/followup",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "followup"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Follow-up & human handoff",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "communications:flow:crm",
+      "type": "flow",
+      "title": "AI Customer Communications — CRM & communication tracking",
+      "text": "CRM & communication tracking Maintain customer interaction visibility. Organize customer information, inquiry status, communication history and appointment activity. Give the business a clearer understanding of ongoing conversations and outstanding customer needs.",
+      "route": "/projects/communications/flow/crm",
+      "tags": [
+        "project",
+        "communications",
+        "flow",
+        "crm"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "CRM & communication tracking",
+        "communications clients",
+        "voix",
+        "sms",
+        "service client",
+        "automatisation"
+      ]
+    },
+    {
+      "id": "knowledge:identity",
+      "type": "project",
+      "title": "B.R.A.I.N. — H2Ops Brain",
+      "text": "B.R.A.I.N. H2Ops Brain AI Solutions An organizational knowledge system that transforms business documentation, operating procedures and institutional knowledge into accessible, AI-powered business intelligence. Knowledge Management Retrieval-Augmented Generation (RAG) Enterprise AI Adoption",
+      "route": "/projects/knowledge",
+      "tags": [
+        "knowledge",
+        "H2Ops Brain",
+        "AI Solutions",
+        "Knowledge Management",
+        "Retrieval-Augmented Generation (RAG)",
+        "Enterprise AI Adoption",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ],
+      "keywords": [
+        "B.R.A.I.N.",
+        "H2Ops Brain",
+        "knowledge",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:what",
+      "type": "project",
+      "title": "B.R.A.I.N. — what it is",
+      "text": "An AI-powered organizational knowledge system designed to help businesses centralize, organize and access internal knowledge. B.R.A.I.N. combines standard operating procedures, business documentation, playbooks and organizational memory with an AI knowledge assistant designed to retrieve relevant information and provide company-specific guidance. Its objective is to make organizational knowledge more accessible, actionable and useful across the business.",
+      "route": "/projects/knowledge",
+      "tags": [
+        "project",
+        "knowledge",
+        "overview"
+      ],
+      "keywords": [
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:challenges",
+      "type": "project",
+      "title": "B.R.A.I.N. — challenges",
+      "text": "Business knowledge scattered across multiple documents and platforms. Employees spending excessive time searching for information. Repeated questions consuming management time. Inconsistent execution of business procedures. Loss of institutional knowledge when employees leave. Time-consuming employee onboarding. Generic AI assistants lacking company-specific context.",
+      "route": "/projects/knowledge",
+      "tags": [
+        "project",
+        "knowledge",
+        "challenges"
+      ],
+      "keywords": [
+        "probleme",
+        "defi",
+        "challenge",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:value",
+      "type": "project",
+      "title": "B.R.A.I.N. — value",
+      "text": "Centralized organizational intelligence. Faster access to relevant business information. More consistent execution of company procedures. Reduced dependence on individual employees’ knowledge. More efficient employee training and onboarding. Company-specific AI assistance. Better preservation of institutional knowledge.",
+      "route": "/projects/knowledge",
+      "tags": [
+        "project",
+        "knowledge",
+        "value"
+      ],
+      "keywords": [
+        "valeur",
+        "benefice",
+        "impact",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:contribution",
+      "type": "project",
+      "title": "B.R.A.I.N. — contribution",
+      "text": "I worked across the knowledge structure and the assistant experience, from defining how guidance was organized to building onboarding, chat, playbooks and organizational memory. Problem: Knowledge was scattered across documents and platforms, slowing onboarding and making routine answers depend on whoever was available. What I did: Defined the operating-library structure and document-access boundaries for procedures, decisions and playbooks. Implemented the assistant’s onboarding and chat experience, including the organization-scoped path that retrieved available documents and memory, and added playbook and organizational-memory features. Scope: The operating library and retrieval prototype remained separate systems; I worked across their knowledge structure and the assistant experience.",
+      "route": "/projects/knowledge",
+      "tags": [
+        "project",
+        "knowledge",
+        "contribution",
+        "role"
+      ],
+      "keywords": [
+        "role",
+        "contribution",
+        "ce que nour a fait",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:intro",
+      "type": "flow",
+      "title": "B.R.A.I.N. — process overview",
+      "text": "Organizational knowledge is captured, organized and maintained so the AI assistant can retrieve relevant context and support informed decisions. The library and retrieval prototype are complementary.",
+      "route": "/projects/knowledge/flow",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "process"
+      ],
+      "keywords": [
+        "processus",
+        "etapes",
+        "fonctionnement",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:documentation",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Business documentation",
+      "text": "Business documentation Capture how the business operates. Collect standard operating procedures, company policies, sales playbooks and operational guidelines. Transform scattered business documentation into a structured organizational resource.",
+      "route": "/projects/knowledge/flow/documentation",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "documentation"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Business documentation",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:memory",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Organizational memory",
+      "text": "Organizational memory Preserve business knowledge and experience. Document important decisions, established practices, business strategies and lessons learned. Preserve valuable institutional knowledge so that it does not remain exclusively with individual employees or managers.",
+      "route": "/projects/knowledge/flow/memory",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "memory"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Organizational memory",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:organize",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Organize business knowledge",
+      "text": "Organize business knowledge Create a structured knowledge library. Organize business information into relevant categories, departments, procedures and playbooks. Establish a consistent structure that makes information easier to maintain, locate and understand.",
+      "route": "/projects/knowledge/flow/organize",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "organize"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Organize business knowledge",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:maintain",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Maintain & update knowledge",
+      "text": "Maintain & update knowledge Keep organizational information relevant. Track changes to business documentation and maintain updated procedures as the organization evolves. Help distinguish established operating practices from outdated information.",
+      "route": "/projects/knowledge/flow/maintain",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "maintain"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Maintain & update knowledge",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:question",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Employee question",
+      "text": "Employee question Ask questions in natural language. Allow employees to ask questions about company procedures, responsibilities, sales practices or operational requirements without manually searching through multiple documents.",
+      "route": "/projects/knowledge/flow/question",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "question"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Employee question",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:retrieve",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Retrieve relevant knowledge",
+      "text": "Retrieve relevant knowledge Find the information that matters. Identify relevant passages within the assistant’s available knowledge sources based on the employee’s question. Retrieval-augmented generation helps provide company-specific context rather than relying exclusively on a general AI model’s knowledge.",
+      "route": "/projects/knowledge/flow/retrieve",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "retrieve"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Retrieve relevant knowledge",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:assistant",
+      "type": "flow",
+      "title": "B.R.A.I.N. — AI-powered business assistance",
+      "text": "AI-powered business assistance Provide contextual business guidance. Generate responses grounded in retrieved organizational information, within the appropriate organizational access boundaries. Help employees understand procedures, locate relevant guidance and navigate business processes.",
+      "route": "/projects/knowledge/flow/assistant",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "assistant"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "AI-powered business assistance",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "knowledge:flow:decisions",
+      "type": "flow",
+      "title": "B.R.A.I.N. — Informed decisions & execution",
+      "text": "Informed decisions & execution Turn knowledge into practical action. Help employees make better-informed decisions, follow established procedures and complete routine tasks with greater independence. The objective is to improve organizational consistency while reducing dependence on management for routine guidance.",
+      "route": "/projects/knowledge/flow/decisions",
+      "tags": [
+        "project",
+        "knowledge",
+        "flow",
+        "decisions"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Informed decisions & execution",
+        "brain",
+        "connaissances",
+        "memoire",
+        "bibliotheque",
+        "recherche"
+      ]
+    },
+    {
+      "id": "safiy:identity",
+      "type": "project",
+      "title": "Safiy — Contextual AI",
+      "text": "Safiy Contextual AI Product & Innovation A local-first AI workplace assistant that transforms conversations, professional context and knowledge into intelligent assistance and business actions. Contextual AI Workplace Productivity Product Innovation",
+      "route": "/projects/safiy",
+      "tags": [
+        "safiy",
+        "Contextual AI",
+        "Product & Innovation",
+        "Workplace Productivity",
+        "Product Innovation",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ],
+      "keywords": [
+        "Safiy",
+        "Contextual AI",
+        "safiy",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:what",
+      "type": "project",
+      "title": "Safiy — what it is",
+      "text": "Safiy is a local-first AI workplace assistant designed to capture conversations, organize professional knowledge, provide contextual assistance and support actions across connected applications. By combining meeting intelligence, knowledge retrieval, real-time AI assistance and application integrations, Safiy bridges the gap between workplace conversations and business execution. Its objective is to make AI a contextual part of everyday professional workflows rather than a separate tool users must repeatedly provide with information.",
+      "route": "/projects/safiy",
+      "tags": [
+        "project",
+        "safiy",
+        "overview"
+      ],
+      "keywords": [
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:challenges",
+      "type": "project",
+      "title": "Safiy — challenges",
+      "text": "Valuable information lost after meetings. Excessive time spent taking notes and preparing summaries. Difficulty retrieving information from previous conversations. Frequent switching between business applications. Manual execution of post-meeting administrative tasks. Generic AI assistants lacking relevant workplace context. Privacy concerns surrounding sensitive business conversations.",
+      "route": "/projects/safiy",
+      "tags": [
+        "project",
+        "safiy",
+        "challenges"
+      ],
+      "keywords": [
+        "probleme",
+        "defi",
+        "challenge",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:value",
+      "type": "project",
+      "title": "Safiy — value",
+      "text": "Improved meeting productivity. Better retention and accessibility of business knowledge. Reduced post-meeting administrative workload. More informed professional conversations. Greater continuity between discussions and business actions. Reduced application switching. Greater control over sensitive information.",
+      "route": "/projects/safiy",
+      "tags": [
+        "project",
+        "safiy",
+        "value"
+      ],
+      "keywords": [
+        "valeur",
+        "benefice",
+        "impact",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:contribution",
+      "type": "project",
+      "title": "Safiy — contribution",
+      "text": "I worked on the knowledge and release layer of Safiy, building on the open-source Meeting Transcriber project. Problem: Meeting context is easy to lose, but uploading recordings can create privacy and adoption barriers. What I did: Added Knowledge Bank imports, improved retrieval indexing and prepared beta releases. Scope: I worked within a local-first direction — recording and transcription on the Mac by default, with connected services treated as explicit choices. The broader assistant, connected actions and suggested tasks extend beyond the features I built.",
+      "route": "/projects/safiy",
+      "tags": [
+        "project",
+        "safiy",
+        "contribution",
+        "role"
+      ],
+      "keywords": [
+        "role",
+        "contribution",
+        "ce que nour a fait",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:intro",
+      "type": "flow",
+      "title": "Safiy — process overview",
+      "text": "Conversations and connected knowledge create context for the assistant, which supports real-time help and business actions. Preserved knowledge feeds continuous intelligence back into future context.",
+      "route": "/projects/safiy/flow",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "process"
+      ],
+      "keywords": [
+        "processus",
+        "etapes",
+        "fonctionnement",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:capture",
+      "type": "flow",
+      "title": "Safiy — Capture conversations",
+      "text": "Capture conversations Capture workplace discussions. Record and transcribe professional conversations across virtual and in-person meetings. Transform spoken information into searchable content that can be reviewed and used beyond the original conversation.",
+      "route": "/projects/safiy/flow/capture",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "capture"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Capture conversations",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:knowledge",
+      "type": "flow",
+      "title": "Safiy — Connect knowledge",
+      "text": "Connect knowledge Bring relevant information together. Organize documents, reference materials, previous conversations and project-specific information through Knowledge Banks and Workspaces. Give the AI assistant access to relevant professional context rather than relying exclusively on general knowledge.",
+      "route": "/projects/safiy/flow/knowledge",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "knowledge"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Connect knowledge",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:context",
+      "type": "flow",
+      "title": "Safiy — Understand context",
+      "text": "Understand context Identify relevant workplace information. Use conversation content, meeting history and available knowledge to establish context around the user’s current activity. Retrieve relevant information to support more meaningful assistance.",
+      "route": "/projects/safiy/flow/context",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "context"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Understand context",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:assistant",
+      "type": "flow",
+      "title": "Safiy — Contextual AI assistant",
+      "text": "Contextual AI assistant Provide intelligence around your work. Combine available professional context with AI capabilities to help users understand information, explore ideas, answer questions and identify potential next steps. Reduce the need to repeatedly explain the same business context to an AI assistant.",
+      "route": "/projects/safiy/flow/assistant",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "assistant"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Contextual AI assistant",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:realtime",
+      "type": "flow",
+      "title": "Safiy — Real-time assistance",
+      "text": "Real-time assistance Support conversations as they happen. Provide contextual suggestions, relevant answers, preparation guidance and potential action recommendations during professional conversations. Help users remain focused and better informed without constantly switching between applications.",
+      "route": "/projects/safiy/flow/realtime",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "realtime"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Real-time assistance",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:actions",
+      "type": "flow",
+      "title": "Safiy — Business action execution",
+      "text": "Business action execution Turn discussions into business actions. Support actions across connected applications such as Gmail, Google Calendar, Google Docs, Sheets and Drive. Help translate meeting discussions into practical tasks, documents, email drafts and scheduled activities, subject to supported integrations and user permissions.",
+      "route": "/projects/safiy/flow/actions",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "actions"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Business action execution",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:preserve",
+      "type": "flow",
+      "title": "Safiy — Preserve workplace knowledge",
+      "text": "Preserve workplace knowledge Retain valuable professional context. Organize meeting transcripts, conversation history and related information within accessible workspaces. Allow users to retrieve previous discussions and relevant knowledge without manually reconstructing past events.",
+      "route": "/projects/safiy/flow/preserve",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "preserve"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Preserve workplace knowledge",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "safiy:flow:continuous",
+      "type": "flow",
+      "title": "Safiy — Continuous intelligence",
+      "text": "Continuous intelligence Carry knowledge into future work. Make accumulated professional knowledge available to support future conversations, questions and activities. Create continuity between past discussions and present work while maintaining user control over stored information.",
+      "route": "/projects/safiy/flow/continuous",
+      "tags": [
+        "project",
+        "safiy",
+        "flow",
+        "continuous"
+      ],
+      "keywords": [
+        "etape",
+        "processus",
+        "Continuous intelligence",
+        "assistant contextuel",
+        "conversations",
+        "connaissances",
+        "reunions",
+        "assistant ia"
+      ]
+    },
+    {
+      "id": "journey:entry",
+      "type": "journey",
+      "title": "Entering the workforce — Entering",
+      "text": "Entering the workforce Entering 2022–2023 My retail chapter began at H&M in 2022. The role taught me how much of work is about consistency: showing up, reading a room and taking responsibility for a customer’s experience. I learned to ask better questions, handle a busy floor and adapt to people who needed different things from me. Those lessons became the base for everything that followed. Commercial performance starts with understanding people. Customer service Communication Reliability Adaptability Product knowledge First retail role Customer service and floor operations High school completed in 2023",
+      "route": "/journey/entry",
+      "tags": [
+        "journey",
+        "career",
+        "entry",
+        "Entering",
+        "Customer service",
+        "Communication",
+        "Reliability",
+        "Adaptability",
+        "Product knowledge"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Entering the workforce",
+        "Entering"
+      ]
+    },
+    {
+      "id": "journey:entry:role:H&M",
+      "type": "journey",
+      "title": "Entering the workforce — H&M",
+      "text": "H&M Sales Advisor · Ottawa 03/2022–02/2024",
+      "route": "/journey/entry",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "entry",
+        "H&M"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "H&M"
+      ]
+    },
+    {
+      "id": "journey:entry:role:Longfields-Davidson Heights Secondary School",
+      "type": "journey",
+      "title": "Entering the workforce — Longfields-Davidson Heights Secondary School",
+      "text": "Longfields-Davidson Heights Secondary School High School Diploma 2023",
+      "route": "/journey/entry",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "entry",
+        "Longfields-Davidson Heights Secondary School"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "Longfields-Davidson Heights Secondary School"
+      ]
+    },
+    {
+      "id": "journey:sales",
+      "type": "journey",
+      "title": "Discovering sales and leadership — Sales & Leadership",
+      "text": "Discovering sales and leadership Sales & Leadership 2023–2024 When I moved into a Sales Coach role, my focus shifted from my own sales to the performance of the team. I translated what worked on the floor into training materials, workshops and weekly conversations about goals. Coaching made me interested in the systems behind results: how a team learns, where performance breaks down and what makes a sales approach repeatable. I moved from selling to improving how others sell. Coaching Sales training Team development Performance conversations Customer relationships Sales training materials Workshops for 10+ associates Weekly goal and progress meetings",
+      "route": "/journey/sales",
+      "tags": [
+        "journey",
+        "career",
+        "sales",
+        "Sales & Leadership",
+        "Coaching",
+        "Sales training",
+        "Team development",
+        "Performance conversations",
+        "Customer relationships"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Discovering sales and leadership",
+        "Sales & Leadership"
+      ]
+    },
+    {
+      "id": "journey:sales:role:H&M",
+      "type": "journey",
+      "title": "Discovering sales and leadership — H&M",
+      "text": "H&M Sales Coach · Ottawa 09/2023–02/2024",
+      "route": "/journey/sales",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "sales",
+        "H&M"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "H&M"
+      ]
+    },
+    {
+      "id": "journey:sales:milestone:associates trained",
+      "type": "journey",
+      "title": "Discovering sales and leadership — associates trained",
+      "text": "10+ associates trained",
+      "route": "/journey/sales",
+      "tags": [
+        "journey",
+        "career",
+        "sales",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "associates trained"
+      ]
+    },
+    {
+      "id": "journey:sales:milestone:team sales improvement",
+      "type": "journey",
+      "title": "Discovering sales and leadership — team sales improvement",
+      "text": "15% team sales improvement",
+      "route": "/journey/sales",
+      "tags": [
+        "journey",
+        "career",
+        "sales",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "team sales improvement"
+      ]
+    },
+    {
+      "id": "journey:commercial",
+      "type": "journey",
+      "title": "Developing commercial experience — Commercial",
+      "text": "Developing commercial experience Commercial 2024–2026 I moved into outbound business development at MPN Capital Markets, where I learned to research a market, qualify a prospect and start a commercial conversation from scratch. I then moved to Browns, where the sale depended on product knowledge, trust and reading a customer’s needs and budget. The environments were different, but the lesson was the same: the quality of the conversation determines the quality of the opportunity. I became more interested in the acquisition process around the sale than in a single transaction. Consultative selling Outbound prospecting Market research Negotiation Client relationships Commercial judgment Consultative selling Outbound prospecting and market research Client relationships and repeat business",
+      "route": "/journey/commercial",
+      "tags": [
+        "journey",
+        "career",
+        "commercial",
+        "Commercial",
+        "Consultative selling",
+        "Outbound prospecting",
+        "Market research",
+        "Negotiation",
+        "Client relationships",
+        "Commercial judgment"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Developing commercial experience",
+        "Commercial"
+      ]
+    },
+    {
+      "id": "journey:commercial:role:MPN Capital Markets",
+      "type": "journey",
+      "title": "Developing commercial experience — MPN Capital Markets",
+      "text": "MPN Capital Markets Business Development Representative · Ottawa 06/2024–09/2024",
+      "route": "/journey/commercial",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "commercial",
+        "MPN Capital Markets"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "MPN Capital Markets"
+      ]
+    },
+    {
+      "id": "journey:commercial:role:Browns",
+      "type": "journey",
+      "title": "Developing commercial experience — Browns",
+      "text": "Browns Sales Associate · Ottawa 10/2024–2026",
+      "route": "/journey/commercial",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "commercial",
+        "Browns"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "Browns"
+      ]
+    },
+    {
+      "id": "journey:commercial:milestone:individual sales at Browns",
+      "type": "journey",
+      "title": "Developing commercial experience — individual sales at Browns",
+      "text": "$400K+ individual sales at Browns",
+      "route": "/journey/commercial",
+      "tags": [
+        "journey",
+        "career",
+        "commercial",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "individual sales at Browns"
+      ]
+    },
+    {
+      "id": "journey:commercial:milestone:qualified leads in a two-week period",
+      "type": "journey",
+      "title": "Developing commercial experience — qualified leads in a two-week period",
+      "text": "Highest qualified leads in a two-week period",
+      "route": "/journey/commercial",
+      "tags": [
+        "journey",
+        "career",
+        "commercial",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "qualified leads in a two-week period"
+      ]
+    },
+    {
+      "id": "journey:education",
+      "type": "journey",
+      "title": "Expanding my perspective — Perspective",
+      "text": "Expanding my perspective Perspective 2023–present Alongside my commercial roles, I study political science and economics at the University of Ottawa. I wanted to understand the systems around a business: markets, institutions, incentives, power and the way people make decisions. The degree trained me to question assumptions, structure ambiguous problems and use evidence. It gave me a language for the strategic questions I was already asking at work. It connected the commercial world to the institutional and strategic questions behind it. Research Critical thinking Economic reasoning Systems thinking Written communication Strategy University of Ottawa Political science and economics Research, analysis and strategy",
+      "route": "/journey/education",
+      "tags": [
+        "journey",
+        "career",
+        "education",
+        "Perspective",
+        "Research",
+        "Critical thinking",
+        "Economic reasoning",
+        "Systems thinking",
+        "Written communication",
+        "Strategy"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Expanding my perspective",
+        "Perspective"
+      ]
+    },
+    {
+      "id": "journey:education:role:University of Ottawa",
+      "type": "journey",
+      "title": "Expanding my perspective — University of Ottawa",
+      "text": "University of Ottawa Bachelor of Social Science · Joint Honours in Political Science and Economics 2023–present · expected 2028",
+      "route": "/journey/education",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "education",
+        "University of Ottawa"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "University of Ottawa"
+      ]
+    },
+    {
+      "id": "journey:education:milestone:expected graduation",
+      "type": "journey",
+      "title": "Expanding my perspective — expected graduation",
+      "text": "2028 expected graduation",
+      "route": "/journey/education",
+      "tags": [
+        "journey",
+        "career",
+        "education",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "expected graduation"
+      ]
+    },
+    {
+      "id": "journey:education:milestone:political science and economics",
+      "type": "journey",
+      "title": "Expanding my perspective — political science and economics",
+      "text": "Joint Honours political science and economics",
+      "route": "/journey/education",
+      "tags": [
+        "journey",
+        "career",
+        "education",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "political science and economics"
+      ]
+    },
+    {
+      "id": "journey:technology",
+      "type": "journey",
+      "title": "Exploring business and technology — Business & Tech",
+      "text": "Exploring business and technology Business & Tech 2025–present My next chapter started with a practical question: how much of the repetitive work inside a business could be designed better? I began building AI agents, automation workflows and business systems, first as experiments and then as products. Working across H2Ops, Safiy and independent projects taught me to evaluate technology by operational fit, adoption and privacy, not novelty. I learned to move between a business problem, a process design and an implementation. Technology became a way to act on commercial problems, not a separate career. Applied AI Process design Automation Product strategy Systems thinking Technical fluency Privacy and operational judgment AI agents and automation Business systems and operations Product strategy and release",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "technology",
+        "Business & Tech",
+        "Applied AI",
+        "Process design",
+        "Automation",
+        "Product strategy",
+        "Systems thinking",
+        "Technical fluency",
+        "Privacy and operational judgment"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Exploring business and technology",
+        "Business & Tech"
+      ]
+    },
+    {
+      "id": "journey:technology:role:H2Ops",
+      "type": "journey",
+      "title": "Exploring business and technology — H2Ops",
+      "text": "H2Ops Co-founder Summer 2025–present",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "technology",
+        "H2Ops"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "H2Ops"
+      ]
+    },
+    {
+      "id": "journey:technology:role:Safiy",
+      "type": "journey",
+      "title": "Exploring business and technology — Safiy",
+      "text": "Safiy Product and release work 2026–present",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "technology",
+        "Safiy"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "Safiy"
+      ]
+    },
+    {
+      "id": "journey:technology:role:Independent product work",
+      "type": "journey",
+      "title": "Exploring business and technology — Independent product work",
+      "text": "Independent product work AI and automation projects 2025–present",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "role",
+        "technology",
+        "Independent product work"
+      ],
+      "keywords": [
+        "parcours",
+        "emploi",
+        "role",
+        "experience",
+        "Independent product work"
+      ]
+    },
+    {
+      "id": "journey:technology:milestone:H2Ops",
+      "type": "journey",
+      "title": "Exploring business and technology — H2Ops",
+      "text": "Co-founder H2Ops",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "technology",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "H2Ops"
+      ]
+    },
+    {
+      "id": "journey:technology:milestone:Safiy releases",
+      "type": "journey",
+      "title": "Exploring business and technology — Safiy releases",
+      "text": "Beta Safiy releases",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "technology",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "Safiy releases"
+      ]
+    },
+    {
+      "id": "journey:technology:milestone:agents and automation",
+      "type": "journey",
+      "title": "Exploring business and technology — agents and automation",
+      "text": "Applied AI agents and automation",
+      "route": "/journey/technology",
+      "tags": [
+        "journey",
+        "career",
+        "technology",
+        "milestone"
+      ],
+      "keywords": [
+        "realisation",
+        "resultat",
+        "chiffre",
+        "agents and automation"
+      ]
+    },
+    {
+      "id": "journey:direction",
+      "type": "journey",
+      "title": "Where I’m heading — Direction",
+      "text": "Where I’m heading Direction Present → next The common thread across these chapters is a move from understanding customers to understanding the systems that serve them. I want to keep working on problems where commercial judgment, analysis and technology all matter. My next step is consulting: helping organizations identify where AI and better processes create real value, then staying close enough to implementation to make the change work. Longer term, I want to lead and build businesses of my own. Practically, I am looking for a role where I can combine commercial analysis, AI and implementation — whether in consulting, strategy or an operating team. Use commercial understanding, strategy and technology to help organizations make better decisions — and eventually lead. Advisory Problem structuring Operating judgment Implementation Leadership",
+      "route": "/journey/direction",
+      "tags": [
+        "journey",
+        "career",
+        "direction",
+        "Direction",
+        "Advisory",
+        "Problem structuring",
+        "Operating judgment",
+        "Implementation",
+        "Leadership"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "experience",
+        "etudes",
+        "Where I’m heading",
+        "Direction"
+      ]
+    },
+    {
+      "id": "profile:intro",
+      "type": "profile",
+      "title": "About Nour",
+      "text": "I'm based in Ottawa, with a background in political science, business, sales and technology. I've always been interested in understanding how businesses operate, how people make decisions and how technology can change what's possible. Rather than choosing between these interests, I've found my direction in combining them. My experience in sales, business and applied AI has shaped how I approach opportunities: commercially, analytically and with a practical understanding of technology.",
+      "route": "/me",
+      "tags": [
+        "profile",
+        "about",
+        "background",
+        "ottawa",
+        "location",
+        "intro"
+      ],
+      "keywords": [
+        "a propos",
+        "profil",
+        "qui est nour",
+        "ou habite",
+        "ottawa",
+        "parcours"
+      ]
+    },
+    {
+      "id": "profile:think",
+      "type": "profile",
+      "title": "How Nour thinks",
+      "text": "I'm naturally curious and drawn to questions that don't have straightforward answers. I enjoy examining assumptions, understanding different perspectives and exploring the reasoning behind decisions. My interests extend across business, economics, politics, psychology, philosophy and technology. I value intellectual independence and remain open to changing my perspective when presented with better information or reasoning. For me, understanding why something works is just as important as understanding how it works.",
+      "route": "/me",
+      "tags": [
+        "profile",
+        "thinking",
+        "curiosity"
+      ],
+      "keywords": [
+        "pense",
+        "reflechit",
+        "curiosite",
+        "approche"
+      ]
+    },
+    {
+      "id": "profile:work",
+      "type": "profile",
+      "title": "How Nour works",
+      "text": "I approach challenges by first understanding the objective, the people involved and the outcome we're trying to achieve. I believe technology should serve a meaningful purpose, strategy should translate into action, and decisions should be grounded in both evidence and practical realities. I value clear communication, accountability, initiative and the ability to adapt. I'm comfortable stepping into unfamiliar environments, learning what is necessary and connecting different perspectives to find a practical way forward.",
+      "route": "/me",
+      "tags": [
+        "profile",
+        "work",
+        "capabilities",
+        "technology",
+        "approach"
+      ],
+      "keywords": [
+        "travaille",
+        "competences",
+        "technologie",
+        "approche",
+        "methode"
+      ]
+    },
+    {
+      "id": "profile:direction",
+      "type": "profile",
+      "title": "Nour direction",
+      "text": "I'm driven by curiosity, independence and the desire to continuously become more capable. Professionally, I'm interested in opportunities that challenge me intellectually, expose me to meaningful business problems and allow me to combine my commercial and technological capabilities. I value integrity, responsibility and long-term thinking. My ambition is not simply to accumulate experience, but to develop the knowledge, judgment and independence necessary to make meaningful decisions and create lasting value.",
+      "route": "/me",
+      "tags": [
+        "profile",
+        "direction",
+        "ambition",
+        "consulting"
+      ],
+      "keywords": [
+        "ambition",
+        "objectif",
+        "consultation",
+        "direction",
+        "carriere"
+      ]
+    },
+    {
+      "id": "profile:journey-intro",
+      "type": "profile",
+      "title": "Career introduction",
+      "text": "My journey began on a retail floor and moved through commercial sales into business systems and applied AI. Each stage added a capability: understanding customers, reading performance, structuring problems and building the systems that support them. Today I work where commercial judgment, strategy and technology meet.",
+      "route": "/journey",
+      "tags": [
+        "profile",
+        "journey",
+        "career",
+        "intro"
+      ],
+      "keywords": [
+        "parcours",
+        "carriere",
+        "introduction"
+      ]
+    },
+    {
+      "id": "site:contact",
+      "type": "contact",
+      "title": "Contact",
+      "text": "I'm open to career opportunities, consulting engagements and conversations across business, sales and technology. If you're working on a commercial problem that needs both strategic and technical judgment, I'd like to hear about it. LinkedIn is the best channel for roles and consulting. Email and the full résumé are available on request there. https://ca.linkedin.com/in/nour-chkair https://github.com/Nourchkair",
+      "route": "/contact",
+      "tags": [
+        "contact",
+        "email",
+        "linkedin",
+        "github",
+        "reach"
+      ],
+      "keywords": [
+        "contact",
+        "courriel",
+        "linkedin",
+        "joindre",
+        "rendez-vous",
+        "consultation"
+      ]
+    }
+  ]
+}

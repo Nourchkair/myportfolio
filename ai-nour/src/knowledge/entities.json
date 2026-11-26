@@ -1,0 +1,136 @@
+{
+  "generatedAt": "2026-11-26T19:38:30.041Z",
+  "sections": [
+    "home",
+    "me",
+    "journey",
+    "projects",
+    "contact"
+  ],
+  "projects": [
+    {
+      "id": "acquisition",
+      "title": "Customer Acquisition",
+      "project": "H2Ops",
+      "route": "/projects/acquisition",
+      "flowNodes": [
+        "target",
+        "find",
+        "improve",
+        "prioritize",
+        "demo",
+        "outreach",
+        "nurture",
+        "replies",
+        "crm"
+      ]
+    },
+    {
+      "id": "h2ops",
+      "title": "Dispatch",
+      "project": "H2Ops Dispatch",
+      "route": "/projects/h2ops",
+      "flowNodes": [
+        "customer",
+        "assess",
+        "coverage",
+        "acquire",
+        "onboard",
+        "activate",
+        "match",
+        "communicate",
+        "confirm",
+        "exception",
+        "operations"
+      ]
+    },
+    {
+      "id": "communications",
+      "title": "AI Customer Communications",
+      "project": "H2Ops",
+      "route": "/projects/communications",
+      "flowNodes": [
+        "inquiries",
+        "reactivation",
+        "understand",
+        "voice",
+        "sms",
+        "next",
+        "appointment",
+        "followup",
+        "crm"
+      ]
+    },
+    {
+      "id": "knowledge",
+      "title": "B.R.A.I.N.",
+      "project": "H2Ops Brain",
+      "route": "/projects/knowledge",
+      "flowNodes": [
+        "documentation",
+        "memory",
+        "organize",
+        "maintain",
+        "question",
+        "retrieve",
+        "assistant",
+        "decisions"
+      ]
+    },
+    {
+      "id": "safiy",
+      "title": "Safiy",
+      "project": "Contextual AI",
+      "route": "/projects/safiy",
+      "flowNodes": [
+        "capture",
+        "knowledge",
+        "context",
+        "assistant",
+        "realtime",
+        "actions",
+        "preserve",
+        "continuous"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "entry",
+      "title": "Entering the workforce",
+      "label": "Entering",
+      "route": "/journey/entry"
+    },
+    {
+      "id": "sales",
+      "title": "Discovering sales and leadership",
+      "label": "Sales & Leadership",
+      "route": "/journey/sales"
+    },
+    {
+      "id": "commercial",
+      "title": "Developing commercial experience",
+      "label": "Commercial",
+      "route": "/journey/commercial"
+    },
+    {
+      "id": "education",
+      "title": "Expanding my perspective",
+      "label": "Perspective",
+      "route": "/journey/education"
+    },
+    {
+      "id": "technology",
+      "title": "Exploring business and technology",
+      "label": "Business & Tech",
+      "route": "/journey/technology"
+    },
+    {
+      "id": "direction",
+      "title": "Where I’m heading",
+      "label": "Direction",
+      "route": "/journey/direction"
+    }
+  ],
+  "contentHash": "28b5ce19a31bd891"
+}

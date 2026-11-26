@@ -1,0 +1,39 @@
+name = "ai-nour-phase1-dev"
+main = "src/index.js"
+compatibility_date = "2026-11-26"
+workers_dev = true
+
+[assets]
+directory = "public"
+binding = "ASSETS"
+
+[triggers]
+crons = ["*/10 * * * *"]
+
+[vars]
+APP_ENV = "development"
+TEXT_PROVIDER = "gemini"
+LIVE_PROVIDER = "gemini"
+TEXT_MODEL = "gemini-flash-lite-latest"
+LIVE_MODEL = "gemini-3.8-live"
+LIVE_VOICE = "Aoede"
+DAILY_SPEND_CAP_USD_MICROS = "1000000"
+CUMULATIVE_SPEND_CAP_USD_MICROS = "7000000"
+TEXT_INPUT_USD_PER_MILLION = "0.10"
+TEXT_OUTPUT_USD_PER_MILLION = "0.40"
+LIVE_TEXT_INPUT_USD_PER_MILLION = "0.75"
+LIVE_AUDIO_INPUT_USD_PER_MILLION = "3.00"
+LIVE_AUDIO_OUTPUT_USD_PER_MILLION = "12.00"
+RATE_LIMIT_WINDOW_SECONDS = "600"
+CHAT_RATE_LIMIT = "30"
+LIVE_RATE_LIMIT = "12"
+MAX_MESSAGE_CHARS = "2000"
+MAX_HISTORY_MESSAGES = "16"
+SUMMARY_TRIGGER_MESSAGES = "20"
+ADMIN_ENABLED = "true"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ai-nour-phase1-dev"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
