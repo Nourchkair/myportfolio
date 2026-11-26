@@ -5061,6 +5061,38 @@
     #project.project-has-overview:not(.project-flow-mode) .pw-overview-value{height:100%;min-height:0}
     #project.project-has-overview:not(.project-flow-mode) .pw-overview-body{overflow-y:auto;min-height:0}
   }
+
+  /* ============================================================
+     MY JOURNEY — split card + panel layout
+     ============================================================ */
+  @media(min-width:901px){
+    .about-overlay.journey-open .about-stage{
+      grid-template-columns:minmax(250px,320px) minmax(0,1fr);
+      grid-template-rows:minmax(0,1fr);
+      gap:clamp(24px,3vw,44px);
+      width:min(1380px,100%);
+      align-items:stretch
+    }
+    .about-overlay.journey-open .about-left{display:flex;align-items:center}
+    .about-overlay.journey-open .about-right{
+      height:100%;align-items:stretch;justify-content:flex-start;transform:none
+    }
+    .about-overlay.journey-open .about-detail{position:absolute;inset:0}
+    .about-overlay.journey-open .about-detail-body{padding:0;overflow-y:auto}
+    .about-overlay.journey-open .professional-view{
+      padding:26px clamp(20px,2.3vw,34px) 32px
+    }
+  }
+  @media(min-width:901px) and (max-width:1180px){
+    .about-overlay.journey-open .pro-chapter-grid{grid-template-columns:1fr;gap:18px}
+    .about-overlay.journey-open .pro-side{
+      display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start
+    }
+    .about-overlay.journey-open .pro-visual-card{min-height:210px}
+    .about-overlay.journey-open .pro-step-label{font-size:9px;max-width:10ch}
+    .about-overlay.journey-open .pro-step-period{font-size:5.4px}
+    .about-overlay.journey-open .pro-narrative p{font-size:13.4px;line-height:1.62}
+  }
 </style>
 </head>
 <body data-mode="home">
@@ -5082,8 +5114,8 @@
   <button class="tb-brand" id="brandHome" type="button" aria-label="Back to portfolio home" title="Home"><span class="tb-mark" aria-hidden="true"></span><b>Nour OS</b></button>
   <span class="tb-sep" aria-hidden="true"></span>
   <nav class="tb-nav" aria-label="Primary navigation">
-        <button class="tb-nav-btn" id="NavMe" data-nav="me" aria-label="Me" title="Me (Alt+1)" aria-keyshortcuts="Alt+1">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>Me</span>
+        <button class="tb-nav-btn" id="NavMe" data-nav="me" aria-label="About" title="About (Alt+1)" aria-keyshortcuts="Alt+1">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>About</span>
         </button>
         <button class="tb-nav-btn" id="NavProjects" data-nav="projects" aria-label="Projects" title="Projects (Alt+2)" aria-keyshortcuts="Alt+2">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="3.2" y="11.6" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="11.6" width="5.2" height="5.2" rx="1.2"/></svg><span>Projects</span>
@@ -5179,8 +5211,8 @@
         <span>All projects</span>
       </button>
       <nav class="pw-global-nav" aria-label="Portfolio navigation">
-        <button class="pw-global-btn" id="projectNavMe" data-nav="me" aria-label="Me" title="Me (Alt+1)" aria-keyshortcuts="Alt+1">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>Me</span>
+        <button class="pw-global-btn" id="projectNavMe" data-nav="me" aria-label="About" title="About (Alt+1)" aria-keyshortcuts="Alt+1">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>About</span>
         </button>
         <button class="pw-global-btn" id="projectNavProjects" data-nav="projects" aria-label="Projects" title="Projects (Alt+2)" aria-keyshortcuts="Alt+2">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="3.2" y="11.6" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="11.6" width="5.2" height="5.2" rx="1.2"/></svg><span>Projects</span>
@@ -5227,8 +5259,8 @@
         <span>Back to portfolio</span>
       </button>
       <nav class="pw-global-nav" aria-label="Portfolio navigation">
-        <button class="pw-global-btn" id="aboutNavMe" data-nav="me" aria-label="Me" title="Me (Alt+1)" aria-keyshortcuts="Alt+1">
-          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>Me</span>
+        <button class="pw-global-btn" id="aboutNavMe" data-nav="me" aria-label="About" title="About (Alt+1)" aria-keyshortcuts="Alt+1">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="10" cy="6.4" r="2.9"/><path d="M4.3 16.2c.6-3 2.8-4.5 5.7-4.5s5.1 1.5 5.7 4.5"/></svg><span>About</span>
         </button>
         <button class="pw-global-btn" id="aboutNavProjects" data-nav="projects" aria-label="Projects" title="Projects (Alt+2)" aria-keyshortcuts="Alt+2">
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="3.2" width="5.2" height="5.2" rx="1.2"/><rect x="3.2" y="11.6" width="5.2" height="5.2" rx="1.2"/><rect x="11.6" y="11.6" width="5.2" height="5.2" rx="1.2"/></svg><span>Projects</span>
@@ -5237,7 +5269,7 @@
           <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4.8" width="14" height="10.4" rx="2"/><path d="m4 6 6 4.4L16 6"/></svg><span>Contact</span>
         </button>
       </nav>
-      <div class="pw-bar-right"><span class="about-bar-label" id="aboutBarLabel">Nour Chkair / Me</span></div>
+      <div class="pw-bar-right"><span class="about-bar-label" id="aboutBarLabel">Nour Chkair / About</span></div>
     </header>
     <div class="about-stage" id="aboutStage">
       <div class="about-left" id="aboutLeftSlot">
@@ -5251,15 +5283,8 @@
             <div class="about-me-content" id="aboutMeContent" aria-live="polite"></div>
           </div>
         </section>
-        <section class="pw-window about-panel about-detail" id="aboutDetail" aria-hidden="true" aria-label="About Nour Chkair details">
-          <header class="about-detail-head">
-            <button class="about-detail-back" id="aboutDetailBack" type="button" aria-label="Back to Me">
-              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg>
-              <span>Me</span>
-            </button>
-            <span class="about-detail-label">My Journey</span>
-          </header>
-          <div class="about-detail-body" id="aboutDetailBody" tabindex="0" aria-label="About details"></div>
+        <section class="pw-window about-panel about-detail" id="aboutDetail" aria-hidden="true" aria-label="My Journey details">
+          <div class="about-detail-body" id="aboutDetailBody" tabindex="0" aria-label="My Journey details"></div>
         </section>
       </div>
     </div>
@@ -5274,7 +5299,7 @@
       <span class="simple-brand-copy"><b>Nour Chkair</b><span>Commercial strategy, sales &amp; technology</span></span>
     </div>
     <nav class="simple-nav" aria-label="Reading view sections">
-      <button type="button" data-simple-jump="simple-about">Me</button>
+      <button type="button" data-simple-jump="simple-about">About</button>
       <button type="button" data-simple-jump="simple-professional">Professional</button>
       <button type="button" data-simple-jump="simple-contact">Contact</button>
     </nav>
@@ -5985,7 +6010,7 @@ function cardLabel(item){
 }
 function cardSub(item){
   if(item.type==='journey') return 'Professional';
-  if(item.type==='profile') return 'Me';
+  if(item.type==='profile') return 'About';
   if(item.type==='projects') return 'Selected work';
   return PROJECT_BY_ID[item.id].category;
 }
@@ -6302,7 +6327,7 @@ function meParagraphs(paragraphs){
 function meViewBarHTML(count){
   return `<div class="me-view-bar">
     <button class="me-back" type="button" data-me-back aria-label="Back to introduction">
-      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg><span>Me</span>
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12.5 4.5 7 10l5.5 5.5"/></svg><span>About</span>
     </button>
     <span class="me-view-count">${escHTML(count)}</span>
   </div>`;
@@ -6743,7 +6768,7 @@ function renderProfessionalView(body){
 
 /* ---------- about overlay (Me workspace + My Journey) ---------- */
 let aboutOpen=false, aboutClosing=false, aboutStackAnim=null;
-let aboutRestoreTimer=null, aboutPanelFlight=null;
+let aboutRestoreTimer=null, aboutPanelFlight=null, aboutSourceCard=null;
 const ABOUT_FLIGHT_MS=460;
 const ABOUT_PANEL_OPEN_MS=420;
 const ABOUT_PANEL_CLOSE_MS=420;
@@ -6755,6 +6780,9 @@ function canAnimateAbout(){
 }
 function aboutLiveProfileCard(){
   return document.querySelector('#cardStage .os-card.pos-0[data-deck="main"][data-type="profile"]');
+}
+function aboutLiveJourneyCard(){
+  return document.querySelector('#cardStage .os-card[data-deck="main"][data-type="journey"]');
 }
 function aboutScrubId(root){
   root.querySelectorAll('[id]').forEach(el=>el.removeAttribute('id'));
@@ -6768,12 +6796,12 @@ function aboutMakeCardClone(live){
   clone.classList.remove('pos-1','pos--1','pos-2','pos--2','pos-hidden');
   clone.classList.add('pos-0','is-active');
   clone.setAttribute('tabindex','-1');
-  clone.setAttribute('aria-label','Nour Chkair about card');
+  clone.setAttribute('aria-label',live.dataset.type==='journey'?'My Journey card':'Nour Chkair about card');
   clone.querySelectorAll('.card-actions').forEach(el=>el.setAttribute('aria-hidden','true'));
   return clone;
 }
-function buildAboutCard(){
-  const live=aboutLiveProfileCard();
+function buildAboutCard(sourceEl){
+  const live=sourceEl||aboutLiveProfileCard();
   const frame=$('aboutHero');
   if(!live||!frame) return null;
   frame.replaceChildren(aboutMakeCardClone(live));
@@ -6836,10 +6864,10 @@ function resetAboutPanels(){
   cancelAboutPanelFlight();
   removeAboutLeftGhost();
   resetAboutMeWorkspace();
-  $('aboutView')?.classList.remove('actions-hidden');
+  $('aboutView')?.classList.remove('actions-hidden','journey-open');
   setAboutReading(false);
   const intro=$('aboutIntro'), detail=$('aboutDetail');
-  if(intro){ intro.classList.remove('is-hidden'); intro.setAttribute('aria-hidden','false'); }
+  if(intro){ intro.classList.remove('is-hidden','is-content-hidden'); intro.setAttribute('aria-hidden','false'); }
   if(detail){ detail.classList.remove('is-visible','is-content-hidden'); detail.setAttribute('aria-hidden','true'); detail.inert=true; }
   document.querySelectorAll('.about-stack-clone').forEach(el=>el.remove());
   aboutStackAnim=null;
@@ -6880,13 +6908,15 @@ function openAbout(sourceEl,opts={}){
   if($('project').classList.contains('open')) return;
   const live=sourceEl||aboutLiveProfileCard();
   if(!live) return;
+  aboutSourceCard=live;
   setUtilityOpen(false);
   const fromRect=live.getBoundingClientRect();
   aboutOpen=true;
   aboutClosing=false;
   resetAboutPanels();
+  if(opts.journey) $('aboutView')?.classList.add('journey-open');
   resetAboutCardStyles();
-  buildAboutCard();
+  buildAboutCard(live);
   sizeAboutCard();
   const ov=$('aboutView');
   const willAnimate=canAnimateAbout()&&!opts.noFlight;
@@ -6899,7 +6929,7 @@ function openAbout(sourceEl,opts={}){
   updateMinimalToggle();
   setActiveNav('me');
   const barLabel=$('aboutBarLabel');
-  if(barLabel) barLabel.textContent=pendingAboutSection?'Nour Chkair / My Journey':'Nour Chkair / Me';
+  if(barLabel) barLabel.textContent=pendingAboutSection?'Nour Chkair / My Journey':'Nour Chkair / About';
   syncA11y();
   if(willAnimate) animateAboutCardIn(fromRect);
   else revealAboutIntro();
@@ -6932,7 +6962,8 @@ function showAboutDetail(){
   intro.style.transition='none';
   intro.classList.add('is-hidden','is-content-hidden');
   intro.setAttribute('aria-hidden','true');
-  setAboutReading(true);
+  setAboutReading(false);
+  $('aboutView')?.classList.add('journey-open');
   renderAboutDetail();
   syncHash('/professional');
   setActiveNav('me');
@@ -6947,7 +6978,7 @@ function showAboutDetail(){
   setTimeout(()=>{
     if(!aboutOpen||aboutClosing) return;
     if(!detail.classList.contains('is-visible')) return;
-    $('aboutDetailBack')?.focus({preventScroll:true});
+    $('aboutDetailBody')?.focus({preventScroll:true});
   },canAnimateAbout()?120:30);
 }
 function restoreAboutIntro(){
@@ -6957,11 +6988,18 @@ function restoreAboutIntro(){
   syncHash('/me');
   setActiveNav('me');
   const barLabel=$('aboutBarLabel');
-  if(barLabel) barLabel.textContent='Nour Chkair / Me';
+  if(barLabel) barLabel.textContent='Nour Chkair / About';
   clearAboutRestoreTimer();
   cancelAboutPanelFlight();
   removeAboutLeftGhost();
+  $('aboutView')?.classList.remove('journey-open');
   setAboutReading(false);
+  const profile=aboutLiveProfileCard();
+  if(profile){
+    aboutSourceCard=profile;
+    buildAboutCard(profile);
+    sizeAboutCard();
+  }
   detail.inert=true;
   detail.setAttribute('aria-hidden','true');
   detail.classList.add('is-content-hidden');
@@ -6980,6 +7018,8 @@ function restoreAboutIntro(){
 }
 function finishAboutClose(restoreFocus){
   const ov=$('aboutView');
+  const live=aboutSourceCard||aboutLiveProfileCard();
+  aboutSourceCard=null;
   clearAboutRestoreTimer();
   cancelAboutPanelFlight();
   removeAboutLeftGhost();
@@ -6996,9 +7036,8 @@ function finishAboutClose(restoreFocus){
   resetAboutPanels();
   setActiveNav(deckNavName());
   syncA11y();
-  if(restoreFocus){
-    const live=aboutLiveProfileCard();
-    if(live) setTimeout(()=>{ if(!aboutOpen) live.focus({preventScroll:true}); },30);
+  if(restoreFocus&&live){
+    setTimeout(()=>{ if(!aboutOpen) live.focus({preventScroll:true}); },30);
   }
 }
 function closeAbout(opts={}){
@@ -7009,7 +7048,7 @@ function closeAbout(opts={}){
   if(brainWasOpen){ setMeBrainMode(false); resetAboutMeWorkspace(); }
   if(!opts.keepRoute) syncHash(deck==='projects'?'/projects':'/home');
   if(opts.immediate||brainWasOpen||!canAnimateAbout()){ finishAboutClose(restoreFocus); return; }
-  const live=aboutLiveProfileCard();
+  const live=aboutSourceCard||aboutLiveProfileCard();
   const slot=$('aboutLeftSlot'), inner=$('aboutLeftInner');
   if(!live||!slot||!inner){ finishAboutClose(restoreFocus); return; }
   const current=getComputedStyle(slot).transform;
@@ -7056,6 +7095,7 @@ function goMe(){
   openMainDeck();
   if(mainIndex!==HOME_MAIN) goCard(HOME_MAIN,false);
   setActiveNav('me');
+  syncHash('/me');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     const live=aboutLiveProfileCard();
     if(live) openAbout(live);
@@ -7065,18 +7105,26 @@ const goAbout=goMe;
 function goAboutSection(){
   clearTimeout(aboutSectionTimer);
   pendingAboutSection='professional';
+  const journeyCard=aboutLiveJourneyCard();
   if(aboutOpen){
+    $('aboutView')?.classList.add('journey-open');
+    if(journeyCard){
+      aboutSourceCard=journeyCard;
+      buildAboutCard(journeyCard);
+      sizeAboutCard();
+    }
     showAboutDetail();
     return;
   }
   resetToHomeChrome();
   openMainDeck();
-  if(mainIndex!==HOME_MAIN) goCard(HOME_MAIN,false);
+  mainIndex=0;
+  updateCards();
   setActiveNav('me');
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    const live=aboutLiveProfileCard();
+    const live=aboutLiveJourneyCard();
     if(!live) return;
-    openAbout(live,{noFlight:true});
+    openAbout(live,{journey:true});
     if(aboutOpen) showAboutDetail();
   }));
 }
@@ -8369,17 +8417,16 @@ schedulePrewarm(PROJECT_CARDS[0].id);
 $('simpleViewBtn').addEventListener('click',()=>openSimpleView());
 
 $('brandHome').addEventListener('click',goHome);
-$('NavMe').addEventListener('click',goMe);
+$('NavMe').addEventListener('click',goHome);
 $('NavProjects').addEventListener('click',goProjects);
 $('NavContact').addEventListener('click',goContact);
-$('projectNavMe').addEventListener('click',goMe);
+$('projectNavMe').addEventListener('click',goHome);
 $('projectNavProjects').addEventListener('click',goProjects);
 $('projectNavContact').addEventListener('click',goContact);
 $('aboutBack').addEventListener('click',()=>closeAbout());
-$('aboutNavMe').addEventListener('click',goMe);
+$('aboutNavMe').addEventListener('click',goHome);
 $('aboutNavProjects').addEventListener('click',goProjects);
 $('aboutNavContact').addEventListener('click',goContact);
-$('aboutDetailBack').addEventListener('click',restoreAboutIntro);
 $('deckPrev').addEventListener('click',()=>navCard(-1));
 $('deckNext').addEventListener('click',()=>navCard(1));
 $('quickMinimalToggle').addEventListener('click',()=>{
@@ -8439,7 +8486,7 @@ document.addEventListener('keydown',e=>{
   const target=e.target;
   const typing=target instanceof Element&&target.closest('input,textarea,select,[contenteditable="true"]');
   if(!typing&&entered&&e.altKey&&!e.ctrlKey&&!e.metaKey&&!e.shiftKey){
-    const navMap={Digit1:goMe,Digit2:goProjects,Digit3:goContact,Digit4:()=>openSimpleView()};
+    const navMap={Digit1:goHome,Digit2:goProjects,Digit3:goContact,Digit4:()=>openSimpleView()};
     if(navMap[e.code]){ e.preventDefault(); navMap[e.code](); return; }
   }
   if(typing) return;
@@ -8450,7 +8497,7 @@ document.addEventListener('keydown',e=>{
   if(aboutOpen){
     if(e.key==='Escape'){
       e.preventDefault();
-      if($('aboutDetail').classList.contains('is-visible')) restoreAboutIntro();
+      if($('aboutDetail').classList.contains('is-visible')) closeAbout();
       else if(mePanelView!=='intro'){
         resetAboutMeWorkspace();
         $('aboutMeContent')?.querySelector('[data-me-brain]')?.focus({preventScroll:true});

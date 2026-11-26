@@ -2,7 +2,7 @@
 
 **Nour OS** — an immersive, Vision Pro-inspired portfolio for Nour Chkair.
 
-The site is built as a static experience: floating glass surfaces over four generated landscapes, a Me / My Journey / Projects deck, a project workspace with system breakdowns and collapsible product panels, and a profile workspace with a six-chapter career journey and résumé.
+The site is built as a static experience: floating glass surfaces over four generated landscapes, an About / My Journey / Projects deck, a project workspace with system breakdowns and collapsible product panels, and a profile workspace with a six-chapter career journey and résumé.
 
 The experience enters automatically on load, with a reduced-motion path. A simplified, scrollable reading view is also available for accessibility and quick reading.
 
@@ -27,7 +27,7 @@ No build step or package installation is required.
 ## Direct links
 
 - `#/home` — main deck
-- `#/me` — Me profile and mindset workspace
+- `#/me` — About profile and mindset workspace
 - `#/professional` — My Journey professional experience and direction
 - `#/projects` — five-project business showcase deck
 - `#/contact` — contact panel
@@ -53,7 +53,7 @@ The five project covers and their demonstration diagrams are original local illu
 
 ## Portrait assets
 
-- `assets/portraits/nour-about.jpg` — Me card portrait
+- `assets/portraits/nour-about.jpg` — About card portrait
 - `assets/portraits/nour-contact.jpg` — Contact panel portrait
 
 ## Stack
