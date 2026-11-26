@@ -1,6 +1,8 @@
+export const PROFESSIONAL_TAGLINE = "From reading customers to reading the systems behind them.";
+
 export const PROFESSIONAL_INTRO = [
-  "My journey began on a retail floor and moved through commercial sales into business systems and applied AI. Each stage added a capability: understanding customers, reading performance, structuring problems and building the systems that support them.",
-  "Today I work where commercial judgment, strategy and technology meet."
+  "My career has moved through customers, commerce and systems, but the thread is a widening field of view: from a single sale to the systems that make sales repeatable, from a team’s performance to the incentives and technology behind it.",
+  "Each chapter changed what I could see — and what I was useful for. Today I work where commercial judgment, business strategy and applied AI meet."
 ];
 
 export const PROFESSIONAL_CHAPTERS = [
@@ -11,8 +13,8 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Entering the workforce",
     "period": "2022–2023",
     "paragraphs": [
-      "My retail chapter began at H&M in 2022. The role taught me how much of work is about consistency: showing up, reading a room and taking responsibility for a customer’s experience.",
-      "I learned to ask better questions, handle a busy floor and adapt to people who needed different things from me. Those lessons became the base for everything that followed."
+      "H&M was my first real lesson in commercial cause and effect. A busy floor shows you immediately whether someone understood the customer: the product they were shown, the question that was asked, the reason they came back.",
+      "I learned to read people, handle pressure and take responsibility for an experience I did not control. The job was not strategic, but it taught me where strategy eventually has to prove itself — in a customer’s decision."
     ],
     "roles": [
       {
@@ -40,7 +42,7 @@ export const PROFESSIONAL_CHAPTERS = [
       "Adaptability",
       "Product knowledge"
     ],
-    "direction": "Commercial performance starts with understanding people."
+    "direction": "Retail taught me that performance is built in small, repeated interactions. It made me want to understand what turns a good conversation into a repeatable result — which led me into coaching."
   },
   {
     "id": "sales",
@@ -49,8 +51,8 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Discovering sales and leadership",
     "period": "2023–2024",
     "paragraphs": [
-      "When I moved into a Sales Coach role, my focus shifted from my own sales to the performance of the team. I translated what worked on the floor into training materials, workshops and weekly conversations about goals.",
-      "Coaching made me interested in the systems behind results: how a team learns, where performance breaks down and what makes a sales approach repeatable."
+      "As a Sales Coach, I stopped being measured only by my own numbers. I had to explain what good looked like, diagnose why someone was struggling and give people a way to improve that they could actually use.",
+      "I built training materials, ran workshops for more than ten associates and held weekly conversations about goals and progress. Team sales improved by 15% over that period. The result mattered, but the more useful lesson was that performance is shaped by the system around a person: clarity, feedback, incentives and support."
     ],
     "roles": [
       {
@@ -59,6 +61,7 @@ export const PROFESSIONAL_CHAPTERS = [
         "period": "09/2023–02/2024"
       }
     ],
+    "milestonesTitle": "Leadership impact",
     "milestones": [
       {
         "value": "10+",
@@ -83,7 +86,7 @@ export const PROFESSIONAL_CHAPTERS = [
       "Performance conversations",
       "Customer relationships"
     ],
-    "direction": "I moved from selling to improving how others sell."
+    "direction": "Coaching showed me that results scale through other people. It also exposed the limits of influencing a single store, which pushed me toward commercial roles with a wider view."
   },
   {
     "id": "commercial",
@@ -92,8 +95,9 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Developing commercial experience",
     "period": "2024–2026",
     "paragraphs": [
-      "I moved into outbound business development at MPN Capital Markets, where I learned to research a market, qualify a prospect and start a commercial conversation from scratch. I then moved to Browns, where the sale depended on product knowledge, trust and reading a customer’s needs and budget.",
-      "The environments were different, but the lesson was the same: the quality of the conversation determines the quality of the opportunity."
+      "At MPN Capital Markets, I learned to create a commercial conversation from nothing: research the market, qualify a prospect, find a reason to reach out and earn a response. I finished with the highest number of qualified leads in a two-week period.",
+      "At Browns, the feedback loop was shorter and more personal. I sold over $400,000 individually by reading budget, taste and intent — and by being direct enough to help someone decide. The product mattered; understanding the person mattered more.",
+      "Together, the two roles moved me from selling a product to studying the acquisition process around it: how interest becomes a conversation, how a conversation becomes trust and how trust becomes revenue."
     ],
     "roles": [
       {
@@ -107,6 +111,7 @@ export const PROFESSIONAL_CHAPTERS = [
         "period": "10/2024–2026"
       }
     ],
+    "milestonesTitle": "Commercial results",
     "milestones": [
       {
         "value": "$400K+",
@@ -132,7 +137,7 @@ export const PROFESSIONAL_CHAPTERS = [
       "Client relationships",
       "Commercial judgment"
     ],
-    "direction": "I became more interested in the acquisition process around the sale than in a single transaction."
+    "direction": "I became more interested in the system around the sale than the transaction itself. That shift is what led me to study how incentives, information and technology shape commercial outcomes."
   },
   {
     "id": "education",
@@ -141,8 +146,8 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Expanding my perspective",
     "period": "2023–present",
     "paragraphs": [
-      "Alongside my commercial roles, I study political science and economics at the University of Ottawa. I wanted to understand the systems around a business: markets, institutions, incentives, power and the way people make decisions.",
-      "The degree trained me to question assumptions, structure ambiguous problems and use evidence. It gave me a language for the strategic questions I was already asking at work."
+      "At the University of Ottawa, I study political science and economics alongside work. I chose the combination because it explains forces a sales floor cannot: why institutions behave the way they do, how incentives move groups and how societies trade off competing goods.",
+      "The degree trained me to question assumptions, structure ambiguous problems and argue from evidence. It gave me a language for the strategic questions I was already asking at work."
     ],
     "roles": [
       {
@@ -151,6 +156,7 @@ export const PROFESSIONAL_CHAPTERS = [
         "period": "2023–present · expected 2028"
       }
     ],
+    "milestonesTitle": "Academic path",
     "milestones": [
       {
         "value": "2028",
@@ -176,7 +182,7 @@ export const PROFESSIONAL_CHAPTERS = [
       "Written communication",
       "Strategy"
     ],
-    "direction": "It connected the commercial world to the institutional and strategic questions behind it."
+    "direction": "It connected the commercial world to the institutional and strategic questions behind it. I stopped seeing a business as a collection of functions and started seeing it as a set of choices."
   },
   {
     "id": "technology",
@@ -185,8 +191,8 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Exploring business and technology",
     "period": "2025–present",
     "paragraphs": [
-      "My next chapter started with a practical question: how much of the repetitive work inside a business could be designed better? I began building AI agents, automation workflows and business systems, first as experiments and then as products.",
-      "Working across H2Ops, Safiy and independent projects taught me to evaluate technology by operational fit, adoption and privacy, not novelty. I learned to move between a business problem, a process design and an implementation."
+      "The next question was practical: how much of the repetitive work inside a business could be designed better? I started with AI agents and automation workflows, first as experiments and then as products.",
+      "Working across H2Ops, Safiy and independent projects taught me to judge technology by operational fit, adoption and privacy, not novelty. I learned to move from a business problem to a process design, then to implementation — and to know when not to automate something."
     ],
     "roles": [
       {
@@ -205,6 +211,7 @@ export const PROFESSIONAL_CHAPTERS = [
         "period": "2025–present"
       }
     ],
+    "milestonesTitle": "Product and operations",
     "milestones": [
       {
         "value": "Co-founder",
@@ -235,7 +242,7 @@ export const PROFESSIONAL_CHAPTERS = [
       "Technical fluency",
       "Privacy and operational judgment"
     ],
-    "direction": "Technology became a way to act on commercial problems, not a separate career."
+    "direction": "Technology became a way to act on commercial problems, not a separate identity. It added a third lens — what can actually be adopted and sustained — to the commercial and strategic ones."
   },
   {
     "id": "direction",
@@ -244,9 +251,9 @@ export const PROFESSIONAL_CHAPTERS = [
     "title": "Where I’m heading",
     "period": "Present → next",
     "paragraphs": [
-      "The common thread across these chapters is a move from understanding customers to understanding the systems that serve them. I want to keep working on problems where commercial judgment, analysis and technology all matter.",
-      "My next step is consulting: helping organizations identify where AI and better processes create real value, then staying close enough to implementation to make the change work. Longer term, I want to lead and build businesses of my own.",
-      "Practically, I am looking for a role where I can combine commercial analysis, AI and implementation — whether in consulting, strategy or an operating team."
+      "The common thread across these chapters is a shift in altitude: from one customer to a team, from a team to a market, from a market to the systems and incentives that shape it. Each step made me more useful at a different level of the business.",
+      "My next step is consulting: helping organizations identify where strategy, operations and applied AI can create real value, then staying close enough to implementation to make the change work.",
+      "Longer term, I want to lead and own businesses of my own — not for the title, but because the decisions I find most interesting are the ones that set direction for everyone else."
     ],
     "roles": [],
     "interestsTitle": "Focus areas",
@@ -259,8 +266,8 @@ export const PROFESSIONAL_CHAPTERS = [
     ],
     "ambitionsTitle": "Long-term ambitions",
     "ambitions": [
-      "Build a business",
-      "Lead an organization",
+      "Own and lead a business",
+      "Set direction for an organization",
       "Sustainable growth"
     ],
     "capabilitiesLabel": "Capabilities I’m developing",

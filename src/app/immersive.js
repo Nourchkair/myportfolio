@@ -1,6 +1,6 @@
 import { PROJECTS, PROJECT_BY_ID } from '../data/projects.js';
-import { PROFESSIONAL_INTRO, PROFESSIONAL_CHAPTERS } from '../data/journey.js';
-import { ABOUT_ME_INTRO, ABOUT_ME_THINK, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../data/profile.js';
+import { PROFESSIONAL_TAGLINE, PROFESSIONAL_CHAPTERS } from '../data/journey.js';
+import { PROFILE_POSITIONING, PROFILE_PROOF, ABOUT_ME_INTRO, ABOUT_ME_THINK, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../data/profile.js';
 import { SCENES } from '../data/environments.js';
 import { parseRoute, normalizePath } from './routes.js';
 import { createStore, initialState } from './store.js';
@@ -116,8 +116,6 @@ function setScene(i,remember=true){
   if(utilitySceneThumb) utilitySceneThumb.src=s.img;
   $('tbScene').textContent=s.name;
   $('nowScene').textContent=s.name;
-  $('enterKicker').textContent=`Nour OS / Environment ${pad(sceneIndex+1)}`;
-  $('enterFootScene').textContent=`Environment / ${s.name}`;
   $('sceneDots').querySelectorAll('[data-scene-dot]').forEach((el,idx)=>el.setAttribute('aria-current',idx===sceneIndex?'true':'false'));
   if(remember){
     announce(`Environment ${sceneIndex+1} of 4: ${s.name}`);
@@ -167,12 +165,14 @@ function bodyHTML(item){
   if(item.type==='journey'){
     return `<div class="card-kicker">Professional / My Journey</div>
       <h2>My Journey.</h2>
-      <p class="card-desc">A career across customers, commerce and systems.</p>
+      <p class="card-desc">From customers to commerce to systems.</p>
       <div class="card-actions"><button class="cta" data-journey>Explore my journey <span aria-hidden="true">↗</span></button></div>`;
   }
   if(item.type==='profile'){
-    return `<h2 id="greetingText">Good evening.</h2>
-      <p class="card-desc">Based in Ottawa. Business, sales and technology.</p>
+    return `<div class="card-kicker">Business strategy / Sales / Applied AI</div>
+      <h2 id="greetingText">Good evening.</h2>
+      <p class="card-position">${escHTML(PROFILE_POSITIONING)}</p>
+      <p class="card-proof">${escHTML(PROFILE_PROOF)}</p>
       <div class="card-actions">
         <button class="cta" data-open-deck>View projects <span aria-hidden="true">↗</span></button>
         <button class="ghost-btn" data-contact>Contact</button>
@@ -389,7 +389,7 @@ function meIntroHTML(){
     <header class="me-intro-head">
       <span class="me-eyebrow">About me</span>
       <h1 id="meIntroTitle" tabindex="-1">Hey, I'm Nour!</h1>
-      <p class="me-subtitle">Business-minded. Commercially experienced. Technologically fluent.</p>
+      <p class="me-subtitle">${escHTML(PROFILE_POSITIONING)}</p>
     </header>
     <div class="me-intro-copy">${meParagraphs(ABOUT_ME_INTRO)}</div>
     <div class="me-intro-next">
@@ -503,9 +503,17 @@ function professionalChapterHTML(chapter){
         </div>`).join('')}
       </div>`
     : '';
+  const milestoneTitle=chapter.milestonesTitle||'Milestones';
   const milestones=chapter.milestones&&chapter.milestones.length
-    ? `<div class="pro-milestones" role="group" aria-label="Key milestones">
-        ${chapter.milestones.map(item=>`<div class="pro-milestone"><b class="${String(item.value).length>8?'is-wide':''}">${escHTML(item.value)}</b><span>${escHTML(item.label)}</span></div>`).join('')}
+    ? `<div class="pro-milestone-block" role="group" aria-label="${escHTML(milestoneTitle)}">
+        <span class="pro-milestone-kicker">${escHTML(milestoneTitle)}</span>
+        <div class="pro-milestones">
+          ${chapter.milestones.map((item,i)=>{
+            const primary=i===0;
+            const wide=String(item.value).length>8||!/\d/.test(String(item.value));
+            return `<div class="pro-milestone${primary?' is-primary':''}"><b class="${wide?'is-wide':''}">${escHTML(item.value)}</b><span>${escHTML(item.label)}</span></div>`;
+          }).join('')}
+        </div>
       </div>`
     : '';
   const detailList=chapter.details&&chapter.details.length
@@ -533,7 +541,7 @@ function professionalChapterHTML(chapter){
       </section>`
     : '';
   const direction=chapter.direction
-    ? `<div class="pro-direction"><span>What it changed</span><p>${escHTML(chapter.direction)}</p></div>`
+    ? `<div class="pro-direction"><span>How it shaped the next step</span><p>${escHTML(chapter.direction)}</p></div>`
     : '';
   return `<div class="journey-panel-grid">
     <section class="pw-window journey-panel journey-panel--main" aria-labelledby="proChapterTitle">
@@ -543,7 +551,8 @@ function professionalChapterHTML(chapter){
           <h2 id="proChapterTitle">${escHTML(chapter.title)}</h2>
         </div>
         ${roles}
-        <div class="pro-narrative">${chapter.paragraphs.map(p=>`<p>${escHTML(p)}</p>`).join('')}${milestones}</div>
+        ${milestones}
+        <div class="pro-narrative">${chapter.paragraphs.map(p=>`<p>${escHTML(p)}</p>`).join('')}</div>
       </div>
     </section>
     <section class="pw-window journey-panel journey-panel--side" aria-label="Chapter summary">
@@ -608,7 +617,7 @@ function renderProfessionalView(body){
   float.innerHTML=`<header class="pro-float-head">
       <span class="pro-eyebrow">My Journey / Professional experience</span>
       <h1>My Journey</h1>
-      <p class="pro-tagline">A career built across customers, commerce and systems.</p>
+      <p class="pro-tagline">${escHTML(PROFESSIONAL_TAGLINE)}</p>
     </header>
     <div class="pro-timeline-panel">
       <div class="pro-timeline-top">
@@ -2014,16 +2023,17 @@ function publishState(){
 /* ---------- entry ---------- */
 function enterWorld(){
   if(entered) return;
-  entered=true;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const screen=$('enterScreen');
   const finish=()=>{
+    entered=true;
     if(screen) screen.classList.add('done');
-    document.body.classList.add('ready');
+    document.body.classList.remove('intro-charge');
+    document.body.classList.add('intro-reveal','ready');
     syncA11y();
     announce('Nour OS ready. Use the arrow keys or the card navigation to explore.');
-    const active=document.querySelector('#cardStage .os-card.pos-0');
-    if(active) setTimeout(()=>active.focus({preventScroll:true}),reduced?0:60);
+    const main=$('mainContent');
+    if(main) setTimeout(()=>main.focus({preventScroll:true}),reduced?0:120);
     if(pendingRoute){
       const path=pendingRoute;
       pendingRoute=null;
@@ -2031,16 +2041,14 @@ function enterWorld(){
         if(hashPath()===path) applyCurrentPath();
       },reduced?0:420);
     }
+    setTimeout(()=>document.body.classList.remove('intro-reveal'),reduced?0:1500);
   };
   if(reduced){
     finish();
     return;
   }
-  document.body.classList.add('powering');
-  requestAnimationFrame(()=>{
-    finish();
-  });
-  setTimeout(()=>document.body.classList.remove('powering'),360);
+  document.body.classList.add('intro-charge');
+  setTimeout(finish,1900);
 }
 
 /* ---------- boot ---------- */
@@ -2084,6 +2092,7 @@ if(initialRoute&&initialRoute.name==='reading'){
       pendingRoute=initialRoute.canonical;
     }
   }
+  announce('Loading Nour OS.');
   const reducedStart=matchMedia('(prefers-reduced-motion: reduce)').matches;
   setTimeout(()=>{
     if(!entered) enterWorld();
@@ -2100,8 +2109,6 @@ function warmProjectArt(){
 }
 primeProjectTemplates();
 bindProjectFlowControls();
-const entryCount=$('entryProjectCount');
-if(entryCount) entryCount.textContent=`${PROJECTS.length} projects`;
 warmProjectArt();
 schedulePrewarm(PROJECT_CARDS[0].id);
 

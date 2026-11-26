@@ -1,6 +1,6 @@
 import { PROJECTS } from '../data/projects.js';
-import { PROFESSIONAL_INTRO, PROFESSIONAL_CHAPTERS } from '../data/journey.js';
-import { ABOUT_ME_INTRO, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../data/profile.js';
+import { PROFESSIONAL_TAGLINE, PROFESSIONAL_INTRO, PROFESSIONAL_CHAPTERS } from '../data/journey.js';
+import { PROFILE_INTERSECTION, ABOUT_ME_INTRO, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../data/profile.js';
 import { SITE } from '../data/site.js';
 import { escHTML as e } from '../utils/html.js';
 
@@ -16,7 +16,14 @@ function list(items,className=''){
 }
 function chapterHTML(chapter){
   const roles=asArray(chapter.roles).map(role=>`<div class="reading-role"><span>${e(role.org)}</span><b>${e(role.role)}</b><small>${e(role.period)}</small></div>`).join('');
-  const milestones=asArray(chapter.milestones).map(item=>`<div class="reading-milestone"><b>${e(item.value)}</b><span>${e(item.label)}</span></div>`).join('');
+  const milestoneTitle=chapter.milestonesTitle||'Milestones';
+  const milestones=asArray(chapter.milestones).length
+    ? `<div class="reading-milestone-block" role="group" aria-label="${e(milestoneTitle)}"><span class="reading-milestone-kicker">${e(milestoneTitle)}</span><div class="reading-milestones">${chapter.milestones.map((item,i)=>{
+        const primary=i===0;
+        const wide=String(item.value).length>8||!/\d/.test(String(item.value));
+        return `<div class="reading-milestone${primary?' is-primary':''}"><b${wide?' class="is-wide"':''}>${e(item.value)}</b><span>${e(item.label)}</span></div>`;
+      }).join('')}</div></div>`
+    : '';
   const details=asArray(chapter.details).length?`<div class="reading-subblock"><h4>${e(chapter.detailsTitle||'At a glance')}</h4>${list(chapter.details,'reading-list')}</div>`:'';
   const focus=asArray(chapter.interests).length?`<div class="reading-subblock"><h4>${e(chapter.interestsTitle||'Focus areas')}</h4>${list(chapter.interests,'reading-list')}</div>`:'';
   const ambitions=asArray(chapter.ambitions).length?`<div class="reading-subblock"><h4>${e(chapter.ambitionsTitle||'Long-term ambitions')}</h4>${list(chapter.ambitions,'reading-list')}</div>`:'';
@@ -24,10 +31,10 @@ function chapterHTML(chapter){
   return `<article class="reading-chapter" id="chapter-${e(chapter.id)}">
     <header class="reading-chapter-head"><span class="reading-kicker">${e(chapter.num)} / ${String(PROFESSIONAL_CHAPTERS.length).padStart(2,'0')} · ${e(chapter.period)}</span><h3>${e(chapter.title)}</h3></header>
     ${roles?`<div class="reading-roles">${roles}</div>`:''}
+    ${milestones}
     <div class="reading-prose">${paragraphs(chapter.paragraphs)}</div>
-    ${milestones?`<div class="reading-milestones">${milestones}</div>`:''}
     <div class="reading-chapter-grid">${details}${focus}${ambitions}${skills}</div>
-    ${chapter.direction?`<blockquote class="reading-direction"><span>What it changed</span>${e(chapter.direction)}</blockquote>`:''}
+    ${chapter.direction?`<blockquote class="reading-direction"><span>How it shaped the next step</span>${e(chapter.direction)}</blockquote>`:''}
   </article>`;
 }
 function contributionHTML(contribution){
@@ -62,13 +69,13 @@ export function renderReadingContent(){
   return `<main id="reading-main" class="reading-main">
     <section class="reading-hero" id="about" aria-labelledby="reading-title">
       <span class="reading-kicker">Nour Chkair / Reading view</span>
-      <h1 id="reading-title">Commercially minded. Technically fluent.</h1>
-      <p class="reading-lead">I'm based in Ottawa, with a background in political science, business, sales and technology.</p>
+      <h1 id="reading-title">I turn customer insight into commercial strategy.</h1>
+      <p class="reading-lead">${e(PROFILE_INTERSECTION)}</p>
       <div class="reading-prose">${paragraphs(ABOUT_ME_INTRO.slice(1))}</div>
       <div class="reading-hero-actions"><a class="reading-cta" href="#contact">Contact</a><a class="reading-link" href="${SITE.linkedin}" target="_blank" rel="noopener">LinkedIn ↗</a><a class="reading-link" href="${SITE.github}" target="_blank" rel="noopener">GitHub ↗</a></div>
     </section>
     <section class="reading-section" id="approach" aria-labelledby="approach-title"><header class="reading-section-head"><span>01</span><h2 id="approach-title">About my approach</h2></header><div class="reading-prose">${paragraphs(ABOUT_ME_WORK)}</div><div class="reading-prose reading-direction-copy">${paragraphs(ABOUT_ME_DIRECTION)}</div></section>
-    <section class="reading-section" id="experience" aria-labelledby="experience-title"><header class="reading-section-head"><span>02</span><h2 id="experience-title">My Journey</h2></header><p class="reading-lead">A career built across customers, commerce and systems.</p><div class="reading-prose">${paragraphs(PROFESSIONAL_INTRO)}</div><nav class="reading-index" aria-label="My Journey chapters">${PROFESSIONAL_CHAPTERS.map(chapter=>`<a href="#chapter-${e(chapter.id)}">${e(chapter.num)} ${e(chapter.label)}</a>`).join('')}</nav><div class="reading-chapters">${journey}</div></section>
+    <section class="reading-section" id="experience" aria-labelledby="experience-title"><header class="reading-section-head"><span>02</span><h2 id="experience-title">My Journey</h2></header><p class="reading-lead">${e(PROFESSIONAL_TAGLINE)}</p><div class="reading-prose">${paragraphs(PROFESSIONAL_INTRO)}</div><nav class="reading-index" aria-label="My Journey chapters">${PROFESSIONAL_CHAPTERS.map(chapter=>`<a href="#chapter-${e(chapter.id)}">${e(chapter.num)} ${e(chapter.label)}</a>`).join('')}</nav><div class="reading-chapters">${journey}</div></section>
     <section class="reading-section" id="projects" aria-labelledby="projects-title"><header class="reading-section-head"><span>03</span><h2 id="projects-title">Projects</h2></header><p class="reading-lead">Five projects across customer acquisition, service operations, AI communication, knowledge systems and workplace intelligence.</p><nav class="reading-index" aria-label="Projects">${PROJECTS.map(project=>`<a href="#project-${e(project.id)}">${e(project.num)} ${e(project.title)}</a>`).join('')}</nav><div class="reading-projects">${projects}</div></section>
     <section class="reading-section" id="contact" aria-labelledby="contact-title"><header class="reading-section-head"><span>04</span><h2 id="contact-title">Contact</h2></header><p class="reading-lead">${e(SITE.contactIntro)}</p><div class="reading-hero-actions"><a class="reading-cta" href="${SITE.linkedin}" target="_blank" rel="noopener">Message on LinkedIn ↗</a><a class="reading-link" href="${SITE.github}" target="_blank" rel="noopener">GitHub ↗</a></div><p class="reading-note">${e(SITE.contactNote)}</p></section>
   </main>`;
@@ -94,7 +101,7 @@ export function renderReadingPage(){
 <body class="reading-page">
 <a class="skip-link" href="#reading-main">Skip to content</a>
 <header class="reading-head">
-  <a class="reading-brand" href="index.html#/home" aria-label="Nour Chkair — immersive portfolio"><span class="reading-mark" aria-hidden="true">N</span><span><b>${e(SITE.name)}</b><small>Commercial strategy, sales &amp; technology</small></span></a>
+  <a class="reading-brand" href="index.html#/home" aria-label="Nour Chkair — immersive portfolio"><span class="reading-mark" aria-hidden="true">N</span><span><b>${e(SITE.name)}</b><small>Business strategy, sales &amp; applied AI</small></span></a>
   <nav class="reading-nav" aria-label="Reading view sections"><a href="#about">About</a><a href="#experience">My Journey</a><a href="#projects">Projects</a><a href="#contact">Contact</a></nav>
   <a class="reading-exit" href="index.html#/home">Open immersive portfolio ↗</a>
 </header>

@@ -1,6 +1,6 @@
 # Validation results
 
-Captured against the local static server (`python3 -m http.server 8768`) after the final refactor. Nothing was deployed.
+Captured against the local static server (`python3 -m http.server 8768`) after the final refactor. The site is now deployed to Cloudflare Pages at https://nourchkair.com.
 
 ## Automated build and contract checks
 
@@ -144,9 +144,9 @@ The lower scores are explained by the local clock changing and the intentional H
 
 ## Remaining issues
 
-1. Hosting remains undecided; no deployment configuration was added.
+1. Production is deployed to Cloudflare Pages via direct upload; no GitHub Actions/CI workflow is committed. `npm run deploy` is the deployment path.
 2. Browser QA was run against the local static server with the Aside browser session; there is no committed Playwright/Puppeteer dependency. The deterministic Node validation harness is committed.
 3. The social preview uses the existing About portrait; a dedicated branded 1200×630 image is still open.
 4. `spatial2.html` depends on JavaScript plus a visible fallback link; `index.html` is the primary entry.
-5. `sitemap.xml` is generated only when `SITE_URL` is provided.
-6. AI Nour, external integrations and public deployment remain intentionally unimplemented.
+5. `sitemap.xml` is generated for the production domain; `SITE_URL` can override it for preview builds.
+6. AI Nour and external integrations remain intentionally unimplemented.

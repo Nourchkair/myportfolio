@@ -6,7 +6,7 @@ import { PROJECTS } from '../src/data/projects.js';
 import { PROFESSIONAL_CHAPTERS } from '../src/data/journey.js';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const siteUrl=(process.env.SITE_URL||'').replace(/\/$/,'');
+const siteUrl=(process.env.SITE_URL||'https://nourchkair.com').replace(/\/$/,'');
 
 const redirect=`<!doctype html>
 <html lang="en">
