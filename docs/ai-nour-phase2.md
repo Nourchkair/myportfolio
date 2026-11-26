@@ -12,7 +12,7 @@
 
 Phase 2 turned the functional Phase 1 prototype into an integrated, feature-flagged Nour OS companion and hardened the surrounding backend.
 
-- The quiet-companion direction is implemented in the portfolio with ambient, compact, expanded, voice, navigation, and mobile states.
+- The quiet-companion direction is implemented as a standalone top-right pill with text and voice modes, a movable transparent panel, a glowing Thinking state, and close-without-ending-the-session behavior.
 - The knowledge corpus was regenerated from the latest `origin/main` content; retrieval is now **87.27% top-1 / 100% top-3** over 55 bilingual queries.
 - CRM, consent, inquiry, appointment, reschedule, cancel, ownership, idempotency and concurrency workflows are implemented and tested.
 - A real synthetic Google Calendar appointment produced a unique Meet link, was rescheduled, cancelled, and left no attendee invite.
@@ -20,7 +20,7 @@ Phase 2 turned the functional Phase 1 prototype into an integrated, feature-flag
 - Live tokens now carry a prepaid server-side reservation; a browser cannot mint a second token once the remaining cap cannot cover the reservation, even if it never reports usage.
 - No fixed infrastructure cost was introduced. The evaluation budget remains intact.
 
-**Current cost:** $0.196322 USD actual spent / **~$0.2791 CAD**; $0.276322 USD committed including an $0.08 held Live reservation / **~$0.3929 CAD**.
+**Current cost:** $0.278328 USD actual spent / **~$0.3958 CAD**; $0.358328 USD committed including an $0.08 held Live reservation / **~$0.5095 CAD**.
 
 ---
 
@@ -54,55 +54,55 @@ http://localhost:8771/?ainour=dev&ainour-api=http://127.0.0.1:8789
 
 It mounts only with `?ainour=dev` or `?ainour=1`; the default portfolio and the reading view remain assistant-free.
 
-### Ambient presence
+### Persistent top-right pill
 
-![Ambient AI Nour toolbar](screenshots/phase2-companion-ambient.jpg)
+![AI Nour pill and text panel](../ai-nour/docs/screenshots/phase2-companion-text.png)
 
-- A glass “AI Nour” button sits at the end of the existing toolbar, between Read and the environment controls.
-- The orb is the only persistent cue; no generic floating chatbot bubble.
-- The panel is closed by default.
+- AI Nour is **not part of the menu bar**. A standalone glass pill is fixed at the top-right of every page, outside the toolbar.
+- The pill contains the orb, a **Text** button and a **Voice** button. It is the only persistent visual cue; there is no generic floating chatbot bubble.
+- The pill remains visible above project overlays and the visor, and reflects the active mode, an active Live session, and unread replies.
+- The panel is closed by default. Opening Text or Voice expands the panel from the pill.
 
-### Compact conversation
+### Text mode
 
-![Compact conversation](screenshots/phase2-companion-compact.png)
+- Text opens a 390 px transparent glass panel at the top-right. The landscape and portfolio content remain visible through it.
+- The panel can be dragged by its header, is clamped inside the viewport, and remembers its position. It can be minimized to 304×355 or expanded to 760 px.
+- AI responses use a thin accent rule; user turns use small glass chips. The disclosure “AI representation · not Nour” and the current portfolio context stay visible.
+- Voice, EN/FR, New, minimize, expand and close controls remain available.
+- Closing the panel hides the UI only. The conversation, session and any active voice connection continue; the pill remains and marks unread replies.
 
-- 392 px glass panel anchored bottom-right.
-- AI responses use a thin accent rule; user turns use small glass chips.
-- Disclosure: “AI representation · not Nour”.
-- Context line shows the current portfolio section.
-- Voice and EN/FR controls remain available.
+### Thinking state
 
-### Expanded conversation
+![AI Nour Thinking state](../ai-nour/docs/screenshots/phase2-companion-thinking.png)
 
-![Expanded conversation](screenshots/phase2-companion-expanded.png)
+- While a text request is in flight, a compact **Thinking** label glows with a pulsing accent dot.
+- The label is hidden when idle and respects `prefers-reduced-motion`; it is a state indicator, not a separate message.
 
-- 760 px workspace with the same visual language.
-- Thread and context remain visible; expansion does not cover the viewport.
-- Manual navigation collapses the panel.
+### Voice mode
 
-### Voice conversation
+![AI Nour voice transcript inside the chat](../ai-nour/docs/screenshots/phase2-companion-voice.png)
 
-![Active voice conversation](screenshots/phase2-companion-voice.png)
-
-- Concentric orb with explicit states: connecting, listening, processing, speaking, error.
-- Transcript with user/AI labels, stop control, and text fallback.
+- The voice panel uses a concentric orb with explicit states: connecting, listening, processing, speaking, error.
+- Voice transcripts stream **directly into the shared conversation thread**, with “You” and “AI Nour” labels. There is no separate transcript sheet, so the text and voice history stay together.
+- Start microphone and Stop voice are explicit controls; the text composer remains available below.
+- **Closing the panel does not stop the session.** The microphone, Live connection and AI tool actions keep running; the pill reflects listening/speaking and reopening Voice returns to the live panel.
 - This screenshot is a deterministic visual demo state; the real microphone path is covered by the human test plan.
 
 ### Navigation during conversation
 
-![Navigation to Safiy](screenshots/phase2-companion-navigation.jpg)
+![AI Nour pill above the Safiy project overlay](../ai-nour/docs/screenshots/phase2-companion-navigation.png)
 
 - “Open the Safiy project” produced the server-validated `openProject: safiy` action.
-- The companion called `window.NourOS.openProject('safiy')`; the project overlay opened at `#/projects/safiy`.
-- The panel collapsed and the context changed to “Safiy · overview”.
-- Manual navigation takes priority: expanded panels collapse and active voice stops on a manual route change.
+- The companion called `window.NourOS.openProject('safiy')`; the project overlay opened at `#/projects/safiy` and the context changed to “Safiy · overview”.
+- The AI Nour pill stays accessible above the project overlay. Navigation transitions that report `BUSY` are retried rather than forced.
+- Manual visitor navigation takes priority: AI Nour never blocks navigation and never re-opens a closed panel.
 
 ### Mobile
 
-![Mobile companion](screenshots/phase2-companion-mobile.png)
+![Mobile companion](../ai-nour/docs/screenshots/phase2-companion-mobile.png)
 
-- At 390×844 the panel becomes a bottom sheet with safe-area awareness.
-- Toolbar labels collapse; the AI Nour trigger remains available.
+- At 390×844 the panel becomes a bottom sheet with safe-area awareness; the top-right pill stays available.
+- The conversation remains usable with the virtual keyboard; voice and text switch without leaving the sheet.
 - The conversation restores after reload.
 
 ### Proposed direction
@@ -254,8 +254,9 @@ Still unresolved: app remains in Testing; refresh tokens can expire after 7 days
 | Real French text + Live | **7/7** | `results/real-french.json` |
 | Recovery | **4/4** | `results/recovery-test.json` |
 | Retrieval | **87.27% top-1 / 100% top-3** | `results/retrieval-benchmark.json` |
-| Secret scan | **361 files, 0 hits** | excludes ignored `.dev.vars` |
+| Secret scan | **364 files, 0 hits** | pattern scan plus 8 active secret values; excludes ignored `.dev.vars` |
 | Portfolio regression | **261 checks** | root `npm test` |
+| Companion UI QA | **9/9** | `results/ui-integration-tests.json`; mock Worker, 1440×900 and 390×844 |
 
 Coverage includes:
 
@@ -308,18 +309,18 @@ Rates are list prices; no invoice has been issued.
 | Item | USD micros | USD | CAD at 1.4219 |
 | --- | ---: | ---: | ---: |
 | Phase 0A + Phase 1 carryover | 34,559 | $0.034559 | $0.04914 |
-| Phase 2 actual spent | 161,763 | $0.161763 | $0.2300 |
-| **Actual spent total** | **196,322** | **$0.196322** | **~$0.2791** |
+| Phase 2 actual spent | 243,769 | $0.243769 | $0.3466 |
+| **Actual spent total** | **278,328** | **$0.278328** | **~$0.3958** |
 | Held Live reservation | 80,000 | $0.080000 | $0.1138 |
-| **Committed total** | **276,322** | **$0.276322** | **~$0.3929** |
+| **Committed total** | **358,328** | **$0.358328** | **~$0.5095** |
 
 - Fixed infrastructure: **$0/month**.
 - Approved evaluation budget: **$10 CAD**.
 - Daily cap: **$1.00 USD**; cumulative cap: **$7.00 USD** (~$9.95 CAD).
-- Remaining committed cap: ~**$9.56 CAD**; actual-spend headroom under the $10 CAD approval: ~**$9.72 CAD**.
+- Remaining committed cap: ~**$9.44 CAD**; actual-spend headroom under the $10 CAD approval: ~**$9.60 CAD**.
 - No billing, subscription, R2, paid auth, paid database, or paid email service was activated.
 
-The Phase 2 cost is dominated by two real Live reservations at $0.08 each (English and French smoke tests), plus text/security usage. The 80,000 held reservation belongs to the recovery test token and is released after the reservation window if unused.
+The Phase 2 cost is dominated by three charged Live reservations at $0.08 each (English, French, and an additional Live check), plus one outstanding $0.08 hold and text/security usage. The held reservation is released after its window if unused. Charged reservations remain counted even when the browser reports no usage.
 
 ---
 
@@ -327,7 +328,7 @@ The Phase 2 cost is dominated by two real Live reservations at $0.08 each (Engli
 
 ### Requires your decision/authorization
 
-1. **Visual approval:** approve Direction A, or request changes to the ambient trigger, panel proportions, disclosure, voice treatment, or mobile sheet.
+1. **Visual approval:** approve Direction A, or request changes to the top-right pill, panel transparency/movement, Thinking treatment, in-chat voice transcript, close-without-stopping behavior, disclosure, or mobile sheet.
 2. **OAuth publishing:** approve publishing/verification and any restricted-scope assessment, or keep the app in Testing and accept 7-day reauthorization.
 3. **Admin exposure:** keep the admin local/private, or approve a production admin hostname and Access/private networking.
 4. **Resend setup:** approve a sending subdomain (`mail.nourchkair.com` or similar) and DNS records; provide a Resend API key only if that path is chosen.
@@ -376,7 +377,7 @@ ai-nour/
   docs/oauth-production-readiness.md
   docs/email-recommendation.md
   docs/real-device-testing.md
-  docs/screenshots/phase2-companion-*.png/jpg
+  docs/screenshots/phase2-companion-*.png
   results/*
   crm-schema.phase2.json
   oauth/privacy.html

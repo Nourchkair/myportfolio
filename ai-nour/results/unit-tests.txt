@@ -6,229 +6,229 @@ TAP version 13
 # Subtest: timingSafeEqual compares strings without early exit
 ok 1 - timingSafeEqual compares strings without early exit
   ---
-  duration_ms: 0.746458
+  duration_ms: 1.155208
   type: 'test'
   ...
 # Subtest: prototype and admin auth are enforced server-side
 ok 2 - prototype and admin auth are enforced server-side
   ---
-  duration_ms: 27.5785
+  duration_ms: 36.908167
   type: 'test'
   ...
 # Subtest: owner token must be present and reasonably sized
 ok 3 - owner token must be present and reasonably sized
   ---
-  duration_ms: 0.698708
+  duration_ms: 0.236084
   type: 'test'
   ...
 # Subtest: admin OAuth PKCE and auth URL include the required fields
 ok 4 - admin OAuth PKCE and auth URL include the required fields
   ---
-  duration_ms: 6.661125
+  duration_ms: 4.425083
   type: 'test'
   ...
 # Subtest: admin OAuth exchange and userinfo use mocked Google responses
 ok 5 - admin OAuth exchange and userinfo use mocked Google responses
   ---
-  duration_ms: 3.69
+  duration_ms: 1.495667
   type: 'test'
   ...
 # Subtest: signed admin session round-trips, rejects tampering and expiry
 ok 6 - signed admin session round-trips, rejects tampering and expiry
   ---
-  duration_ms: 4.684084
+  duration_ms: 3.315875
   type: 'test'
   ...
 # Subtest: portfolio context accepts only known sections/projects/chapters/nodes
 ok 7 - portfolio context accepts only known sections/projects/chapters/nodes
   ---
-  duration_ms: 0.843709
+  duration_ms: 0.837375
   type: 'test'
   ...
 # Subtest: context hints and instructions resolve pronouns without granting authority
 ok 8 - context hints and instructions resolve pronouns without granting authority
   ---
-  duration_ms: 0.273083
+  duration_ms: 0.1855
   type: 'test'
   ...
 # Subtest: text cost uses published per-million rates
 ok 9 - text cost uses published per-million rates
   ---
-  duration_ms: 0.707292
+  duration_ms: 0.855083
   type: 'test'
   ...
 # Subtest: live cost separates text input, audio input and audio output
 ok 10 - live cost separates text input, audio input and audio output
   ---
-  duration_ms: 0.086667
+  duration_ms: 0.522208
   type: 'test'
   ...
 # Subtest: budget blocks when daily or cumulative caps are reached
 ok 11 - budget blocks when daily or cumulative caps are reached
   ---
-  duration_ms: 0.371042
+  duration_ms: 1.04375
   type: 'test'
   ...
 # Subtest: cost service records text usage with a stable request id
 ok 12 - cost service records text usage with a stable request id
   ---
-  duration_ms: 0.145583
+  duration_ms: 0.213417
   type: 'test'
   ...
 # Subtest: held Live reservations count toward the budget
 ok 13 - held Live reservations count toward the budget
   ---
-  duration_ms: 0.098417
+  duration_ms: 0.121542
   type: 'test'
   ...
 # Subtest: Google auth refreshes once and adds the bearer token
 ok 14 - Google auth refreshes once and adds the bearer token
   ---
-  duration_ms: 35.73325
+  duration_ms: 51.833625
   type: 'test'
   ...
 # Subtest: Google auth retries once after a 401
 ok 15 - Google auth retries once after a 401
   ---
-  duration_ms: 2.453166
+  duration_ms: 0.569792
   type: 'test'
   ...
 # Subtest: Sheets adapter reads metadata and appends a synthetic row
 ok 16 - Sheets adapter reads metadata and appends a synthetic row
   ---
-  duration_ms: 0.229042
+  duration_ms: 0.203708
   type: 'test'
   ...
 # Subtest: Calendar adapter creates a no-attendee Meet event and cancels it
 ok 17 - Calendar adapter creates a no-attendee Meet event and cancels it
   ---
-  duration_ms: 0.225375
+  duration_ms: 0.218208
   type: 'test'
   ...
 # Subtest: Gmail adapter creates drafts and exposes no send method
 ok 18 - Gmail adapter creates drafts and exposes no send method
   ---
-  duration_ms: 0.34925
+  duration_ms: 0.365084
   type: 'test'
   ...
 # Subtest: Drive backup encryption round-trips without network access
 ok 19 - Drive backup encryption round-trips without network access
   ---
-  duration_ms: 7.769875
+  duration_ms: 8.579208
   type: 'test'
   ...
 # Subtest: Google services report not configured cleanly
 ok 20 - Google services report not configured cleanly
   ---
-  duration_ms: 0.513542
+  duration_ms: 0.4085
   type: 'test'
   ...
 # Subtest: Gemini text adapter sends system, contents and tools and parses usage
 ok 21 - Gemini text adapter sends system, contents and tools and parses usage
   ---
-  duration_ms: 28.1495
+  duration_ms: 40.058542
   type: 'test'
   ...
 # Subtest: Gemini text adapter retries a retryable HTTP failure once
 ok 22 - Gemini text adapter retries a retryable HTTP failure once
   ---
-  duration_ms: 351.39925
+  duration_ms: 354.352958
   type: 'test'
   ...
 # Subtest: Gemini Live adapter wraps tool declarations and uses the auth_tokens endpoint
 ok 23 - Gemini Live adapter wraps tool declarations and uses the auth_tokens endpoint
   ---
-  duration_ms: 1.873834
+  duration_ms: 1.245625
   type: 'test'
   ...
 # Subtest: mock text provider returns deterministic grounded answers and a navigation call
 ok 24 - mock text provider returns deterministic grounded answers and a navigation call
   ---
-  duration_ms: 0.530708
+  duration_ms: 0.466459
   type: 'test'
   ...
 # Subtest: corpus is built and structured
 ok 25 - corpus is built and structured
   ---
-  duration_ms: 0.768875
+  duration_ms: 1.567
   type: 'test'
   ...
 # Subtest: English project and journey queries retrieve expected chunks
 ok 26 - English project and journey queries retrieve expected chunks
   ---
-  duration_ms: 47.104833
+  duration_ms: 47.608375
   type: 'test'
   ...
 # Subtest: French and paraphrase queries retrieve expected chunks
 ok 27 - French and paraphrase queries retrieve expected chunks
   ---
-  duration_ms: 27.900625
+  duration_ms: 27.974042
   type: 'test'
   ...
 # Subtest: retrieval benchmark meets Phase 1 thresholds
 ok 28 - retrieval benchmark meets Phase 1 thresholds
   ---
-  duration_ms: 417.68325
+  duration_ms: 383.870333
   type: 'test'
   ...
 # Subtest: locale detection handles English, French and explicit overrides
 ok 29 - locale detection handles English, French and explicit overrides
   ---
-  duration_ms: 1.033834
+  duration_ms: 1.167167
   type: 'test'
   ...
 # Subtest: conversation brief includes summary and recent turns
 ok 30 - conversation brief includes summary and recent turns
   ---
-  duration_ms: 0.133291
+  duration_ms: 0.140083
   type: 'test'
   ...
 # Subtest: system prompt carries persona, context, brief and injection rules
 ok 31 - system prompt carries persona, context, brief and injection rules
   ---
-  duration_ms: 0.148666
+  duration_ms: 0.150375
   type: 'test'
   ...
 # Subtest: history removes a leading assistant message and maps roles
 ok 32 - history removes a leading assistant message and maps roles
   ---
-  duration_ms: 0.104041
+  duration_ms: 0.109416
   type: 'test'
   ...
 # Subtest: appendTurn stores both messages and advances the turn count
 ok 33 - appendTurn stores both messages and advances the turn count
   ---
-  duration_ms: 2.337542
+  duration_ms: 2.880916
   type: 'test'
   ...
 # Subtest: summarization updates only the summary field
 ok 34 - summarization updates only the summary field
   ---
-  duration_ms: 0.808292
+  duration_ms: 1.960708
   type: 'test'
   ...
 # Subtest: tool declarations are allowlisted and schema-shaped
 ok 35 - tool declarations are allowlisted and schema-shaped
   ---
-  duration_ms: 1.760208
+  duration_ms: 1.375584
   type: 'test'
   ...
 # Subtest: valid navigation calls produce actions
 ok 36 - valid navigation calls produce actions
   ---
-  duration_ms: 0.1925
+  duration_ms: 0.209833
   type: 'test'
   ...
 # Subtest: unknown tools, projects, sections and nodes are rejected
 ok 37 - unknown tools, projects, sections and nodes are rejected
   ---
-  duration_ms: 0.068083
+  duration_ms: 0.063334
   type: 'test'
   ...
 # Subtest: tool execution returns a model-safe response and action
 ok 38 - tool execution returns a model-safe response and action
   ---
-  duration_ms: 0.092042
+  duration_ms: 0.091667
   type: 'test'
   ...
 1..38
@@ -239,4 +239,4 @@ ok 38 - tool execution returns a model-safe response and action
 # cancelled 0
 # skipped 0
 # todo 0
-# duration_ms 660.356417
+# duration_ms 622.362

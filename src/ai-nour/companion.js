@@ -5,7 +5,7 @@ const params = new URLSearchParams(location.search);
 const DEV = params.get('ainour') === 'dev';
 const API_BASE = (params.get('ainour-api') || (['localhost', '127.0.0.1'].includes(location.hostname) ? 'http://127.0.0.1:8789' : '')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
-const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
+const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale', pos: 'ainour:panelpos' };
 
 const state = {
   key: sessionStorage.getItem(STORE.key) || '',
@@ -14,8 +14,11 @@ const state = {
   locale: localStorage.getItem(STORE.locale) || 'en',
   messages: [],
   meta: null,
-  view: 'compact',
+  mode: 'text',
+  size: 'standard',
   busy: false,
+  thinking: false,
+  unread: false,
   ready: false,
   mounted: false,
   voice: 'idle'
@@ -34,6 +37,8 @@ const voice = {
   lastTotals: { text: 0, audioIn: 0, audioOut: 0 },
   userText: '',
   assistantText: '',
+  userDraftId: null,
+  assistantDraftId: null,
   turnId: null,
   reservationId: null
 };
@@ -43,6 +48,7 @@ let nour = null;
 let lastRoute = null;
 let aiNavUntil = 0;
 let mounted = false;
+let drag = null;
 
 localStorage.setItem(STORE.owner, state.owner);
 
@@ -87,18 +93,30 @@ function mountCss() {
   document.head.appendChild(link);
 }
 
+function pillMarkup() {
+  return `
+    <span class="ainour-pill-orb" aria-hidden="true"></span>
+    <button type="button" data-ainour="mode-text" class="is-active">Text</button>
+    <span class="ainour-pill-sep" aria-hidden="true"></span>
+    <button type="button" data-ainour="mode-voice">Voice</button>
+  `;
+}
+
 function panelMarkup() {
   return `
-    <header class="ainour-head">
+    <header class="ainour-head" data-drag-handle title="Drag to move">
       <div class="ainour-id">
         <span class="ainour-orb" aria-hidden="true"></span>
         <div><b>AI Nour</b><span>AI representation · not Nour</span></div>
       </div>
       <div class="ainour-head-actions">
-        <button class="ainour-icon" type="button" data-ainour="expand" aria-label="Expand conversation" title="Expand">
+        <button class="ainour-icon" type="button" data-ainour="minimize" aria-label="Minimize panel" title="Minimize">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10"/></svg>
+        </button>
+        <button class="ainour-icon" type="button" data-ainour="expand" aria-label="Expand panel" title="Expand">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M10 14h4v-4M14 6V2h-4M2 10v4h4"/></svg>
         </button>
-        <button class="ainour-icon" type="button" data-ainour="close" aria-label="Close AI Nour" title="Close">
+        <button class="ainour-icon" type="button" data-ainour="close" aria-label="Close AI Nour panel" title="Close panel (voice keeps running)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg>
         </button>
       </div>
@@ -117,14 +135,15 @@ function panelMarkup() {
         <div class="ainour-orb-stage">
           <span class="ainour-orb-big" aria-hidden="true"></span>
           <b class="ainour-live-state" id="ainourLiveState">idle</b>
-          <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation, or type below.</span>
+          <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation; the transcript will appear in the conversation.</span>
         </div>
-        <div class="ainour-live-transcript" id="ainourLiveTranscript" aria-live="polite"></div>
         <div class="ainour-live-actions">
-          <button class="ainour-stop" type="button" data-ainour="stop-voice">Stop voice</button>
+          <button class="ainour-start" type="button" data-ainour="start-voice">Start microphone</button>
+          <button class="ainour-stop" type="button" data-ainour="stop-voice" hidden>Stop voice</button>
         </div>
       </div>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
+      <div class="ainour-thinking" id="ainourThinking" role="status" aria-live="polite" hidden><span class="ainour-thinking-dot" aria-hidden="true"></span>Thinking<span class="ainour-thinking-dots" aria-hidden="true">…</span></div>
       <form class="ainour-compose" id="ainourForm">
         <textarea id="ainourInput" rows="2" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
         <div class="ainour-compose-actions">
@@ -145,21 +164,20 @@ function mount() {
   mounted = true;
   mountCss();
 
-  const trigger = document.createElement('button');
-  trigger.type = 'button';
-  trigger.className = 'tb-read ainour-trigger';
-  trigger.id = 'ainourTrigger';
-  trigger.setAttribute('aria-label', 'Ask AI Nour');
-  trigger.setAttribute('aria-expanded', 'false');
-  trigger.innerHTML = '<span class="ainour-orb" aria-hidden="true"></span><span>AI Nour</span>';
-  const readButton = document.getElementById('readViewBtn');
-  if (readButton?.parentElement) readButton.insertAdjacentElement('afterend', trigger);
-  else document.getElementById('toolbar')?.appendChild(trigger);
+  const pill = document.createElement('div');
+  pill.className = 'ainour-pill';
+  pill.id = 'ainourPill';
+  pill.dataset.state = 'idle';
+  pill.setAttribute('role', 'group');
+  pill.setAttribute('aria-label', 'AI Nour');
+  pill.innerHTML = pillMarkup();
+  document.body.appendChild(pill);
 
   const panel = document.createElement('section');
   panel.className = 'ainour-panel';
   panel.id = 'ainourPanel';
-  panel.dataset.view = 'compact';
+  panel.dataset.mode = 'text';
+  panel.dataset.size = 'standard';
   panel.dataset.state = 'idle';
   panel.setAttribute('role', 'dialog');
   panel.setAttribute('aria-modal', 'false');
@@ -169,7 +187,9 @@ function mount() {
   document.body.appendChild(panel);
 
   els = {
-    trigger,
+    pill,
+    pillText: pill.querySelector('[data-ainour="mode-text"]'),
+    pillVoice: pill.querySelector('[data-ainour="mode-voice"]'),
     panel,
     context: panel.querySelector('#ainourContext'),
     gate: panel.querySelector('#ainourGate'),
@@ -180,25 +200,38 @@ function mount() {
     live: panel.querySelector('#ainourLive'),
     liveState: panel.querySelector('#ainourLiveState'),
     liveHint: panel.querySelector('#ainourLiveHint'),
-    liveTranscript: panel.querySelector('#ainourLiveTranscript'),
+    liveStart: panel.querySelector('[data-ainour="start-voice"]'),
+    liveStop: panel.querySelector('[data-ainour="stop-voice"]'),
     thread: panel.querySelector('#ainourThread'),
+    thinking: panel.querySelector('#ainourThinking'),
     form: panel.querySelector('#ainourForm'),
     input: panel.querySelector('#ainourInput'),
     send: panel.querySelector('#ainourSend'),
-    locale: panel.querySelector('#ainourLocale')
+    locale: panel.querySelector('#ainourLocale'),
+    expand: panel.querySelector('[data-ainour="expand"]'),
+    minimize: panel.querySelector('[data-ainour="minimize"]')
   };
 
-  trigger.addEventListener('click', () => {
-    if (els.panel.hidden) open();
-    else close();
+  pill.addEventListener('click', (event) => {
+    const action = event.target.closest('[data-ainour]')?.dataset.ainour;
+    if (action === 'mode-text') {
+      if (!els.panel.hidden && state.mode === 'text') closePanel();
+      else openPanel('text');
+    } else if (action === 'mode-voice') {
+      if (!els.panel.hidden && state.mode === 'voice') closePanel();
+      else openPanel('voice');
+    }
   });
   panel.addEventListener('click', (event) => {
     const action = event.target.closest('[data-ainour]')?.dataset.ainour;
     if (!action) return;
-    if (action === 'close') close();
-    else if (action === 'expand') setView(state.view === 'expanded' ? 'compact' : 'expanded');
-    else if (action === 'voice') startVoice();
-    else if (action === 'stop-voice') stopVoice('Voice stopped.');
+    if (action === 'close') closePanel();
+    else if (action === 'minimize') setSize(state.size === 'mini' ? 'standard' : 'mini');
+    else if (action === 'expand') setSize(state.size === 'expanded' ? 'standard' : 'expanded');
+    else if (action === 'voice' || action === 'start-voice') {
+      if (voice.active) openPanel('voice');
+      else startVoice();
+    } else if (action === 'stop-voice') stopVoice('Voice stopped.');
     else if (action === 'locale') toggleLocale();
     else if (action === 'reset') resetSession();
   });
@@ -220,38 +253,130 @@ function mount() {
   panel.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       event.preventDefault();
-      close();
+      closePanel();
     }
   });
+  window.addEventListener('resize', () => {
+    if (els.panel.hidden) return;
+    if (window.innerWidth <= 760) {
+      els.panel.style.removeProperty('left');
+      els.panel.style.removeProperty('top');
+      els.panel.style.removeProperty('right');
+      return;
+    }
+    applySavedPosition();
+    clampPanel();
+  });
+  initDrag();
 
   setLocaleButton();
+  setMode('text');
+  setSize('standard');
   updateContext();
+  updatePill();
   if (state.key) init();
   else showGate();
 
   if (DEV) {
     window.AINourPrototype = {
-      open,
-      close,
-      expand: () => setView('expanded'),
-      compact: () => setView('compact'),
-      voiceView: () => setView('voice'),
+      open: (mode = state.mode) => openPanel(mode),
+      close: closePanel,
+      expand: () => setSize('expanded'),
+      compact: () => setSize('standard'),
+      minimize: () => setSize('mini'),
+      voiceView: () => openPanel('voice'),
       startVoice,
       stopVoice,
       setVoiceState: (value, hint) => setLiveState(value, hint),
+      thinking: (active) => showThinking(Boolean(active)),
       demoVoice: (userText, assistantText) => {
+        openPanel('voice');
+        voice.active = true;
         voice.userText = userText || '';
         voice.assistantText = assistantText || '';
-        setView('voice');
+        appendVoiceTranscript('user', voice.userText);
+        appendVoiceTranscript('assistant', voice.assistantText);
         setLiveState('speaking', 'Speaking…');
-        renderLive();
       },
       state
     };
   }
 }
 
+function applySavedPosition() {
+  if (window.innerWidth <= 760) return;
+  try {
+    const pos = JSON.parse(localStorage.getItem(STORE.pos) || 'null');
+    if (!pos || !Number.isFinite(pos.left) || !Number.isFinite(pos.top)) return;
+    els.panel.style.left = `${pos.left}px`;
+    els.panel.style.top = `${pos.top}px`;
+    els.panel.style.right = 'auto';
+    clampPanel();
+  } catch {}
+}
+
+function savePosition() {
+  if (!els.panel || els.panel.hidden || window.innerWidth <= 760) return;
+  const rect = els.panel.getBoundingClientRect();
+  localStorage.setItem(STORE.pos, JSON.stringify({ left: Math.round(rect.left), top: Math.round(rect.top) }));
+}
+
+function clampPanel() {
+  if (!els.panel || els.panel.hidden || window.innerWidth <= 760) return;
+  const rect = els.panel.getBoundingClientRect();
+  const maxLeft = Math.max(8, window.innerWidth - rect.width - 8);
+  const maxTop = Math.max(8, window.innerHeight - rect.height - 8);
+  const left = Math.min(Math.max(8, rect.left), maxLeft);
+  const top = Math.min(Math.max(8, rect.top), maxTop);
+  els.panel.style.left = `${left}px`;
+  els.panel.style.top = `${top}px`;
+  els.panel.style.right = 'auto';
+}
+
+function initDrag() {
+  const handle = els.panel.querySelector('[data-drag-handle]');
+  if (!handle) return;
+  handle.addEventListener('pointerdown', (event) => {
+    if (event.target.closest('button') || window.innerWidth <= 760) return;
+    const rect = els.panel.getBoundingClientRect();
+    drag = { dx: event.clientX - rect.left, dy: event.clientY - rect.top, pointerId: event.pointerId };
+    els.panel.style.left = `${rect.left}px`;
+    els.panel.style.top = `${rect.top}px`;
+    els.panel.style.right = 'auto';
+    els.panel.classList.add('is-dragging');
+    try { handle.setPointerCapture(event.pointerId); } catch {}
+    event.preventDefault();
+  });
+  handle.addEventListener('pointermove', (event) => {
+    if (!drag || event.pointerId !== drag.pointerId) return;
+    const rect = els.panel.getBoundingClientRect();
+    const left = Math.min(Math.max(8, event.clientX - drag.dx), Math.max(8, window.innerWidth - rect.width - 8));
+    const top = Math.min(Math.max(8, event.clientY - drag.dy), Math.max(8, window.innerHeight - rect.height - 8));
+    els.panel.style.left = `${left}px`;
+    els.panel.style.top = `${top}px`;
+  });
+  const end = (event) => {
+    if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
+    drag = null;
+    els.panel.classList.remove('is-dragging');
+    savePosition();
+  };
+  handle.addEventListener('pointerup', end);
+  handle.addEventListener('pointercancel', end);
+}
+
+function updatePill() {
+  if (!els.pill) return;
+  els.pill.dataset.state = state.voice;
+  els.pill.dataset.live = voice.active ? 'true' : 'false';
+  els.pill.dataset.unread = state.unread ? 'true' : 'false';
+  els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
+  els.pillText.classList.toggle('is-active', state.mode === 'text');
+  els.pillVoice.classList.toggle('is-active', state.mode === 'voice');
+}
+
 function showGate(message = '') {
+  if (!els.gate) return;
   els.gate.hidden = false;
   els.body.hidden = true;
   els.gateError.textContent = message;
@@ -263,46 +388,57 @@ function showBody() {
   els.body.hidden = false;
 }
 
-async function open() {
+async function openPanel(mode = state.mode) {
+  state.unread = false;
   if (els.panel.hidden) {
     els.panel.hidden = false;
-    els.trigger.setAttribute('aria-expanded', 'true');
-    setView(state.view === 'voice' ? 'voice' : 'compact');
+    applySavedPosition();
   }
+  setMode(mode);
+  setSize(state.size);
+  updatePill();
   if (!state.ready && state.key) await init();
   if (!state.key) showGate();
-  if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
+  if (state.ready && mode === 'text') setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
   updateContext();
+  clampPanel();
 }
 
-function close() {
-  if (voice.active) stopVoice('Voice stopped.');
+function closePanel() {
+  // Closing the UI deliberately does NOT stop the voice session or the D1 session.
   els.panel.hidden = true;
-  els.trigger.setAttribute('aria-expanded', 'false');
-  els.trigger.focus({ preventScroll: true });
+  state.unread = false;
+  updatePill();
+  els.pillText.focus({ preventScroll: true });
 }
 
-function setView(view) {
-  state.view = view;
-  els.panel.dataset.view = view;
-  const expand = els.panel.querySelector('[data-ainour="expand"]');
-  if (expand) expand.setAttribute('aria-label', view === 'expanded' ? 'Collapse conversation' : 'Expand conversation');
-  if (view === 'voice') {
-    els.live.hidden = false;
-    renderLive();
-  } else {
-    els.live.hidden = true;
-  }
+function setMode(mode) {
+  state.mode = mode;
+  els.panel.dataset.mode = mode;
+  els.live.hidden = mode !== 'voice';
+  if (mode === 'voice') renderLive();
+  updatePill();
+}
+
+function setSize(size) {
+  state.size = size;
+  els.panel.dataset.size = size;
+  const isMini = size === 'mini';
+  const isExpanded = size === 'expanded';
+  if (els.expand) els.expand.setAttribute('aria-label', isExpanded ? 'Restore panel size' : 'Expand panel');
+  if (els.minimize) els.minimize.setAttribute('aria-label', isMini ? 'Restore panel size' : 'Minimize panel');
+  requestAnimationFrame(clampPanel);
 }
 
 function setState(value) {
   state.voice = value;
   els.panel.dataset.state = value;
-  els.trigger.dataset.state = value;
+  updatePill();
 }
 
 function setLiveState(value, hint) {
   setState(value);
+  if (!els.live) return;
   els.live.dataset.state = value;
   const labels = {
     idle: 'idle',
@@ -314,18 +450,23 @@ function setLiveState(value, hint) {
   };
   els.liveState.textContent = labels[value] || value;
   if (hint) els.liveHint.textContent = hint;
+  els.liveStart.hidden = voice.active || value === 'connecting';
+  els.liveStop.hidden = !voice.active && value !== 'connecting';
   renderLive();
 }
 
 function renderLive() {
   if (!els.live) return;
-  els.live.hidden = state.view !== 'voice';
+  els.live.hidden = state.mode !== 'voice';
   if (els.live.hidden) return;
   els.live.dataset.state = state.voice;
-  els.liveTranscript.textContent = voice.userText || voice.assistantText
-    ? `${voice.userText ? `You: ${voice.userText}\n` : ''}${voice.assistantText ? `AI Nour: ${voice.assistantText}` : ''}`.trim()
-    : 'Voice transcript will appear here.';
-  els.liveTranscript.scrollTop = els.liveTranscript.scrollHeight;
+}
+
+function showThinking(active) {
+  state.thinking = active;
+  if (!els.thinking) return;
+  els.thinking.hidden = !active;
+  els.panel.dataset.thinking = active ? 'true' : 'false';
 }
 
 function updateContext() {
@@ -394,12 +535,13 @@ function renderThread() {
       continue;
     }
     const item = document.createElement('div');
-    item.className = `ainour-msg ${message.role}`;
+    item.className = `ainour-msg ${message.role}${message.streaming ? ' streaming' : ''}`;
     const label = document.createElement('span');
     label.className = 'ainour-msg-label';
     label.textContent = message.role === 'user' ? 'You' : 'AI Nour';
     const text = document.createElement('span');
-    text.textContent = message.content;
+    text.className = 'ainour-msg-text';
+    text.textContent = message.content || '…';
     item.append(label, text);
     if (message.actions?.length) {
       const actions = document.createElement('div');
@@ -464,7 +606,7 @@ async function init() {
     await loadSession();
     state.ready = true;
     setState('idle');
-    setLiveState('idle', 'Start a voice conversation, or type below.');
+    setLiveState('idle', 'Start a voice conversation; the transcript will appear in the conversation.');
     updateContext();
   } catch (error) {
     if (String(error.message).includes('unauthorized')) return;
@@ -482,6 +624,7 @@ async function sendMessage(event) {
   els.input.value = '';
   addMessage('user', message);
   setState('processing');
+  showThinking(true);
   try {
     const data = await api('/api/chat', {
       method: 'POST',
@@ -498,6 +641,10 @@ async function sendMessage(event) {
     addMessage('assistant', data.reply, data.actions || []);
     await runActions(data.actions || []);
     setState('idle');
+    if (els.panel.hidden) {
+      state.unread = true;
+      updatePill();
+    }
   } catch (error) {
     addMessage('system', `Could not answer: ${error.message || error}`);
     setState('error');
@@ -505,10 +652,11 @@ async function sendMessage(event) {
   } finally {
     state.busy = false;
     els.send.disabled = false;
+    showThinking(false);
   }
 }
 
-async function runActions(actions, { collapse = true } = {}) {
+async function runActions(actions) {
   const list = (actions || []).filter(Boolean);
   if (!list.length) return;
   if (!voice.active) setState('processing');
@@ -538,22 +686,12 @@ async function runActions(actions, { collapse = true } = {}) {
   }
   aiNavUntil = Date.now() + 900;
   updateContext();
-  if (collapse && !voice.active) setView('compact');
   if (!voice.active) setState('idle');
 }
 
 function onNourState(status) {
-  const path = status?.route?.path || null;
   updateContext();
-  if (lastRoute && path && path !== lastRoute) {
-    if (Date.now() < aiNavUntil) {
-      aiNavUntil = 0;
-    } else if (!els.panel.hidden) {
-      if (voice.active) stopVoice('Voice stopped because you navigated.');
-      if (state.view === 'expanded' || state.view === 'voice') setView('compact');
-    }
-  }
-  lastRoute = path;
+  lastRoute = status?.route?.path || lastRoute;
 }
 
 function toggleLocale() {
@@ -571,6 +709,7 @@ async function resetSession() {
   localStorage.removeItem(STORE.session);
   state.sessionId = null;
   state.messages = [];
+  state.unread = false;
   renderThread();
   if (state.ready) await createSession();
 }
@@ -647,6 +786,29 @@ function usageDelta() {
   };
 }
 
+function appendVoiceTranscript(role, text) {
+  if (!text) return;
+  const key = role === 'user' ? 'userDraftId' : 'assistantDraftId';
+  if (!voice[key]) {
+    voice[key] = randomId(8);
+    state.messages.push({ id: voice[key], role, content: '', actions: [], streaming: true });
+  }
+  const message = state.messages.find((item) => item.id === voice[key]);
+  if (message) message.content += text;
+  renderThread();
+}
+
+function finalizeVoiceDrafts() {
+  for (const id of [voice.userDraftId, voice.assistantDraftId]) {
+    if (!id) continue;
+    const message = state.messages.find((item) => item.id === id);
+    if (message) message.streaming = false;
+  }
+  voice.userDraftId = null;
+  voice.assistantDraftId = null;
+  renderThread();
+}
+
 async function persistVoiceTurn() {
   const userText = voice.userText.trim();
   const assistantText = voice.assistantText.trim();
@@ -668,11 +830,10 @@ async function persistVoiceTurn() {
       })
     });
     voice.lastTotals = usageTotals(voice.usage);
-    if (userText) addMessage('user', userText);
-    if (assistantText) addMessage('assistant', assistantText);
   } catch {
-    voice.lastTotals = usageTotals(voice.usage);
+    addMessage('system', 'Voice turn could not be saved; the transcript is still shown locally.');
   }
+  finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
   renderLive();
@@ -688,7 +849,7 @@ async function handleLiveTool(toolCall) {
         method: 'POST',
         body: JSON.stringify({ sessionId: state.sessionId, name: call.name, args: call.args || {} })
       });
-      if (result.ok) await runActions(result.actions || (result.action ? [result.action] : []), { collapse: false });
+      if (result.ok) await runActions(result.actions || (result.action ? [result.action] : []));
       responses.push({
         id: call.id,
         name: call.name,
@@ -704,18 +865,23 @@ async function handleLiveTool(toolCall) {
 }
 
 async function startVoice() {
-  if (voice.active) return stopVoice('Voice stopped.');
+  if (voice.active) {
+    openPanel('voice');
+    return;
+  }
   if (!state.ready) {
-    await open();
+    await openPanel('voice');
     if (!state.ready) return;
   }
-  setView('voice');
+  openPanel('voice');
   setLiveState('connecting', 'Requesting microphone and a one-use Live token…');
   voice.turnId = randomId(12);
   voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0 };
   voice.usage = null;
   voice.userText = '';
   voice.assistantText = '';
+  voice.userDraftId = null;
+  voice.assistantDraftId = null;
   try {
     const token = await api('/api/live/token', {
       method: 'POST',
@@ -748,11 +914,11 @@ async function startVoice() {
           }
           if (message.serverContent?.inputTranscription?.text) {
             voice.userText += message.serverContent.inputTranscription.text;
-            renderLive();
+            appendVoiceTranscript('user', message.serverContent.inputTranscription.text);
           }
           if (message.serverContent?.outputTranscription?.text) {
             voice.assistantText += message.serverContent.outputTranscription.text;
-            renderLive();
+            appendVoiceTranscript('assistant', message.serverContent.outputTranscription.text);
           }
           for (const part of message.serverContent?.modelTurn?.parts || []) {
             if (part.inlineData?.data) {
@@ -770,7 +936,7 @@ async function startVoice() {
         },
         onerror: () => setLiveState('error', 'The Live connection failed. Try again.'),
         onclose: () => {
-          if (voice.active) setLiveState('idle', 'Voice session ended. Start again when ready.');
+          if (voice.active) stopVoice('Live session ended. Start again when ready.');
         }
       }
     });
@@ -788,13 +954,12 @@ async function startVoice() {
     silent.connect(voice.inputContext.destination);
     setLiveState('listening', 'Listening. Speak naturally; interrupt whenever you want.');
   } catch (error) {
-    setLiveState('error', 'Could not start voice. Check microphone permission and the local Worker.');
     await stopVoice('');
+    setLiveState('error', 'Could not start voice. Check microphone permission and the local Worker.');
   }
 }
 
 async function stopVoice(message = '') {
-  const wasActive = voice.active;
   voice.active = false;
   if (voice.processor) { voice.processor.disconnect(); voice.processor = null; }
   if (voice.mic) { for (const track of voice.mic.getTracks()) track.stop(); voice.mic = null; }
@@ -802,8 +967,10 @@ async function stopVoice(message = '') {
   if (voice.session) { try { voice.session.close(); } catch {} voice.session = null; }
   if (voice.inputContext) { try { await voice.inputContext.close(); } catch {} voice.inputContext = null; }
   if (voice.outputContext) { try { await voice.outputContext.close(); } catch {} voice.outputContext = null; }
-  setLiveState('idle', 'Voice is off. Use Voice to start again.');
-  if (wasActive) setView('compact');
+  finalizeVoiceDrafts();
+  voice.userText = '';
+  voice.assistantText = '';
+  setLiveState('idle', 'Voice is off. Use Start microphone to talk again.');
   if (message) addMessage('system', message);
 }
 

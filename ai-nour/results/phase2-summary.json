@@ -46,14 +46,14 @@
   "adminOAuth": "verified-locally",
   "uiIntegration": "verified-mock",
   "cost": {
-    "actualSpentUsdMicros": 196322,
+    "actualSpentUsdMicros": 278328,
     "heldReservationUsdMicros": 80000,
-    "committedUsdMicros": 276322,
-    "actualCad": 0.2791,
-    "committedCad": 0.3929
+    "committedUsdMicros": 358328,
+    "actualCad": 0.3958,
+    "committedCad": 0.5095
   },
   "secretScan": {
-    "files": 361,
+    "files": 364,
     "hits": 0
   },
   "fixedInfrastructureCad": 0

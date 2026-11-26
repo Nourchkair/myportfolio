@@ -31,16 +31,20 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 
 ## 2. Desktop Chrome checklist
 
-- [ ] Ambient AI Nour button is visible in the toolbar; panel is closed by default.
-- [ ] Clicking AI Nour opens the compact panel without shifting the portfolio.
-- [ ] Text question returns a grounded answer.
-- [ ] Expand/collapse changes the panel width and preserves the thread.
-- [ ] “Open the Safiy project” opens the project via NourOS; the panel collapses.
-- [ ] Manual navigation while the panel is open collapses it and does not re-open.
+- [ ] The top-right AI Nour pill is visible on every page and is not part of the menu bar.
+- [ ] Text opens the transparent panel without shifting the portfolio; Voice opens the voice view.
+- [ ] The panel can be dragged by its header, minimized, expanded, and keeps its position; it stays inside the viewport.
+- [ ] A text question shows the glowing Thinking label while generating, then hides it.
+- [ ] Text question returns a grounded answer; the transcript remains after switching modes.
+- [ ] “Open the Safiy project” opens the project via NourOS; the pill stays above the project overlay.
+- [ ] Manual navigation is never blocked and does not re-open a closed panel.
+- [ ] Closing the panel with X does not end the text or voice session.
 - [ ] Voice button asks for microphone permission only after the click.
-- [ ] Listening, processing, speaking and idle states are visible.
+- [ ] Listening, processing, speaking and idle states are visible in the panel and pill.
+- [ ] Voice user and AI transcripts appear inside the shared chat thread.
 - [ ] Speaking can be interrupted by talking over it; audio stops promptly.
-- [ ] Stop voice ends the session; text still works.
+- [ ] Speaking can interrupt the assistant, and Stop voice ends the session; text still works.
+- [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening Voice returns to the live state.
 - [ ] Reload restores the conversation from D1.
 - [ ] No console errors or failed network requests.
 - [ ] Reading view has no assistant UI.
@@ -66,11 +70,12 @@ iOS requires HTTPS for microphone access. Use a temporary HTTPS tunnel for the p
 4. Enter the prototype access key.
 5. Test:
    - [ ] Page loads without layout breakage at 390×844 and 430×932.
-   - [ ] AI Nour trigger is reachable with one hand.
+   - [ ] The top-right AI Nour pill is reachable with one hand.
    - [ ] Bottom sheet opens, scrolls, and respects safe-area insets.
    - [ ] Microphone permission prompt appears; denial produces a clear error.
    - [ ] Voice playback routes to the speaker; Bluetooth headset switch works.
    - [ ] Talking over the assistant interrupts it.
+   - [ ] Closing the bottom sheet while speaking keeps the session alive; reopening Voice restores it.
    - [ ] Switching to another app and back preserves the session; reconnect works.
    - [ ] French pronunciation is understandable and the answer is in French.
    - [ ] Text fallback works with the software keyboard.

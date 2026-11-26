@@ -1,35 +1,54 @@
 {
-  "generatedAt": "2026-11-26T20:27:00Z",
-  "mode": "mock-providers/local-integrated-portfolio",
-  "checks": {
-    "ambientToolbarPresence": true,
-    "compactConversation": true,
-    "expandedConversation": true,
-    "portfolioNavigation": true,
-    "activeVoiceVisualState": true,
-    "mobileBottomSheet": true,
-    "manualNavigationPriority": true,
-    "consoleErrors": 0
-  },
-  "navigation": {
-    "request": "Open the Safiy project.",
-    "serverAction": "openProject: safiy -> /projects/safiy",
-    "result": "NourOS opened the Safiy project; panel context changed to Safiy / overview",
-    "manualNavigationBehavior": "Panel collapses; active voice stops on manual route change"
-  },
-  "voice": {
-    "demoOnly": true,
-    "realMicrophoneStarted": false,
-    "statesShown": ["idle", "speaking"],
-    "disclosure": "AI representation, not Nour"
-  },
-  "screenshots": [
-    "docs/screenshots/phase2-companion-ambient.jpg",
-    "docs/screenshots/phase2-companion-compact.png",
-    "docs/screenshots/phase2-companion-expanded.png",
-    "docs/screenshots/phase2-companion-navigation.jpg",
-    "docs/screenshots/phase2-companion-voice.png",
-    "docs/screenshots/phase2-companion-mobile.png"
-  ],
-  "notes": "The integrated UI was exercised against the mock Worker on 127.0.0.1:8792 with the test-only access key. Real microphone, Bluetooth and device audio still require the human test checklist."
+  "generatedAt": "2026-11-26T21:52:48.000Z",
+  "mode": "mock-providers/browser",
+  "viewports": ["1440x900", "390x844"],
+  "passed": 9,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "pill is outside the menu bar",
+      "pass": true,
+      "detail": "Standalone 156x42 pill at x1266 y82; menu banner spans x399-1041 y18-78 and contains no AI Nour control."
+    },
+    {
+      "name": "text mode panel",
+      "pass": true,
+      "detail": "Text opens a transparent 390px top-right panel with context, transcript and composer."
+    },
+    {
+      "name": "Thinking state",
+      "pass": true,
+      "detail": "Thinking chip is display:none while idle; visible, animated and glowing while a reply is generated; hidden again afterwards."
+    },
+    {
+      "name": "drag, minimize, expand",
+      "pass": true,
+      "detail": "Dragging the header moved the panel to 561,212 and clamped it inside the viewport; minimize produced 304x355; restore returned 390x680."
+    },
+    {
+      "name": "close preserves the session",
+      "pass": true,
+      "detail": "X hides the panel only. A demo voice state remained speaking with Stop voice shown, the pill stayed visible, and reopening Voice restored the voice view; reopening Text restored all 6 messages."
+    },
+    {
+      "name": "pill above project overlay and visor",
+      "pass": true,
+      "detail": "Pill z-index 330 is above the project overlay (90) and visor (310); elementFromPoint at the pill centre returns a pill button."
+    },
+    {
+      "name": "mobile bottom sheet",
+      "pass": true,
+      "detail": "At 390x844 the panel is a 390x565 bottom sheet with a 141x40 top-right pill; session restored after reload and gate entry."
+    },
+    {
+      "name": "voice transcript and glyphs",
+      "pass": true,
+      "detail": "Demo voice turns appear inside #ainourThread with You/AI Nour labels; Stop voice is visible and Start microphone is display:none. No tofu glyphs: the streaming caret is a 2x12.7px CSS-drawn amber bar, and the only rendered non-ASCII text is ·, … and ↗ from the system font stack."
+    },
+    {
+      "name": "browser console",
+      "pass": true,
+      "detail": "In-page error/unhandledrejection/console collector recorded 0 errors and 0 warnings across text, Thinking, drag, minimize, close/reopen, voice demo and project navigation."
+    }
+  ]
 }
