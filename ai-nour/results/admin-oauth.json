@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-11-26T20:22:00Z",
+  "provider": "Google OAuth",
+  "clientName": "AI Nour - Development",
+  "clientType": "Web application",
+  "publishingStatus": "Testing",
+  "userType": "External",
+  "testUsers": ["nourchkair@gmail.com"],
+  "redirectUris": [
+    "http://localhost:8787/oauth/google/callback",
+    "http://127.0.0.1:8791/auth/google/callback"
+  ],
+  "redirectUriAddedThisPhase": true,
+  "credentialRotation": false,
+  "publishingSubmitted": false,
+  "localAdminLogin": {
+    "start": "GET / -> 302 /auth/google/start",
+    "consent": "basic openid/email/profile only",
+    "callback": "Google -> /auth/google/callback -> 302 /",
+    "session": "HMAC-signed HttpOnly cookie",
+    "reloadStayedSignedIn": true,
+    "unauthorizedApiStatus": 401
+  },
+  "notes": "Client ID and secret are redacted from this evidence. The app remains in Testing; no publish or verification submission was made."
+}

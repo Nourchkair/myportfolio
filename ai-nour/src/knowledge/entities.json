@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-26T19:38:30.041Z",
+  "generatedAt": "2026-11-26T20:02:21.117Z",
   "sections": [
     "home",
     "me",
@@ -132,5 +132,5 @@
       "route": "/journey/direction"
     }
   ],
-  "contentHash": "28b5ce19a31bd891"
+  "contentHash": "5fce1ae962dac4a2"
 }

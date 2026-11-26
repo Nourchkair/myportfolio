@@ -55,6 +55,9 @@ test('Gemini Live adapter wraps tool declarations and uses the auth_tokens endpo
     voice: 'Aoede'
   });
   assert.match(captured.url, /\/v1alpha\/auth_tokens/);
+  assert.equal(captured.body.uses, 1);
+  assert.ok(captured.body.expireTime);
+  assert.ok(captured.body.newSessionExpireTime);
   assert.equal(captured.body.bidiGenerateContentSetup.model, 'models/gemini-3.8-live');
   assert.equal(captured.body.bidiGenerateContentSetup.tools[0].functionDeclarations[0].name, 'openProject');
   assert.equal(captured.body.bidiGenerateContentSetup.generationConfig.speechConfig.voiceConfig.prebuiltVoiceConfig.voiceName, 'Aoede');

@@ -1,16 +1,16 @@
 {
-  "generatedAt": "2026-11-26T19:34:27.794Z",
+  "generatedAt": "2026-11-26T20:32:02.175Z",
   "checks": {
     "textContextEstablished": true,
     "newLiveToken": true,
     "liveAnsweredFromTextContext": true,
-    "liveTranscript": "You mentioned that Safiy is your favourite project.",
+    "liveTranscript": "You mentioned that your favourite project is Safiy.",
     "liveToolCalls": [],
     "sharedContextAfterLive": true
   },
   "costs": {
-    "textUsdMicros": 117,
-    "afterLiveUsdMicros": 135
+    "textUsdMicros": 120,
+    "afterLiveUsdMicros": 137
   },
   "passed": 4,
   "failed": 0

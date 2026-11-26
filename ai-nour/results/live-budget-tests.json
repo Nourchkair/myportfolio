@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-11-26T20:34:36.808Z",
+  "mode": "mock-live/no-usage-reported",
+  "passed": 3,
+  "failed": 0,
+  "total": 3,
+  "results": [
+    {
+      "name": "first Live token reserves budget",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reservationUsdMicros": 600000
+      }
+    },
+    {
+      "name": "held Live reservation counts toward budget",
+      "pass": true,
+      "detail": {
+        "held": 600000
+      }
+    },
+    {
+      "name": "second Live token blocked before unreported usage can bypass cap",
+      "pass": true,
+      "detail": {
+        "status": 402,
+        "error": "BUDGET_EXCEEDED"
+      }
+    }
+  ]
+}

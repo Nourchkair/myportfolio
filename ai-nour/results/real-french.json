@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-26T19:33:09.132Z",
+  "generatedAt": "2026-11-26T20:31:39.433Z",
   "checks": {
     "frenchText": true,
-    "frenchReply": "Safiy est un assistant IA de bureau local-first qui transforme les conversations et le contexte professionnel en assistance intelligente et en actions commerciales.",
+    "frenchReply": "Safiy est un assistant IA local et professionnel qui capture les conversations, organise les connaissances et fournit une assistance contextuelle pour connecter les discussions au travail quotidien.",
     "frenchLiveToken": true,
     "frenchLiveSetup": true,
     "frenchLiveAudio": true,
@@ -11,8 +11,8 @@
     "sharedFrenchContext": true
   },
   "costs": {
-    "textUsdMicros": 108,
-    "liveUsdMicros": 4014
+    "textUsdMicros": 121,
+    "liveUsdMicros": 80000
   },
   "live": {
     "events": [
@@ -20,16 +20,16 @@
       "setup",
       "turnComplete"
     ],
-    "transcript": "Safiy est un assistant IA de bureau local-first qui transforme les conversations et le contexte professionnel en assistance intelligente et en actions commerciales.",
-    "audioBytes": 437762,
+    "transcript": "Safiy est un assistant IA local et professionnel qui capture vos conversations, organise les connaissances et fournit une assistance contextuelle pour connecter vos discussions au travail quotidien.",
+    "audioBytes": 476642,
     "usage": {
-      "promptTokenCount": 1250,
-      "responseTokenCount": 234,
-      "totalTokenCount": 1484,
+      "promptTokenCount": 1363,
+      "responseTokenCount": 254,
+      "totalTokenCount": 1617,
       "promptTokensDetails": [
         {
           "modality": "TEXT",
-          "tokenCount": 831
+          "tokenCount": 895
         },
         {
           "modality": "AUDIO",
@@ -39,10 +39,10 @@
       "responseTokensDetails": [
         {
           "modality": "AUDIO",
-          "tokenCount": 234
+          "tokenCount": 254
         }
       ],
-      "thoughtsTokenCount": 79
+      "thoughtsTokenCount": 83
     }
   },
   "passed": 7,

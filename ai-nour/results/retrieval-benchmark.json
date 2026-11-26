@@ -1,13 +1,13 @@
 {
   "corpus": {
     "version": 1,
-    "contentHash": "28b5ce19a31bd891",
-    "generatedAt": "2026-11-26T19:38:30.043Z",
-    "chunks": 105
+    "contentHash": "5fce1ae962dac4a2",
+    "generatedAt": "2026-11-26T20:02:21.120Z",
+    "chunks": 107
   },
   "queries": 55,
-  "top1": 0.8545,
+  "top1": 0.8727,
   "top3": 1,
-  "mrr": 0.9273,
+  "mrr": 0.9364,
   "misses": []
 }

@@ -1,3 +1,5 @@
+import { ProviderError } from '../errors.js';
+
 function isFrench(text) {
   return /\b(bonjour|salut|merci|projet|parcours|compétence|competence|où|comment|pourquoi|je|vous|nour)\b/i.test(text)
     && !/\b(the|what|how|where|project|about|contact)\b/i.test(text);
@@ -8,6 +10,9 @@ export function createMockTextProvider({ model = 'mock-text' } = {}) {
     const lastUser = [...contents].reverse().find((message) => message.role === 'user');
     const text = lastUser?.parts?.map((part) => part.text || '').join(' ') || '';
     const french = isFrench(text);
+    if (text.includes('__FAIL_PROVIDER__')) {
+      throw new ProviderError('MOCK_PROVIDER_FAILURE', 'Synthetic provider failure', { status: 503, retryable: false });
+    }
 
     if (/open|ouvre|montre|show/i.test(text) && /safiy/i.test(text) && !/openProject|function/i.test(text)) {
       return {

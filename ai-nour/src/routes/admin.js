@@ -5,7 +5,7 @@ import { getCorpusMeta, listChunks, search } from '../knowledge/retrieval.js';
 import { badRequest, forbidden } from '../http/errors.js';
 
 export function registerAdminRoutes(router, services) {
-  const { db, config, cost, google } = services;
+  const { db, config, cost, google, email, crm } = services;
 
   router.get('/api/admin/status', async ({ request }) => {
     requireAdmin(request, config);
@@ -123,5 +123,38 @@ export function registerAdminRoutes(router, services) {
   router.get('/api/admin/audit', async ({ request }) => {
     requireAdmin(request, config);
     return json({ audit: await db.listAudit(50), events: await db.listOpsEvents(50) });
+  });
+
+  router.get('/api/admin/inquiries', async ({ request }) => {
+    requireAdmin(request, config);
+    return json({ inquiries: await db.listInquiries({ ownerHash: null, limit: 100 }) });
+  });
+
+  router.get('/api/admin/appointments', async ({ request }) => {
+    requireAdmin(request, config);
+    return json({ appointments: await db.listBookings(100) });
+  });
+
+  router.get('/api/admin/email', async ({ request }) => {
+    requireAdmin(request, config);
+    return json({ jobs: await db.listEmailJobs(100), provider: config.email.provider, sendEnabled: config.email.sendEnabled });
+  });
+
+  router.post('/api/admin/appointments/:id/cancel', async ({ request, params }) => {
+    requireAdmin(request, config);
+    const bookings = await db.listBookings(200);
+    const booking = bookings.find((item) => item.id === params.id);
+    if (!booking) throw badRequest('Appointment not found');
+    const flags = await readFlags(db);
+    const result = await crm.cancel({ ownerHash: booking.owner_hash, id: params.id, flags, now: Date.now() });
+    await db.audit({ actor: 'admin-token', action: 'appointment.cancel', detail: { id: params.id }, now: Date.now() });
+    return json(result);
+  });
+
+  router.post('/api/admin/email/process', async ({ request }) => {
+    requireAdmin(request, config);
+    const results = await email.processQueued({ db, limit: 10, now: Date.now() });
+    await db.audit({ actor: 'admin-token', action: 'email.process', detail: { results }, now: Date.now() });
+    return json({ results, sendEnabled: config.email.sendEnabled, provider: email.provider });
   });
 }

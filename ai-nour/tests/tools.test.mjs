@@ -4,7 +4,7 @@ import { getToolDeclarations, validateToolCall, executeToolCall } from '../src/t
 
 test('tool declarations are allowlisted and schema-shaped', () => {
   const tools = getToolDeclarations();
-  assert.deepEqual(tools.map((tool) => tool.name).sort(), ['openContact', 'openJourneyChapter', 'openProject', 'openProjectFlow', 'openSection']);
+  assert.deepEqual(tools.map((tool) => tool.name).sort(), ['openContact', 'openJourneyChapter', 'openProject', 'openProjectFlow', 'openSection', 'presentProject']);
   for (const tool of tools) assert.equal(tool.parameters.type, 'OBJECT');
 });
 
@@ -16,6 +16,10 @@ test('valid navigation calls produce actions', () => {
   assert.equal(validateToolCall('openJourneyChapter', { chapterId: 'education' }).ok, true);
   assert.equal(validateToolCall('openSection', { section: 'brain' }).ok, true);
   assert.equal(validateToolCall('openContact', {}).ok, true);
+  const tour = validateToolCall('presentProject', { projectId: 'safiy', includeFlow: true });
+  assert.equal(tour.ok, true);
+  assert.equal(tour.actions.length, 2);
+  assert.equal(tour.actions[1].type, 'openProjectFlow');
 });
 
 test('unknown tools, projects, sections and nodes are rejected', () => {

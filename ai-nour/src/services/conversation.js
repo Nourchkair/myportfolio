@@ -1,4 +1,4 @@
-import { badRequest, conflict, tooMany } from '../http/errors.js';
+import { badRequest, conflict, paymentRequired, tooMany } from '../http/errors.js';
 import {
   appendTurn,
   buildConversationBrief,
@@ -10,6 +10,7 @@ import {
   summarizeIfNeeded
 } from '../sessions/manager.js';
 import { executeToolCalls, getToolDeclarations } from '../tools/registry.js';
+import { normalizePortfolioContext, contextQuery, contextInstruction } from '../knowledge/context.js';
 
 function cleanText(value, max) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
@@ -54,6 +55,7 @@ export async function handleChat({
 }) {
   const message = cleanText(body.message, config.limits.maxMessageChars);
   const locale = detectLocale(message, body.locale || 'auto');
+  const portfolioContext = normalizePortfolioContext(body.portfolioContext);
 
   const rate = await db.checkRateLimit({
     bucket: `chat:${clientHash}`,
@@ -81,13 +83,14 @@ export async function handleChat({
   const history = await historyContents({ db, sessionId: session.id, maxMessages: config.limits.maxHistoryMessages });
   const previousMessages = await db.listMessages(session.id, 20);
   const brief = buildConversationBrief({ session, messages: previousMessages, maxMessages: 6 });
-  const context = retrieval.buildContext(message, { limit: 4, maxChars: 3200 });
+  const context = retrieval.buildContext([message, contextQuery(portfolioContext)].filter(Boolean).join(' '), { limit: 4, maxChars: 3200 });
   const systemInstruction = buildSystemPrompt({
     persona: flags.persona,
     context: context.text,
     brief,
     locale,
-    mode: 'text'
+    mode: 'text',
+    portfolioContext: contextInstruction(portfolioContext)
   });
 
   const contents = [...history, { role: 'user', parts: [{ text: message }] }];
@@ -118,7 +121,10 @@ export async function handleChat({
     if (!response.toolCalls?.length) break;
 
     const executed = executeToolCalls(response.toolCalls);
-    for (const item of executed) if (item.action) actions.push(item.action);
+    for (const item of executed) {
+      if (item.actions?.length) actions.push(...item.actions);
+      else if (item.action) actions.push(item.action);
+    }
     contents.push({ role: 'model', parts: response.parts || response.toolCalls.map((call) => ({ functionCall: { name: call.name, args: call.args } })) });
     contents.push({
       role: 'user',
@@ -151,7 +157,7 @@ export async function handleChat({
     userText: message,
     assistantText: reply,
     locale,
-    meta: { actions: uniqueActions, model: response?.model || config.textModel, source: 'text' },
+    meta: { actions: uniqueActions, model: response?.model || config.textModel, source: 'text', portfolioContext },
     usage: totalUsage,
     now,
     ttlMs: config.limits.sessionTtlMs
@@ -213,30 +219,58 @@ export async function handleLiveToken({
   });
   if (!rate.allowed) throw tooMany('Too many Live sessions. Please wait before trying again.');
 
-  await cost.assertBudget(now);
+  const budgetBeforeToken = await cost.assertBudget(now);
+  const reservation = config.limits.liveTokenReservationUsdMicros;
+  if (budgetBeforeToken.dailyUsdMicros + reservation > config.caps.dailyUsdMicros || budgetBeforeToken.cumulativeUsdMicros + reservation > config.caps.cumulativeUsdMicros) {
+    throw paymentRequired('The remaining evaluation budget cannot cover another Live session');
+  }
 
   const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
   const session = body.sessionId
     ? await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now })
     : await createSessionForOwner({ db, ownerHash, locale, now, ttlMs: config.limits.sessionTtlMs });
   const messages = await db.listMessages(session.id, 14);
+  const portfolioContext = normalizePortfolioContext(body.portfolioContext);
   const brief = buildConversationBrief({ session, messages, maxMessages: 6 });
   const detected = locale === 'auto' ? detectLocale(messages.filter((m) => m.role === 'user').at(-1)?.content || '', 'auto') : locale;
   const systemInstruction = buildSystemPrompt({
     persona: flags.persona,
     brief,
     locale: detected,
-    mode: 'live'
+    mode: 'live',
+    portfolioContext: contextInstruction(portfolioContext)
   });
   const tools = getToolDeclarations();
   const liveTools = [{ functionDeclarations: tools }];
   const voice = config.liveVoice;
-  const token = await provider.mintToken({ systemInstruction, tools, voice });
+  const reservationId = crypto.randomUUID();
+  const reservationUsdMicros = reservation;
+  await db.createLiveTokenReservation({
+    id: reservationId,
+    ownerHash,
+    sessionId: session.id,
+    reservedUsdMicros: reservationUsdMicros,
+    now,
+    expiresAt: now + 3_600_000
+  });
+  let token;
+  try {
+    token = await provider.mintToken({
+      systemInstruction,
+      tools,
+      voice,
+      expireMs: config.limits.liveTokenTtlSeconds * 1000,
+      newSessionExpireMs: config.limits.liveTokenNewSessionTtlSeconds * 1000
+    });
+  } catch (error) {
+    await db.failLiveToken({ id: reservationId, now }).catch(() => {});
+    throw error;
+  }
 
   await db.logEvent({
     level: 'info',
     event: 'live.token.issued',
-    detail: { sessionId: session.id, model: config.liveModel },
+    detail: { sessionId: session.id, model: config.liveModel, reservationUsdMicros },
     now
   });
 
@@ -246,6 +280,8 @@ export async function handleLiveToken({
     model: token.model,
     expiresAt: token.expiresAt,
     newSessionExpiresAt: token.newSessionExpiresAt,
+    reservationId,
+    reservationUsdMicros,
     config: {
       responseModalities: ['AUDIO'],
       systemInstruction,
@@ -286,7 +322,10 @@ export async function handleLiveTurn({
     requestId: `${requestId}:live`,
     model: config.liveModel,
     usage,
-    now
+    now,
+    reservationId: body.reservationId || null,
+    ownerHash,
+    sessionId: session.id
   });
   await appendTurn({
     db,

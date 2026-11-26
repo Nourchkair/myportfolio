@@ -36,10 +36,12 @@ function bool(env, key, fallback) {
 export function loadConfig(env = {}) {
   const config = {
     appEnv: env.APP_ENV || DEFAULTS.appEnv,
-    version: 'phase1-0.1.0',
+    version: 'phase2-0.2.0',
     prototypeAccessKey: env.PROTOTYPE_ACCESS_KEY || '',
     adminToken: env.ADMIN_TOKEN || '',
     adminEnabled: bool(env, 'ADMIN_ENABLED', DEFAULTS.adminEnabled),
+    crmWritesEnabled: bool(env, 'ENABLE_CRM_WRITES', false),
+    allowedOrigins: String(env.ALLOWED_ORIGINS || 'http://localhost:8768,http://127.0.0.1:8768,http://localhost:8771,http://127.0.0.1:8771,http://localhost:8789,http://127.0.0.1:8789').split(',').map((origin) => origin.trim()).filter(Boolean),
     textProvider: env.TEXT_PROVIDER || DEFAULTS.textProvider,
     liveProvider: env.LIVE_PROVIDER || DEFAULTS.liveProvider,
     textModel: env.TEXT_MODEL || env.GEMINI_TEXT_MODEL || DEFAULTS.textModel,
@@ -48,6 +50,12 @@ export function loadConfig(env = {}) {
     gemini: {
       apiKey: env.GEMINI_API_KEY || '',
       baseUrl: env.GEMINI_API_BASE_URL || 'https://generativelanguage.googleapis.com'
+    },
+    email: {
+      provider: env.EMAIL_PROVIDER || 'resend',
+      sendEnabled: bool(env, 'EMAIL_SEND_ENABLED', false),
+      resendApiKey: env.RESEND_API_KEY || '',
+      resendFrom: env.RESEND_FROM || ''
     },
     google: {
       clientId: env.GOOGLE_CLIENT_ID || '',
@@ -78,6 +86,9 @@ export function loadConfig(env = {}) {
       maxMessageChars: number(env, 'MAX_MESSAGE_CHARS', DEFAULTS.maxMessageChars),
       maxHistoryMessages: number(env, 'MAX_HISTORY_MESSAGES', DEFAULTS.maxHistoryMessages),
       summaryTriggerMessages: number(env, 'SUMMARY_TRIGGER_MESSAGES', DEFAULTS.summaryTriggerMessages),
+      liveTokenReservationUsdMicros: number(env, 'LIVE_TOKEN_RESERVATION_USD_MICROS', 80_000),
+      liveTokenTtlSeconds: number(env, 'LIVE_TOKEN_TTL_SECONDS', 120),
+      liveTokenNewSessionTtlSeconds: number(env, 'LIVE_TOKEN_NEW_SESSION_TTL_SECONDS', 60),
       sessionTtlMs: number(env, 'SESSION_TTL_HOURS', 168) * 3_600_000
     }
   };

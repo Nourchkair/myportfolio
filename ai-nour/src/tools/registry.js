@@ -64,6 +64,18 @@ const definitions = [
     name: 'openContact',
     description: 'Open the portfolio contact panel.',
     parameters: { type: 'OBJECT', properties: {} }
+  },
+  {
+    name: 'presentProject',
+    description: 'Give a guided presentation of a public project: open the case study and optionally continue into its process flow.',
+    parameters: {
+      type: 'OBJECT',
+      properties: {
+        projectId: { type: 'STRING', enum: entities.projects.map((project) => project.id) },
+        includeFlow: { type: 'BOOLEAN', description: 'Continue into the project process flow after opening the case study.' }
+      },
+      required: ['projectId']
+    }
   }
 ];
 
@@ -101,6 +113,15 @@ export function validateToolCall(name, args = {}) {
   if (name === 'openContact') {
     return { ok: true, action: { type: 'openContact', route: '/contact' } };
   }
+  if (name === 'presentProject') {
+    const project = projectById.get(args.projectId);
+    if (!project) return { ok: false, code: 'UNKNOWN_PROJECT', message: 'Unknown project id' };
+    const actions = [{ type: 'openProject', projectId: project.id, route: project.route }];
+    if (args.includeFlow === true) {
+      actions.push({ type: 'openProjectFlow', projectId: project.id, nodeId: null, route: `${project.route}/flow` });
+    }
+    return { ok: true, action: actions[0], actions };
+  }
   return { ok: false, code: 'TOOL_NOT_IMPLEMENTED', message: 'Tool is not implemented' };
 }
 
@@ -114,14 +135,17 @@ export function executeToolCall(name, args) {
       modelResponse: { ok: false, error: validation.code }
     };
   }
-  const action = validation.action;
+  const actions = validation.actions || (validation.action ? [validation.action] : []);
+  const action = actions[0] || null;
   return {
     ok: true,
     action,
+    actions,
     modelResponse: {
       ok: true,
-      message: `Navigation requested: ${action.route}`,
-      route: action.route
+      message: `Navigation requested: ${actions.map((item) => item.route).join(' → ')}`,
+      route: action?.route || null,
+      routes: actions.map((item) => item.route)
     }
   };
 }

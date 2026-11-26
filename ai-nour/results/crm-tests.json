@@ -1,0 +1,113 @@
+{
+  "generatedAt": "2026-11-26T20:34:32.948Z",
+  "mode": "mock-providers/local-d1/no-google-writes",
+  "passed": 14,
+  "failed": 0,
+  "total": 14,
+  "results": [
+    {
+      "name": "inquiry + contact + consent created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "inquiry idempotency",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "second inquiry created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "availability endpoint responds",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "appointment reserved in D1",
+      "pass": true,
+      "detail": {
+        "status": 202,
+        "calendarPending": true
+      }
+    },
+    {
+      "name": "appointment idempotency",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "concurrent same-slot booking has one winner",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          202,
+          409
+        ]
+      }
+    },
+    {
+      "name": "appointment ownership enforced",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "appointment rescheduled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "appointment cancelled by owner",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "cancelled slot can be rebooked",
+      "pass": true,
+      "detail": {
+        "status": 202
+      }
+    },
+    {
+      "name": "visitor sees own inquiries only",
+      "pass": true,
+      "detail": {
+        "count": 1
+      }
+    },
+    {
+      "name": "admin sees CRM inquiries and appointments",
+      "pass": true,
+      "detail": {
+        "inquiries": 2,
+        "appointments": 3
+      }
+    },
+    {
+      "name": "email jobs queue and process as dry runs",
+      "pass": true,
+      "detail": {
+        "jobs": 4,
+        "processed": 4
+      }
+    }
+  ]
+}

@@ -122,6 +122,7 @@ if (liveToken.token) {
         locale: 'en',
         userText: 'Open the Safiy project.',
         assistantText: transcript.replace(/^AI Nour:\s*/gm, '').trim(),
+        reservationId: liveToken.reservationId,
         usage
       })
     });

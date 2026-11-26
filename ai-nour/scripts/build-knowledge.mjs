@@ -3,8 +3,8 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { PROJECTS } from '../../src/data/projects.js';
-import { PROFESSIONAL_CHAPTERS, PROFESSIONAL_INTRO } from '../../src/data/journey.js';
-import { ABOUT_ME_INTRO, ABOUT_ME_THINK, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../../src/data/profile.js';
+import { PROFESSIONAL_TAGLINE, PROFESSIONAL_CHAPTERS, PROFESSIONAL_INTRO } from '../../src/data/journey.js';
+import { PROFILE_POSITIONING, PROFILE_INTERSECTION, PROFILE_PROOF, ABOUT_ME_INTRO, ABOUT_ME_THINK, ABOUT_ME_WORK, ABOUT_ME_DIRECTION } from '../../src/data/profile.js';
 import { SITE } from '../../src/data/site.js';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -142,6 +142,24 @@ for (const chapter of PROFESSIONAL_CHAPTERS) {
   }
 }
 
+add({
+  id: 'profile:positioning',
+  type: 'profile',
+  title: 'Positioning and proof',
+  text: [PROFILE_POSITIONING, PROFILE_INTERSECTION, PROFILE_PROOF].join(' '),
+  route: '/me',
+  tags: ['profile', 'positioning', 'proof', 'strategy', 'sales', 'applied ai', 'commercial'],
+  keywords: ['positionnement', 'proposition', 'preuve', 'resultats', 'ventes', 'strategie', 'ia appliquee']
+});
+add({
+  id: 'journey:tagline',
+  type: 'journey',
+  title: 'Career through-line',
+  text: PROFESSIONAL_TAGLINE,
+  route: '/journey',
+  tags: ['journey', 'career', 'tagline', 'through-line'],
+  keywords: ['parcours', 'carriere', 'fil conducteur', 'accroche']
+});
 add({
   id: 'profile:intro',
   type: 'profile',

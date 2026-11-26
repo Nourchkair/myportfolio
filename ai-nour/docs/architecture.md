@@ -82,6 +82,7 @@ migrations/                D1 schema + Phase 0A cost carryover
 8. On `turnComplete`, the browser posts transcripts and usage deltas to `/api/live/turn`.
 9. The server appends both turns to the same D1 conversation, records cost, and returns the updated budget.
 10. A later text or Live session reads the same brief, so context survives beyond the Live socket.
+11. The token carries a prepaid reservation that counts toward the spend caps until a Live turn is reported and reconciled.
 
 ## D1 schema
 
@@ -99,6 +100,14 @@ migrations/                D1 schema + Phase 0A cost carryover
 | `knowledge_overrides` | draft admin overrides (not yet applied to retrieval) |
 
 Migration: `migrations/0001_init.sql`. Phase 0A carryover of `25,213` USD micros is seeded into `cost_events`.
+
+## Live token reservations
+
+A Live token is minted only after the Worker verifies the remaining budget. The Worker then creates a `live_tokens` row with a prepaid reservation (default `$0.08 USD` for a 120-second token). Held reservations count toward both daily and cumulative caps, so a browser that connects directly and never reports usage cannot mint unlimited tokens. When a Live turn is reported, the server charges `max(actual usage, reservation)` and reconciles the reservation; if no usage is reported, the reservation stays held until the release window. This is a conservative server-side bound, not a full audio proxy: actual usage within a token is still reported by the client, so a malicious client cannot exceed the per-token reservation’s economic coverage. A server-side WebSocket proxy would be the Phase 3 option if exact per-token metering becomes necessary.
+
+## CRM, appointments and email
+
+The CRM workflow is implemented in D1: contacts, consents, inquiries, appointments (`bookings`), idempotency keys, ownership checks, overlap checks, reschedule/cancel, and a reconciliation endpoint for calendar failures. Google Calendar writes are gated by `google_writes_enabled`; synthetic validation created and cancelled a real no-attendee event with a unique Meet link. The Google Sheet schema remains a proposal; no production headers were written. Email jobs are queued in `email_jobs` and processed by an admin action. `EMAIL_SEND_ENABLED=false` makes processing a dry run; Resend and Gmail-draft adapters are prepared but not active.
 
 ## Cost model
 

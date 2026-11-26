@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-26T20:35:00Z",
+  "unit": {
+    "passed": 38,
+    "total": 38
+  },
+  "api": {
+    "passed": 23,
+    "total": 23
+  },
+  "security": {
+    "passed": 8,
+    "total": 8
+  },
+  "crm": {
+    "passed": 14,
+    "total": 14
+  },
+  "crmGoogle": {
+    "passed": 10,
+    "total": 10
+  },
+  "liveBudget": {
+    "passed": 3,
+    "total": 3
+  },
+  "realSmoke": {
+    "passed": 12,
+    "total": 12
+  },
+  "realFrench": {
+    "passed": 7,
+    "total": 7
+  },
+  "recovery": {
+    "passed": 4,
+    "total": 4
+  },
+  "retrieval": {
+    "chunks": 107,
+    "queries": 55,
+    "top1": 0.8727,
+    "top3": 1.0,
+    "mrr": 0.9364
+  },
+  "adminOAuth": "verified-locally",
+  "uiIntegration": "verified-mock",
+  "cost": {
+    "actualSpentUsdMicros": 196322,
+    "heldReservationUsdMicros": 80000,
+    "committedUsdMicros": 276322,
+    "actualCad": 0.2791,
+    "committedCad": 0.3929
+  },
+  "secretScan": {
+    "files": 361,
+    "hits": 0
+  },
+  "fixedInfrastructureCad": 0
+}

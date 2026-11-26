@@ -24,13 +24,22 @@ export function liveCostMicros(usage = {}, rates) {
 export function createCostService({ db, config }) {
   async function budget(now = Date.now()) {
     const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
-    const daily = await db.getCostSince(dayStart);
-    const cumulative = await db.getCostTotal();
+    const [dailySpent, cumulativeSpent, heldDaily, heldTotal] = await Promise.all([
+      db.getCostSince(dayStart),
+      db.getCostTotal(),
+      db.sumHeldLiveTokens({ since: dayStart, now }),
+      db.sumHeldLiveTokens({ since: 0, now })
+    ]);
+    const daily = dailySpent + heldDaily;
+    const cumulative = cumulativeSpent + heldTotal;
     const dailyRemaining = Math.max(0, config.caps.dailyUsdMicros - daily);
     const cumulativeRemaining = Math.max(0, config.caps.cumulativeUsdMicros - cumulative);
     return {
       dailyUsdMicros: daily,
       cumulativeUsdMicros: cumulative,
+      dailySpentUsdMicros: dailySpent,
+      cumulativeSpentUsdMicros: cumulativeSpent,
+      heldLiveReservationsUsdMicros: heldTotal,
       dailyCapUsdMicros: config.caps.dailyUsdMicros,
       cumulativeCapUsdMicros: config.caps.cumulativeUsdMicros,
       dailyRemainingUsdMicros: dailyRemaining,
@@ -75,12 +84,23 @@ export function createCostService({ db, config }) {
     return usdMicros;
   }
 
-  async function recordLive({ requestId, model, usage, capability = 'live_voice', now = Date.now() }) {
-    const usdMicros = liveCostMicros(usage, config.rates);
+  async function recordLive({ requestId, model, usage, capability = 'live_voice', now = Date.now(), reservationId = null, ownerHash = null, sessionId = null }) {
+    const actual = liveCostMicros(usage, config.rates);
     const inputTokens = Number(usage.textInput ?? 0) + Number(usage.audioInput ?? 0);
     const outputTokens = Number(usage.audioOutput ?? 0);
-    await record({ requestId, model, capability, inputTokens, outputTokens, usdMicros, now });
-    return usdMicros;
+    let charge = actual;
+    if (reservationId) {
+      const reservation = await db.getLiveTokenReservation(reservationId);
+      if (!reservation || reservation.owner_hash !== ownerHash || reservation.session_id !== sessionId) {
+        throw new AppError(409, 'LIVE_RESERVATION_INVALID', 'The Live token reservation is invalid for this session');
+      }
+      if (reservation.status !== 'held') return 0;
+      charge = Math.max(actual, Number(reservation.reserved_usd_micros || 0));
+      const reconciled = await db.reconcileLiveToken({ id: reservationId, reportedUsdMicros: actual, now });
+      if (!reconciled) return 0;
+    }
+    await record({ requestId, model, capability, inputTokens, outputTokens, usdMicros: charge, now });
+    return charge;
   }
 
   return {

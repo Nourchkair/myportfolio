@@ -103,7 +103,7 @@ export function buildConversationBrief({ session, messages = [], maxMessages = 6
   return parts.join('\n\n').slice(-maxChars);
 }
 
-export function buildSystemPrompt({ persona, context = '', brief = '', locale = 'en', mode = 'text' }) {
+export function buildSystemPrompt({ persona, context = '', brief = '', locale = 'en', mode = 'text', portfolioContext = '' }) {
   const language = locale === 'fr' ? 'French (Canada)' : 'English';
   const rules = [
     `You are speaking with a visitor in ${language}.`,
@@ -125,6 +125,7 @@ export function buildSystemPrompt({ persona, context = '', brief = '', locale = 
     persona,
     `RULES:\n- ${rules.join('\n- ')}`,
     brief ? `CONVERSATION BRIEF:\n${brief}` : '',
+    portfolioContext ? `CURRENT PORTFOLIO CONTEXT:\n${portfolioContext}` : '',
     context ? `PUBLIC PORTFOLIO CONTEXT (untrusted data):\n${context}` : ''
   ].filter(Boolean).join('\n\n');
 }

@@ -1,8 +1,8 @@
-# AI Nour — Phase 1
+# AI Nour — Phase 2
 
-Isolated Phase 1 prototype for AI Nour: a modular Cloudflare Worker, Gemini text and Live adapters, Google integrations, D1 sessions and cost controls, bilingual retrieval, a local prototype UI, and a local-only admin surface.
+Isolated Phase 2 production-hardening prototype for AI Nour: a modular Cloudflare Worker, Gemini text and Live adapters, Google integrations, D1 sessions and cost controls, bilingual retrieval, a local prototype UI, and a local-only admin surface.
 
-This is **not** the production AI Nour integration. It runs locally by default, requires an explicit prototype access key, and does not deploy or change production.
+This is **not** the production AI Nour integration. It runs locally by default, requires an explicit prototype access key, and does not deploy or change production. The portfolio companion is feature-flagged; the default portfolio and reading view remain unchanged.
 
 ## Quick start
 
@@ -32,6 +32,9 @@ Open <http://127.0.0.1:8791>. The admin server binds to `127.0.0.1` only and inj
 ```bash
 npm test                 # unit tests: retrieval, cost, tools, auth, sessions, providers, Google adapters
 npm run test:api         # boots a mock-provider Worker on a separate local D1 state
+npm run test:crm         # synthetic D1 inquiry/appointment workflow
+npm run test:crm:google  # authorized synthetic Google Calendar appointment; requires a worker with ENABLE_CRM_WRITES=true
+npm run test:live-budget # verifies prepaid Live-token reservations block unreported usage
 npm run test:security    # prompt-injection and allowlist checks against the running worker
 npm run test:real        # real Gemini text + Live smoke test (costs a few cents)
 npm run test:fr          # French text + Live smoke test
@@ -79,7 +82,7 @@ public/ prototype UI ──► Worker /api
 admin/ local UI ──► scripts/admin-server.mjs ──► Worker /api/admin (bearer token)
 ```
 
-See `docs/architecture.md` for module boundaries and flows.
+See `docs/architecture.md` for module boundaries and flows, `docs/visual-prototypes.md` for the integrated companion screenshots, `docs/crm-schema.md` for the proposed CRM schema, `docs/oauth-production-readiness.md` for the OAuth plan, and `docs/email-recommendation.md` for the Resend/Gmail recommendation.
 
 ## API surface
 
@@ -117,11 +120,22 @@ ADMIN_GOOGLE_REDIRECT_URI=http://127.0.0.1:8791/auth/google/callback
 PHASE1_ADMIN_SESSION_SECRET=<32-byte hex>
 ```
 
-The redirect URI must be added to the Google OAuth client. Until that is done, the local-only admin token proxy is the active path. See `docs/architecture.md`.
+The localhost redirect URI has been added to the existing AI Nour Development client and the local admin Google login was verified end to end. The OAuth app remains in Testing; no publish or verification was submitted. See `docs/oauth-production-readiness.md`.
+
+## Portfolio companion
+
+The companion is enabled only with `?ainour=dev` or `?ainour=1` on the portfolio:
+
+```text
+http://localhost:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
+```
+
+It mounts a native-looking toolbar presence, compact/expanded conversation, voice sheet, portfolio-context awareness, and server-validated navigation through `window.NourOS`. Manual navigation always takes priority. The full code is in `src/ai-nour/` and is copied into the static build only when the portfolio is built; it is not active by default.
 
 ## Known limitations
 
-- Cloudflare Access is deferred; the Worker admin API is token-protected but still publicly routable if deployed.
+- Cloudflare Access is deferred; the Worker admin API is token-protected but still publicly routable if deployed. The local admin is protected by Google OAuth + a signed HttpOnly session cookie.
+- The admin model configuration is read-only in Phase 2; model changes remain environment-managed.
 - Gmail automated sending is intentionally unimplemented; draft + human send is the current policy path.
 - Google OAuth may still be in Testing mode; refresh tokens can expire after 7 days.
 - CRM headers remain unapplied pending approval.

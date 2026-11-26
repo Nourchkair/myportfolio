@@ -9,12 +9,28 @@ import { AppError } from './http/errors.js';
 import { ProviderError } from './providers/errors.js';
 import { IntegrationError } from './integrations/errors.js';
 import { createGoogleServices } from './integrations/google/index.js';
+import { createEmailService } from './integrations/email/index.js';
+import { createCrmService } from './services/crm.js';
 import { registerHealthRoutes } from './routes/health.js';
 import { registerSessionRoutes } from './routes/session.js';
 import { registerAdminRoutes } from './routes/admin.js';
+import { registerCrmRoutes } from './routes/crm.js';
 
-function withRequestId(response, requestId) {
+function corsHeaders(request, config) {
+  const origin = request.headers.get('origin');
+  if (!origin || !config.allowedOrigins.includes(origin)) return {};
+  return {
+    'access-control-allow-origin': origin,
+    'access-control-allow-methods': 'GET,POST,PATCH,OPTIONS',
+    'access-control-allow-headers': 'content-type,x-prototype-key,x-owner-token,authorization',
+    'access-control-max-age': '600',
+    vary: 'Origin'
+  };
+}
+
+function withRequestId(response, requestId, extra = {}) {
   const headers = new Headers(response.headers);
+  for (const [key, value] of Object.entries(extra)) headers.set(key, value);
   headers.set('x-request-id', requestId);
   headers.set('x-content-type-options', 'nosniff');
   headers.set('referrer-policy', 'no-referrer');
@@ -24,6 +40,8 @@ function withRequestId(response, requestId) {
 export function createApp(env) {
   const config = loadConfig(env);
   const db = createDb(env.DB);
+  const google = createGoogleServices(config);
+  const emailService = createEmailService({ config, gmail: google.gmail });
   const services = {
     config,
     db,
@@ -31,13 +49,16 @@ export function createApp(env) {
     liveProvider: createLiveProvider(config),
     cost: createCostService({ db, config }),
     retrieval,
-    google: createGoogleServices(config),
+    google,
+    email: emailService,
+    crm: createCrmService({ db, config, google, email: emailService }),
     clientKey
   };
   const router = createRouter();
   registerHealthRoutes(router, services);
   registerSessionRoutes(router, services);
   registerAdminRoutes(router, services);
+  registerCrmRoutes(router, services);
 
   async function fetch(request, ctx) {
     const requestId = makeRequestId();
@@ -45,8 +66,12 @@ export function createApp(env) {
     const started = Date.now();
 
     if (url.pathname.startsWith('/api/')) {
+      const cors = corsHeaders(request, config);
+      if (request.method === 'OPTIONS') {
+        return withRequestId(new Response(null, { status: 204 }), requestId, cors);
+      }
       const matched = router.match(request.method, url.pathname);
-      if (!matched) return withRequestId(json({ error: { code: 'NOT_FOUND', message: 'API route not found' } }, 404), requestId);
+      if (!matched) return withRequestId(json({ error: { code: 'NOT_FOUND', message: 'API route not found' } }, 404), requestId, cors);
       try {
         const response = await matched.handler({
           request,
@@ -58,10 +83,10 @@ export function createApp(env) {
           now: started,
           ctx
         });
-        return withRequestId(response, requestId);
+        return withRequestId(response, requestId, cors);
       } catch (error) {
         if (error instanceof AppError) {
-          return withRequestId(json({ error: { code: error.code, message: error.message, details: error.details } }, error.status), requestId);
+          return withRequestId(json({ error: { code: error.code, message: error.message, details: error.details } }, error.status), requestId, cors);
         }
         if (error instanceof ProviderError) {
           try {
@@ -72,10 +97,10 @@ export function createApp(env) {
               now: started
             });
           } catch {}
-          return withRequestId(json({ error: { code: error.code, message: error.message } }, error.status), requestId);
+          return withRequestId(json({ error: { code: error.code, message: error.message } }, error.status), requestId, cors);
         }
         if (error instanceof IntegrationError) {
-          return withRequestId(json({ error: { code: error.code, message: error.message, details: error.details } }, error.status || 502), requestId);
+          return withRequestId(json({ error: { code: error.code, message: error.message, details: error.details } }, error.status || 502), requestId, cors);
         }
         try {
           await db.logEvent({
@@ -85,7 +110,7 @@ export function createApp(env) {
             now: started
           });
         } catch {}
-        return withRequestId(json({ error: { code: 'INTERNAL', message: 'Internal server error' } }, 500), requestId);
+        return withRequestId(json({ error: { code: 'INTERNAL', message: 'Internal server error' } }, 500), requestId, cors);
       }
     }
 

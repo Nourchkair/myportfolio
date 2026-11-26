@@ -169,19 +169,48 @@ async function runSynthetic() {
 }
 
 async function loadCRM() {
-  const [crm, bookings] = await Promise.all([api('/api/admin/crm'), api('/api/admin/bookings')]);
+  const [crm, bookings, inquiries, emails] = await Promise.all([
+    api('/api/admin/crm'),
+    api('/api/admin/bookings'),
+    api('/api/admin/inquiries'),
+    api('/api/admin/email')
+  ]);
   const counts = crm.crm?.counts || {};
   $('#crm-summary').innerHTML = cards([
     { label: 'CRM', value: crm.crm?.title || 'not configured', sub: `${crm.crm?.tabs?.length || 0} tabs` },
-    ...Object.entries(counts).map(([tab, count]) => ({ label: tab, value: String(count), sub: 'records' }))
+    ...Object.entries(counts).map(([tab, count]) => ({ label: tab, value: String(count), sub: 'records' })),
+    { label: 'Inquiries (D1)', value: String(inquiries.inquiries?.length || 0), sub: 'synthetic/local' },
+    { label: 'Email jobs', value: String(emails.jobs?.length || 0), sub: `${emails.provider} · ${emails.sendEnabled ? 'send enabled' : 'dry-run'}` }
   ]);
-  $('#booking-list').innerHTML = table(
-    ['Slot', 'Status', 'Owner hash', 'Created'],
-    (bookings.bookings || []).map((booking) => [
-      esc(`${new Date(Number(booking.start_utc)).toLocaleString()} → ${new Date(Number(booking.end_utc)).toLocaleTimeString()}`),
-      esc(booking.status), `<code>${esc(String(booking.owner_hash).slice(0, 12))}…</code>`, time(booking.created_at)
+  $('#inquiry-list').innerHTML = table(
+    ['Created', 'Type', 'Status', 'Summary', 'Contact', 'Owner'],
+    (inquiries.inquiries || []).map((item) => [
+      time(item.created_at), esc(item.inquiry_type), esc(item.status), esc(String(item.summary).slice(0, 90)),
+      `<code>${esc(String(item.contact_id).slice(0, 8))}…</code>`, `<code>${esc(String(item.owner_hash).slice(0, 8))}…</code>`
     ])
   );
+  $('#booking-list').innerHTML = table(
+    ['Slot', 'Status', 'Meet link', 'Owner hash', 'Created'],
+    (bookings.bookings || []).map((booking) => [
+      esc(`${new Date(Number(booking.start_utc)).toLocaleString()} → ${new Date(Number(booking.end_utc)).toLocaleTimeString()}`),
+      esc(booking.status), booking.meet_link ? '<span class="muted">present</span>' : '—', `<code>${esc(String(booking.owner_hash).slice(0, 12))}…</code>`, time(booking.created_at)
+    ])
+  );
+  $('#email-jobs').innerHTML = table(
+    ['Created', 'Kind', 'To', 'Status', 'Provider'],
+    (emails.jobs || []).map((job) => [time(job.created_at), esc(job.kind), esc(job.to_email), esc(job.status), esc(job.provider)])
+  );
+}
+
+async function processEmail() {
+  $('#email-result').textContent = 'Processing queued jobs…';
+  try {
+    const result = await api('/api/admin/email/process', { method: 'POST', body: '{}' });
+    $('#email-result').textContent = `${result.results?.length || 0} jobs processed · send enabled: ${result.sendEnabled}`;
+    await loadCRM();
+  } catch (error) {
+    $('#email-result').textContent = String(error.message || error);
+  }
 }
 
 async function loadAudit() {
@@ -239,6 +268,7 @@ $('#save-persona').addEventListener('click', () => savePersona().catch((error) =
 $('#knowledge-search').addEventListener('click', () => searchKnowledge().catch((error) => showError(error.message)));
 $('#refresh-integrations').addEventListener('click', () => loadIntegrations().catch((error) => showError(error.message)));
 $('#synthetic-test').addEventListener('click', () => runSynthetic());
+$('#process-email').addEventListener('click', () => processEmail());
 
 api('/api/admin/status').then((status) => {
   state.status = status;

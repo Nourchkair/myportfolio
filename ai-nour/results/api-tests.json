@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-26T19:38:22.050Z",
+  "generatedAt": "2026-11-26T20:34:28.888Z",
   "mode": "mock-providers/local-d1",
-  "passed": 22,
+  "passed": 23,
   "failed": 0,
-  "total": 22,
+  "total": 23,
   "results": [
     {
       "name": "health and D1",
@@ -24,7 +24,7 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "chunks": 105
+        "chunks": 107
       }
     },
     {
@@ -72,6 +72,14 @@
       }
     },
     {
+      "name": "external provider failure returns 503 and recovers",
+      "pass": true,
+      "detail": {
+        "failure": 503,
+        "recovery": 200
+      }
+    },
+    {
       "name": "server-side tool execution",
       "pass": true,
       "detail": {
@@ -92,7 +100,7 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "messages": 4
+        "messages": 6
       }
     },
     {
@@ -100,7 +108,8 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "model": "gemini-3.8-live"
+        "model": "gemini-3.8-live",
+        "reservation": true
       }
     },
     {
@@ -108,7 +117,7 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "cost": 466
+        "cost": 1000
       }
     },
     {

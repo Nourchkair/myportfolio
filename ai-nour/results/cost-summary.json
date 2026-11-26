@@ -1,222 +1,170 @@
 {
   "budget": {
-    "dailyUsdMicros": 34559,
-    "cumulativeUsdMicros": 34559,
+    "dailyUsdMicros": 276322,
+    "cumulativeUsdMicros": 276322,
+    "dailySpentUsdMicros": 196322,
+    "cumulativeSpentUsdMicros": 196322,
+    "heldLiveReservationsUsdMicros": 80000,
     "dailyCapUsdMicros": 1000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 965441,
-    "cumulativeRemainingUsdMicros": 6965441,
+    "dailyRemainingUsdMicros": 723678,
+    "cumulativeRemainingUsdMicros": 6723678,
     "allowed": true
   },
   "events": [
     {
-      "id": 19,
-      "request_id": "6ddbfa5c-bc2d-4bc5-a5a0-51fb57a64c36:text:1",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 1455,
-      "output_tokens": 16,
-      "usd_micros": 153,
-      "created_at": 1795721706398
-    },
-    {
-      "id": 20,
-      "request_id": "6ddbfa5c-bc2d-4bc5-a5a0-51fb57a64c36:text:2",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_tool_followup",
-      "input_tokens": 1492,
-      "output_tokens": 38,
-      "usd_micros": 166,
-      "created_at": 1795721706398
-    },
-    {
-      "id": 18,
-      "request_id": "3b7fc3dd-e00a-4de3-88b6-3a2d41f0483b:text:1",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 1485,
-      "output_tokens": 49,
-      "usd_micros": 169,
-      "created_at": 1795721705649
-    },
-    {
-      "id": 17,
-      "request_id": "1f7c86e5-6a9b-4d7b-9014-60dd4d4a8f72:text:1",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 1137,
-      "output_tokens": 28,
-      "usd_micros": 126,
-      "created_at": 1795721704943
-    },
-    {
       "id": 16,
-      "request_id": "631f29b5-cbe2-4aef-a598-3e2df1cd50e6:text:1",
+      "request_id": "01760c3f-adb7-4567-90cc-4a781c8620ac:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 1100,
-      "output_tokens": 35,
-      "usd_micros": 125,
-      "created_at": 1795721704289
+      "input_tokens": 1320,
+      "output_tokens": 10,
+      "usd_micros": 137,
+      "created_at": 1795725128402
     },
     {
       "id": 15,
-      "request_id": "3ee27c45-9913-457e-8b7d-42e1c71823a8:text:1",
+      "request_id": "82c0e80c-508e-48fb-b09c-89292d3807de:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 1268,
-      "output_tokens": 30,
-      "usd_micros": 139,
-      "created_at": 1795721703674
+      "input_tokens": 1144,
+      "output_tokens": 12,
+      "usd_micros": 120,
+      "created_at": 1795725122228
     },
     {
       "id": 14,
-      "request_id": "6d8d870e-a8d6-4750-9a5c-519e74802543:text:1",
+      "request_id": "49f80148-283c-4a26-ab10-4b2a649082ec:live",
       "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 1249,
-      "output_tokens": 23,
-      "usd_micros": 135,
-      "created_at": 1795721674927
+      "model": "gemini-3.8-live",
+      "capability": "live_voice",
+      "input_tokens": 1089,
+      "output_tokens": 254,
+      "usd_micros": 80000,
+      "created_at": 1795725113070
     },
     {
       "id": 13,
-      "request_id": "a9eae822-483e-4829-859c-2100be1bad2b:text:1",
+      "request_id": "7472676a-560e-4fb5-8453-78bf7ff31921:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 1035,
+      "input_tokens": 1078,
       "output_tokens": 31,
-      "usd_micros": 117,
-      "created_at": 1795721667873
+      "usd_micros": 121,
+      "created_at": 1795725099481
     },
     {
       "id": 12,
-      "request_id": "e359b46f-65d0-40dd-9d29-07795ca77532:live",
+      "request_id": "703f491d-9e0b-4fca-8ee9-d96742ab8cfd:live",
       "provider": "gemini",
       "model": "gemini-3.8-live",
       "capability": "live_voice",
-      "input_tokens": 1025,
-      "output_tokens": 234,
-      "usd_micros": 4014,
-      "created_at": 1795721602128
-    },
-    {
-      "id": 11,
-      "request_id": "da8c9249-3504-495d-9e76-83815ef4f6f1:text:1",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 969,
-      "output_tokens": 27,
-      "usd_micros": 108,
-      "created_at": 1795721589168
+      "input_tokens": 1145,
+      "output_tokens": 77,
+      "usd_micros": 80000,
+      "created_at": 1795725091114
     },
     {
       "id": 10,
-      "request_id": "ed5c5c3c-7688-4466-8b1c-57b826134452:text:1",
+      "request_id": "cb162181-a6f0-44df-85f2-68daf041ba1e:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 969,
-      "output_tokens": 34,
-      "usd_micros": 111,
-      "created_at": 1795721569450
+      "input_tokens": 1586,
+      "output_tokens": 16,
+      "usd_micros": 166,
+      "created_at": 1795725076272
+    },
+    {
+      "id": 11,
+      "request_id": "cb162181-a6f0-44df-85f2-68daf041ba1e:text:2",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_tool_followup",
+      "input_tokens": 1623,
+      "output_tokens": 48,
+      "usd_micros": 183,
+      "created_at": 1795725076272
     },
     {
       "id": 9,
-      "request_id": "4ae78658-cc55-4db7-9f23-11a5bdec1ee8:live",
-      "provider": "gemini",
-      "model": "gemini-3.8-live",
-      "capability": "live_voice",
-      "input_tokens": 1078,
-      "output_tokens": 75,
-      "usd_micros": 2145,
-      "created_at": 1795721258026
-    },
-    {
-      "id": 7,
-      "request_id": "72d37097-e975-4c6c-acac-99a2ed9101c6:text:1",
+      "request_id": "c5e5f1cd-e393-495d-af93-61e1f8928b1d:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 1156,
-      "output_tokens": 16,
-      "usd_micros": 123,
-      "created_at": 1795721241062
+      "input_tokens": 1587,
+      "output_tokens": 38,
+      "usd_micros": 175,
+      "created_at": 1795725075689
     },
     {
       "id": 8,
-      "request_id": "72d37097-e975-4c6c-acac-99a2ed9101c6:text:2",
+      "request_id": "f77ecfef-54a7-4d29-aa7b-2ee59bb3cf0b:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
-      "capability": "text_tool_followup",
-      "input_tokens": 1193,
-      "output_tokens": 13,
-      "usd_micros": 126,
-      "created_at": 1795721241062
+      "capability": "text_chat",
+      "input_tokens": 1581,
+      "output_tokens": 41,
+      "usd_micros": 176,
+      "created_at": 1795725075003
     },
     {
       "id": 6,
-      "request_id": "2c5c6752-540a-48ab-a90d-d8c9fdddbe62:text:1",
+      "request_id": "16a419cf-daef-4ed8-8174-8956f07bc9ba:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 966,
-      "output_tokens": 42,
-      "usd_micros": 114,
-      "created_at": 1795721240314
-    },
-    {
-      "id": 5,
-      "request_id": "c1728fbd-9f75-491d-92e3-ebe192b3ead3:live",
-      "provider": "gemini",
-      "model": "gemini-3.8-live",
-      "capability": "live_voice",
-      "input_tokens": 915,
-      "output_tokens": 0,
-      "usd_micros": 1123,
-      "created_at": 1795720806905
-    },
-    {
-      "id": 3,
-      "request_id": "5fc6a96b-2c23-4260-a698-e7dd10d53503:text:1",
-      "provider": "gemini",
-      "model": "gemini-flash-lite-latest",
-      "capability": "text_chat",
-      "input_tokens": 1115,
+      "input_tokens": 1281,
       "output_tokens": 16,
-      "usd_micros": 119,
-      "created_at": 1795720730906
+      "usd_micros": 136,
+      "created_at": 1795725074500
     },
     {
-      "id": 4,
-      "request_id": "5fc6a96b-2c23-4260-a698-e7dd10d53503:text:2",
+      "id": 7,
+      "request_id": "16a419cf-daef-4ed8-8174-8956f07bc9ba:text:2",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_tool_followup",
-      "input_tokens": 1152,
-      "output_tokens": 10,
-      "usd_micros": 121,
-      "created_at": 1795720730906
+      "input_tokens": 1318,
+      "output_tokens": 12,
+      "usd_micros": 137,
+      "created_at": 1795725074500
     },
     {
-      "id": 2,
-      "request_id": "e959e417-4c36-458f-ad24-235beeb115a5:text:1",
+      "id": 5,
+      "request_id": "65abac72-d0ee-4352-b805-2c495d2685c6:text:1",
       "provider": "gemini",
       "model": "gemini-flash-lite-latest",
       "capability": "text_chat",
-      "input_tokens": 914,
-      "output_tokens": 48,
-      "usd_micros": 112,
-      "created_at": 1795720730154
+      "input_tokens": 1181,
+      "output_tokens": 40,
+      "usd_micros": 136,
+      "created_at": 1795725074422
+    },
+    {
+      "id": 4,
+      "request_id": "e7c67c9c-a504-4596-bc85-6775f9a37eb5:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1075,
+      "output_tokens": 50,
+      "usd_micros": 128,
+      "created_at": 1795725073687
+    },
+    {
+      "id": 3,
+      "request_id": "f51b8f21-c62a-43b5-b2fb-5d010d07c3e7:text:1",
+      "provider": "gemini",
+      "model": "gemini-flash-lite-latest",
+      "capability": "text_chat",
+      "input_tokens": 1315,
+      "output_tokens": 38,
+      "usd_micros": 148,
+      "created_at": 1795725073653
     },
     {
       "id": 1,
@@ -227,7 +175,18 @@
       "input_tokens": 0,
       "output_tokens": 0,
       "usd_micros": 25213,
-      "created_at": 1795720706000
+      "created_at": 1795723531000
+    },
+    {
+      "id": 2,
+      "request_id": "phase1-carryover",
+      "provider": "gemini",
+      "model": "phase1-validation",
+      "capability": "carryover",
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "usd_micros": 9346,
+      "created_at": 1795723531000
     }
   ]
 }

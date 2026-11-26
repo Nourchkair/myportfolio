@@ -35,7 +35,8 @@ function start() {
   return new Promise((resolve, reject) => {
     const child = spawn('npx', [
       'wrangler', 'dev', '--local', '--port', String(port), '--persist-to', persist,
-      '--var', 'TEXT_PROVIDER:mock', '--var', 'LIVE_PROVIDER:mock'
+      '--var', 'TEXT_PROVIDER:mock', '--var', 'LIVE_PROVIDER:mock',
+      '--var', 'LIVE_TOKEN_RESERVATION_USD_MICROS:1000'
     ], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
     let log = '';
     child.stdout.on('data', (chunk) => { log += chunk.toString(); });
@@ -83,6 +84,10 @@ async function main() {
     const toolChat = await call('/api/chat', { method: 'POST', body: { sessionId: sid, message: 'Open the Safiy project.', locale: 'en', clientMessageId: 'api-chat-2' } });
     check('tool call returns navigation action', toolChat.status === 200 && toolChat.body.actions?.[0]?.projectId === 'safiy', { status: toolChat.status, actions: toolChat.body.actions });
 
+    const providerFailure = await call('/api/chat', { method: 'POST', body: { sessionId: sid, message: '__FAIL_PROVIDER__', locale: 'en', clientMessageId: 'api-provider-fail' } });
+    const recovered = await call('/api/chat', { method: 'POST', body: { sessionId: sid, message: 'What does Safiy do?', locale: 'en', clientMessageId: 'api-provider-recover' } });
+    check('external provider failure returns 503 and recovers', providerFailure.status === 503 && recovered.status === 200, { failure: providerFailure.status, recovery: recovered.status });
+
     const toolExecute = await call('/api/tools/execute', { method: 'POST', body: { sessionId: sid, name: 'openProject', args: { projectId: 'safiy' } } });
     check('server-side tool execution', toolExecute.status === 200 && toolExecute.body.action?.route === '/projects/safiy', { status: toolExecute.status, route: toolExecute.body.action?.route });
     const badTool = await call('/api/tools/execute', { method: 'POST', body: { sessionId: sid, name: 'openProject', args: { projectId: 'admin' } } });
@@ -92,15 +97,15 @@ async function main() {
     check('session recovery returns messages', view.status === 200 && (view.body.session?.messages || []).length >= 4, { status: view.status, messages: view.body.session?.messages?.length });
 
     const live = await call('/api/live/token', { method: 'POST', body: { sessionId: sid, locale: 'en' } });
-    check('mock Live token', live.status === 200 && String(live.body.token || '').startsWith('mock-live-token-'), { status: live.status, model: live.body.model });
+    check('mock Live token', live.status === 200 && String(live.body.token || '').startsWith('mock-live-token-') && Boolean(live.body.reservationId), { status: live.status, model: live.body.model, reservation: Boolean(live.body.reservationId) });
 
-    const liveTurn = await call('/api/live/turn', { method: 'POST', body: { sessionId: sid, turnId: 'api-live-1', locale: 'en', userText: 'Voice question', assistantText: 'Voice answer', usage: { textInput: 100, audioInput: 50, audioOutput: 20 } } });
+    const liveTurn = await call('/api/live/turn', { method: 'POST', body: { sessionId: sid, turnId: 'api-live-1', locale: 'en', userText: 'Voice question', assistantText: 'Voice answer', reservationId: live.body.reservationId, usage: { textInput: 100, audioInput: 50, audioOutput: 20 } } });
     check('Live turn persists shared context and cost', liveTurn.status === 200 && liveTurn.body.duplicate === false && liveTurn.body.costUsdMicros > 0, { status: liveTurn.status, cost: liveTurn.body.costUsdMicros });
-    const liveDuplicate = await call('/api/live/turn', { method: 'POST', body: { sessionId: sid, turnId: 'api-live-1', locale: 'en', userText: 'Voice question', assistantText: 'Voice answer', usage: { textInput: 100, audioInput: 50, audioOutput: 20 } } });
+    const liveDuplicate = await call('/api/live/turn', { method: 'POST', body: { sessionId: sid, turnId: 'api-live-1', locale: 'en', userText: 'Voice question', assistantText: 'Voice answer', reservationId: live.body.reservationId, usage: { textInput: 100, audioInput: 50, audioOutput: 20 } } });
     check('duplicate Live turn rejected', liveDuplicate.status === 200 && liveDuplicate.body.duplicate === true, { status: liveDuplicate.status, duplicate: liveDuplicate.body.duplicate });
 
     const admin = await call('/api/admin/status', { admin: true });
-    check('admin status', admin.status === 200 && admin.body.version === 'phase1-0.1.0', { status: admin.status });
+    check('admin status', admin.status === 200 && admin.body.version === 'phase2-0.2.0', { status: admin.status });
     const adminNoAuth = await fetch(`${base}/api/admin/status`);
     check('admin auth required', adminNoAuth.status === 401, { status: adminNoAuth.status });
 

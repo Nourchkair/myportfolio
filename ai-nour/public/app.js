@@ -16,6 +16,7 @@ const state = {
   liveUsage: null,
   lastUsageTotals: { text: 0, audioIn: 0, audioOut: 0 },
   turnId: null,
+  reservationId: null,
   micStream: null,
   inputContext: null,
   outputContext: null,
@@ -324,6 +325,7 @@ async function persistLiveTurn() {
       body: JSON.stringify({
         sessionId: state.sessionId,
         turnId,
+        reservationId: state.reservationId,
         locale: state.locale,
         userText: userText || (usage ? '[voice turn]' : ''),
         assistantText: assistantText || (usage ? '[voice response]' : ''),
@@ -387,6 +389,7 @@ async function startVoice() {
       body: JSON.stringify({ sessionId: state.sessionId, locale: state.locale })
     });
     state.sessionId = token.sessionId;
+    state.reservationId = token.reservationId;
     localStorage.setItem('ainour_session', state.sessionId);
 
     state.micStream = await navigator.mediaDevices.getUserMedia({

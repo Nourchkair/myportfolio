@@ -11,7 +11,7 @@ export function registerHealthRoutes(router, services) {
     }
     return json({
       ok: d1,
-      service: 'ai-nour-phase1-dev',
+      service: 'ai-nour-phase2-dev',
       version: services.config.version,
       d1,
       error,

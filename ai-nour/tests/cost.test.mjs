@@ -25,7 +25,8 @@ test('budget blocks when daily or cumulative caps are reached', async () => {
     getCostSince: async () => 1_000_000,
     getCostTotal: async () => 1_000_000,
     recordCost: async () => {},
-    listCostEvents: async () => []
+    listCostEvents: async () => [],
+    sumHeldLiveTokens: async () => 0
   };
   const config = { caps: { dailyUsdMicros: 1_000_000, cumulativeUsdMicros: 7_000_000 }, rates };
   const cost = createCostService({ db, config });
@@ -41,7 +42,8 @@ test('cost service records text usage with a stable request id', async () => {
     getCostSince: async () => 0,
     getCostTotal: async () => 0,
     recordCost: async (row) => rows.push(row),
-    listCostEvents: async () => []
+    listCostEvents: async () => [],
+    sumHeldLiveTokens: async () => 0
   };
   const config = { caps: { dailyUsdMicros: 1_000_000, cumulativeUsdMicros: 7_000_000 }, rates };
   const cost = createCostService({ db, config });
@@ -50,4 +52,21 @@ test('cost service records text usage with a stable request id', async () => {
   assert.equal(rows.length, 1);
   assert.equal(rows[0].requestId, 'req-1');
   assert.equal(rows[0].usdMicros, 300);
+});
+
+
+test('held Live reservations count toward the budget', async () => {
+  const db = {
+    getCostSince: async () => 0,
+    getCostTotal: async () => 0,
+    recordCost: async () => {},
+    listCostEvents: async () => [],
+    sumHeldLiveTokens: async ({ since }) => since > 0 ? 600_000 : 600_000
+  };
+  const config = { caps: { dailyUsdMicros: 1_000_000, cumulativeUsdMicros: 7_000_000 }, rates };
+  const cost = createCostService({ db, config });
+  const budget = await cost.budget(1000);
+  assert.equal(budget.heldLiveReservationsUsdMicros, 600_000);
+  assert.equal(budget.dailyUsdMicros, 600_000);
+  assert.equal(budget.allowed, true);
 });

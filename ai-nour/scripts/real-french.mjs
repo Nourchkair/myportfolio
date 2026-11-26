@@ -78,6 +78,7 @@ if (token.token) {
         locale: 'fr',
         userText: 'Bonjour, présente Safiy en une phrase.',
         assistantText: transcript.trim(),
+        reservationId: token.reservationId,
         usage: { textInput: prompt.text || 0, audioInput: prompt.audio || 0, audioOutput: response.audio || 0 }
       })
     });

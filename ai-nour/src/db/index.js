@@ -162,21 +162,23 @@ export function createDb(d1) {
     return result.results || [];
   }
 
-  async function createBooking({ id, ownerHash, slotKey, startUtc, endUtc, now }) {
+  async function createBooking({ id, ownerHash, slotKey, startUtc, endUtc, now, inquiryId = null, contactId = null, timezone = null, idempotencyKey = null }) {
     try {
       await d1.prepare(
-        "INSERT INTO bookings(id,owner_hash,slot_key,start_utc,end_utc,status,calendar_event_id,meet_link,created_at,updated_at) VALUES(?,?,?,?,?,'reserved',NULL,NULL,?,?)"
-      ).bind(id, ownerHash, slotKey, startUtc, endUtc, now, now).run();
+        "INSERT INTO bookings(id,owner_hash,slot_key,start_utc,end_utc,status,calendar_event_id,meet_link,created_at,updated_at,inquiry_id,contact_id,timezone,idempotency_key) VALUES(?,?,?,?,?,'reserved',NULL,NULL,?,?,?,?,?,?)"
+      ).bind(id, ownerHash, slotKey, startUtc, endUtc, now, now, inquiryId, contactId, timezone, idempotencyKey).run();
       return { ok: true, id };
     } catch (error) {
-      if (String(error?.message || error).includes('UNIQUE')) return { ok: false, code: 'SLOT_TAKEN' };
+      const message = String(error?.message || error);
+      if (message.includes('idempotency')) return { ok: false, code: 'IDEMPOTENCY_TAKEN' };
+      if (message.includes('UNIQUE')) return { ok: false, code: 'SLOT_TAKEN' };
       throw error;
     }
   }
 
   async function cancelBooking({ id, ownerHash, now }) {
     const result = await d1.prepare(
-      "UPDATE bookings SET status='cancelled', updated_at=? WHERE id=? AND owner_hash=? AND status='reserved'"
+      "UPDATE bookings SET status='cancelled', updated_at=? WHERE id=? AND owner_hash=? AND status!='cancelled'"
     ).bind(now, id, ownerHash).run();
     return (result.meta?.changes || 0) > 0;
   }
@@ -219,6 +221,139 @@ export function createDb(d1) {
     `).bind(chunkId, title || null, text || null, JSON.stringify(tags || []), status || 'draft', now).run();
   }
 
+  async function createContact({ id, ownerHash, fullName, email = null, phone = null, organization = null, role = null, locale = 'en', timezone = null, source = 'portfolio', consentStatus = 'none', now }) {
+    await d1.prepare(
+      'INSERT INTO contacts(id,owner_hash,full_name,email,phone,organization,role,locale,timezone,source,consent_status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    ).bind(id, ownerHash, fullName, email, phone, organization, role, locale, timezone, source, consentStatus, now, now).run();
+    return getContact(id);
+  }
+
+  async function getContact(id) {
+    return d1.prepare('SELECT * FROM contacts WHERE id=?').bind(id).first();
+  }
+
+  async function findContactByEmail(ownerHash, email) {
+    if (!email) return null;
+    return d1.prepare('SELECT * FROM contacts WHERE owner_hash=? AND lower(email)=lower(?) ORDER BY created_at DESC LIMIT 1').bind(ownerHash, email).first();
+  }
+
+  async function createConsent({ id, contactId, scope, status = 'granted', capturedAt, expiresAt = null, source = 'portfolio', evidence = null }) {
+    await d1.prepare(
+      'INSERT INTO consents(id,contact_id,scope,status,captured_at,expires_at,source,evidence) VALUES(?,?,?,?,?,?,?,?)'
+    ).bind(id, contactId, scope, status, capturedAt, expiresAt, source, evidence).run();
+  }
+
+  async function listConsents(contactId) {
+    const result = await d1.prepare('SELECT * FROM consents WHERE contact_id=? ORDER BY captured_at DESC').bind(contactId).all();
+    return result.results || [];
+  }
+
+  async function createInquiry({ id, ownerHash, contactId, inquiryType = 'general', summary, requestedService = null, budgetRange = null, timeline = null, status = 'new', source = 'portfolio', sourceUrl = null, consentId = null, clientRequestId = null, now }) {
+    await d1.prepare(
+      'INSERT INTO inquiries(id,owner_hash,contact_id,inquiry_type,summary,requested_service,budget_range,timeline,status,source,source_url,consent_id,client_request_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)'
+    ).bind(id, ownerHash, contactId, inquiryType, summary, requestedService, budgetRange, timeline, status, source, sourceUrl, consentId, clientRequestId, now, now).run();
+    return getInquiry(id);
+  }
+
+  async function getInquiry(id) {
+    return d1.prepare('SELECT * FROM inquiries WHERE id=?').bind(id).first();
+  }
+
+  async function findInquiryByClientRequest(ownerHash, clientRequestId) {
+    if (!clientRequestId) return null;
+    return d1.prepare('SELECT * FROM inquiries WHERE owner_hash=? AND client_request_id=? LIMIT 1').bind(ownerHash, clientRequestId).first();
+  }
+
+  async function listInquiries({ ownerHash = null, limit = 50 } = {}) {
+    const result = ownerHash
+      ? await d1.prepare('SELECT * FROM inquiries WHERE owner_hash=? ORDER BY created_at DESC LIMIT ?').bind(ownerHash, limit).all()
+      : await d1.prepare('SELECT * FROM inquiries ORDER BY created_at DESC LIMIT ?').bind(limit).all();
+    return result.results || [];
+  }
+
+  async function getBookingForOwner(id, ownerHash) {
+    return d1.prepare('SELECT * FROM bookings WHERE id=? AND owner_hash=?').bind(id, ownerHash).first();
+  }
+
+  async function findBookingByOwnerIdempotency(ownerHash, idempotencyKey) {
+    if (!idempotencyKey) return null;
+    return d1.prepare('SELECT * FROM bookings WHERE owner_hash=? AND idempotency_key=? LIMIT 1').bind(ownerHash, idempotencyKey).first();
+  }
+
+  async function listOverlappingBookings(startUtc, endUtc) {
+    const result = await d1.prepare(
+      "SELECT * FROM bookings WHERE status IN ('reserved','confirmed','calendar_pending') AND start_utc < ? AND end_utc > ? ORDER BY start_utc"
+    ).bind(endUtc, startUtc).all();
+    return result.results || [];
+  }
+
+  async function listBookingsForOwner(ownerHash, limit = 50) {
+    const result = await d1.prepare('SELECT * FROM bookings WHERE owner_hash=? ORDER BY start_utc DESC LIMIT ?').bind(ownerHash, limit).all();
+    return result.results || [];
+  }
+
+  async function updateBookingCalendar({ id, status, calendarEventId = null, meetLink = null, statusDetail = null, now }) {
+    await d1.prepare(
+      'UPDATE bookings SET status=?, calendar_event_id=?, meet_link=?, status_detail=?, updated_at=? WHERE id=?'
+    ).bind(status, calendarEventId, meetLink, statusDetail, now, id).run();
+    return d1.prepare('SELECT * FROM bookings WHERE id=?').bind(id).first();
+  }
+
+  async function rescheduleBooking({ id, startUtc, endUtc, slotKey, timezone, calendarEventId = null, meetLink = null, status = 'reserved', statusDetail = null, now }) {
+    try {
+      await d1.prepare(
+        'UPDATE bookings SET start_utc=?, end_utc=?, slot_key=?, timezone=?, calendar_event_id=?, meet_link=?, status=?, status_detail=?, updated_at=? WHERE id=?'
+      ).bind(startUtc, endUtc, slotKey, timezone, calendarEventId, meetLink, status, statusDetail, now, id).run();
+      return { ok: true, booking: await d1.prepare('SELECT * FROM bookings WHERE id=?').bind(id).first() };
+    } catch (error) {
+      if (String(error?.message || error).includes('UNIQUE')) return { ok: false, code: 'SLOT_TAKEN' };
+      throw error;
+    }
+  }
+
+  async function addEmailJob({ id, kind, toEmail, subject, body, status = 'queued', provider = 'resend', inquiryId = null, appointmentId = null, now }) {
+    await d1.prepare(
+      'INSERT INTO email_jobs(id,kind,to_email,subject,body,status,provider,inquiry_id,appointment_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)'
+    ).bind(id, kind, toEmail, subject, body, status, provider, inquiryId, appointmentId, now, now).run();
+  }
+
+  async function listEmailJobs(limit = 50) {
+    const result = await d1.prepare('SELECT * FROM email_jobs ORDER BY created_at DESC LIMIT ?').bind(limit).all();
+    return result.results || [];
+  }
+
+  async function updateEmailJob({ id, status, sentAt = null, error = null, now }) {
+    await d1.prepare('UPDATE email_jobs SET status=?, sent_at=?, error=?, updated_at=? WHERE id=?').bind(status, sentAt, error, now, id).run();
+  }
+
+  async function createLiveTokenReservation({ id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt }) {
+    await d1.prepare(
+      "INSERT INTO live_tokens(id,owner_hash,session_id,reserved_usd_micros,status,created_at,expires_at) VALUES(?,?,?,?,'held',?,?)"
+    ).bind(id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt).run();
+  }
+
+  async function getLiveTokenReservation(id) {
+    return d1.prepare('SELECT * FROM live_tokens WHERE id=?').bind(id).first();
+  }
+
+  async function reconcileLiveToken({ id, reportedUsdMicros, now }) {
+    const result = await d1.prepare(
+      "UPDATE live_tokens SET status='reconciled', reported_usd_micros=?, reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(reportedUsdMicros, now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function failLiveToken({ id, now }) {
+    await d1.prepare("UPDATE live_tokens SET status='failed', reconciled_at=? WHERE id=? AND status='held'").bind(now, id).run();
+  }
+
+  async function sumHeldLiveTokens({ since = 0, now } = {}) {
+    const row = await d1.prepare(
+      "SELECT COALESCE(SUM(reserved_usd_micros),0) AS total FROM live_tokens WHERE status='held' AND created_at>=? AND expires_at>?"
+    ).bind(since, now).first();
+    return Number(row?.total || 0);
+  }
+
   async function cleanup({ now, rateWindowMs }) {
     const expiredSessions = await deleteExpiredSessions(now);
     const staleRates = await d1.prepare('DELETE FROM rate_limits WHERE window_start < ?').bind(now - rateWindowMs).run();
@@ -253,7 +388,30 @@ export function createDb(d1) {
     logEvent,
     listOpsEvents,
     claimAction,
+    createContact,
+    getContact,
+    findContactByEmail,
+    createConsent,
+    listConsents,
+    createInquiry,
+    getInquiry,
+    findInquiryByClientRequest,
+    listInquiries,
     createBooking,
+    getBookingForOwner,
+    findBookingByOwnerIdempotency,
+    listOverlappingBookings,
+    listBookingsForOwner,
+    updateBookingCalendar,
+    rescheduleBooking,
+    addEmailJob,
+    listEmailJobs,
+    updateEmailJob,
+    createLiveTokenReservation,
+    getLiveTokenReservation,
+    reconcileLiveToken,
+    failLiveToken,
+    sumHeldLiveTokens,
     cancelBooking,
     listBookings,
     audit,

@@ -55,7 +55,7 @@ export function createCalendarAdapter({ auth, calendarId }) {
 
   async function cancel(id) {
     const response = await auth.request(`${base}/events/${encodeURIComponent(id)}?sendUpdates=none`, { method: 'DELETE' });
-    if (response.status !== 204 && response.status !== 200) {
+    if (![200, 204, 404, 410].includes(response.status)) {
       throw new Error(`Calendar cancel failed with HTTP ${response.status}`);
     }
     return true;

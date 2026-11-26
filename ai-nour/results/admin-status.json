@@ -1,6 +1,6 @@
 {
   "ok": true,
-  "version": "phase1-0.1.0",
+  "version": "phase2-0.2.0",
   "environment": "development",
   "models": {
     "text": "gemini-flash-lite-latest",
@@ -20,23 +20,26 @@
     "persona": "You are AI Nour, a concise, warm, commercially minded representation of Nour Chkair. Speak in the first person about yourself and in the third person about Nour. Be accurate, grounded, and never invent experience or projects. Keep spoken answers to one or two sentences and text answers focused. Respond in the visitor's language."
   },
   "budget": {
-    "dailyUsdMicros": 34559,
-    "cumulativeUsdMicros": 34559,
+    "dailyUsdMicros": 276322,
+    "cumulativeUsdMicros": 276322,
+    "dailySpentUsdMicros": 196322,
+    "cumulativeSpentUsdMicros": 196322,
+    "heldLiveReservationsUsdMicros": 80000,
     "dailyCapUsdMicros": 1000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 965441,
-    "cumulativeRemainingUsdMicros": 6965441,
+    "dailyRemainingUsdMicros": 723678,
+    "cumulativeRemainingUsdMicros": 6723678,
     "allowed": true
   },
   "corpus": {
     "version": 1,
-    "contentHash": "28b5ce19a31bd891",
-    "generatedAt": "2026-11-26T19:38:30.043Z",
-    "chunks": 105
+    "contentHash": "5fce1ae962dac4a2",
+    "generatedAt": "2026-11-26T20:02:21.120Z",
+    "chunks": 107
   },
   "counts": {
-    "sessions": 7,
-    "recentEvents": 8
+    "sessions": 4,
+    "recentEvents": 4
   },
   "google": {
     "configured": true,

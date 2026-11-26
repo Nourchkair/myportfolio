@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-11-26T20:27:00Z",
+  "mode": "mock-providers/local-integrated-portfolio",
+  "checks": {
+    "ambientToolbarPresence": true,
+    "compactConversation": true,
+    "expandedConversation": true,
+    "portfolioNavigation": true,
+    "activeVoiceVisualState": true,
+    "mobileBottomSheet": true,
+    "manualNavigationPriority": true,
+    "consoleErrors": 0
+  },
+  "navigation": {
+    "request": "Open the Safiy project.",
+    "serverAction": "openProject: safiy -> /projects/safiy",
+    "result": "NourOS opened the Safiy project; panel context changed to Safiy / overview",
+    "manualNavigationBehavior": "Panel collapses; active voice stops on manual route change"
+  },
+  "voice": {
+    "demoOnly": true,
+    "realMicrophoneStarted": false,
+    "statesShown": ["idle", "speaking"],
+    "disclosure": "AI representation, not Nour"
+  },
+  "screenshots": [
+    "docs/screenshots/phase2-companion-ambient.jpg",
+    "docs/screenshots/phase2-companion-compact.png",
+    "docs/screenshots/phase2-companion-expanded.png",
+    "docs/screenshots/phase2-companion-navigation.jpg",
+    "docs/screenshots/phase2-companion-voice.png",
+    "docs/screenshots/phase2-companion-mobile.png"
+  ],
+  "notes": "The integrated UI was exercised against the mock Worker on 127.0.0.1:8792 with the test-only access key. Real microphone, Bluetooth and device audio still require the human test checklist."
+}
