@@ -1,1 +1,1 @@
-import './app/immersive.js';
+import './app/immersive.js?v=4';

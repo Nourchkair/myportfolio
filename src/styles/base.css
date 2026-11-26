@@ -189,7 +189,26 @@
   /* ---------- intro ---------- */
   .enter-screen{position:fixed;inset:0;z-index:300;overflow:hidden;background:transparent;pointer-events:auto;transition:opacity 1s ease,visibility 1s ease}
   .enter-screen.done{opacity:0;visibility:hidden;pointer-events:none}
-  .intro-hud{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .intro-hud{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;transition:opacity .65s ease}
+  .intro-welcome{
+    position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:7vw;
+    opacity:0;pointer-events:none;transition:opacity .75s ease;
+    background:radial-gradient(ellipse at 50% 50%,rgba(4,9,13,.32),transparent 64%)
+  }
+  body.intro-greeting .intro-welcome{opacity:1}
+  body.intro-greeting .intro-hud{opacity:0}
+  .intro-welcome-inner{animation:introWelcomeFloat 5s ease-in-out infinite;will-change:transform}
+  .intro-welcome-text{
+    margin:0;max-width:16ch;font-size:clamp(44px,8.5vw,104px);line-height:.92;
+    letter-spacing:-.06em;font-weight:650;color:#fff;text-align:center;
+    text-shadow:0 22px 80px rgba(0,0,0,.62),0 2px 10px rgba(0,0,0,.4)
+  }
+  .intro-welcome-text em{font-style:normal;color:var(--accent)}
+  @keyframes introWelcomeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @media(max-width:700px){
+    .intro-welcome{padding:8vw 6vw}
+    .intro-welcome-text{font-size:clamp(32px,9.4vw,48px)}
+  }
   .intro-grid{
     position:absolute;inset:-10%;
     background-image:

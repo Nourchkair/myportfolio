@@ -101,7 +101,7 @@ for(const file of buildFiles) check(`build file exists: ${file}`,exists(file));
 const indexHTML=read('index.html');
 const readHTML=read('read.html');
 const redirectHTML=read('spatial2.html');
-check('index uses module entry',indexHTML.includes('<script type="module" src="src/main.js"></script>'));
+check('index uses module entry',/<script type="module" src="src\/main\.js(?:\?[^"]*)?"><\/script>/.test(indexHTML));
 check('index has no inline simple view',!indexHTML.includes('simpleView')&&!indexHTML.includes('simple-view'));
 check('index has no legacy project system',!indexHTML.includes('projectSystem')&&!indexHTML.includes('data-project-stage'));
 check('index has favicon',indexHTML.includes('rel="icon"')&&indexHTML.includes('favicon.svg'));
