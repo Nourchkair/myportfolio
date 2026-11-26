@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-label="Business Knowledge Assistant conceptual workflow illustration">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1200" role="img" aria-label="B.R.A.I.N. — Business Knowledge Assistant conceptual workflow illustration">
   <defs>
     <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2a2140"/><stop offset=".62" stop-color="#11111d"/><stop offset="1" stop-color="#080d11"/></linearGradient>
     <radialGradient id="glow" cx=".76" cy=".2" r=".55"><stop offset="0" stop-color="#d9c6ff" stop-opacity=".34"/><stop offset="1" stop-color="#d9c6ff" stop-opacity="0"/></radialGradient>
@@ -14,7 +14,8 @@
   <g font-family="SFMono-Regular, Menlo, monospace" font-size="16" letter-spacing="2.2" fill="rgba(255,255,255,.42)">
     <text x="72" y="160">H2OPS BRAIN</text>
   </g>
-  <text x="72" y="240" fill="#f7fbfc" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="70" font-weight="650" letter-spacing="-3">Business Knowledge</text><text x="72" y="318" fill="#f7fbfc" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="70" font-weight="650" letter-spacing="-3">Assistant</text>
+  <text x="72" y="270" fill="#f7fbfc" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="76" font-weight="650" letter-spacing="-3">B.R.A.I.N.</text>
+  <text x="72" y="330" fill="rgba(247,251,252,.62)" font-family="Inter, -apple-system, BlinkMacSystemFont, sans-serif" font-size="24" letter-spacing=".2">Business Knowledge Assistant</text>
   <text x="72" y="470" fill="rgba(255,255,255,.55)" font-family="Inter, -apple-system, sans-serif" font-size="24">Library → Source</text>
   <g><path d="M204 812 H246 M414 812 H456" stroke="rgba(255,255,255,.28)" stroke-width="2" stroke-dasharray="5 6"/><g>
           <rect x="36" y="760" width="168" height="104" rx="20" fill="rgba(255,255,255,.055)" stroke="rgba(255,255,255,.18)"/>

@@ -5112,7 +5112,7 @@
   }
 
   /* B.R.A.I.N. is the densest overview: stack before the three columns become cramped */
-  @media(min-width:1021px) and (max-width:1399px),(min-width:1021px) and (max-height:879px){
+  @media(min-width:1021px) and (max-width:1240px){
     #project[data-project="knowledge"].project-has-overview .pw-canvas{
       overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px;perspective:none!important
     }
@@ -5140,7 +5140,7 @@
     #project[data-project="knowledge"].project-has-overview .pw-project-frame{margin:0 auto}
   }
   /* three-column B.R.A.I.N. overview uses a slightly tighter type rhythm */
-  @media(min-width:1400px){
+  @media(min-width:1241px){
     #project[data-project="knowledge"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
     #project[data-project="knowledge"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
     #project[data-project="knowledge"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
@@ -5155,6 +5155,22 @@
   }
   @media(max-width:1020px){
     #project[data-project="knowledge"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
+  }
+
+  /* B.R.A.I.N. keeps the same three-column overview on shorter desktops; the canvas scrolls instead of stacking. */
+  @media(min-width:1241px) and (max-width:1399px),(min-width:1241px) and (max-height:879px){
+    #project[data-project="knowledge"].project-has-overview .pw-canvas{
+      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
+    }
+    #project[data-project="knowledge"].project-has-overview .pw-stage{
+      height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
+    }
+    #project[data-project="knowledge"].project-has-overview .pw-middle{height:auto!important}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-what,
+    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges{
+      flex:none!important;height:auto!important;min-height:0
+    }
+    #project[data-project="knowledge"].project-has-overview .pw-overview-body{overflow:visible!important}
   }
 </style>
 </head>
@@ -5775,7 +5791,7 @@ const PROJECTS_ALL=[
     id:'knowledge', num:'04', title:'B.R.A.I.N.', subtitle:'Business Knowledge Assistant', project:'H2Ops Brain', category:'AI Solutions',
     description:'An organizational knowledge system that transforms business documentation, operating procedures and institutional knowledge into accessible, AI-powered business intelligence.',
     capabilities:['Knowledge Management','Retrieval-Augmented Generation (RAG)','Enterprise AI Adoption'],
-    cover:'assets/cards/knowledge.svg?v=2',
+    cover:'assets/cards/knowledge.svg?v=3',
     coverAlt:'Illustration of an operating knowledge library paired with a retrieval assistant and source evidence.',
     overview:{
       whatItIs:[
@@ -7726,7 +7742,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&(window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240)||(active.id==='knowledge'&&(window.innerWidth<=1399||window.innerHeight<=879)))) return;
+  if(active&&active.overview&&(active.id==='knowledge'||window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240))) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;
