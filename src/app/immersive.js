@@ -2030,7 +2030,6 @@ function enterWorld(){
   const finish=()=>{
     entered=true;
     if(screen) screen.classList.add('done');
-    document.body.classList.remove('intro-charge');
     document.body.classList.add('intro-reveal','ready');
     syncA11y();
     announce('Nour OS ready. Use the arrow keys or the card navigation to explore.');
@@ -2049,7 +2048,6 @@ function enterWorld(){
     finish();
     return;
   }
-  document.body.classList.add('intro-charge');
   setTimeout(()=>{
     document.body.classList.add('intro-greeting');
     announce('Welcome to Nour’s Portfolio');
