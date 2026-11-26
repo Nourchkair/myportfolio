@@ -3489,6 +3489,20 @@
   .ja-conv-out b{font-size:11px;line-height:1.2;font-weight:600;color:rgba(255,255,255,.86)}
   .ja-conv-out i{font-style:normal;font-size:9.3px;color:rgba(255,225,196,.9)}
 
+  .ja-entry-brand{position:absolute;left:0;top:0;font-size:27px;letter-spacing:-.02em;color:rgba(255,255,255,.88)}
+  .ja-entry .ja-foundation-path{inset:54px 0 38px;height:calc(100% - 92px)}
+  .ja-sales{display:flex;flex-direction:column;justify-content:space-between;min-height:204px}
+  .ja-brand--role{font-size:8px;letter-spacing:.18em;color:rgba(255,255,255,.4)}
+  .ja-split-stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:auto;padding-top:18px}
+  .ja-split-stats .ja-stat{margin-top:0;padding-top:0}
+  .ja-split-stats .ja-stat b{font-size:clamp(25px,2.6vw,34px)}
+  .ja-tech-brands{
+    position:absolute;left:0;right:0;bottom:0;display:flex;flex-wrap:wrap;gap:5px;
+    font-family:var(--mono);font-size:6.4px;letter-spacing:.12em;color:rgba(255,255,255,.48)
+  }
+  .ja-tech-brands span{padding:3px 6px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:rgba(10,17,22,.4)}
+  .ja-convergence{padding-top:12px}
+
   @media(min-width:901px){
     .journey-timeline{
       position:sticky;top:0;z-index:4;
@@ -3944,7 +3958,7 @@
   .pro-intro p:last-child{margin-bottom:0}
 
   .pro-timeline{
-    position:relative;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+    position:relative;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));
     padding:18px 0 8px;border-bottom:1px solid rgba(255,255,255,.1)
   }
   .pro-timeline-rail{position:absolute;left:10%;right:10%;top:18px;height:1px;pointer-events:none}
@@ -3971,7 +3985,12 @@
   .pro-step.is-active .pro-step-dot{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px rgba(255,210,161,.13)}
   .pro-step-num{font-family:var(--mono);font-size:7.2px;font-weight:500;letter-spacing:.12em;color:rgba(255,255,255,.38)}
   .pro-step.is-active .pro-step-num{color:var(--accent)}
-  .pro-step-label{max-width:16ch;font-size:10.8px;line-height:1.3;font-weight:600;letter-spacing:-.01em}
+  .pro-step-label{max-width:14ch;font-size:10.4px;line-height:1.28;font-weight:600;letter-spacing:-.01em}
+  .pro-step-period{
+    margin-top:3px;font-family:var(--mono);font-size:6.2px;line-height:1.2;
+    letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.3);white-space:nowrap
+  }
+  .pro-step.is-active .pro-step-period{color:rgba(255,225,194,.62)}
 
   .pro-chapter{padding:22px 0 0;outline:none}
   .pro-chapter:focus-visible{outline:1px solid rgba(255,255,255,.38);outline-offset:4px;border-radius:8px}
@@ -4003,6 +4022,43 @@
     background:rgba(255,255,255,.03);font-size:8.8px;line-height:1.25;letter-spacing:.03em;
     color:rgba(255,255,255,.62)
   }
+  .pro-role-strip{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:16px
+  }
+  .pro-role{
+    display:flex;flex-direction:column;gap:3px;min-width:0;padding:9px 11px;
+    border-left:1px solid rgba(255,210,161,.34);
+    background:linear-gradient(90deg,rgba(255,255,255,.035),transparent 80%)
+  }
+  .pro-role-org{
+    font-family:var(--mono);font-size:6.8px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(255,225,194,.8)
+  }
+  .pro-role-title{font-size:11.6px;line-height:1.3;font-weight:600;letter-spacing:-.005em;color:rgba(255,255,255,.9)}
+  .pro-role-date{font-family:var(--mono);font-size:6.7px;letter-spacing:.06em;color:rgba(255,255,255,.42)}
+  .pro-milestones{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:10px;
+    margin-top:18px;padding-top:15px;border-top:1px solid rgba(255,255,255,.1)
+  }
+  .pro-milestone b{
+    display:block;font-size:clamp(23px,2.15vw,29px);line-height:.96;font-weight:650;
+    letter-spacing:-.055em;color:var(--accent);font-variant-numeric:tabular-nums
+  }
+  .pro-milestone b.is-wide{font-size:18px;letter-spacing:-.025em;line-height:1.1}
+  .pro-milestone span{
+    display:block;margin-top:5px;font-family:var(--mono);font-size:6.8px;line-height:1.45;
+    letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.44)
+  }
+  .pro-direction{
+    margin-top:17px;padding:11px 13px;border-left:2px solid rgba(255,210,161,.58);
+    border-radius:0 10px 10px 0;
+    background:linear-gradient(90deg,rgba(255,210,161,.075),rgba(255,255,255,0) 82%)
+  }
+  .pro-direction span{
+    display:block;font-family:var(--mono);font-size:6.6px;letter-spacing:.13em;
+    text-transform:uppercase;color:rgba(255,225,194,.66)
+  }
+  .pro-direction p{margin:4px 0 0;font-size:13px;line-height:1.55;color:rgba(255,255,255,.8);max-width:60ch}
   .pro-chapter-foot{
     display:flex;align-items:center;justify-content:space-between;gap:12px;
     margin-top:22px;padding-top:16px;border-top:1px solid rgba(255,255,255,.1)
@@ -4027,7 +4083,8 @@
     .pro-tagline{font-size:13.4px}
     .pro-intro p{font-size:13.4px;line-height:1.6}
     .pro-step{padding:24px 4px 8px}
-    .pro-step-label{font-size:10.1px;max-width:13ch}
+    .pro-step-label{font-size:9.6px;max-width:12ch}
+    .pro-step-period{font-size:5.8px;letter-spacing:.03em}
     .pro-chapter h2{font-size:29px}
     .pro-chapter-grid{grid-template-columns:1fr;gap:18px}
     .pro-side{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start}
@@ -4044,6 +4101,9 @@
     .pro-step-dot{left:9px;top:50%;transform:translate(-50%,-50%)}
     .pro-step-num{flex:none}
     .pro-step-label{max-width:none;font-size:10.8px;line-height:1.25}
+    .pro-step-period{margin:0 0 0 auto;padding-left:8px;font-size:5.9px;text-align:right}
+    .pro-role-strip{grid-template-columns:1fr}
+    .pro-milestones{grid-template-columns:repeat(2,minmax(0,1fr))}
     .professional-view--merged{padding:18px 18px 20px}
     .pro-section-head h1{font-size:31px}
     .pro-chapter{padding-top:18px}
@@ -4074,6 +4134,8 @@
     .pro-timeline{padding:6px 0 8px}
     .pro-step{min-height:38px;padding:7px 6px 7px 23px}
     .pro-step-label{font-size:10px}
+    .pro-milestone b{font-size:22px}
+    .pro-milestone b.is-wide{font-size:16px}
   }
 
   button.tb-brand{
@@ -4783,38 +4845,25 @@
   .pw-flow-crm-note{top:545px}
 
   /* ============================================================
-     CUSTOMER ACQUISITION — business impact case study
+     PROJECT OVERVIEW — MY CONTRIBUTION
      ============================================================ */
-  .pw-overview-impact{margin-top:20px;padding-top:17px;border-top:1px solid rgba(255,255,255,.14)}
-  .pw-impact-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;row-gap:6px;margin-bottom:10px}
-  .pw-impact-head h3{margin:0;font-size:19px;line-height:1.1;letter-spacing:-.035em;font-weight:650;color:#fff}
-  .pw-impact-tag{
-    flex:none;padding:3px 7px;border:1px solid rgba(255,210,161,.26);border-radius:999px;
-    background:rgba(255,210,161,.06);font-family:var(--mono);font-size:6.2px;letter-spacing:.1em;
-    text-transform:uppercase;color:rgba(255,225,194,.72);white-space:nowrap
+  .pw-overview-contribution{margin-top:20px;padding-top:17px;border-top:1px solid rgba(255,255,255,.14)}
+  .pw-contribution-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+  .pw-contribution-head h3{margin:0;font-size:19px;line-height:1.1;letter-spacing:-.035em;font-weight:650;color:#fff}
+  .pw-contribution-lead{margin:0 0 13px;font-size:12.2px;line-height:1.5;color:rgba(255,255,255,.78)}
+  .pw-contribution-blocks{display:flex;flex-direction:column;gap:10px}
+  .pw-contribution-block{display:grid;grid-template-columns:82px minmax(0,1fr);gap:10px;align-items:start}
+  .pw-contribution-block span{
+    padding-top:2px;font-family:var(--mono);font-size:6.5px;line-height:1.5;letter-spacing:.1em;
+    text-transform:uppercase;color:rgba(255,210,161,.72)
   }
-  .pw-impact-case b{display:block;font-size:13.4px;line-height:1.3;font-weight:650;letter-spacing:.005em;color:rgba(255,255,255,.86)}
-  .pw-impact-case p{margin:5px 0 0;font-size:13.2px;line-height:1.52;color:rgba(255,255,255,.6)}
-  .pw-impact-grid{
-    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));margin:14px 0 0;padding:0;
-    border-top:1px solid rgba(255,255,255,.12);border-bottom:1px solid rgba(255,255,255,.12)
+  .pw-contribution-block p{margin:0;font-size:11.4px;line-height:1.5;color:rgba(255,255,255,.62)}
+  @media(max-width:1180px){
+    .pw-contribution-block{grid-template-columns:1fr;gap:3px}
   }
-  .pw-impact-metric{min-width:0;padding:12px 13px 12px 0}
-  .pw-impact-metric:nth-child(even){padding-left:14px;border-left:1px solid rgba(255,255,255,.1)}
-  .pw-impact-metric:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.1)}
-  .pw-impact-metric dt{
-    font-size:clamp(25px,2.2vw,31px);line-height:.95;font-weight:650;letter-spacing:-.05em;
-    color:var(--accent);white-space:nowrap;font-variant-numeric:tabular-nums
-  }
-  .pw-impact-metric dd{margin:5px 0 0;font-size:9.8px;line-height:1.38;color:rgba(255,255,255,.52);overflow-wrap:break-word}
   @media(max-width:420px){
-    .pw-overview-impact{margin-top:17px;padding-top:14px}
-    .pw-impact-head h3{font-size:18px}
-    .pw-impact-metric{padding:11px 10px 11px 0}
-    .pw-impact-metric:nth-child(even){padding-left:11px}
-    .pw-impact-metric dt{font-size:25px}
-    .pw-impact-metric dd{font-size:9.2px}
-    .pw-impact-case p{font-size:13px}
+    .pw-overview-contribution{margin-top:17px;padding-top:14px}
+    .pw-contribution-head h3{font-size:18px}
   }
 
   /* ============================================================
@@ -4874,33 +4923,6 @@
   }
 
   /* ============================================================
-     SERVICE DISPATCH — qualitative business impact
-     ============================================================ */
-  .pw-impact-achievement{min-width:0;padding:13px 13px 13px 0;display:flex;flex-direction:column}
-  .pw-impact-achievement:nth-child(even){padding-left:14px;border-left:1px solid rgba(255,255,255,.1)}
-  .pw-impact-achievement:nth-child(-n+2){border-bottom:1px solid rgba(255,255,255,.1)}
-  .pw-impact-achievement-head{display:flex;align-items:flex-start;gap:9px;margin-bottom:7px}
-  .pw-impact-achievement-icon{
-    display:grid;place-items:center;width:27px;height:27px;flex:none;border:1px solid rgba(255,210,161,.28);
-    border-radius:9px;background:rgba(255,255,255,.05);color:var(--accent);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.12)
-  }
-  .pw-impact-achievement-icon svg{width:17px;height:17px}
-  .pw-impact-achievement-head b{
-    padding-top:3px;font-size:13px;line-height:1.24;font-weight:650;letter-spacing:-.012em;color:rgba(255,255,255,.88)
-  }
-  .pw-impact-achievement p{margin:0;font-size:11.6px;line-height:1.46;color:rgba(255,255,255,.55);overflow-wrap:break-word}
-  @media(max-width:420px){
-    .pw-impact-achievement{padding:11px 10px 11px 0}
-    .pw-impact-achievement:nth-child(even){padding-left:11px}
-    .pw-impact-achievement-icon{width:25px;height:25px;border-radius:8px}
-    .pw-impact-achievement-icon svg{width:16px;height:16px}
-    .pw-impact-achievement-head{gap:7px}
-    .pw-impact-achievement-head b{font-size:12px;padding-top:2px}
-    .pw-impact-achievement p{font-size:10.8px}
-  }
-
-  /* ============================================================
      AI CUSTOMER COMMUNICATIONS — parallel channel process
      ============================================================ */
   .pw-flow-link--entry{stroke:rgba(255,255,255,.3)}
@@ -4937,14 +4959,6 @@
     background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
   }
 
-  /* ============================================================
-     AI CUSTOMER COMMUNICATIONS — intended business impact
-     ============================================================ */
-  .pw-impact-intent{
-    display:inline-block;margin-top:9px;padding:3px 8px;border:1px solid rgba(255,210,161,.24);border-radius:999px;
-    background:rgba(255,210,161,.055);font-family:var(--mono);font-size:6.5px;letter-spacing:.1em;
-    text-transform:uppercase;color:rgba(255,225,194,.72)
-  }
   /* ============================================================
      B.R.A.I.N. — business knowledge overview and flow
      ============================================================ */
@@ -5352,16 +5366,12 @@ const PROJECTS_ALL=[
         'More consistent follow-up and opportunity management.',
         'A more scalable customer acquisition process.'
       ],
-      impact:{
-        heading:'Business impact',
-        tag:'Anonymized case study',
-        client:'Service Referral Company',
-        description:'Implemented to reduce prospecting costs, expand outreach capacity and improve customer acquisition.',
-        metrics:[
-          {value:'~80%',label:'reduction in prospect research time'},
-          {value:'~60%',label:'reduction in prospect research costs'},
-          {value:'~4×',label:'prospecting capacity'},
-          {value:'~30%',label:'personalized demo open rate'}
+      contribution:{
+        lead:'I worked across the commercial logic and the demo/follow-up layer, from defining who to target to connecting demo engagement with the next sales action.',
+        blocks:[
+          {label:'Problem',text:'Generic outreach made it difficult for a prospect to see how the offer applied to their business, while the team needed replies and bookings to drive the next step.'},
+          {label:'What I did',text:'Defined the target segments, qualification criteria and follow-up rules used to prioritize prospects. Built parts of the H2Ops demo follow-up engine, including inbox sync and booking detection, and set up the contractor demo interface.'},
+          {label:'Scope',text:'I worked across strategy and implementation within a wider H2Ops acquisition workflow that also included lead sourcing, enrichment and outreach.'}
         ]
       },
       cta:'Understand how it works'
@@ -5452,16 +5462,12 @@ const PROJECTS_ALL=[
         'More consistent customer and contractor experiences.',
         'A more scalable service delivery model.'
       ],
-      impact:{
-        heading:'Business impact',
-        tag:'Anonymized case study',
-        client:'Service Referral Company',
-        description:'Implemented to centralize service operations and streamline coordination between customers and contractors.',
-        achievements:[
-          {icon:'layers',title:'Centralized operations',description:'Customer requests, contractor profiles and service coverage managed within one system.'},
-          {icon:'message',title:'Automated communication',description:'Streamlined contractor notifications, responses and booking confirmations.'},
-          {icon:'link',title:'Reduced manual coordination',description:'Simplified contractor matching and repetitive administrative tasks.'},
-          {icon:'eye',title:'Operational visibility',description:'Improved tracking of requests, contractor readiness and booking progression.'}
+      contribution:{
+        lead:'I worked on the front door of the dispatch process: how a service request enters the system and how the customer receives a reference.',
+        blocks:[
+          {label:'Problem',text:'A request creates an expectation, but dispatch can only fulfil it when coverage, contractor readiness and availability line up.'},
+          {label:'What I did',text:'Built and refined the public intake flow: which request details dispatch receives, how the request is validated, and how the customer receives a confirmation reference.'},
+          {label:'Scope',text:'I worked on the intake-to-queue handoff; coverage, contractor activation and offer/confirmation sat within the wider Dispatch system.'}
         ]
       },
       cta:'Understand how it works'
@@ -5559,17 +5565,12 @@ const PROJECTS_ALL=[
         'More efficient appointment management.',
         'Increased communication capacity without proportional staffing increases.'
       ],
-      impact:{
-        heading:'Business impact',
-        tag:'Anonymized case study',
-        client:'Service-Based Business',
-        description:'Designed to streamline customer communications, reduce administrative workload and improve responsiveness.',
-        intent:'Intended benefits · pending confirmation',
-        achievements:[
-          {icon:'clock',title:'Extended availability',description:'Customer interactions outside regular business hours.'},
-          {icon:'message',title:'Reduced manual communication',description:'Automated routine conversations through AI voice and SMS agents.'},
-          {icon:'calendar',title:'Automated appointment management',description:'Streamlined booking, rescheduling and cancellations.'},
-          {icon:'repeat',title:'Customer reactivation',description:'Re-engagement of inactive prospects within existing customer databases.'}
+      contribution:{
+        lead:'I led the project end-to-end, from the initial communication problem through planning, implementation, testing and release.',
+        blocks:[
+          {label:'Problem',text:'Slow or inconsistent responses were losing inquiries, while booking commitments needed to respect service duration and calendar availability.'},
+          {label:'What I did',text:'Defined the inquiry triage and appointment rules: how inquiries were captured, prioritized and routed, and when a voice or SMS response could offer or change a time. Built and tested the AI voice and SMS workflows, including booking, rescheduling and cancellation paths, then prepared the system for release.'},
+          {label:'Scope',text:'The voice, SMS and reactivation examples were separate workflows within one communication system; I owned the project from idea through shipping.'}
         ]
       },
       cta:'Understand how it works'
@@ -5692,16 +5693,12 @@ const PROJECTS_ALL=[
         'Company-specific AI assistance.',
         'Better preservation of institutional knowledge.'
       ],
-      impact:{
-        heading:'Business impact',
-        tag:'Anonymized case study',
-        client:'Service Referral Company',
-        description:'Designed to centralize organizational knowledge and make internal business information more accessible.',
-        achievements:[
-          {icon:'layers',title:'Centralized business knowledge',description:'Organized operating procedures, business strategies and internal documentation.'},
-          {icon:'search',title:'Intelligent information access',description:'Prototyped AI-assisted retrieval of relevant business knowledge.'},
-          {icon:'clipboard',title:'Operational standardization',description:'Structured playbooks and procedures to support consistent execution.'},
-          {icon:'book',title:'Knowledge preservation',description:'Documented business decisions, established practices and organizational experience.'}
+      contribution:{
+        lead:'I worked across the knowledge structure and the assistant experience, from defining how guidance was organized to building onboarding, chat, playbooks and organizational memory.',
+        blocks:[
+          {label:'Problem',text:'Knowledge was scattered across documents and platforms, slowing onboarding and making routine answers depend on whoever was available.'},
+          {label:'What I did',text:'Defined the operating-library structure and document-access boundaries for procedures, decisions and playbooks. Implemented the assistant’s onboarding and chat experience, including the organization-scoped path that retrieved available documents and memory, and added playbook and organizational-memory features.'},
+          {label:'Scope',text:'The operating library and retrieval prototype remained separate systems; I worked across their knowledge structure and the assistant experience.'}
         ]
       },
       cta:'Understand how it works'
@@ -5791,6 +5788,14 @@ const PROJECTS_ALL=[
         'Reduced application switching.',
         'Greater control over sensitive information.'
       ],
+      contribution:{
+        lead:'I worked on the knowledge and release layer of Safiy, building on the open-source Meeting Transcriber project.',
+        blocks:[
+          {label:'Problem',text:'Meeting context is easy to lose, but uploading recordings can create privacy and adoption barriers.'},
+          {label:'What I did',text:'Added Knowledge Bank imports, improved retrieval indexing and prepared beta releases.'},
+          {label:'Scope',text:'I worked within a local-first direction — recording and transcription on the Mac by default, with connected services treated as explicit choices. The broader assistant, connected actions and suggested tasks extend beyond the features I built.'}
+        ]
+      },
       cta:'Understand how it works'
     },
     flow:{
@@ -6052,7 +6057,7 @@ function artHTML(item){
         <circle cx="200" cy="300" r="130" opacity=".05"/>
       </svg>
       <span class="journey-card-word" aria-hidden="true">JOURNEY</span>
-      <span class="journey-card-meta" aria-hidden="true">05 Chapters · 2026</span>
+      <span class="journey-card-meta" aria-hidden="true">06 Chapters · 2026</span>
       <div class="art-wash"></div><div class="art-grid"></div><div class="art-tint"></div>
     </div>`;
   }
@@ -6067,7 +6072,7 @@ function bodyHTML(item){
   if(item.type==='journey'){
     return `<div class="card-kicker">Professional / My Journey</div>
       <h2>My Journey.</h2>
-      <p class="card-desc">Experience, capabilities and direction.</p>
+      <p class="card-desc">A career across customers, commerce and systems.</p>
       <div class="card-actions"><button class="cta" data-journey>Explore my journey <span aria-hidden="true">↗</span></button></div>`;
   }
   if(item.type==='profile'){
@@ -6412,111 +6417,165 @@ function bindAboutMeWorkspace(){
 }
 
 const PROFESSIONAL_INTRO=[
-  "My professional journey has been shaped by a combination of practical experience, academic exploration and a growing interest in the relationship between business and technology.",
-  "Rather than following a single predefined career path, I've developed capabilities across different disciplines that increasingly complement one another.",
-  "Today, my focus is on understanding how businesses operate, how people make decisions and how technology can create commercial opportunities."
+  "My journey began on a retail floor and moved through commercial sales into business systems and applied AI. Each stage added a capability: understanding customers, reading performance, structuring problems and building the systems that support them.",
+  "Today I work where commercial judgment, strategy and technology meet."
 ];
 const PROFESSIONAL_CHAPTERS=[
   {
-    id:'foundations', num:'01', label:'Foundations', title:'Professional foundations', visual:'foundations',
+    id:'entry', num:'01', label:'Entering', title:'Entering the workforce', visual:'entry', period:'2022–2023',
     paragraphs:[
-      "My professional development began with entering the workforce and gaining firsthand experience in responsibility, independence and working with others.",
-      "Through my early employment experiences, I developed discipline, adaptability and confidence in unfamiliar situations. Working with different personalities and environments taught me the importance of communication, accountability and taking ownership of my responsibilities.",
-      "Over time, I discovered that some of my greatest strengths lie in understanding people, adapting to changing circumstances and approaching challenges with initiative.",
-      "These experiences established the foundations of how I work today. I value reliability, clear communication and the ability to contribute meaningfully, regardless of the environment I'm operating in."
+      "My retail chapter began at H&M in 2022. The role taught me how much of work is about consistency: showing up, reading a room and taking responsibility for a customer’s experience.",
+      "I learned to ask better questions, handle a busy floor and adapt to people who needed different things from me. Those lessons became the base for everything that followed."
     ],
+    roles:[
+      {org:'H&M', role:'Sales Advisor · Ottawa', period:'03/2022–02/2024'},
+      {org:'Longfields-Davidson Heights Secondary School', role:'High School Diploma', period:'2023'}
+    ],
+    detailsTitle:'At a glance',
+    details:['First retail role','Customer service and floor operations','High school completed in 2023'],
     capabilitiesLabel:'Core capabilities',
-    capabilities:["Communication","Adaptability","Accountability","Initiative","Professional independence"]
+    capabilities:['Customer service','Communication','Reliability','Adaptability','Product knowledge'],
+    direction:'Commercial performance starts with understanding people.'
   },
   {
-    id:'business', num:'02', label:'Business & Sales', title:'Business and commercial experience', visual:'commercial',
+    id:'sales', num:'02', label:'Sales & Leadership', title:'Discovering sales and leadership', visual:'sales', period:'2023–2024',
     paragraphs:[
-      "My experience in sales introduced me to the commercial world and shaped my understanding of business through direct interaction with customers.",
-      "Through my time at H&M, Browns and MPN Capital Markets, I gained experience across different commercial environments, including retail, customer relationships, outbound sales and business development.",
-      "At H&M, I progressed into a Sales Coach position, supporting colleagues and contributing to team performance. At Browns, I generated over $400,000 in sales in less than a year, developing a stronger understanding of customer behaviour, negotiation and commercial performance.",
-      "These experiences encouraged me to look beyond individual transactions. I became increasingly interested in how businesses identify opportunities, position themselves, acquire customers, differentiate their offerings and develop sustainable competitive advantages.",
-      "I approach commercial challenges by considering both the business objective and the customer's perspective. Understanding what people need, what influences their decisions and how businesses can respond effectively remains central to how I think."
+      "When I moved into a Sales Coach role, my focus shifted from my own sales to the performance of the team. I translated what worked on the floor into training materials, workshops and weekly conversations about goals.",
+      "Coaching made me interested in the systems behind results: how a team learns, where performance breaks down and what makes a sales approach repeatable."
     ],
-    detailsTitle:'Key milestones',
-    details:["H&M — Sales Advisor and Sales Coach","Browns — Over $400,000 in sales in less than a year","MPN Capital Markets — Outbound sales experience"],
+    roles:[
+      {org:'H&M', role:'Sales Coach · Ottawa', period:'09/2023–02/2024'}
+    ],
+    milestones:[
+      {value:'10+', label:'associates trained'},
+      {value:'15%', label:'team sales improvement'}
+    ],
+    detailsTitle:'Coaching scope',
+    details:['Sales training materials','Workshops for 10+ associates','Weekly goal and progress meetings'],
     capabilitiesLabel:'Core capabilities',
-    capabilities:["Sales and negotiation","Customer understanding","Business development","Commercial judgment","Team development","Relationship management"]
+    capabilities:['Coaching','Sales training','Team development','Performance conversations','Customer relationships'],
+    direction:'I moved from selling to improving how others sell.'
   },
   {
-    id:'education', num:'03', label:'Education & Strategy', title:'Education and strategic thinking', visual:'academic',
+    id:'commercial', num:'03', label:'Commercial', title:'Developing commercial experience', visual:'commercial', period:'2024–2026',
     paragraphs:[
-      "My studies in political science and economics at the University of Ottawa expanded my understanding of the systems in which businesses and individuals operate.",
-      "Studying markets, institutions, political structures, incentives and human behaviour has encouraged me to examine problems beyond their immediate circumstances.",
-      "I became particularly interested in how different disciplines complement one another. Economics provides insight into markets and incentives, political science helps explain institutions and power, and psychology offers perspectives on behaviour and decision-making.",
-      "These interests influence how I approach business challenges. I naturally question assumptions, investigate underlying causes and consider the broader implications of different decisions.",
-      "I value evidence and structured reasoning, while recognizing that decisions often need to be made with incomplete information. Understanding when to investigate further, when to experiment and when to act is an important part of my approach.",
-      "For me, education is not separate from practical experience. It provides additional perspectives through which I can better understand businesses, people and opportunities."
+      "I moved into outbound business development at MPN Capital Markets, where I learned to research a market, qualify a prospect and start a commercial conversation from scratch. I then moved to Browns, where the sale depended on product knowledge, trust and reading a customer’s needs and budget.",
+      "The environments were different, but the lesson was the same: the quality of the conversation determines the quality of the opportunity."
+    ],
+    roles:[
+      {org:'MPN Capital Markets', role:'Business Development Representative · Ottawa', period:'06/2024–09/2024'},
+      {org:'Browns', role:'Sales Associate · Ottawa', period:'10/2024–2026'}
+    ],
+    milestones:[
+      {value:'$400K+', label:'individual sales at Browns'},
+      {value:'Highest', label:'qualified leads in a two-week period'}
+    ],
+    detailsTitle:'Commercial focus',
+    details:['Consultative selling','Outbound prospecting and market research','Client relationships and repeat business'],
+    capabilitiesLabel:'Core capabilities',
+    capabilities:['Consultative selling','Outbound prospecting','Market research','Negotiation','Client relationships','Commercial judgment'],
+    direction:'I became more interested in the acquisition process around the sale than in a single transaction.'
+  },
+  {
+    id:'education', num:'04', label:'Perspective', title:'Expanding my perspective', visual:'academic', period:'2023–present',
+    paragraphs:[
+      "Alongside my commercial roles, I study political science and economics at the University of Ottawa. I wanted to understand the systems around a business: markets, institutions, incentives, power and the way people make decisions.",
+      "The degree trained me to question assumptions, structure ambiguous problems and use evidence. It gave me a language for the strategic questions I was already asking at work."
+    ],
+    roles:[
+      {org:'University of Ottawa', role:'Bachelor of Social Science · Joint Honours in Political Science and Economics', period:'2023–present · expected 2028'}
+    ],
+    milestones:[
+      {value:'2028', label:'expected graduation'},
+      {value:'Joint Honours', label:'political science and economics'}
     ],
     detailsTitle:'Academic foundation',
-    details:["University of Ottawa","Political science and economics","Multidisciplinary approach to business and society"],
+    details:['University of Ottawa','Political science and economics','Research, analysis and strategy'],
     capabilitiesLabel:'Core capabilities',
-    capabilities:["Critical thinking","Strategic analysis","Research","Economic reasoning","Systems thinking","Decision-making"]
+    capabilities:['Research','Critical thinking','Economic reasoning','Systems thinking','Written communication','Strategy'],
+    direction:'It connected the commercial world to the institutional and strategic questions behind it.'
   },
   {
-    id:'technology', num:'04', label:'Technology & AI', title:'Technology and artificial intelligence', visual:'technology',
+    id:'technology', num:'05', label:'Business & Tech', title:'Exploring business and technology', visual:'technology', period:'2025–present',
     paragraphs:[
-      "My interest in technology introduced another dimension to my professional development.",
-      "What began as curiosity about artificial intelligence gradually developed into hands-on experience with AI systems, business automation, software, digital platforms and entrepreneurial initiatives.",
-      "Through these experiences, I've explored how technology can improve business operations, customer acquisition, communication, service delivery and decision-making.",
-      "What interests me most is not technology in isolation, but the opportunities it creates. I want to understand what businesses need, identify where technology can provide an advantage and translate those opportunities into practical solutions.",
-      "My commercial background helps me evaluate technology beyond its technical capabilities. I consider its relevance to the customer, its operational impact, its implementation costs and its potential to generate meaningful returns.",
-      "I see technical fluency as a complement to commercial judgment. Being able to understand both the business problem and the technology available to address it allows me to operate across commercial and technical environments."
+      "My next chapter started with a practical question: how much of the repetitive work inside a business could be designed better? I began building AI agents, automation workflows and business systems, first as experiments and then as products.",
+      "Working across H2Ops, Safiy and independent projects taught me to evaluate technology by operational fit, adoption and privacy, not novelty. I learned to move between a business problem, a process design and an implementation."
     ],
-    detailsTitle:'Areas of applied experience',
-    details:["Artificial intelligence and AI agents","Business process automation","CRM systems and integrations","Customer acquisition and communication systems","Digital platforms and websites","Business operations and workflows"],
+    roles:[
+      {org:'H2Ops', role:'Co-founder', period:'Summer 2025–present'},
+      {org:'Safiy', role:'Product and release work', period:'2026–present'},
+      {org:'Independent product work', role:'AI and automation projects', period:'2025–present'}
+    ],
+    milestones:[
+      {value:'Co-founder', label:'H2Ops'},
+      {value:'Beta', label:'Safiy releases'},
+      {value:'Applied AI', label:'agents and automation'}
+    ],
+    detailsTitle:'Business and technology',
+    details:['AI agents and automation','Business systems and operations','Product strategy and release'],
     capabilitiesLabel:'Core capabilities',
-    capabilities:["Technical fluency","Applied AI","Process optimization","Commercial problem-solving","Technology evaluation","Business innovation"]
+    capabilities:['Applied AI','Process design','Automation','Product strategy','Systems thinking','Technical fluency','Privacy and operational judgment'],
+    direction:'Technology became a way to act on commercial problems, not a separate career.'
   },
   {
-    id:'direction', num:'05', label:'Direction & Ambitions', title:'Professional direction and ambitions', visual:'direction',
+    id:'direction', num:'06', label:'Direction', title:'Where I’m heading', visual:'direction', period:'Present → next',
     paragraphs:[
-      "Each stage of my professional development has contributed something different to my current direction.",
-      "My early employment experiences developed my independence and adaptability. Sales gave me a practical understanding of customers and commercial performance. My education expanded my analytical perspective, and technology introduced new ways to address business challenges.",
-      "I now see these experiences as complementary capabilities rather than separate professional interests.",
-      "I'm particularly drawn to opportunities in consulting, business strategy and applied artificial intelligence, where understanding businesses, communicating effectively and identifying practical opportunities for improvement are equally important.",
-      "At this stage of my career, I want to work on meaningful commercial challenges, learn from experienced professionals and develop a deeper understanding of how organizations grow, adapt and compete.",
-      "My long-term ambition is entrepreneurship and business leadership. I want to develop the experience, judgment and capabilities necessary to lead businesses, identify opportunities and create sustainable commercial value.",
-      "My professional journey is still unfolding, but its direction is increasingly clear: combining commercial understanding, strategic thinking and technology to address meaningful business challenges."
+      "The common thread across these chapters is a move from understanding customers to understanding the systems that serve them. I want to keep working on problems where commercial judgment, analysis and technology all matter.",
+      "My next step is consulting: helping organizations identify where AI and better processes create real value, then staying close enough to implementation to make the change work. Longer term, I want to lead and build businesses of my own.",
+      "Practically, I am looking for a role where I can combine commercial analysis, AI and implementation — whether in consulting, strategy or an operating team."
     ],
-    interestsTitle:'Professional interests',
-    interests:["Business consulting","AI consulting","Business strategy","Business development","Technology adoption and transformation"],
+    roles:[],
+    interestsTitle:'Focus areas',
+    interests:['Business consulting','AI consulting','Business strategy','Entrepreneurship','Business leadership'],
     ambitionsTitle:'Long-term ambitions',
-    ambitions:["Entrepreneurship","Business leadership","Sustainable business growth"]
+    ambitions:['Build a business','Lead an organization','Sustainable growth'],
+    capabilitiesLabel:'Capabilities I’m developing',
+    capabilities:['Advisory','Problem structuring','Operating judgment','Implementation','Leadership'],
+    direction:'Use commercial understanding, strategy and technology to help organizations make better decisions — and eventually lead.'
   }
 ];
 
-
 let professionalChapterId=null;
 function professionalArt(chapter){
-  if(chapter.visual==='foundations'){
-    return `<div class="journey-art ja-foundations" aria-hidden="true">
+  if(chapter.visual==='entry'){
+    return `<div class="journey-art ja-entry" aria-hidden="true">
       <span class="ja-number">01</span>
+      <span class="ja-brand ja-brand--hm ja-entry-brand">H&amp;M</span>
       <svg class="ja-foundation-path" viewBox="0 0 280 150" fill="none" stroke="currentColor" stroke-width="1.1">
         <path d="M18 132h52v-24h52V84h52V60h52V36h36"/>
         <path d="M18 145h244" opacity=".22"/>
         <circle cx="70" cy="132" r="3" fill="currentColor"/><circle cx="122" cy="108" r="3" fill="currentColor"/><circle cx="174" cy="84" r="3" fill="currentColor"/><circle cx="226" cy="60" r="3" fill="currentColor"/><circle cx="262" cy="36" r="3" fill="currentColor"/>
       </svg>
-      <div class="ja-foundation-labels"><span>Responsibility</span><span>Adaptability</span><span>Discipline</span></div>
+      <div class="ja-foundation-labels"><span>Responsibility</span><span>Customers</span><span>Consistency</span></div>
+    </div>`;
+  }
+  if(chapter.visual==='sales'){
+    return `<div class="journey-art ja-sales" aria-hidden="true">
+      <span class="ja-number">02</span>
+      <div class="ja-brand-stack">
+        <span class="ja-brand ja-brand--hm">H&amp;M</span>
+        <span class="ja-brand ja-brand--role">SALES COACH</span>
+      </div>
+      <div class="ja-split-stats">
+        <div class="ja-stat"><b>10+</b><span>associates trained</span></div>
+        <div class="ja-stat"><b>15%</b><span>team sales improvement</span></div>
+      </div>
     </div>`;
   }
   if(chapter.visual==='commercial'){
     return `<div class="journey-art ja-commercial" aria-hidden="true">
+      <span class="ja-number">03</span>
       <div class="ja-brand-stack">
-        <span class="ja-brand ja-brand--hm">H&amp;M</span>
         <span class="ja-brand ja-brand--browns">BROWNS</span>
         <span class="ja-brand ja-brand--mpn">MPN CAPITAL MARKETS</span>
       </div>
-      <div class="ja-stat"><b>$400,000</b><span>in individual sales at Browns<br>in under a year</span></div>
+      <div class="ja-stat"><b>$400,000</b><span>individual sales at Browns<br>in under a year</span></div>
       <span class="ja-commercial-rule"></span>
     </div>`;
   }
   if(chapter.visual==='academic'){
     return `<div class="journey-art ja-academic" aria-hidden="true">
+      <span class="ja-number">04</span>
       <span class="ja-ring ja-ring-a"></span><span class="ja-ring ja-ring-b"></span><span class="ja-ring ja-ring-c"></span>
       <div class="ja-academic-center"><small>University of</small><b>OTTAWA</b><span>Political science · Economics</span></div>
       <span class="ja-academic-label ja-al-a">Markets</span>
@@ -6527,6 +6586,7 @@ function professionalArt(chapter){
   }
   if(chapter.visual==='technology'){
     return `<div class="journey-art ja-technology" aria-hidden="true">
+      <span class="ja-number">05</span>
       <svg viewBox="0 0 290 180" fill="none" stroke="currentColor" stroke-width="1.05">
         <path d="M77 54 145 90 213 54M77 126 145 90 213 126M145 90v44" opacity=".7"/>
         <rect x="22" y="35" width="70" height="38" rx="8"/><text x="57" y="58" text-anchor="middle">AI</text>
@@ -6536,9 +6596,11 @@ function professionalArt(chapter){
         <circle cx="145" cy="90" r="26"/><circle cx="145" cy="90" r="3" fill="currentColor"/>
         <text x="145" y="94" text-anchor="middle" class="ja-tech-core">FLOW</text>
       </svg>
+      <div class="ja-tech-brands"><span>H2OPS</span><span>SAFIY</span></div>
     </div>`;
   }
   return `<div class="journey-art ja-convergence" aria-hidden="true">
+    <span class="ja-number">06</span>
     <div class="ja-conv-list"><span>Business</span><span>Sales</span><span>Strategy</span><span>Technology</span></div>
     <span class="ja-conv-arrow">→</span>
     <div class="ja-conv-out"><small>Direction</small><b>Consulting</b><b>Strategy</b><b>Applied AI</b><i>Entrepreneurship</i></div>
@@ -6559,12 +6621,30 @@ function professionalChapterHTML(chapter,index){
   const caps=chapter.capabilities&&chapter.capabilities.length
     ? `<section class="pro-capabilities"><span class="pro-side-label">${escHTML(chapter.capabilitiesLabel||'Core capabilities')}</span><div class="pro-chips">${chapter.capabilities.map(item=>`<span>${escHTML(item)}</span>`).join('')}</div></section>`
     : '';
+  const roles=chapter.roles&&chapter.roles.length
+    ? `<div class="pro-role-strip" role="group" aria-label="Roles and dates">
+        ${chapter.roles.map(role=>`<div class="pro-role">
+          <span class="pro-role-org">${escHTML(role.org)}</span>
+          <span class="pro-role-title">${escHTML(role.role)}</span>
+          <span class="pro-role-date">${escHTML(role.period)}</span>
+        </div>`).join('')}
+      </div>`
+    : '';
+  const milestones=chapter.milestones&&chapter.milestones.length
+    ? `<div class="pro-milestones" role="group" aria-label="Key milestones">
+        ${chapter.milestones.map(item=>`<div class="pro-milestone"><b class="${String(item.value).length>8?'is-wide':''}">${escHTML(item.value)}</b><span>${escHTML(item.label)}</span></div>`).join('')}
+      </div>`
+    : '';
+  const direction=chapter.direction
+    ? `<div class="pro-direction"><span>What it changed</span><p>${escHTML(chapter.direction)}</p></div>`
+    : '';
   return `<div class="pro-chapter-head">
-      <span class="pro-chapter-kicker">${chapter.num} / ${String(total).padStart(2,'0')} · ${escHTML(chapter.label)}</span>
+      <span class="pro-chapter-kicker">${chapter.num} / ${String(total).padStart(2,'0')} · ${escHTML(chapter.label)} · ${escHTML(chapter.period)}</span>
       <h2>${escHTML(chapter.title)}</h2>
     </div>
+    ${roles}
     <div class="pro-chapter-grid">
-      <div class="pro-narrative">${chapter.paragraphs.map(p=>`<p>${escHTML(p)}</p>`).join('')}</div>
+      <div class="pro-narrative">${chapter.paragraphs.map(p=>`<p>${escHTML(p)}</p>`).join('')}${milestones}${direction}</div>
       <aside class="pro-side">
         <div class="pro-visual-card">${professionalArt(chapter)}</div>
         ${details}
@@ -6619,12 +6699,12 @@ function selectProfessionalChapter(id,opts={}){
   },opts.animate===false?0:60);
 }
 function renderProfessionalView(body){
-  const steps=PROFESSIONAL_CHAPTERS.map((chapter,i)=>`<button class="pro-step" type="button" role="tab" id="proTab-${chapter.id}" data-pro-chapter="${chapter.id}" aria-label="${chapter.num} ${escHTML(chapter.title)}" aria-selected="${i===0?'true':'false'}" aria-controls="proChapter" tabindex="${i===0?'0':'-1'}"><span class="pro-step-dot" aria-hidden="true"></span><span class="pro-step-num">${chapter.num}</span><span class="pro-step-label">${escHTML(chapter.label)}</span></button>`).join('');
+  const steps=PROFESSIONAL_CHAPTERS.map((chapter,i)=>`<button class="pro-step" type="button" role="tab" id="proTab-${chapter.id}" data-pro-chapter="${chapter.id}" aria-label="${chapter.num} ${escHTML(chapter.title)} — ${escHTML(chapter.period)}" aria-selected="${i===0?'true':'false'}" aria-controls="proChapter" tabindex="${i===0?'0':'-1'}"><span class="pro-step-dot" aria-hidden="true"></span><span class="pro-step-num">${chapter.num}</span><span class="pro-step-label">${escHTML(chapter.label)}</span><span class="pro-step-period">${escHTML(chapter.period)}</span></button>`).join('');
   body.innerHTML=`<div class="professional-view professional-view--merged">
     <header class="pro-section-head">
       <span class="pro-eyebrow">My Journey / Professional experience</span>
       <h1>My Journey</h1>
-      <p class="pro-tagline">Experience, capabilities and direction.</p>
+      <p class="pro-tagline">A career built across customers, commerce and systems.</p>
       <div class="pro-intro">${PROFESSIONAL_INTRO.map(p=>`<p>${escHTML(p)}</p>`).join('')}</div>
     </header>
     <div class="pro-timeline" id="proTimeline" role="tablist" aria-label="My Journey chapters" style="--pro-progress:0%">
@@ -7139,32 +7219,20 @@ function projectOverviewBriefHTML(p){
     </div>
   </section>`;
 }
-function projectImpactHTML(o){
-  const impact=o.impact;
-  if(!impact) return '';
-  return `<section class="pw-overview-impact" aria-labelledby="pwImpactTitle">
-    <div class="pw-impact-head">
-      <h3 id="pwImpactTitle">${escHTML(impact.heading)}</h3>
-      <span class="pw-impact-tag">${escHTML(impact.tag)}</span>
+function projectContributionHTML(o){
+  const contribution=o.contribution;
+  if(!contribution) return '';
+  return `<section class="pw-overview-contribution" aria-labelledby="pwContributionTitle">
+    <div class="pw-contribution-head">
+      <h3 id="pwContributionTitle">My Contribution</h3>
     </div>
-    <div class="pw-impact-case">
-      <b>${escHTML(impact.client)}</b>
-      <p>${escHTML(impact.description)}</p>
-      ${impact.intent?`<span class="pw-impact-intent">${escHTML(impact.intent)}</span>`:''}
+    ${contribution.lead?`<p class="pw-contribution-lead">${escHTML(contribution.lead)}</p>`:''}
+    <div class="pw-contribution-blocks">
+      ${(contribution.blocks||[]).map(block=>`<div class="pw-contribution-block">
+        <span>${escHTML(block.label)}</span>
+        <p>${escHTML(block.text)}</p>
+      </div>`).join('')}
     </div>
-    ${impact.achievements
-      ? `<div class="pw-impact-grid pw-impact-grid--achievements">
-          ${impact.achievements.map(a=>`<div class="pw-impact-achievement">
-            <div class="pw-impact-achievement-head">
-              <span class="pw-impact-achievement-icon">${flowIcon(a.icon)}</span>
-              <b>${escHTML(a.title)}</b>
-            </div>
-            <p>${escHTML(a.description)}</p>
-          </div>`).join('')}
-        </div>`
-      : `<dl class="pw-impact-grid">
-          ${impact.metrics.map(m=>`<div class="pw-impact-metric"><dt>${escHTML(m.value)}</dt><dd>${escHTML(m.label)}</dd></div>`).join('')}
-        </dl>`}
   </section>`;
 }
 function projectOverviewValueHTML(p){
@@ -7174,7 +7242,7 @@ function projectOverviewValueHTML(p){
     <div class="pw-overview-body">
       <h2 id="pwOverviewValueTitle">Business value</h2>
       <ul class="pw-overview-list pw-overview-list--value">${o.value.map(item=>`<li>${escHTML(item)}</li>`).join('')}</ul>
-      ${projectImpactHTML(o)}
+      ${projectContributionHTML(o)}
     </div>
     <footer class="pw-overview-foot">
       <button class="pw-overview-cta" type="button" data-project-flow>${escHTML(o.cta)} <span aria-hidden="true">→</span></button>
