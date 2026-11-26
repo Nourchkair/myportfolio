@@ -517,7 +517,7 @@
   <section class="home-panel" id="homePanel" aria-label="Welcome to Nour's spatial lab">
     <article class="billboard board-profile">
       <div class="board-top"><span class="board-tag">Profile / 01</span><span class="live"><i></i>Online</span></div>
-      <div class="profile-photo"><img src="assets/portrait-screen.svg" alt="Nour Chkair portrait (placeholder)"><span class="ph-tag">Nour Chkair / Portrait</span></div>
+      <div class="profile-photo"><img src="../assets/portrait-screen.svg" alt="Nour Chkair portrait (placeholder)"><span class="ph-tag">Nour Chkair / Portrait</span></div>
       <div class="home-greeting">
         <div class="k">Nour Chkair / AI products / systems</div>
         <h1 id="greetingText">Good evening.</h1>
@@ -914,7 +914,7 @@ function openProject(id){
     <div class="project-kicker">${p.category} / 2026 / ${p.status}</div>
     <h2>${p.name}</h2>
     <p class="project-tagline">${p.tagline}</p>
-    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
+    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="../assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
     <div class="project-cols"><div class="pblock"><h3>Why I built it</h3><p>${p.why}</p></div><div class="pblock"><h3>What it is</h3><p>${p.what}</p></div></div>
     <div class="pblock"><h3>Result</h3><p>${p.result}</p></div>
     <div class="pblock" style="margin-top:26px"><h3>The system</h3><div class="modules">${p.modules.map((m,i)=>`<div class="module"><b>${m}</b>Module ${String(i+1).padStart(2,'0')}</div>`).join('')}</div></div>
@@ -968,7 +968,7 @@ document.addEventListener('pointermove',e=>{
 },{passive:true});
 
 </script>
-<script type="importmap">{"imports":{"three":"./assets/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"../assets/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
 
@@ -1283,7 +1283,7 @@ function buildScreens(){
   const metalSoft=new THREE.MeshStandardMaterial({color:0x17262c,roughness:.55,metalness:.55,envMapIntensity:.5});
 
   // the two wall displays
-  wallScreen(-3.7,3.55,3.35,1.58,makeSvgTexture('./assets/monitor-workflow.svg',1600,760),metal,0x5fcfe8);
+  wallScreen(-3.7,3.55,3.35,1.58,makeSvgTexture('../assets/monitor-workflow.svg',1600,760),metal,0x5fcfe8);
   wallScreen(-6.55,2.95,1.12,1.86,null,metal,0x8fe6ff,true);
 
   // ambient ticker above the wall
@@ -1444,7 +1444,7 @@ function buildMacBook(cx,cz){
   group.add(lid);
   const lidShell=new THREE.Mesh(new THREE.BoxGeometry(1.16,.76,.035),shell);
   lidShell.position.y=.38; lidShell.castShadow=true; lid.add(lidShell);
-  const screenMat=new THREE.MeshBasicMaterial({map:makeSvgTexture('./assets/macbook-status.svg',900,560),toneMapped:false,color:0x161616});
+  const screenMat=new THREE.MeshBasicMaterial({map:makeSvgTexture('../assets/macbook-status.svg',900,560),toneMapped:false,color:0x161616});
   const screen=new THREE.Mesh(new THREE.PlaneGeometry(1.02,.64),screenMat);
   screen.position.set(0,.39,.022); lid.add(screen);
   screenMats.push({mat:screenMat,base:new THREE.Color(0xffffff),flicker:true});

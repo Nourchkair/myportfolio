@@ -24,7 +24,7 @@
   button{font:inherit;color:inherit}
   ::selection{background:var(--brass);color:#111}
   a{color:inherit}
-  .bg{position:fixed;inset:-3%;z-index:0;background:url('assets/table-bg.jpg') center center/cover no-repeat;filter:brightness(.66) saturate(.82) contrast(1.02);transform:scale(1.03);transition:filter 2s ease,transform 2s ease, opacity 1.2s ease;opacity:.5}
+  .bg{position:fixed;inset:-3%;z-index:0;background:url('../assets/table-bg.jpg') center center/cover no-repeat;filter:brightness(.66) saturate(.82) contrast(1.02);transform:scale(1.03);transition:filter 2s ease,transform 2s ease, opacity 1.2s ease;opacity:.5}
   body.ready .bg{filter:brightness(.78) saturate(.9) contrast(1.02);opacity:1}
   .bg-veil{position:fixed;inset:0;z-index:1;background:
     radial-gradient(ellipse at 50% 42%,transparent 34%,rgba(0,0,0,.54) 100%),
@@ -478,7 +478,7 @@ function openProject(id){
     <div class="project-kicker">${p.category} / 2026 / ${p.status}</div>
     <h2>${p.name}</h2>
     <p class="project-tagline">${p.tagline}</p>
-    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
+    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="../assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
     <div class="project-cols"><div class="pblock"><h3>Why I built it</h3><p>${p.why}</p></div><div class="pblock"><h3>What it is</h3><p>${p.what}</p></div></div>
     <div class="pblock"><h3>Result</h3><p>${p.result}</p></div>
     <div class="pblock" style="margin-top:26px"><h3>The system</h3><div class="modules">${p.modules.map((m,i)=>`<div class="module"><b>${m}</b>Module ${String(i+1).padStart(2,'0')}</div>`).join('')}</div></div>

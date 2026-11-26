@@ -1,0 +1,11 @@
+{
+  "name": "nour-os",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "validate": "node scripts/build.mjs && node scripts/validate.mjs",
+    "test": "node scripts/build.mjs && node scripts/validate.mjs"
+  }
+}

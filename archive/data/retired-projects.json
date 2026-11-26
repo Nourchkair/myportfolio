@@ -1,0 +1,214 @@
+[
+  {
+    "id": "waterair",
+    "num": "04",
+    "title": "Sales & Referrals",
+    "project": "Water-air",
+    "category": "Revenue & Growth",
+    "description": "A CRM for water-treatment sales that connects customer referrals, demo appointments, rewards and rep coaching.",
+    "capabilities": [
+      "Sales CRM",
+      "Referral program design",
+      "Rep enablement"
+    ],
+    "cover": "assets/cards/waterair.svg",
+    "coverAlt": "Illustration of a referral moving from a share link through eligibility and demo booking to reward review.",
+    "brief": {
+      "contribution": "I implemented referral validation and refined progress tracking so the sales team could see referral status in its dashboard.",
+      "challenge": "Referral volume alone says little about sales opportunity. A submission can stall before a demo, while duplicate or incomplete referrals create extra work and complicate reward decisions.",
+      "decision": "Keep customer sharing simple, then separate eligibility, booking and reward review. Each stage gives reps and managers a different decision to make.",
+      "solution": "Customer referral links connect to the CRM and sales calendar. Staff can monitor progress and review reward claims, while reps can practise conversations in a separate coaching tool.",
+      "value": "Make referral conversion easier to manage and give managers a clearer basis for reviewing incentive spend."
+    },
+    "system": {
+      "intro": "Follow a referral from the share link to demo booking and reward review. Explore sales coaching as a separate tool for reps.",
+      "stages": [
+        {
+          "id": "capture-referral",
+          "group": "Sales process",
+          "relation": "Customer share link",
+          "label": "Capture the referral",
+          "component": "A customer can submit a referral through a share link and check its progress in a tracker. The link keeps the referral connected to the person who made it."
+        },
+        {
+          "id": "review-eligibility",
+          "group": "Sales process",
+          "relation": "Eligibility decision",
+          "label": "Review referral eligibility",
+          "component": "Check the submission against program rules and existing CRM records. A duplicate or ineligible referral needs a different response from a new opportunity."
+        },
+        {
+          "id": "book-demo",
+          "group": "Sales process",
+          "relation": "CRM and calendar",
+          "label": "Book and track the demo",
+          "component": "Connect the referral to a CRM lead and calendar appointment so the rep can follow up and see whether the referral advanced."
+        },
+        {
+          "id": "review-reward",
+          "group": "Sales process",
+          "relation": "Reward review",
+          "label": "Review the reward",
+          "component": "Compare a claim with the referral’s recorded progress. Keeping rewards separate from submission helps staff apply program rules consistently."
+        },
+        {
+          "id": "coach-conversation",
+          "group": "Rep enablement",
+          "relation": "Related tool",
+          "label": "Coach the sales conversation",
+          "component": "Reps practise a scenario and receive feedback on different stages of the conversation, from opening to follow-up."
+        }
+      ]
+    },
+    "demonstrations": [
+      {
+        "src": "assets/projects/waterair/referral-flow.svg",
+        "label": "Sample scenario",
+        "alt": "A sample referral path from share link to eligibility, demo booking and staff reward review.",
+        "caption": "One customer referral, from the share link to a booked demo.",
+        "support": "Staff can review the reward against the referral’s recorded progress."
+      }
+    ],
+    "visual": "assets/projects/waterair/referral-flow.svg",
+    "technology": "Next.js and Supabase support the CRM, referral links, booking records and reward review. OpenAI powers conversation practice. Water-air also exposes an integration endpoint that can accept Safiy session details and recordings for a lead or demo."
+  },
+  {
+    "id": "afuntime",
+    "num": "07",
+    "title": "AFunTime",
+    "project": "Rental booking and inventory",
+    "category": "Business & Operations",
+    "description": "An event rental platform for managing quotes, delivery, booking approvals and allocation of physical inventory.",
+    "capabilities": [
+      "Inventory allocation",
+      "Capacity planning",
+      "Booking operations"
+    ],
+    "cover": "assets/cards/afuntime.webp",
+    "coverAlt": "Representative artwork for AFunTime, an event rental booking and inventory platform.",
+    "brief": {
+      "contribution": "I built storefront and operations interfaces and implemented the inventory revision that checks eligibility and allocates individual units at approval.",
+      "challenge": "Overlapping requests can compete for the same equipment. A package may look available even though a single item prevents the business from fulfilling it.",
+      "decision": "Accept requests before committing stock. Review delivery and price, then recheck and reserve exact units at approval so the business can make a credible commitment.",
+      "solution": "Customers select packages and add-ons. Staff review quotes and stock, resolve shortages and confirm bookings against available equipment.",
+      "value": "Capture demand without overcommitting inventory, and give staff better visibility into the trade-offs behind each booking."
+    },
+    "system": {
+      "intro": "Follow a rental request through pricing, capacity review and approval. See what changes when a required item is unavailable.",
+      "stages": [
+        {
+          "id": "capture-request",
+          "group": "Booking lifecycle",
+          "relation": "Demand captured",
+          "label": "Capture the rental request",
+          "component": "Customers choose a date, package and add-ons. Treat their submission as demand the business can review before committing equipment."
+        },
+        {
+          "id": "check-stock",
+          "group": "Booking lifecycle",
+          "relation": "Shortage example",
+          "label": "Check available stock",
+          "component": "Compare the request with the actual units that can be assigned for the date. Flag a shortage before staff confirm a booking."
+        },
+        {
+          "id": "review-quote",
+          "group": "Booking lifecycle",
+          "relation": "Staff review",
+          "label": "Review price and delivery",
+          "component": "Staff review what the customer requested, the delivery requirements and the final quote before committing to the booking."
+        },
+        {
+          "id": "approve-allocate",
+          "group": "Booking lifecycle",
+          "relation": "Exact-unit allocation",
+          "label": "Approve and allocate",
+          "component": "Recheck availability at approval and reserve individual units. If capacity has changed, bring the shortage back to staff for a decision."
+        },
+        {
+          "id": "confirm-booking",
+          "group": "Booking lifecycle",
+          "relation": "Confirmation",
+          "label": "Confirm the booking",
+          "component": "Update the customer’s booking status and keep a payment record for staff to reconcile."
+        }
+      ]
+    },
+    "demonstrations": [
+      {
+        "src": "assets/projects/afuntime/approval-flow.svg",
+        "label": "Sample scenario",
+        "alt": "A fictional rental request for three chairs and one table with the table unavailable, followed by staff review and an updated booking.",
+        "caption": "A customer requests a package while staff review what can be assigned.",
+        "support": "A shortage is flagged before the booking is confirmed."
+      }
+    ],
+    "visual": "assets/projects/afuntime/approval-flow.svg",
+    "technology": "Next.js powers the storefront and operations interface. Supabase and PostgreSQL manage bookings, permissions and stock. Booking automation rechecks availability and allocates specific units in a single database transaction when staff approve a booking."
+  },
+  {
+    "id": "academia",
+    "num": "08",
+    "title": "Academia OS",
+    "project": "AI workspace for students",
+    "category": "Product & Innovation",
+    "description": "A local-first AI workspace that organizes coursework and governs how AI agents propose changes to a student’s plan.",
+    "capabilities": [
+      "AI governance",
+      "Agent orchestration",
+      "Source traceability"
+    ],
+    "cover": "assets/cards/academia.webp",
+    "coverAlt": "Representative artwork for Academia OS, a local-first AI workspace for students.",
+    "brief": {
+      "contribution": "I developed Study chat features and implemented improvements to how students review and edit proposed changes.",
+      "challenge": "Coursework spans syllabuses, files, calendars and several AI tools. An agent can find a deadline quickly, but an outdated source or unreviewed change can create more work for the student.",
+      "decision": "Tie proposals to source material and keep approval with the student. Give agents bounded access so using a new tool doesn’t mean handing over control of the plan.",
+      "solution": "Academia OS organizes coursework and coordinates the handoff from an AI agent’s proposal to student review and a recorded outcome.",
+      "value": "Reduce the effort of reconciling course information while keeping changes traceable and under the student’s control."
+    },
+    "system": {
+      "intro": "Follow an AI proposal from a syllabus deadline to student approval or decline and the resulting plan.",
+      "stages": [
+        {
+          "id": "organize-sources",
+          "group": "Review flow",
+          "relation": "Source context",
+          "label": "Organize course sources",
+          "component": "Keep course materials with their original context so a deadline can be traced back to the right document."
+        },
+        {
+          "id": "agent-proposal",
+          "group": "Review flow",
+          "relation": "Agent proposal",
+          "label": "Create an agent proposal",
+          "component": "An AI agent can suggest a task or deadline update for the student to review. The proposal identifies the change before anything is applied."
+        },
+        {
+          "id": "review-decide",
+          "group": "Review flow",
+          "relation": "Student decision",
+          "label": "Review and decide",
+          "component": "Check the date and source, then approve, edit where supported, or decline. The student controls whether the change goes ahead."
+        },
+        {
+          "id": "record-outcome",
+          "group": "Review flow",
+          "relation": "Recorded outcome",
+          "label": "Record the outcome",
+          "component": "Keep a record of the decision and show what changed. Declining a proposal leaves the plan unchanged."
+        }
+      ]
+    },
+    "demonstrations": [
+      {
+        "src": "assets/projects/academia/source-to-decision.svg",
+        "label": "Sample scenario",
+        "alt": "A fictional syllabus deadline, an agent proposal, student review, and the recorded outcome or decline.",
+        "caption": "A proposed task and the syllabus passage that supports it.",
+        "support": "The student reviews the change before it appears in their plan."
+      }
+    ],
+    "visual": "assets/projects/academia/source-to-decision.svg",
+    "technology": "A Python core manages the local workspace, provenance and review logic. React runs in a Tauri desktop app. Agent adapters and permission grants govern how external tools access information and submit proposals for human review."
+  }
+]

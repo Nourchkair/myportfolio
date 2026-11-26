@@ -22,11 +22,11 @@
   ::selection{background:var(--brass);color:#111}
   a{color:inherit}
   /* Scene: Unsplash / sunlit apartment workspace, mirrored and cropped for layout */
-  .bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#1a120c url("assets/table-wood.jpg") center/cover no-repeat;transform:translate3d(var(--cam-x,0px),var(--cam-y,0px),0) scale(var(--cam-scale,1)) perspective(1600px) rotateX(var(--cam-tilt,8deg));transform-origin:50% 56%;transition:transform 2.2s cubic-bezier(.22,.78,.2,1);will-change:transform}
+  .bg{position:fixed;inset:0;z-index:0;overflow:hidden;background:#1a120c url("../assets/table-wood.jpg") center/cover no-repeat;transform:translate3d(var(--cam-x,0px),var(--cam-y,0px),0) scale(var(--cam-scale,1)) perspective(1600px) rotateX(var(--cam-tilt,8deg));transform-origin:50% 56%;transition:transform 2.2s cubic-bezier(.22,.78,.2,1);will-change:transform}
   body.vr .bg{--cam-tilt:16deg}
   .bg:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 4%,rgba(255,197,128,.12),transparent 38%);pointer-events:none}
   .pad-surface{position:absolute;left:15%;top:19%;width:58%;aspect-ratio:1.745;z-index:1;background:linear-gradient(150deg,#12232e,#060d13 65%);border:1px solid rgba(160,215,235,.28);border-radius:10px;box-shadow:0 48px 90px rgba(0,0,0,.66),0 12px 30px rgba(0,0,0,.45),inset 0 0 0 1px rgba(255,255,255,.07);overflow:hidden}
-  .pad-surface:before{content:"";position:absolute;inset:9px;background:url("assets/blueprint-pad.svg") center/cover no-repeat,#08263d;border-radius:5px;box-shadow:inset 0 0 80px rgba(0,0,0,.5)}
+  .pad-surface:before{content:"";position:absolute;inset:9px;background:url("../assets/blueprint-pad.svg") center/cover no-repeat,#08263d;border-radius:5px;box-shadow:inset 0 0 80px rgba(0,0,0,.5)}
   .pad-surface:after{content:"";position:absolute;inset:9px;border-radius:5px;background:linear-gradient(120deg,rgba(180,230,250,.09),transparent 22%,transparent 68%,rgba(0,0,0,.26));pointer-events:none}
   .bg-scene{position:absolute;left:50%;top:50%;width:max(100vw,177.7778vh);height:max(100vh,56.25vw);transform:translate(-50%,-50%) translate3d(calc(var(--px)*-3px),calc(var(--py)*-2px),0);transition:transform .12s linear;will-change:transform}
   .bg-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.9) contrast(1.02);transition:filter 2.2s ease}
@@ -728,7 +728,7 @@
 
 <section class="home-panel" id="homePanel" aria-label="Welcome to Nour's portfolio">
   <div class="home-head">
-    <div class="profile-photo"><img src="assets/portrait-screen.svg" alt="Nour Chkair portrait (placeholder)"></div>
+    <div class="profile-photo"><img src="../assets/portrait-screen.svg" alt="Nour Chkair portrait (placeholder)"></div>
     <div class="home-greeting">
       <div class="k">Nour Chkair / AI products / systems</div>
       <h1 id="greetingText">Good evening.</h1>
@@ -1095,7 +1095,7 @@ function openProject(id){
     <div class="project-kicker">${p.category} / 2026 / ${p.status}</div>
     <h2>${p.name}</h2>
     <p class="project-tagline">${p.tagline}</p>
-    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
+    <div class="project-hero"><div class="label">${p.name.toUpperCase()} / PROJECT SHEET / ${p.num}</div>${isTrackit?`<img class="icon" src="../assets/trackit-icon.png" alt="">`:''}<div class="title">${p.name}</div><div class="big">${p.num}</div></div>
     <div class="project-cols"><div class="pblock"><h3>Why I built it</h3><p>${p.why}</p></div><div class="pblock"><h3>What it is</h3><p>${p.what}</p></div></div>
     <div class="pblock"><h3>Result</h3><p>${p.result}</p></div>
     <div class="pblock" style="margin-top:26px"><h3>The system</h3><div class="modules">${p.modules.map((m,i)=>`<div class="module"><b>${m}</b>Module ${String(i+1).padStart(2,'0')}</div>`).join('')}</div></div>

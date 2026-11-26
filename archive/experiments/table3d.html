@@ -165,20 +165,13 @@
   <div class="project-inner" id="projectInner"></div>
 </div>
 
-<script type="importmap">{"imports":{"three":"./assets/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"../assets/three.module.js"}}</script>
 <script type="module">
 import * as THREE from 'three';
-import { GLTFLoader } from './assets/jsm/loaders/GLTFLoader.js';
-import { EffectComposer } from './assets/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from './assets/jsm/postprocessing/RenderPass.js';
-import { UnrealBloomPass } from './assets/jsm/postprocessing/UnrealBloomPass.js';
-import { OutputPass } from './assets/jsm/postprocessing/OutputPass.js';
-import { BokehPass } from './assets/jsm/postprocessing/BokehPass.js';
-import { RectAreaLightUniformsLib } from './assets/jsm/lights/RectAreaLightUniformsLib.js';
 
 const P = {
   safiy:{num:'01',name:'Safiy',category:'AI & Agents',status:'BETA',tagline:'On-device meeting intelligence for macOS.',why:'Meetings generate decisions faster than notes can keep up. Safiy keeps the recording, transcription, and speaker separation on the Mac.',what:'A native macOS app that captures Teams, Zoom, and Webex audio, transcribes locally, separates speakers, and updates itself through Sparkle.',result:'Private beta 0.9.0-beta.8, with local transcription, speaker separation, and a signed update feed.',modules:['Audio capture','Transcription','Speaker separation','Sparkle updates'],stack:['Swift','WhisperKit','Parakeet','Sparkle'],holo:'recorder',art:'safiy'},
-  trackit:{num:'02',name:'TrackIt',category:'Apps & Interfaces',status:'SHIPPED',tagline:'A native macOS trackpad utility.',why:'The edges and corners of the trackpad were doing nothing. TrackIt gives them jobs: brightness, volume, music, screenshots.',what:'A menu-bar app that turns edge swipes and corner taps into actions, with a HUD, settings, diagnostics, and automatic updates.',result:'Shipped version 1.10 with a public release feed and in-app update flow.',modules:['Gesture engine','Menu-bar app','HUD','Auto-update'],stack:['Swift','SwiftUI','AppKit','Sparkle'],holo:'trackpad',art:'trackit',icon:'assets/trackit-icon.png'},
+  trackit:{num:'02',name:'TrackIt',category:'Apps & Interfaces',status:'SHIPPED',tagline:'A native macOS trackpad utility.',why:'The edges and corners of the trackpad were doing nothing. TrackIt gives them jobs: brightness, volume, music, screenshots.',what:'A menu-bar app that turns edge swipes and corner taps into actions, with a HUD, settings, diagnostics, and automatic updates.',result:'Shipped version 1.10 with a public release feed and in-app update flow.',modules:['Gesture engine','Menu-bar app','HUD','Auto-update'],stack:['Swift','SwiftUI','AppKit','Sparkle'],holo:'trackpad',art:'trackit',icon:'../assets/trackit-icon.png'},
   afuntime:{num:'03',name:'AFunTime',category:'Business & Operations',status:'PRE-LAUNCH',tagline:'Booking, inventory, and ops for a rental business.',why:'Event-game rentals are operationally messy: availability, packages, approvals, and physical units all have to agree before a booking is confirmed.',what:'A customer booking flow plus an ops portal that checks inventory, allocates exact units, and handles package and add-on requirements.',result:'Built and tested end to end; production launch is still gated on credentials, monitoring, and final checks.',modules:['Booking flow','Inventory engine','Ops approval','Admin portal'],stack:['Next.js','TypeScript','Supabase','Vitest'],holo:'calendar',art:'afuntime'},
   chefskiss:{num:'04',name:'ChefsKiss',category:'Apps & Interfaces',status:'BETA',tagline:'A private food journal and shared tasting table.',why:'Restaurant notes live in camera rolls and group chats. ChefsKiss keeps the dish, the rating, and the people you shared it with in one place.',what:'A Next.js app with private journals, shared tables, invites, dish media, and a weighted rating system.',result:'Built on Supabase Auth and RLS with invite links, media storage, and realtime table updates.',modules:['Journal','Shared tables','Ratings','Media'],stack:['Next.js','React','Supabase','TypeScript'],holo:'plate',art:'chefskiss'},
   academia:{num:'05',name:'Academia OS',category:'AI & Agents',status:'ALPHA',tagline:'A local-first agent workspace for students.',why:'Students juggle tasks, readings, calendars, and agents across disconnected tools. Academia OS keeps one local system in control.',what:'A Python core and local dashboard that own academic state, evidence, permissions, and reviewable actions, with adapters for Codex and other agents.',result:'Early public alpha 0.4.x with CLI views, a local dashboard, reviewable proposals, and MCP connections.',modules:['CLI core','Local dashboard','MCP connections','Review & provenance'],stack:['Python','Tauri','MCP','Codex'],holo:'notebook',art:'academia'},
@@ -197,9 +190,9 @@ scene.fog = new THREE.FogExp2(0x070605, 0.035);
 
 const camera = new THREE.PerspectiveCamera(42, innerWidth/innerHeight, 0.1, 100);
 const startPos = new THREE.Vector3(0, 3.1, 6.2);
-const endPos = new THREE.Vector3(0, 2.38, 3.55);
+const endPos = new THREE.Vector3(0, 2.12, 3.36);
 const startTarget = new THREE.Vector3(0, 1.35, -0.35);
-const endTarget = new THREE.Vector3(0, 0.86, 0.18);
+const endTarget = new THREE.Vector3(0, 0.88, 0.14);
 camera.position.copy(startPos);
 camera.lookAt(startTarget);
 
@@ -208,24 +201,13 @@ renderer.setSize(innerWidth, innerHeight);
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.outputColorSpace = THREE.SRGBColorSpace;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure = 1.14;
+renderer.toneMappingExposure = 1.08;
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 document.getElementById('scene').appendChild(renderer.domElement);
 
-RectAreaLightUniformsLib.init();
-const composer = new EffectComposer(renderer);
-composer.addPass(new RenderPass(scene, camera));
-const bokeh = new BokehPass(scene, camera, { focus: 3.35, aperture: 0.00018, maxblur: 0.006 });
-composer.addPass(bokeh);
-const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.2, 0.5, 0.88);
-composer.addPass(bloom);
-composer.addPass(new OutputPass());
-
-const manager = new THREE.LoadingManager();
 const maxAniso = renderer.capabilities.getMaxAnisotropy();
-const loader = new THREE.TextureLoader(manager);
-const gltfLoader = new GLTFLoader(manager);
+const loader = new THREE.TextureLoader();
 const tex = (url, srgb=true, repeat=null) => {
   const t = loader.load(url);
   if (srgb) t.colorSpace = THREE.SRGBColorSpace;
@@ -234,9 +216,9 @@ const tex = (url, srgb=true, repeat=null) => {
   return t;
 };
 
-const woodDiff = tex('./assets/wood_diff.jpg', true, [1.55,1.2]);
-const woodNor = tex('./assets/wood_nor.jpg', false, [1.55,1.2]);
-const woodRough = tex('./assets/wood_rough.jpg', false, [1.55,1.2]);
+const woodDiff = tex('../assets/wood_diff.jpg', true, [1.55,1.2]);
+const woodNor = tex('../assets/wood_nor.jpg', false, [1.55,1.2]);
+const woodRough = tex('../assets/wood_rough.jpg', false, [1.55,1.2]);
 const woodMat = new THREE.MeshStandardMaterial({map:woodDiff, normalMap:woodNor, roughnessMap:woodRough, normalScale:new THREE.Vector2(.45,.45), roughness:.78, metalness:.04, envMapIntensity:.8});
 const darkMetal = new THREE.MeshStandardMaterial({color:0x15181a, metalness:.8, roughness:.32, envMapIntensity:1});
 const brass = new THREE.MeshStandardMaterial({color:0xc98a3d, metalness:1, roughness:.28, envMapIntensity:1.3});
@@ -282,8 +264,6 @@ box(3.4,.08,.08,darkMetal,0,1.38,-2.96); box(3.4,.08,.08,darkMetal,0,3.32,-2.96)
 box(.08,2.0,.08,darkMetal,-1.64,2.35,-2.96); box(.08,2.0,.08,darkMetal,1.64,2.35,-2.96);
 box(.05,1.9,.06,darkMetal,0,2.35,-2.95); box(3.2,.05,.06,darkMetal,0,2.35,-2.95);
 const windowLight = new THREE.PointLight(0x5a8fa8, 0, 9, 2); windowLight.position.set(-1.2,2.2,-2.4); scene.add(windowLight);
-const windowRect = new THREE.RectAreaLight(0x7fb4d0, 0, 3.2, 1.9);
-windowRect.position.set(0,2.35,-2.9); windowRect.lookAt(0,1.15,0); scene.add(windowRect);
 
 // pinned drawings
 function drawingTexture(){
@@ -298,11 +278,20 @@ for (let i=0;i<4;i++){
   d.position.set(-1.7+i*.95, 2.55, -2.985); d.rotation.z = (i-1.5)*.035; scene.add(d);
 }
 
-// shelves are a Poly Haven model loaded below
+// shelves
+box(2.4,.08,.34,woodMat,2.4,1.55,-2.8); box(2.4,.08,.34,woodMat,2.4,.9,-2.8); box(2.4,.08,.34,woodMat,2.4,.25,-2.8);
+for(let i=0;i<4;i++){
+  box(.24,.38,.22,cream,1.55+i*.42,1.75,-2.8);
+  box(.16,.22,.16,paper,1.6+i*.4,.62,-2.76);
+  const roll = new THREE.Mesh(new THREE.CylinderGeometry(.055,.055,.55,16), cream);
+  roll.rotation.z = Math.PI/2; roll.position.set(1.7+i*.3,1.12,-2.7); roll.castShadow=true; scene.add(roll);
+}
 
 /* ---------------- TABLE ---------------- */
 const tableY = .74;
-// The table itself is a Poly Haven model loaded below. These are the surface props.
+box(4.2,.14,2.5, woodMat, 0, tableY, 0);
+box(.18,.74,.18, darkMetal, -1.85, .37, -1.05); box(.18,.74,.18, darkMetal, 1.85,.37,-1.05);
+box(.18,.74,.18, darkMetal, -1.85,.37,1.05); box(.18,.74,.18, darkMetal, 1.85,.37,1.05);
 box(3.6,.02,2.0, leather, 0, tableY+.085, .06);
 const blueprintTex = (()=>{
   const c=document.createElement('canvas'); c.width=1024;c.height=560; const x=c.getContext('2d');
@@ -333,18 +322,24 @@ const monitorTex=new THREE.CanvasTexture(monitorCanvas); monitorTex.colorSpace=T
 plane(1.05,.62,new THREE.MeshBasicMaterial({map:monitorTex,toneMapped:false}),-1.55,1.55,-.68,0);
 const screenLight=new THREE.PointLight(0x5fc3dc,.4,3,2); screenLight.position.set(-1.4,1.5,-.5); scene.add(screenLight);
 
-// lamp position is supplied by the model; the light is aimed from the shade area
-const shadePos = new THREE.Vector3(1.02,1.34,-.35);
+// lamp
+const lampBase = new THREE.Mesh(new THREE.CylinderGeometry(.15,.18,.035,32), brass); lampBase.position.set(1.5,tableY+.11,-.65); lampBase.castShadow=true; scene.add(lampBase);
+function rod(a,b,r=.018){
+  const dir=new THREE.Vector3().subVectors(b,a); const len=dir.length();
+  const m=new THREE.Mesh(new THREE.CylinderGeometry(r,r,len,12),brass); m.position.copy(a).addScaledVector(dir,.5); m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),dir.clone().normalize()); m.castShadow=true; scene.add(m); return m;
+}
+const joint1=new THREE.Vector3(1.5,1.02,-.65), joint2=new THREE.Vector3(1.27,1.42,-.58), shadePos=new THREE.Vector3(1.02,1.34,-.35);
+rod(new THREE.Vector3(1.5,tableY+.12,-.65),joint1,.022); rod(joint1,joint2,.018); rod(joint2,shadePos,.015);
+const shade=new THREE.Mesh(new THREE.CylinderGeometry(.16,.24,.17,24,1,true), brass); shade.position.copy(shadePos); shade.rotation.z=.5; shade.rotation.x=.35; shade.castShadow=true; scene.add(shade);
+const bulb=new THREE.Mesh(new THREE.SphereGeometry(.065,16,12),new THREE.MeshBasicMaterial({color:0xffd9a0,toneMapped:false})); bulb.position.copy(shadePos).add(new THREE.Vector3(-.03,-.08,.03)); scene.add(bulb);
 
-const spot = new THREE.SpotLight(0xffc27a, 0, 9, .82, .9, 1.4);
+const spot = new THREE.SpotLight(0xffc27a, 0, 9, .72, .7, 1.4);
 spot.position.copy(shadePos).add(new THREE.Vector3(0,-.12,0));
-spot.target.position.set(0,.84,.35); scene.add(spot); scene.add(spot.target);
+spot.target.position.set(0,.85,.15); scene.add(spot); scene.add(spot.target);
 spot.castShadow = true; spot.shadow.mapSize.set(2048,2048); spot.shadow.bias=-.0006; spot.shadow.normalBias=.02;
 const lampPoint = new THREE.PointLight(0xffb86c, 0, 4, 2); lampPoint.position.copy(shadePos); scene.add(lampPoint);
 const ceiling = new THREE.PointLight(0xffd2a1, 0, 8, 2); ceiling.position.set(0,3.1,0); scene.add(ceiling);
 const fill = new THREE.PointLight(0xffd8b0, 0, 6, 2); fill.position.set(-0.9,2.2,1.1); scene.add(fill);
-const topFill = new THREE.RectAreaLight(0xffd8b4, 0, 3.2, 1.7);
-topFill.position.set(0, 2.35, 0.55); topFill.lookAt(0, .82, 0.1); scene.add(topFill);
 const ambient = new THREE.AmbientLight(0x7d6f60, .05); scene.add(ambient);
 const hemi = new THREE.HemisphereLight(0x8fb6c8, 0x100b08, .12); scene.add(hemi);
 
@@ -362,65 +357,6 @@ box(.72,.012,.09,cream,-1.5,tableY+.13,1.0).rotation.y=-.08;
 // rolled plans
 cylinder(.075,.075,.65,cream,1.55,tableY+.15,-1.02,0,Math.PI/2);
 cylinder(.065,.065,.58,cream,1.59,tableY+.25,-.98,0,Math.PI/2);
-
-/* ---------------- HIGH-FIDELITY MODELS ---------------- */
-const modelRoot = new THREE.Group(); scene.add(modelRoot);
-function placeModel(id, opts={}){
-  gltfLoader.load(`./assets/models/${id}/model.gltf`, (gltf)=>{
-    const obj = gltf.scene;
-    obj.rotation.y = opts.rotY || 0;
-    obj.updateMatrixWorld(true);
-    let box = new THREE.Box3().setFromObject(obj);
-    const size = box.getSize(new THREE.Vector3());
-    const s = opts.width ? opts.width / size.x : opts.height / size.y;
-    obj.scale.setScalar(s);
-    obj.updateMatrixWorld(true);
-    box.setFromObject(obj);
-    const center = box.getCenter(new THREE.Vector3());
-    obj.position.x += (opts.x || 0) - center.x;
-    obj.position.z += (opts.z || 0) - center.z;
-    if (opts.top !== undefined) obj.position.y += opts.top - box.max.y;
-    else obj.position.y += (opts.bottom || 0) - box.min.y;
-    obj.traverse(o=>{
-      if(o.isMesh){
-        o.castShadow = true; o.receiveShadow = true;
-        if(o.material){ o.material.envMapIntensity = 1.15; if(o.material.map){ o.material.map.anisotropy = maxAniso; } }
-      }
-    });
-    modelRoot.add(obj);
-    if(opts.onload) opts.onload(obj);
-  }, undefined, err=>console.warn('Model failed:', id, err));
-}
-
-placeModel('industrial_coffee_table', {width:3.9, top:.82, x:0, z:0});
-placeModel('desk_lamp_arm_01', {height:1.15, bottom:.82, x:1.5, z:-.65, rotY:-0.55, onload:(obj)=>{
-  obj.traverse(o=>{
-    if(o.isMesh && o.material){
-      o.material = o.material.clone();
-      o.material.map = null;
-      o.material.color.set(0xb37b3e);
-      o.material.metalness = .82;
-      o.material.roughness = .32;
-    }
-  });
-}});
-placeModel('WoodenChair_01', {height:1.05, bottom:0, x:.4, z:-1.95, rotY:Math.PI});
-placeModel('wooden_bookshelf_worn', {height:2.05, bottom:0, x:2.35, z:-2.82, rotY:0});
-placeModel('binder_notebook', {width:.34, bottom:.821, x:-1.1, z:.86, rotY:.18});
-placeModel('Camera_01', {width:.2, bottom:.821, x:.95, z:.9, rotY:.35});
-
-manager.onProgress = (url, loaded, total) => {
-  const bar = document.getElementById('loadBar');
-  if(bar) bar.style.width = Math.min(96, Math.round(loaded/total*100)) + '%';
-};
-manager.onLoad = () => {
-  if (startTime === null) startTime = performance.now();
-  document.getElementById('loader').classList.add('done');
-};
-setTimeout(() => {
-  if (startTime === null) startTime = performance.now();
-  document.getElementById('loader').classList.add('done');
-}, 9000);
 
 /* ---------------- CARDS + HOLOGRAMS ---------------- */
 const cardGroupRoot = new THREE.Group(); scene.add(cardGroupRoot);
@@ -518,7 +454,7 @@ FEATURED.forEach((id,i)=>{
 });
 
 /* ---------------- ENV ---------------- */
-loader.load('./assets/workshop_env.jpg', (t)=>{
+loader.load('../assets/workshop_env.jpg', (t)=>{
   t.mapping = THREE.EquirectangularReflectionMapping; t.colorSpace = THREE.SRGBColorSpace;
   const pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromEquirectangular(t).texture;
@@ -526,7 +462,7 @@ loader.load('./assets/workshop_env.jpg', (t)=>{
 });
 
 /* ---------------- INTRO ---------------- */
-let startTime = null;
+const startTime = performance.now();
 let skipped = false;
 let entered = false;
 const introUi = document.getElementById('introUi');
@@ -537,10 +473,7 @@ const ease = t => t<.5 ? 4*t*t*t : 1-Math.pow(-2*t+2,3)/2;
 window.addEventListener('resize', ()=>{
   camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth,innerHeight);
-  composer.setSize(innerWidth,innerHeight);
-  bloom.setSize(innerWidth,innerHeight);
 });
-composer.setPixelRatio(Math.min(devicePixelRatio, 2));
 document.getElementById('skip').addEventListener('click', ()=>{
   skipped=true;
   document.body.classList.add('entered');
@@ -627,21 +560,18 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(document.getElem
 /* ---------------- ANIMATE ---------------- */
 function animate(){
   const t=clock.getElapsedTime();
-  if(startTime===null){ renderer.render(scene,camera); return; }
   const now=performance.now();
   const elapsed=skipped?99:(now-startTime)/1000;
   const lightT=skipped?1:ease(Math.min(1,Math.max(0,(elapsed-.55)/2.8)));
   const camT=skipped?1:ease(Math.min(1,Math.max(0,elapsed/6.0)));
   const flick=elapsed<1.9?0.55+0.45*Math.abs(Math.sin(elapsed*23)):1;
-  spot.intensity=lightT*10*flick;
-  lampPoint.intensity=lightT*1.8*flick;
-  ceiling.intensity=lightT*7.0*flick;
-  fill.intensity=lightT*4.0*flick;
-  topFill.intensity=lightT*1.6;
-  ambient.intensity=.08+lightT*.22;
+  spot.intensity=lightT*42*flick;
+  lampPoint.intensity=lightT*3.2*flick;
+  ceiling.intensity=lightT*4.5*flick;
+  fill.intensity=lightT*2.2*flick;
+  ambient.intensity=.05+lightT*.18;
   hemi.intensity=.12+lightT*.22;
   windowLight.intensity=lightT*.9;
-  windowRect.intensity=lightT*2.2;
   screenLight.intensity=.25+lightT*.55;
   loadBar.style.width=Math.min(100,lightT*100)+'%';
   if(!entered && elapsed>6.8){entered=true;document.body.classList.add('entered');introUi.style.opacity='0';}
@@ -663,16 +593,13 @@ function animate(){
     holo.position.y=.02+g.userData.hover*.32;
     holo.rotation.y += .003;
   });
-  composer.render();
+  renderer.render(scene,camera);
 }
 renderer.setAnimationLoop(animate);
-window.__workshop = { cardGroupRoot, modelRoot, scene, camera };
-const qp = new URLSearchParams(location.search);
-if (qp.has('wide')) {
-  endPos.set(0, 2.95, 5.35);
-  endTarget.set(0, 1.12, -0.05);
-}
-if (qp.get('empty') === '1') cardGroupRoot.visible = false;
+
+// hide loader when env is loaded (or after a short fallback)
+loader.load('../assets/workshop_env.jpg',()=>document.getElementById('loader').classList.add('done'),undefined,()=>document.getElementById('loader').classList.add('done'));
+setTimeout(()=>document.getElementById('loader').classList.add('done'),1800);
 </script>
 </body>
 </html>

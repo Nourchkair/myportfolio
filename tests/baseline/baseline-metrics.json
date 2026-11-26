@@ -1,0 +1,21 @@
+{
+  "path": "#/professional",
+  "journey": {
+    "chapters": 6,
+    "panel": {
+      "x": 12,
+      "y": 546.21875,
+      "width": 366,
+      "height": 737.4296875,
+      "top": 546.21875,
+      "right": 378,
+      "bottom": 1283.6484375,
+      "left": 12
+    }
+  },
+  "page": [
+    844,
+    844
+  ],
+  "dom": 817
+}
