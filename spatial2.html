@@ -4985,24 +4985,39 @@
     background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
   }
 
-  /* Same three-column desktop overview as Customer Acquisition for the denser projects.
-     Use content-height columns and a scrollable workspace instead of changing layout. */
-  @media(min-width:1021px){
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-canvas{
-      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
-    }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-stage{
-      height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
-    }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-middle{height:auto!important}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-what,
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-challenges{
-      flex:none!important;height:auto!important;min-height:0
-    }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]).project-has-overview .pw-overview-body{
-      overflow:visible!important
-    }
+  /* ============================================================
+     SAFIY — continuous intelligence product flow
+     ============================================================ */
+  .pw-overview-provenance{
+    margin:12px 0 0;padding-top:10px;border-top:1px solid rgba(255,255,255,.1);
+    font-size:8.4px;line-height:1.5;letter-spacing:.01em;color:rgba(255,255,255,.38)
   }
+  .pw-flow-link--context{stroke:rgba(255,210,161,.42)}
+  .pw-flow-link--assist{stroke:rgba(182,211,225,.42)}
+  .pw-flow-link--feedback{stroke:rgba(255,255,255,.22);stroke-dasharray:2 6}
+  .pw-flow-label--context{
+    padding:4px 8px;font-size:7.4px;letter-spacing:.1em;color:rgba(255,232,208,.86);
+    border-color:rgba(255,210,161,.3);background:rgba(7,13,17,.74)
+  }
+  .pw-flow-label--assist{
+    padding:4px 8px;font-size:7.4px;letter-spacing:.08em;color:rgba(205,226,235,.8);
+    border-color:rgba(190,220,235,.25);background:rgba(7,13,17,.72)
+  }
+  .pw-flow-label--focus{
+    padding:4px 9px;font-size:7.4px;letter-spacing:.08em;color:rgba(255,225,194,.94);
+    border-color:rgba(255,210,161,.4);background:rgba(8,14,18,.78)
+  }
+  .pw-flow-label--feedback{
+    padding:4px 8px;font-size:7px;letter-spacing:.06em;color:rgba(255,255,255,.5);
+    border-color:rgba(255,255,255,.18);background:rgba(7,13,17,.72)
+  }
+  #project[data-project="safiy"] .pw-overview-list--value{gap:8px}
+  #project[data-project="safiy"] .pw-flow-bar:before{
+    content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
+  }
+
+  /* The identity card can use a little more room for long product descriptions. */
   @media(min-width:1021px){
     #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:48%}
   }
@@ -5010,7 +5025,26 @@
     #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
   }
 
-  /* Compact the impacts of the dense projects while keeping the same three-column overview. */
+  /* Dense projects keep the Customer Acquisition three-column overview while their
+     long middle content determines the column height. */
+  @media(min-width:1021px){
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-canvas{
+      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
+    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-stage{
+      height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
+    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-middle{
+      height:auto!important
+    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what,
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges{
+      flex:none!important;height:auto!important;min-height:0
+    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{
+      overflow:visible!important
+    }
+  }
   @media(min-width:1021px){
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-overview-impact{
       margin-top:14px;padding-top:13px
@@ -5024,6 +5058,17 @@
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-icon{width:25px;height:25px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-head b{font-size:12.4px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
+  }
+
+  /* The denser projects keep the same three-column composition with a slightly
+     tighter text rhythm so their panels and CTAs fit the desktop workspace. */
+  @media(min-width:1021px){
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{padding:14px 18px 14px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
   }
 </style>
 </head>
@@ -5739,11 +5784,75 @@ const PROJECTS_ALL=[
     technology:'The prototype uses Next.js, Supabase and PostgreSQL with pgvector. It uses OpenAI embeddings to retrieve relevant passages within an organization’s documents and passes that context to the model. The separate operating library uses Markdown and Git, with n8n for change logging.'
   },
   {
-    id:'safiy', num:'05', title:'Safiy', project:'Meeting intelligence for Mac', category:'Product & Innovation',
-    description:'A local-first meeting intelligence app for Mac that turns recordings into transcripts and searchable context.',
-    capabilities:['Meeting intelligence','Local-first AI','Privacy and user control'],
+    id:'safiy', num:'05', title:'Safiy', subtitle:'Contextual AI Workplace Assistant', project:'Contextual AI', category:'Product & Innovation',
+    description:'A local-first AI workplace assistant that transforms conversations, professional context and knowledge into intelligent assistance and business actions.',
+    capabilities:['Contextual AI','Workplace Productivity','Product Innovation'],
     cover:'assets/cards/safiy.webp',
-    coverAlt:'Representative artwork for Safiy, a local-first meeting intelligence app for Mac.',
+    coverAlt:'Representative artwork for Safiy, a local-first contextual AI workplace assistant.',
+    overview:{
+      whatItIs:[
+        'Safiy is a local-first AI workplace assistant designed to capture conversations, organize professional knowledge, provide contextual assistance and support actions across connected applications.',
+        'By combining meeting intelligence, knowledge retrieval, real-time AI assistance and application integrations, Safiy bridges the gap between workplace conversations and business execution.',
+        'Its objective is to make AI a contextual part of everyday professional workflows rather than a separate tool users must repeatedly provide with information.'
+      ],
+      provenance:'Builds on the open-source Meeting Transcriber project.',
+      challenges:[
+        'Valuable information lost after meetings.',
+        'Excessive time spent taking notes and preparing summaries.',
+        'Difficulty retrieving information from previous conversations.',
+        'Frequent switching between business applications.',
+        'Manual execution of post-meeting administrative tasks.',
+        'Generic AI assistants lacking relevant workplace context.',
+        'Privacy concerns surrounding sensitive business conversations.'
+      ],
+      value:[
+        'Improved meeting productivity.',
+        'Better retention and accessibility of business knowledge.',
+        'Reduced post-meeting administrative workload.',
+        'More informed professional conversations.',
+        'Greater continuity between discussions and business actions.',
+        'Reduced application switching.',
+        'Greater control over sensitive information.'
+      ],
+      cta:'Understand how it works'
+    },
+    flow:{
+      eyebrow:'Safiy / Continuous intelligence',
+      title:'How Safiy works',
+      intro:'Conversations and connected knowledge create context for the assistant, which supports real-time help and business actions. Preserved knowledge feeds continuous intelligence back into future context.',
+      nodes:[
+        {id:'capture',num:'01',title:'Capture conversations',visible:'Capture workplace discussions.',icon:'mic',x:60,y:50,explanation:'Record and transcribe professional conversations across virtual and in-person meetings. Transform spoken information into searchable content that can be reviewed and used beyond the original conversation.'},
+        {id:'knowledge',num:'02',title:'Connect knowledge',visible:'Bring relevant information together.',icon:'book',x:60,y:300,explanation:'Organize documents, reference materials, previous conversations and project-specific information through Knowledge Banks and Workspaces. Give the AI assistant access to relevant professional context rather than relying exclusively on general knowledge.'},
+        {id:'context',num:'03',title:'Understand context',visible:'Identify relevant workplace information.',icon:'search',x:330,y:175,explanation:'Use conversation content, meeting history and available knowledge to establish context around the user’s current activity. Retrieve relevant information to support more meaningful assistance.'},
+        {id:'assistant',num:'04',title:'Contextual AI assistant',visible:'Provide intelligence around your work.',icon:'spark',x:600,y:175,tone:'focus',explanation:'Combine available professional context with AI capabilities to help users understand information, explore ideas, answer questions and identify potential next steps. Reduce the need to repeatedly explain the same business context to an AI assistant.'},
+        {id:'realtime',num:'05',title:'Real-time assistance',visible:'Support conversations as they happen.',icon:'message',x:870,y:50,explanation:'Provide contextual suggestions, relevant answers, preparation guidance and potential action recommendations during professional conversations. Help users remain focused and better informed without constantly switching between applications.'},
+        {id:'actions',num:'06',title:'Business action execution',visible:'Turn discussions into business actions.',icon:'check',x:870,y:300,explanation:'Support actions across connected applications such as Gmail, Google Calendar, Google Docs, Sheets and Drive. Help translate meeting discussions into practical tasks, documents, email drafts and scheduled activities, subject to supported integrations and user permissions.'},
+        {id:'preserve',num:'07',title:'Preserve workplace knowledge',visible:'Retain valuable professional context.',icon:'layers',x:1140,y:175,explanation:'Organize meeting transcripts, conversation history and related information within accessible workspaces. Allow users to retrieve previous discussions and relevant knowledge without manually reconstructing past events.'},
+        {id:'continuous',num:'08',title:'Continuous intelligence',visible:'Carry knowledge into future work.',icon:'repeat',x:1410,y:175,explanation:'Make accumulated professional knowledge available to support future conversations, questions and activities. Create continuity between past discussions and present work while maintaining user control over stored information.'}
+      ],
+      connections:[
+        {from:'capture',to:'context',kind:'context'},
+        {from:'knowledge',to:'context',kind:'context'},
+        {from:'context',to:'assistant',kind:'assist'},
+        {from:'assistant',to:'realtime',kind:'assist'},
+        {from:'assistant',to:'actions',kind:'assist'},
+        {from:'realtime',to:'preserve',kind:'assist'},
+        {from:'actions',to:'preserve',kind:'assist'},
+        {from:'preserve',to:'continuous',kind:'assist'},
+        {from:'continuous',to:'context',kind:'feedback',path:'M1515 325 C1515 520, 1490 560, 1390 560 H540 C470 560, 435 520, 435 325'}
+      ],
+      canvas:{width:1720,height:680},
+      labels:[
+        {text:'Context sources',x:165,y:36,kind:'context'},
+        {text:'Assistance & action',x:975,y:36,kind:'assist'},
+        {text:'Contextual AI Assistant',x:705,y:154,kind:'focus'},
+        {text:'Continuous context',x:900,y:548,kind:'feedback'}
+      ],
+      hint:'Scroll in any direction · Hover or focus a step',
+      viewportLabel:'Safiy continuous intelligence product flow',
+      scopeNote:'Product concept · Builds on open-source Meeting Transcriber · Local-first; optional connected services may use external processing.',
+      start:'assistant'
+    },
     brief:{
       contribution:'Safiy builds on the open-source Meeting Transcriber project. I added Knowledge Bank imports, improved retrieval indexing and prepared beta releases.',
       challenge:'Teams need to recover decisions and context after a meeting, but uploading recordings can create privacy and adoption barriers.',
@@ -7042,6 +7151,7 @@ function projectOverviewBriefHTML(p){
     <div class="pw-overview-body">
       <h2 id="pwOverviewWhatTitle">What it is</h2>
       ${what.map(t=>`<p class="pw-overview-lead">${escHTML(t)}</p>`).join('')}
+      ${o.provenance?`<p class="pw-overview-provenance">${escHTML(o.provenance)}</p>`:''}
     </div>
   </section>
   <section class="pw-window pw-overview-window pw-overview-challenges" aria-labelledby="pwOverviewChallengesTitle">
@@ -7114,6 +7224,7 @@ function flowIcon(name){
   if(name==='phone') return `<svg ${attrs}><path d="M6.5 3.5h2.9l1.4 3.9-2 1.4a14.2 14.2 0 0 0 6.4 6.4l1.4-2 3.9 1.4v2.9a2.5 2.5 0 0 1-2.8 2.5C10.3 20.1 3.9 13.7 4 6.3a2.5 2.5 0 0 1 2.5-2.8Z"/></svg>`;
   if(name==='clock') return `<svg ${attrs}><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>`;
   if(name==='book') return `<svg ${attrs}><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5H6.5A2.5 2.5 0 0 0 4 22Z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg>`;
+  if(name==='mic') return `<svg ${attrs}><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/></svg>`;
   if(name==='alert') return `<svg ${attrs}><path d="M12 3.5 21 20H3Z"/><path d="M12 9v5M12 17.2v.1"/></svg>`;
   return `<svg ${attrs}><path d="M4 19V5M4 19h16"/><path d="M7 16v-4M11 16V8M15 16v-6M19 16V6"/></svg>`;
 }
@@ -7607,7 +7718,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&(window.innerWidth<=1020||active.id==='h2ops'||active.id==='communications'||active.id==='knowledge')) return;
+  if(active&&active.overview&&window.innerWidth<=1020) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;

@@ -47,7 +47,7 @@ AI Customer Communications uses the same overview and free-floating process arch
 
 B.R.A.I.N. uses the same overview and free-floating process architecture. A knowledge-management branch captures business documentation and organizational memory, organizes them into a library and maintains updates. A separate AI-assistance branch follows an employee question through retrieval, AI-assisted guidance and informed execution. A dashed conceptual link connects the organized library to retrieval, and the scope note makes clear that the library and RAG prototype are complementary rather than automatically synchronized. A Business impact subsection within the Business value panel presents an anonymized service-referral case study with four qualitative achievements, including prototyped AI-assisted retrieval. No numerical impact metrics are presented.
 
-Safiy remains the fifth project and retains the existing Brief / System / Demonstrations / Components / Technology workspace without redesign.
+Safiy is the fifth project and uses the same overview and free-floating process architecture. Capture conversations and connected knowledge create context for a contextual AI assistant that supports real-time help and connected business actions. Preserved workplace knowledge feeds continuous intelligence back into future context through a subtle feedback link. Safiy builds on the open-source Meeting Transcriber project; local processing is the default, while optional connected services may involve external processing. No Business Impact metrics or case study are presented.
 
 The five project covers and their demonstration diagrams are original local illustrations. They are visibly labeled as conceptual system views or sample scenarios. Safiy retains its existing representative cover artwork. No live workflow, messaging, booking or CRM integration is connected to the portfolio, and no measured business results are claimed. Replace labeled sample visuals with approved product captures as they become available.
 
@@ -63,7 +63,7 @@ The five project covers and their demonstration diagrams are original local illu
 - Local clock (no weather or IP-based location requests)
 - LinkedIn and GitHub contact links
 - Responsive layouts with a flat fallback below 1020px
-- Data-driven project overview and free-floating process flow for Customer Acquisition, Dispatch, AI Customer Communications and B.R.A.I.N.
+- Data-driven project overview and free-floating process flow for Customer Acquisition, Dispatch, AI Customer Communications, B.R.A.I.N. and Safiy
 
 ## Structure
 
