@@ -4486,7 +4486,7 @@
   .pw-middle>.pw-overview-window{flex:1 1 0}
   .pw-right>.pw-overview-window{flex:1 1 auto;height:100%}
   .pw-overview-body{
-    flex:1 1 auto;min-height:0;overflow-y:auto;padding:20px 22px 22px;
+    flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:20px 22px 22px;
     scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.24) transparent
   }
   .pw-overview-body::-webkit-scrollbar{display:block;width:5px}
@@ -5030,41 +5030,22 @@
   #project[data-project="knowledge"] .pw-flow-bar:before,
   #project[data-project="safiy"] .pw-flow-bar:before{display:none!important}
 
-  /* Dense projects keep the same three-column overview and are fitted to the
-     workspace as a whole, so the project page itself never scrolls. */
+  /* Every project overview uses the Customer Acquisition fixed-height panel
+     contract. The project page and canvas never scroll; only the content
+     inside the three overview panels does. */
   @media(min-width:1021px){
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-canvas{
-      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
+    #project.project-has-overview:not(.project-flow-mode) .pw-canvas{
+      overflow:visible!important;align-items:center!important;padding-bottom:0!important
     }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-stage{
-      height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
+    #project.project-has-overview:not(.project-flow-mode) .pw-stage{
+      height:calc(var(--pw-panel-h)*2 + 11px);min-height:0;align-items:center;margin-block:auto
     }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-middle{height:auto!important}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what,
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges{
-      flex:none!important;height:auto!important;min-height:0
-    }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{overflow:visible!important}
-  }
-  @media(min-width:1021px){
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-overview-impact{margin-top:14px;padding-top:13px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-head h3{font-size:18px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case b{font-size:13px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case p{font-size:12.6px}
-    #project[data-project="communications"] .pw-impact-intent{margin-top:7px;font-size:6.1px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement{padding:11px 12px 11px 0}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement:nth-child(even){padding-left:12px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-icon{width:25px;height:25px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-head b{font-size:12.4px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
-  }
-  @media(min-width:1021px){
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{padding:14px 18px 14px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
+    #project.project-has-overview:not(.project-flow-mode) .pw-middle,
+    #project.project-has-overview:not(.project-flow-mode) .pw-right{height:100%!important;min-height:0}
+    #project.project-has-overview:not(.project-flow-mode) .pw-overview-what{flex:.8 1 0;min-height:0}
+    #project.project-has-overview:not(.project-flow-mode) .pw-overview-challenges{flex:1.2 1 0;min-height:0}
+    #project.project-has-overview:not(.project-flow-mode) .pw-overview-value{height:100%;min-height:0}
+    #project.project-has-overview:not(.project-flow-mode) .pw-overview-body{overflow-y:auto;min-height:0}
   }
 </style>
 </head>
@@ -7712,22 +7693,34 @@ function fitProjectStage(){
   const stage=$('projectStage');
   if(!stage) return;
   sizeProjectHero();
-  resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&window.innerWidth<=1020) return;
+  const prevTransition=stage.style.transition;
+  stage.style.transition='none';
+  resetProjectStageScale();
+  void stage.offsetWidth;
+  if(active&&active.overview&&window.innerWidth<=1020){
+    stage.style.transition=prevTransition;
+    return;
+  }
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
-  if(!cols.length) return;
+  if(!cols.length){
+    stage.style.transition=prevTransition;
+    return;
+  }
   const stageTop=stage.getBoundingClientRect().top;
   const maxBottom=Math.max(...cols.map(c=>c.getBoundingClientRect().bottom));
   const targetBottom=window.innerHeight-(window.innerWidth<=1020?72:16);
-  if(maxBottom<=targetBottom||targetBottom-stageTop<260) return;
-  const scale=Math.max(.55,Math.min(1,(targetBottom-stageTop)/(maxBottom-stageTop)));
-  if(scale<.998){
-    projectStageScale=scale;
-    stage.style.transformOrigin='top center';
-    stage.style.transform=`scale(${scale})`;
+  if(maxBottom>targetBottom&&targetBottom-stageTop>=260){
+    const scale=Math.max(.55,Math.min(1,(targetBottom-stageTop)/(maxBottom-stageTop)));
+    if(scale<.998){
+      projectStageScale=scale;
+      stage.style.transformOrigin='top center';
+      stage.style.transform=`scale(${scale})`;
+    }
   }
+  void stage.offsetWidth;
+  stage.style.transition=prevTransition;
 }
 function applyProjectMobileTab(tab,doFit=true){
   const ov=$('project');
@@ -7887,7 +7880,7 @@ function openProject(id,opts={}){
   $('project').setAttribute('aria-hidden','false');
   document.body.classList.add('project-open');
   $('project').scrollTop=0;
-  if(!prewarmHit) fitProjectStage();
+  fitProjectStage();
   const frame=$('projectHero').querySelector('.pw-project-frame');
   if(frame){
     if(wasOpen){
