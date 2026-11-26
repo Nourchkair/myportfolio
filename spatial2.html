@@ -5011,7 +5011,6 @@
     padding:4px 8px;font-size:7px;letter-spacing:.06em;color:rgba(255,255,255,.5);
     border-color:rgba(255,255,255,.18);background:rgba(7,13,17,.72)
   }
-  #project[data-project="safiy"] .pw-overview-list--value{gap:8px}
   #project[data-project="safiy"] .pw-flow-bar:before{
     content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
     background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
@@ -5025,8 +5024,14 @@
     #project.project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
   }
 
-  /* Dense projects keep the Customer Acquisition three-column overview while their
-     long middle content determines the column height. */
+  /* Process views sit directly on the environment; no dark header canvas. */
+  #project[data-project="h2ops"] .pw-flow-bar:before,
+  #project[data-project="communications"] .pw-flow-bar:before,
+  #project[data-project="knowledge"] .pw-flow-bar:before,
+  #project[data-project="safiy"] .pw-flow-bar:before{display:none!important}
+
+  /* Dense projects keep the same three-column overview and are fitted to the
+     workspace as a whole, so the project page itself never scrolls. */
   @media(min-width:1021px){
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-canvas{
       overflow-y:auto!important;align-items:flex-start!important;padding-bottom:24px
@@ -5034,21 +5039,15 @@
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-stage{
       height:auto!important;min-height:0;align-items:center!important;margin-block:auto!important
     }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-middle{
-      height:auto!important
-    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-middle{height:auto!important}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-what,
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-challenges{
       flex:none!important;height:auto!important;min-height:0
     }
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{
-      overflow:visible!important
-    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{overflow:visible!important}
   }
   @media(min-width:1021px){
-    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-overview-impact{
-      margin-top:14px;padding-top:13px
-    }
+    #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-overview-impact{margin-top:14px;padding-top:13px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-head h3{font-size:18px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case b{font-size:13px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-case p{font-size:12.6px}
@@ -5059,9 +5058,6 @@
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement-head b{font-size:12.4px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"]) .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
   }
-
-  /* The denser projects keep the same three-column composition with a slightly
-     tighter text rhythm so their panels and CTAs fit the desktop workspace. */
   @media(min-width:1021px){
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body{padding:14px 18px 14px}
     #project:is([data-project="h2ops"],[data-project="communications"],[data-project="knowledge"],[data-project="safiy"]).project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
