@@ -32,6 +32,13 @@ export function registerAdminRoutes(router, services) {
         knowledgeFolder: Boolean(config.google.knowledgeFolderId),
         backupFolder: Boolean(config.google.backupFolderId),
         allowSyntheticWrites: config.google.allowSyntheticWrites
+      },
+      email: {
+        provider: config.email.provider,
+        sendEnabled: config.email.sendEnabled,
+        from: config.email.resendFrom,
+        webhookConfigured: Boolean(config.email.webhookSecret),
+        internalNotifications: Boolean(config.email.internalTo)
       }
     });
   });
@@ -137,7 +144,27 @@ export function registerAdminRoutes(router, services) {
 
   router.get('/api/admin/email', async ({ request }) => {
     requireAdmin(request, config);
-    return json({ jobs: await db.listEmailJobs(100), provider: config.email.provider, sendEnabled: config.email.sendEnabled });
+    return json({
+      jobs: await db.listEmailJobs(100),
+      provider: config.email.provider,
+      sendEnabled: config.email.sendEnabled,
+      webhookConfigured: Boolean(config.email.webhookSecret)
+    });
+  });
+
+  router.post('/api/admin/email/:id/retry', async ({ request, params }) => {
+    requireAdmin(request, config);
+    const changed = await db.retryEmailJob({ id: params.id, now: Date.now() });
+    if (!changed) throw badRequest('Email job is not in a retryable state');
+    await db.audit({ actor: 'admin-token', action: 'email.retry', detail: { id: params.id }, now: Date.now() });
+    return json({ ok: true, id: params.id });
+  });
+
+  router.post('/api/admin/email/reminders', async ({ request }) => {
+    requireAdmin(request, config);
+    const queued = await email.scheduleReminders({ db, now: Date.now() });
+    await db.audit({ actor: 'admin-token', action: 'email.reminders', detail: { queued: queued.length }, now: Date.now() });
+    return json({ ok: true, queued });
   });
 
   router.post('/api/admin/appointments/:id/cancel', async ({ request, params }) => {

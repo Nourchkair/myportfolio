@@ -31,14 +31,14 @@ export function createPkcePair() {
   }));
 }
 
-export function buildAuthUrl({ clientId, redirectUri, state, challenge, scopes = ['openid', 'email', 'profile'] }) {
+export function buildAuthUrl({ clientId, redirectUri, state, challenge, scopes = ['openid', 'email', 'profile'], prompt = 'select_account' }) {
   const url = new URL('https://accounts.google.com/o/oauth2/v2/auth');
   url.searchParams.set('client_id', clientId);
   url.searchParams.set('redirect_uri', redirectUri);
   url.searchParams.set('response_type', 'code');
   url.searchParams.set('scope', scopes.join(' '));
   url.searchParams.set('access_type', 'online');
-  url.searchParams.set('prompt', 'select_account');
+  url.searchParams.set('prompt', prompt);
   url.searchParams.set('state', state);
   url.searchParams.set('code_challenge', challenge);
   url.searchParams.set('code_challenge_method', 'S256');
@@ -72,9 +72,15 @@ export async function fetchUserInfo({ accessToken, fetchImpl = fetch }) {
   return { email: String(json.email).toLowerCase(), name: json.name || '', emailVerified: Boolean(json.email_verified) };
 }
 
-export async function signSession({ email, expiresAt, secret }) {
+export async function signSession({ email, expiresAt, secret, issuedAt = Date.now(), sid = randomToken(18), epoch = 0 }) {
   if (!secret) throw new Error('Admin session secret is required');
-  const payload = base64url(encoder.encode(JSON.stringify({ email: String(email).toLowerCase(), expiresAt })));
+  const payload = base64url(encoder.encode(JSON.stringify({
+    email: String(email).toLowerCase(),
+    expiresAt,
+    issuedAt,
+    sid,
+    epoch: Number(epoch) || 0
+  })));
   const signature = base64url(await hmac(secret, payload));
   return `${payload}.${signature}`;
 }
@@ -90,15 +96,20 @@ export async function verifySession(token, secret) {
   if (diff !== 0) return null;
   try {
     const data = JSON.parse(decoder.decode(fromBase64url(payload)));
-    if (!data.email || data.expiresAt < Date.now()) return null;
+    if (!data.email || !data.expiresAt || data.expiresAt < Date.now()) return null;
+    if (!data.sid || !Number.isFinite(Number(data.epoch))) return null;
     return data;
   } catch {
     return null;
   }
 }
 
-export function buildSessionCookie(token, { maxAgeSeconds = 8 * 3600 } = {}) {
-  return `ainour_admin=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAgeSeconds}`;
+export function buildSessionCookie(token, { maxAgeSeconds = 8 * 3600, secure = false } = {}) {
+  return `ainour_admin=${token}; HttpOnly; SameSite=Lax; Path=/; Max-Age=${maxAgeSeconds}${secure ? '; Secure' : ''}`;
+}
+
+export function clearSessionCookie({ secure = false } = {}) {
+  return `ainour_admin=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0${secure ? '; Secure' : ''}`;
 }
 
 export function parseCookies(header = '') {

@@ -70,3 +70,34 @@ test('held Live reservations count toward the budget', async () => {
   assert.equal(budget.dailyUsdMicros, 600_000);
   assert.equal(budget.allowed, true);
 });
+
+test('expired Live reservations are charged as unreported usage and settled once', async () => {
+  const events = [];
+  const settled = new Set();
+  const db = {
+    getCostSince: async () => 0,
+    getCostTotal: async () => 0,
+    recordCost: async (row) => events.push(row),
+    listCostEvents: async () => [],
+    sumHeldLiveTokens: async () => 0,
+    listExpiredLiveTokens: async () => [{ id: 'live-1', reserved_usd_micros: 80_000 }],
+    markLiveTokenExpired: async ({ id }) => {
+      if (settled.has(id)) return false;
+      settled.add(id);
+      return true;
+    }
+  };
+  const config = {
+    caps: { dailyUsdMicros: 1_000_000, cumulativeUsdMicros: 7_000_000 },
+    rates,
+    liveModel: 'gemini-3.8-live'
+  };
+  const cost = createCostService({ db, config });
+  const first = await cost.settleExpiredLiveTokens({ now: 5000 });
+  assert.equal(first.settled, 1);
+  assert.equal(first.usdMicros, 80_000);
+  assert.equal(events[0].capability, 'live_unreported');
+  assert.equal(events[0].usdMicros, 80_000);
+  const second = await cost.settleExpiredLiveTokens({ now: 6000 });
+  assert.equal(second.settled, 0);
+});

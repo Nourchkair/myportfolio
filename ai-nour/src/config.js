@@ -36,7 +36,7 @@ function bool(env, key, fallback) {
 export function loadConfig(env = {}) {
   const config = {
     appEnv: env.APP_ENV || DEFAULTS.appEnv,
-    version: 'phase2-0.2.0',
+    version: 'phase3-0.3.0',
     prototypeAccessKey: env.PROTOTYPE_ACCESS_KEY || '',
     adminToken: env.ADMIN_TOKEN || '',
     adminEnabled: bool(env, 'ADMIN_ENABLED', DEFAULTS.adminEnabled),
@@ -55,7 +55,11 @@ export function loadConfig(env = {}) {
       provider: env.EMAIL_PROVIDER || 'resend',
       sendEnabled: bool(env, 'EMAIL_SEND_ENABLED', false),
       resendApiKey: env.RESEND_API_KEY || '',
-      resendFrom: env.RESEND_FROM || ''
+      resendFrom: env.RESEND_FROM || '',
+      internalTo: env.EMAIL_INTERNAL_TO || env.ADMIN_EMAIL || '',
+      webhookSecret: env.RESEND_WEBHOOK_SECRET || '',
+      maxAttempts: number(env, 'EMAIL_MAX_ATTEMPTS', 5),
+      retryBaseMs: number(env, 'EMAIL_RETRY_BASE_SECONDS', 60) * 1000
     },
     google: {
       clientId: env.GOOGLE_CLIENT_ID || '',
@@ -89,6 +93,8 @@ export function loadConfig(env = {}) {
       liveTokenReservationUsdMicros: number(env, 'LIVE_TOKEN_RESERVATION_USD_MICROS', 80_000),
       liveTokenTtlSeconds: number(env, 'LIVE_TOKEN_TTL_SECONDS', 120),
       liveTokenNewSessionTtlSeconds: number(env, 'LIVE_TOKEN_NEW_SESSION_TTL_SECONDS', 60),
+      liveTokenHoldMs: number(env, 'LIVE_TOKEN_HOLD_SECONDS', 900) * 1000,
+      maxLiveTokensPerDay: number(env, 'MAX_LIVE_TOKENS_PER_DAY', 12),
       sessionTtlMs: number(env, 'SESSION_TTL_HOURS', 168) * 3_600_000
     }
   };

@@ -1,0 +1,121 @@
+{
+  "generatedAt": "2026-11-26T22:14:13.154Z",
+  "mode": "local-admin/google-session-signing/mock-worker",
+  "passed": 15,
+  "failed": 0,
+  "total": 15,
+  "results": [
+    {
+      "name": "admin API rejects a missing session",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "admin page redirects unauthenticated visitors to Google sign-in",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "location": "/auth/google/start"
+      }
+    },
+    {
+      "name": "valid signed session is accepted",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "email": "nourchkair@gmail.com"
+      }
+    },
+    {
+      "name": "authorized admin proxy reaches the Worker",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "version": "phase3-0.3.0"
+      }
+    },
+    {
+      "name": "tampered session cookie is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "expired session is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "non-allowlisted Google account is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "cross-origin administrative mutation is rejected",
+      "pass": true,
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "name": "authorized admin page renders with security headers",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "xfo": "DENY"
+      }
+    },
+    {
+      "name": "logout clears and revokes the session",
+      "pass": true,
+      "detail": {
+        "status": 204,
+        "cookie": "ainour_admin=; HttpOnly; SameSite=Lax; Path=/; Max-Age=0"
+      }
+    },
+    {
+      "name": "revoked session no longer works after logout",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "reauthentication starts a fresh Google login prompt",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "prompt": "login"
+      }
+    },
+    {
+      "name": "revoke-all rotates the administrator session epoch",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "epoch": 1
+      }
+    },
+    {
+      "name": "access revocation invalidates existing sessions",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "a new session works after revocation",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    }
+  ]
+}

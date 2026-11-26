@@ -135,7 +135,7 @@ function panelMarkup() {
         <div class="ainour-orb-stage">
           <span class="ainour-orb-big" aria-hidden="true"></span>
           <b class="ainour-live-state" id="ainourLiveState">idle</b>
-          <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation; the transcript will appear in the conversation.</span>
+          <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation; sessions are limited to about two minutes and the transcript stays in the chat.</span>
         </div>
         <div class="ainour-live-actions">
           <button class="ainour-start" type="button" data-ainour="start-voice">Start microphone</button>
@@ -606,7 +606,7 @@ async function init() {
     await loadSession();
     state.ready = true;
     setState('idle');
-    setLiveState('idle', 'Start a voice conversation; the transcript will appear in the conversation.');
+    setLiveState('idle', 'Start a voice conversation; sessions are limited to about two minutes and the transcript stays in the chat.');
     updateContext();
   } catch (error) {
     if (String(error.message).includes('unauthorized')) return;
@@ -874,7 +874,7 @@ async function startVoice() {
     if (!state.ready) return;
   }
   openPanel('voice');
-  setLiveState('connecting', 'Requesting microphone and a one-use Live token…');
+  setLiveState('connecting', 'Requesting microphone and a one-use Live token (about two minutes)…');
   voice.turnId = randomId(12);
   voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0 };
   voice.usage = null;

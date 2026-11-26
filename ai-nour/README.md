@@ -1,8 +1,8 @@
-# AI Nour — Phase 2
+# AI Nour — Phase 3 launch candidate
 
-Isolated Phase 2 production-hardening prototype for AI Nour: a modular Cloudflare Worker, Gemini text and Live adapters, Google integrations, D1 sessions and cost controls, bilingual retrieval, a local prototype UI, and a local-only admin surface.
+Isolated Phase 3 launch candidate for AI Nour: a Cloudflare Worker, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, D1 conversation/CRM/cost stores, bilingual retrieval, a feature-flagged portfolio companion, a private admin dashboard, and a transactional email pipeline prepared for Resend Free.
 
-This is **not** the production AI Nour integration. It runs locally by default, requires an explicit prototype access key, and does not deploy or change production. The portfolio companion is feature-flagged; the default portfolio and reading view remain unchanged.
+This is **not deployed to production**, is not merged into `main`, and does not activate billing or paid services. The portfolio companion mounts only when explicitly enabled.
 
 ## Quick start
 
@@ -16,34 +16,44 @@ npm run dev
 
 Open <http://127.0.0.1:8789>, enter the `PROTOTYPE_ACCESS_KEY` from the local `.dev.vars`, and start chatting.
 
-The Worker reads `ai-nour/.dev.vars`. In the Phase 1 worktree this is a symlink to the repository-root `.dev.vars`. For a fresh checkout, create `ai-nour/.dev.vars` with mode `600` and the required keys.
+The Worker reads `ai-nour/.dev.vars`. In this worktree it points at the repository-root `.dev.vars`; keep it mode `600` and never commit it.
+
+### Local companion
+
+```text
+http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
+```
+
+Mock Worker key: `phase2-test-key`. Real Worker: `ainour-api=http://127.0.0.1:8789` and the key from `.dev.vars`.
 
 ### Local admin
 
 ```bash
-# separate terminal, with the Worker running
+# separate terminal, Worker running
 npm run admin
 ```
 
-Open <http://127.0.0.1:8791>. The admin server binds to `127.0.0.1` only and injects the server-side `ADMIN_TOKEN`; the token never reaches the browser. The Worker admin API also requires that token.
+Open <http://127.0.0.1:8791> using the allowlisted Google account. The admin server binds to `127.0.0.1`; the Worker bearer token never reaches the browser. Sign out, re-authenticate, and sign out all are available in the header.
 
-### Tests
+## Tests
 
 ```bash
-npm test                 # unit tests: retrieval, cost, tools, auth, sessions, providers, Google adapters
-npm run test:api         # boots a mock-provider Worker on a separate local D1 state
+npm test                 # unit: retrieval, cost, tools, auth, sessions, providers, Google adapters, email
+npm run test:api         # mock-provider API Worker on a separate D1 state
 npm run test:crm         # synthetic D1 inquiry/appointment workflow
-npm run test:crm:google  # authorized synthetic Google Calendar appointment; requires a worker with ENABLE_CRM_WRITES=true
-npm run test:live-budget # verifies prepaid Live-token reservations block unreported usage
-npm run test:security    # prompt-injection and allowlist checks against the running worker
+npm run test:lifecycle   # full inquiry → consent → calendar → email → reminder → reschedule → cancel
+npm run test:admin-auth  # admin session, logout, reauth, revocation, CSRF and security headers
+npm run test:live-budget # prepaid Live reservation and cap bypass checks
+npm run test:security    # prompt-injection/allowlist checks against the running Worker
+npm run retrieval        # bilingual retrieval benchmark
 npm run test:real        # real Gemini text + Live smoke test (costs a few cents)
 npm run test:fr          # French text + Live smoke test
 npm run test:recovery    # text → new Live session → shared context recovery
-npm run retrieval        # bilingual retrieval benchmark
-npm run google:synthetic # authorized synthetic Google write test; requires a worker started with ALLOW_SYNTHETIC_WRITES=true
+npm run test:crm:google  # authorized synthetic Google Calendar appointment
+npm run google:synthetic # authorized synthetic Google write test
 ```
 
-The real-model scripts assume the dev Worker is running at `http://127.0.0.1:8789`. Set `PHASE1_WORKER_URL` to point elsewhere. They read credentials from `.dev.vars` and never print secrets.
+The lifecycle test uses mock email delivery plus a real synthetic no-attendee Google Calendar event with a unique Meet link; it cancels the event. No real email is sent. Real-model scripts require the Worker at `http://127.0.0.1:8789` and credentials from `.dev.vars`.
 
 ## Required local keys
 
@@ -64,7 +74,14 @@ GOOGLE_BACKUP_FOLDER_ID
 BACKUP_ENCRYPTION_KEY
 ```
 
-Cloudflare bindings (`DB`, `ASSETS`) are declared in `wrangler.toml`. The local D1 database is `ai-nour-phase1-dev`.
+Resend production secrets/configuration are not required until the domain/webhook is approved:
+
+```text
+RESEND_API_KEY
+RESEND_WEBHOOK_SECRET
+EMAIL_SEND_ENABLED=true
+EMAIL_INTERNAL_TO
+```
 
 ## Architecture
 
@@ -72,73 +89,69 @@ Cloudflare bindings (`DB`, `ASSETS`) are declared in `wrangler.toml`. The local 
 public/ prototype UI ──► Worker /api
                            ├─ auth: prototype key + owner token + admin token
                            ├─ sessions: D1 messages, summary, recovery
-                           ├─ retrieval: 105 structured chunks, bilingual aliases
-                           ├─ text provider: Gemini Flash-Lite REST adapter
-                           ├─ Live provider: one-use ephemeral token, constrained config
+                           ├─ retrieval: 107 structured chunks, bilingual aliases
+                           ├─ text: Gemini Flash-Lite
+                           ├─ Live: one-use token, 120s lifetime, prepaid reservation
                            ├─ tools: allowlisted NourOS navigation
-                           ├─ Google adapters: Sheets, Calendar, Drive, Gmail
-                           ├─ cost: per-model rates, daily + cumulative caps
-                           └─ controls: feature flags and emergency shutdown
-admin/ local UI ──► scripts/admin-server.mjs ──► Worker /api/admin (bearer token)
+                           ├─ Google: Sheets, Calendar, Drive, Gmail drafts
+                           ├─ CRM: contacts, consent, inquiries, bookings, idempotency
+                           ├─ email: D1 queue, Resend/mock/Gmail-draft, retries, webhooks
+                           ├─ cost: daily + cumulative caps, Live settlement
+                           └─ controls: flags, persona, emergency shutdown
+admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin (bearer token)
 ```
-
-See `docs/architecture.md` for module boundaries and flows, `docs/visual-prototypes.md` for the integrated companion screenshots, `docs/crm-schema.md` for the proposed CRM schema, `docs/oauth-production-readiness.md` for the OAuth plan, and `docs/email-recommendation.md` for the Resend/Gmail recommendation.
 
 ## API surface
 
 | Route | Auth | Purpose |
 | --- | --- | --- |
 | `GET /api/health` | public | Worker/D1 health |
-| `GET /api/meta` | prototype key | models, corpus, tool list, public flags |
+| `GET /api/meta` | prototype key | models, corpus, tools, public flags |
 | `POST /api/session` | prototype + owner | create a session |
-| `GET /api/session/:id` | prototype + owner | restore messages and summary |
+| `GET /api/session/:id` | prototype + owner | restore messages/summary |
 | `POST /api/chat` | prototype + owner | text conversation and tool loop |
-| `POST /api/live/token` | prototype + owner | mint a one-use Live token and constrained config |
-| `POST /api/live/turn` | prototype + owner | persist Live transcript/usage into shared context |
-| `POST /api/tools/execute` | prototype + owner | validate and execute an allowlisted navigation tool |
-| `GET /api/knowledge/search` | prototype key | inspect retrieval results |
-| `GET /api/admin/*` | admin bearer | status, flags, persona, cost, sessions, knowledge, integrations, CRM, audit |
+| `POST /api/live/token` | prototype + owner | one-use Live token + reservation |
+| `POST /api/live/turn` | prototype + owner | persist transcript/usage |
+| `POST /api/tools/execute` | prototype + owner | validate/execute navigation |
+| `POST /api/crm/inquiries` | prototype + owner | inquiry + consent |
+| `POST /api/crm/availability` | prototype + owner | D1 + Calendar free/busy |
+| `POST /api/crm/appointments` | prototype + owner | idempotent booking |
+| `POST /api/crm/appointments/:id/reschedule` | prototype + owner | reschedule |
+| `POST /api/crm/appointments/:id/cancel` | prototype + owner | cancel |
+| `POST /api/crm/appointments/:id/reconcile` | prototype + owner | recover calendar failure |
+| `POST /api/webhooks/resend` | Svix signature | delivery/bounce/complaint events |
+| `GET /api/admin/*` | admin bearer | status, flags, cost, CRM, email, audit |
+| `POST /api/admin/email/:id/retry` | admin bearer | requeue failed email |
+| `POST /api/admin/email/reminders` | admin bearer | queue due reminders |
 
 ## Safety and cost
 
-- Permanent Gemini key and Google refresh token stay server-side.
-- The browser receives only one-use Live tokens.
-- Proposed Google writes are off by default (`google_writes_enabled=false`); synthetic tests require both the admin token and `ALLOW_SYNTHETIC_WRITES=true`.
+- Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
+- Live tokens are one-use, expire after 120 seconds, carry an $0.08 prepaid reservation, and are capped at 12/day. Expired holds are charged as `live_unreported`.
+- Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
+- Google writes are off by default and require an admin flag; synthetic tests use no attendees.
 - Gmail adapter has no send method; it creates drafts only.
-- Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (about `$9.95 CAD`), enforced from D1 cost events.
-- Phase 0A carryover is seeded into the cumulative ledger.
-- No billing, paid services, R2, or production deployment is activated.
+- Resend is prepared but `EMAIL_SEND_ENABLED=false` by default; local processing is dry-run.
+- No R2, paid auth, paid database, or production deployment is activated.
+- CRM headers remain proposed; no production sheet writes.
 
-## Google admin OAuth evaluation
+## Documentation
 
-`src/admin/google-oauth.js` implements state + PKCE, code exchange, userinfo email verification, and HMAC-signed HttpOnly sessions. The local admin server can use it when all of the following are set:
-
-```text
-ADMIN_GOOGLE_AUTH=true
-ADMIN_EMAIL=<authorized admin email>
-ADMIN_GOOGLE_REDIRECT_URI=http://127.0.0.1:8791/auth/google/callback
-PHASE1_ADMIN_SESSION_SECRET=<32-byte hex>
-```
-
-The localhost redirect URI has been added to the existing AI Nour Development client and the local admin Google login was verified end to end. The OAuth app remains in Testing; no publish or verification was submitted. See `docs/oauth-production-readiness.md`.
-
-## Portfolio companion
-
-The companion is enabled only with `?ainour=dev` or `?ainour=1` on the portfolio:
-
-```text
-http://localhost:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
-```
-
-It mounts a native-looking toolbar presence, compact/expanded conversation, voice sheet, portfolio-context awareness, and server-validated navigation through `window.NourOS`. Manual navigation always takes priority. The full code is in `src/ai-nour/` and is copied into the static build only when the portfolio is built; it is not active by default.
+- `docs/visual-prototypes.md` — six-state visual approval package.
+- `docs/real-device-testing.md` — Chrome/Safari/iOS/Bluetooth/French human checklist.
+- `docs/crm-schema.md` — proposed CRM tables, field purposes, required flags.
+- `docs/email-recommendation.md` — verified Resend limits, DNS, credentials, retry/delivery design.
+- `docs/oauth-production-readiness.md` — production OAuth clients, scopes, redirects, verification, MCP policy.
+- `docs/admin-security.md` — admin authentication, authorization, logout/revocation, tests.
+- `docs/live-spend-analysis.md` — Live exposure, abandoned connections, proxy comparison.
+- `docs/architecture.md` — module map and data flows.
 
 ## Known limitations
 
-- Cloudflare Access is deferred; the Worker admin API is token-protected but still publicly routable if deployed. The local admin is protected by Google OAuth + a signed HttpOnly session cookie.
-- The admin model configuration is read-only in Phase 2; model changes remain environment-managed.
-- Gmail automated sending is intentionally unimplemented; draft + human send is the current policy path.
-- Google OAuth may still be in Testing mode; refresh tokens can expire after 7 days.
-- CRM headers remain unapplied pending approval.
-- Real device microphone behaviour and Safari/iOS audio are not validated by the automated tests.
-- The visual interface is a temporary QA surface, not a production design. See `docs/visual-prototypes.md`.
-- D1 is ENAM/ORD, not Canada.
+- Visual approval and real-device microphone/Bluetooth/iOS testing remain pending.
+- OAuth production publishing/verification and production redirect URIs are not submitted.
+- Resend DNS/DKIM/DMARC and a real test send are not configured.
+- Google Workspace MCP migration is a post-1-February-2027 requirement if direct REST agent access is disallowed.
+- CRM Google Sheet headers are not applied.
+- Cloudflare Access is not introduced; production admin hosting is undecided.
+- D1 remains ENAM/ORD; the historical third-party key remains in Git history without rewriting.

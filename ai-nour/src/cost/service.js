@@ -84,6 +84,30 @@ export function createCostService({ db, config }) {
     return usdMicros;
   }
 
+  async function settleExpiredLiveTokens({ now = Date.now(), limit = 100 } = {}) {
+    if (typeof db.listExpiredLiveTokens !== 'function') return { settled: 0, usdMicros: 0 };
+    const rows = await db.listExpiredLiveTokens({ now, limit });
+    let usdMicros = 0;
+    let settled = 0;
+    for (const row of rows) {
+      const amount = Number(row.reserved_usd_micros || 0);
+      const changed = await db.markLiveTokenExpired({ id: row.id, now });
+      if (!changed) continue;
+      await record({
+        requestId: `live-settle:${row.id}`,
+        model: config.liveModel || 'gemini-live',
+        capability: 'live_unreported',
+        inputTokens: 0,
+        outputTokens: 0,
+        usdMicros: amount,
+        now
+      });
+      settled++;
+      usdMicros += amount;
+    }
+    return { settled, usdMicros };
+  }
+
   async function recordLive({ requestId, model, usage, capability = 'live_voice', now = Date.now(), reservationId = null, ownerHash = null, sessionId = null }) {
     const actual = liveCostMicros(usage, config.rates);
     const inputTokens = Number(usage.textInput ?? 0) + Number(usage.audioInput ?? 0);
@@ -109,6 +133,7 @@ export function createCostService({ db, config }) {
     record,
     recordText,
     recordLive,
+    settleExpiredLiveTokens,
     textCostMicros: (usage) => textCostMicros(usage, config.rates),
     liveCostMicros: (usage) => liveCostMicros(usage, config.rates),
     list: (limit) => db.listCostEvents(limit)

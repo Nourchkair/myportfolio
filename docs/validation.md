@@ -149,4 +149,4 @@ The lower scores are explained by the local clock changing and the intentional H
 3. The social preview uses the existing About portrait; a dedicated branded 1200×630 image is still open.
 4. `spatial2.html` depends on JavaScript plus a visible fallback link; `index.html` is the primary entry.
 5. `sitemap.xml` is generated for the production domain; `SITE_URL` can override it for preview builds.
-6. AI Nour and external integrations remain intentionally unimplemented.
+6. AI Nour is now implemented behind the `?ainour=dev`/`?ainour=1` feature flag; the default portfolio and reading view remain assistant-free. Phase 3 status, tests, and approval gates are in `docs/ai-nour-phase3.md`.

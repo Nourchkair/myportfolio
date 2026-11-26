@@ -219,6 +219,12 @@ export async function handleLiveToken({
   });
   if (!rate.allowed) throw tooMany('Too many Live sessions. Please wait before trying again.');
 
+  const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
+  const tokensToday = await db.countLiveTokensSince(dayStart);
+  if (tokensToday >= config.limits.maxLiveTokensPerDay) {
+    throw tooMany('The daily Live session limit has been reached. Try again after midnight UTC.');
+  }
+
   const budgetBeforeToken = await cost.assertBudget(now);
   const reservation = config.limits.liveTokenReservationUsdMicros;
   if (budgetBeforeToken.dailyUsdMicros + reservation > config.caps.dailyUsdMicros || budgetBeforeToken.cumulativeUsdMicros + reservation > config.caps.cumulativeUsdMicros) {
@@ -251,7 +257,7 @@ export async function handleLiveToken({
     sessionId: session.id,
     reservedUsdMicros: reservationUsdMicros,
     now,
-    expiresAt: now + 3_600_000
+    expiresAt: now + config.limits.liveTokenHoldMs
   });
   let token;
   try {

@@ -1,9 +1,9 @@
 {
   "name": "ai-nour-phase1",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "AI Nour Phase 1 prototype: modular Cloudflare Worker, Gemini adapters, Google integrations, and local admin surface",
+  "description": "AI Nour Phase 3 launch candidate: Cloudflare Worker, Gemini text/Live, Google integrations, CRM/email pipeline, and private admin",
   "scripts": {
     "build:knowledge": "node scripts/build-knowledge.mjs",
     "build:ui": "node scripts/build-ui.mjs",
@@ -23,6 +23,8 @@
     "build:companion-sdk": "node scripts/build-companion-sdk.mjs",
     "test:crm": "node scripts/test-crm.mjs",
     "test:crm:google": "node scripts/test-crm-google.mjs",
+    "test:lifecycle": "node scripts/test-lifecycle.mjs",
+    "test:admin-auth": "node scripts/test-admin-auth.mjs",
     "test:live-budget": "node scripts/test-live-budget.mjs"
   },
   "dependencies": {

@@ -25,8 +25,43 @@ async function api(path, options = {}) {
   const text = await response.text();
   let body = {};
   try { body = text ? JSON.parse(text) : {}; } catch {}
+  if (response.status === 401 && body?.error === 'admin_login_required') {
+    $('#session-note').textContent = 'Administrator session expired. Redirecting to sign-in…';
+    setTimeout(() => { location.href = '/auth/google/start'; }, 800);
+  }
   if (!response.ok) throw new Error(body?.error?.message || body?.error || `HTTP ${response.status}`);
   return body;
+}
+
+async function loadSession() {
+  try {
+    const session = await api('/auth/session');
+    if (session.mode === 'local-token') {
+      $('#session-note').textContent = 'Local token proxy · Google admin OAuth is disabled';
+      $('#reauth').hidden = true;
+      $('#logout').hidden = true;
+      $('#revoke-all').hidden = true;
+      return;
+    }
+    const expires = session.expiresAt ? new Date(session.expiresAt).toLocaleString() : 'unknown';
+    $('#session-note').textContent = `Signed in as ${session.email} · session expires ${expires}`;
+  } catch {
+    $('#session-note').textContent = 'Administrator session required. Redirecting to sign-in…';
+    $('#reauth').hidden = true;
+    $('#logout').hidden = true;
+    $('#revoke-all').hidden = true;
+  }
+}
+
+async function logout() {
+  await fetch('/auth/logout', { method: 'POST' });
+  location.href = '/';
+}
+
+async function revokeAll() {
+  if (!window.confirm('Sign out every administrator session?')) return;
+  await fetch('/auth/revoke-all', { method: 'POST' });
+  location.href = '/auth/google/start';
 }
 
 function cards(items) {
@@ -48,6 +83,7 @@ function renderOverview() {
     { label: 'Cumulative spend (USD)', value: money(s.budget.cumulativeUsdMicros), sub: `cap ${money(s.budget.cumulativeCapUsdMicros)}` },
     { label: 'Knowledge corpus', value: `${s.corpus.chunks} chunks`, sub: s.corpus.contentHash },
     { label: 'Google', value: s.google.configured ? 'configured' : 'not configured', sub: `sheets ${s.google.spreadsheet ? 'yes' : 'no'} · calendar ${s.google.calendar ? 'yes' : 'no'}` },
+    { label: 'Email', value: s.email?.sendEnabled ? 'send enabled' : 'dry-run', sub: `${s.email?.provider || 'not configured'} · ${s.email?.webhookConfigured ? 'webhook ready' : 'no webhook'}` },
     { label: 'Sessions', value: String(s.counts.sessions), sub: 'recent shown in Sessions' }
   ]);
   const flags = s.flags;
@@ -180,7 +216,7 @@ async function loadCRM() {
     { label: 'CRM', value: crm.crm?.title || 'not configured', sub: `${crm.crm?.tabs?.length || 0} tabs` },
     ...Object.entries(counts).map(([tab, count]) => ({ label: tab, value: String(count), sub: 'records' })),
     { label: 'Inquiries (D1)', value: String(inquiries.inquiries?.length || 0), sub: 'synthetic/local' },
-    { label: 'Email jobs', value: String(emails.jobs?.length || 0), sub: `${emails.provider} · ${emails.sendEnabled ? 'send enabled' : 'dry-run'}` }
+    { label: 'Email jobs', value: String(emails.jobs?.length || 0), sub: `${emails.provider} · ${emails.sendEnabled ? 'send enabled' : 'dry-run'} · ${emails.webhookConfigured ? 'webhook verified' : 'webhook not configured'}` }
   ]);
   $('#inquiry-list').innerHTML = table(
     ['Created', 'Type', 'Status', 'Summary', 'Contact', 'Owner'],
@@ -197,16 +233,40 @@ async function loadCRM() {
     ])
   );
   $('#email-jobs').innerHTML = table(
-    ['Created', 'Kind', 'To', 'Status', 'Provider'],
-    (emails.jobs || []).map((job) => [time(job.created_at), esc(job.kind), esc(job.to_email), esc(job.status), esc(job.provider)])
+    ['Created', 'Kind', 'To', 'Status', 'Attempts', 'Next attempt', 'Provider ID', 'Last event', ''],
+    (emails.jobs || []).map((job) => {
+      const retryable = ['failed', 'dead_letter', 'cancelled'].includes(job.status);
+      return [
+        time(job.created_at), esc(job.kind), esc(job.to_email), esc(job.status), esc(job.attempts || 0),
+        job.next_attempt_at ? time(job.next_attempt_at) : '—',
+        job.provider_message_id ? `<code>${esc(String(job.provider_message_id).slice(0, 12))}…</code>` : '—',
+        job.last_event_at ? time(job.last_event_at) : '—',
+        retryable ? `<button data-retry-email="${esc(job.id)}">Retry</button>` : ''
+      ];
+    })
   );
+  $$('#email-jobs button[data-retry-email]').forEach((button) => button.addEventListener('click', async () => {
+    await api(`/api/admin/email/${encodeURIComponent(button.dataset.retryEmail)}/retry`, { method: 'POST', body: '{}' });
+    await loadCRM();
+  }));
 }
 
 async function processEmail() {
-  $('#email-result').textContent = 'Processing queued jobs…';
+  $('#email-result').textContent = 'Processing due jobs…';
   try {
     const result = await api('/api/admin/email/process', { method: 'POST', body: '{}' });
     $('#email-result').textContent = `${result.results?.length || 0} jobs processed · send enabled: ${result.sendEnabled}`;
+    await loadCRM();
+  } catch (error) {
+    $('#email-result').textContent = String(error.message || error);
+  }
+}
+
+async function scheduleReminders() {
+  $('#email-result').textContent = 'Scheduling reminders…';
+  try {
+    const result = await api('/api/admin/email/reminders', { method: 'POST', body: '{}' });
+    $('#email-result').textContent = `${result.queued?.length || 0} reminders queued`;
     await loadCRM();
   } catch (error) {
     $('#email-result').textContent = String(error.message || error);
@@ -269,7 +329,12 @@ $('#knowledge-search').addEventListener('click', () => searchKnowledge().catch((
 $('#refresh-integrations').addEventListener('click', () => loadIntegrations().catch((error) => showError(error.message)));
 $('#synthetic-test').addEventListener('click', () => runSynthetic());
 $('#process-email').addEventListener('click', () => processEmail());
+$('#schedule-reminders').addEventListener('click', () => scheduleReminders());
+$('#reauth').addEventListener('click', () => { location.href = '/auth/google/start?reauth=1'; });
+$('#logout').addEventListener('click', () => logout().catch((error) => showError(error.message)));
+$('#revoke-all').addEventListener('click', () => revokeAll().catch((error) => showError(error.message)));
 
+loadSession();
 api('/api/admin/status').then((status) => {
   state.status = status;
   state.flags = status.flags;

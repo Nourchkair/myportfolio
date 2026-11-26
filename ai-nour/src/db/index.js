@@ -311,10 +311,15 @@ export function createDb(d1) {
     }
   }
 
-  async function addEmailJob({ id, kind, toEmail, subject, body, status = 'queued', provider = 'resend', inquiryId = null, appointmentId = null, now }) {
-    await d1.prepare(
-      'INSERT INTO email_jobs(id,kind,to_email,subject,body,status,provider,inquiry_id,appointment_id,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?)'
-    ).bind(id, kind, toEmail, subject, body, status, provider, inquiryId, appointmentId, now, now).run();
+  async function addEmailJob({ id, kind, toEmail, subject, body, html = null, status = 'queued', provider = 'resend', dedupeKey = null, maxAttempts = 5, nextAttemptAt = null, inquiryId = null, appointmentId = null, now }) {
+    const result = await d1.prepare(
+      'INSERT OR IGNORE INTO email_jobs(id,kind,to_email,subject,body,html,status,provider,dedupe_key,max_attempts,next_attempt_at,inquiry_id,appointment_id,attempts,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,0,?,?)'
+    ).bind(id, kind, toEmail, subject, body, html, status, provider, dedupeKey, maxAttempts, nextAttemptAt ?? now, inquiryId, appointmentId, now, now).run();
+    return { id, created: (result.meta?.changes || 0) > 0 };
+  }
+
+  async function getEmailJob(id) {
+    return d1.prepare('SELECT * FROM email_jobs WHERE id=?').bind(id).first();
   }
 
   async function listEmailJobs(limit = 50) {
@@ -322,8 +327,92 @@ export function createDb(d1) {
     return result.results || [];
   }
 
-  async function updateEmailJob({ id, status, sentAt = null, error = null, now }) {
-    await d1.prepare('UPDATE email_jobs SET status=?, sent_at=?, error=?, updated_at=? WHERE id=?').bind(status, sentAt, error, now, id).run();
+  async function listDueEmailJobs({ now, limit = 10 }) {
+    const result = await d1.prepare(
+      "SELECT * FROM email_jobs WHERE status='queued' AND (next_attempt_at IS NULL OR next_attempt_at<=?) ORDER BY created_at, id LIMIT ?"
+    ).bind(now, limit).all();
+    return result.results || [];
+  }
+
+  async function claimEmailJob({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE email_jobs SET status='sending', attempts=attempts+1, last_attempt_at=?, updated_at=? WHERE id=? AND status='queued'"
+    ).bind(now, now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function markEmailJobSent({ id, status = 'sent', sentAt = null, providerMessageId = null, now }) {
+    await d1.prepare(
+      'UPDATE email_jobs SET status=?, sent_at=?, provider_message_id=?, error=NULL, next_attempt_at=NULL, last_event_at=?, updated_at=? WHERE id=?'
+    ).bind(status, sentAt, providerMessageId, now, now, id).run();
+  }
+
+  async function markEmailJobFailure({ id, status = 'queued', error = null, nextAttemptAt = null, now }) {
+    await d1.prepare(
+      'UPDATE email_jobs SET status=?, error=?, next_attempt_at=?, updated_at=? WHERE id=?'
+    ).bind(status, error, nextAttemptAt, now, id).run();
+  }
+
+  async function retryEmailJob({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE email_jobs SET status='queued', attempts=0, next_attempt_at=?, error=NULL, updated_at=? WHERE id=? AND status IN ('failed','dead_letter','cancelled')"
+    ).bind(now, now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function resetStaleEmailJobs({ before, now }) {
+    const result = await d1.prepare(
+      "UPDATE email_jobs SET status='queued', next_attempt_at=?, updated_at=? WHERE status='sending' AND updated_at<?"
+    ).bind(now, now, before).run();
+    return result.meta?.changes || 0;
+  }
+
+  async function cancelEmailJobsForAppointment({ appointmentId, kinds = [], now }) {
+    if (!appointmentId || !kinds.length) return 0;
+    const placeholders = kinds.map(() => '?').join(',');
+    const result = await d1.prepare(
+      `UPDATE email_jobs SET status='cancelled', updated_at=? WHERE appointment_id=? AND status='queued' AND kind IN (${placeholders})`
+    ).bind(now, appointmentId, ...kinds).run();
+    return result.meta?.changes || 0;
+  }
+
+  async function recordEmailEvent({ id, eventType, emailId = null, now }) {
+    const result = await d1.prepare(
+      'INSERT OR IGNORE INTO email_webhook_events(id,event_type,email_id,created_at) VALUES(?,?,?,?)'
+    ).bind(id, eventType, emailId, now).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function applyEmailDelivery({ providerMessageId, status = null, eventType, now }) {
+    if (!providerMessageId) return false;
+    const deliveredAt = eventType === 'email.delivered' ? now : null;
+    const bouncedAt = eventType === 'email.bounced' ? now : null;
+    const complainedAt = eventType === 'email.complained' ? now : null;
+    const result = await d1.prepare(`
+      UPDATE email_jobs SET
+        status = CASE
+          WHEN status IN ('bounced','complained') THEN status
+          WHEN ? IS NULL THEN status
+          ELSE ?
+        END,
+        delivered_at = COALESCE(delivered_at, ?),
+        bounced_at = COALESCE(bounced_at, ?),
+        complained_at = COALESCE(complained_at, ?),
+        last_event_at = ?,
+        updated_at = ?
+      WHERE provider_message_id = ?
+    `).bind(status, status, deliveredAt, bouncedAt, complainedAt, now, now, providerMessageId).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function listBookingsForReminder({ from, to }) {
+    const result = await d1.prepare(`
+      SELECT b.*, c.full_name, c.email, c.locale
+      FROM bookings b JOIN contacts c ON c.id=b.contact_id
+      WHERE b.status='confirmed' AND b.start_utc>=? AND b.start_utc<=? AND c.email IS NOT NULL
+      ORDER BY b.start_utc
+    `).bind(from, to).all();
+    return result.results || [];
   }
 
   async function createLiveTokenReservation({ id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt }) {
@@ -354,14 +443,43 @@ export function createDb(d1) {
     return Number(row?.total || 0);
   }
 
+  async function countLiveTokensSince(since) {
+    const row = await d1.prepare('SELECT COUNT(*) AS total FROM live_tokens WHERE created_at>=?').bind(since).first();
+    return Number(row?.total || 0);
+  }
+
+  async function listExpiredLiveTokens({ now, limit = 100 }) {
+    const result = await d1.prepare(
+      "SELECT * FROM live_tokens WHERE status='held' AND expires_at<=? ORDER BY expires_at LIMIT ?"
+    ).bind(now, limit).all();
+    return result.results || [];
+  }
+
+  async function markLiveTokenExpired({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE live_tokens SET status='expired', reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
   async function cleanup({ now, rateWindowMs }) {
     const expiredSessions = await deleteExpiredSessions(now);
     const staleRates = await d1.prepare('DELETE FROM rate_limits WHERE window_start < ?').bind(now - rateWindowMs).run();
     const oldEvents = await d1.prepare('DELETE FROM ops_events WHERE created_at < ?').bind(now - 30 * 86_400_000).run();
+    const staleEmailJobs = await resetStaleEmailJobs({ before: now - 10 * 60_000, now });
+    const oldEmailJobs = await d1.prepare(
+      "DELETE FROM email_jobs WHERE created_at < ? AND status NOT IN ('queued','sending')"
+    ).bind(now - 30 * 86_400_000).run();
+    const oldEmailEvents = await d1.prepare(
+      'DELETE FROM email_webhook_events WHERE created_at < ?'
+    ).bind(now - 30 * 86_400_000).run();
     return {
       expiredSessions,
       staleRateBuckets: staleRates.meta?.changes || 0,
-      oldOpsEvents: oldEvents.meta?.changes || 0
+      oldOpsEvents: oldEvents.meta?.changes || 0,
+      staleEmailJobs,
+      oldEmailJobs: oldEmailJobs.meta?.changes || 0,
+      oldEmailEvents: oldEmailEvents.meta?.changes || 0
     };
   }
 
@@ -405,13 +523,26 @@ export function createDb(d1) {
     updateBookingCalendar,
     rescheduleBooking,
     addEmailJob,
+    getEmailJob,
     listEmailJobs,
-    updateEmailJob,
+    listDueEmailJobs,
+    claimEmailJob,
+    markEmailJobSent,
+    markEmailJobFailure,
+    retryEmailJob,
+    resetStaleEmailJobs,
+    cancelEmailJobsForAppointment,
+    recordEmailEvent,
+    applyEmailDelivery,
+    listBookingsForReminder,
     createLiveTokenReservation,
     getLiveTokenReservation,
     reconcileLiveToken,
     failLiveToken,
     sumHeldLiveTokens,
+    countLiveTokensSince,
+    listExpiredLiveTokens,
+    markLiveTokenExpired,
     cancelBooking,
     listBookings,
     audit,

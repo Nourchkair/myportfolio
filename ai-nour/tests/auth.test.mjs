@@ -4,6 +4,7 @@ import { timingSafeEqual, requireAdmin, requirePrototypeKey, ownerTokenFrom } fr
 import {
   buildAuthUrl as buildAdminAuthUrl,
   buildSessionCookie as buildAdminCookie,
+  clearSessionCookie,
   createPkcePair as createAdminPkce,
   exchangeCode as exchangeAdminCode,
   fetchUserInfo as fetchAdminUser,
@@ -69,13 +70,18 @@ test('admin OAuth exchange and userinfo use mocked Google responses', async () =
 
 test('signed admin session round-trips, rejects tampering and expiry', async () => {
   const secret = 'test-secret';
-  const token = await signAdminSession({ email: 'admin@example.com', expiresAt: Date.now() + 60_000, secret });
+  const token = await signAdminSession({ email: 'admin@example.com', expiresAt: Date.now() + 60_000, secret, epoch: 3 });
   const verified = await verifyAdminSession(token, secret);
   assert.equal(verified.email, 'admin@example.com');
+  assert.equal(verified.epoch, 3);
+  assert.ok(verified.sid);
+  assert.ok(verified.issuedAt);
   assert.equal(await verifyAdminSession(token + 'x', secret), null);
   assert.equal(await verifyAdminSession(token, 'wrong-secret'), null);
   const expired = await signAdminSession({ email: 'admin@example.com', expiresAt: Date.now() - 1, secret });
   assert.equal(await verifyAdminSession(expired, secret), null);
   assert.match(buildAdminCookie(token), /HttpOnly/);
+  assert.match(buildAdminCookie(token, { secure: true }), /Secure/);
+  assert.match(clearSessionCookie(), /Max-Age=0/);
   assert.equal(parseAdminCookies('a=1; ainour_admin=abc').ainour_admin, 'abc');
 });

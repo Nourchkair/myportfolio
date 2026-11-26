@@ -43,8 +43,9 @@ button:disabled { opacity: .45; cursor: default; }
 .controls input { width: 18px; height: 18px; accent-color: var(--accent); }
 textarea, input[type="text"], input:not([type]) { width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 9px; padding: 11px 12px; font: inherit; }
 textarea { resize: vertical; line-height: 1.55; }
-.row { display: flex; gap: 10px; align-items: center; margin: 14px 0; }
+.row { display: flex; gap: 10px; align-items: center; margin: 14px 0; flex-wrap: wrap; }
 .row input { flex: 1; }
+header .row { justify-content: flex-end; margin: 0; }
 .table-wrap { overflow: auto; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
 table { width: 100%; border-collapse: collapse; font-size: .86rem; }
 th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }

@@ -15,6 +15,7 @@ import { registerHealthRoutes } from './routes/health.js';
 import { registerSessionRoutes } from './routes/session.js';
 import { registerAdminRoutes } from './routes/admin.js';
 import { registerCrmRoutes } from './routes/crm.js';
+import { registerEmailRoutes } from './routes/email.js';
 
 function corsHeaders(request, config) {
   const origin = request.headers.get('origin');
@@ -59,6 +60,7 @@ export function createApp(env) {
   registerSessionRoutes(router, services);
   registerAdminRoutes(router, services);
   registerCrmRoutes(router, services);
+  registerEmailRoutes(router, services);
 
   async function fetch(request, ctx) {
     const requestId = makeRequestId();
@@ -125,10 +127,13 @@ export function createApp(env) {
     const now = Date.now();
     try {
       const result = await db.cleanup({ now, rateWindowMs: config.limits.rateLimitWindowMs });
+      const reminders = await emailService.scheduleReminders({ db, now });
+      const emails = await emailService.processQueued({ db, limit: 20, now });
+      const liveSettlement = await services.cost.settleExpiredLiveTokens({ now });
       await db.logEvent({
         level: 'info',
         event: 'scheduled.cleanup',
-        detail: result,
+        detail: { ...result, reminders: reminders.length, emails: emails.length, liveSettlement },
         now
       });
     } catch (error) {

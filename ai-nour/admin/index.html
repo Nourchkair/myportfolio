@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AI Nour — Phase 2 admin</title>
+  <title>AI Nour — Phase 3 admin</title>
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <aside class="sidebar">
     <div class="brand">
       <strong>AI Nour</strong>
-      <span>Phase 2 admin</span>
+      <span>Phase 3 admin</span>
     </div>
     <nav>
       <button data-tab="overview" class="active">Overview</button>
@@ -30,8 +30,14 @@
       <div>
         <h1 id="page-title">Overview</h1>
         <p id="worker-note">Connecting to the local Phase 1 Worker…</p>
+        <p id="session-note" class="muted">Checking administrator session…</p>
       </div>
-      <button id="refresh" class="secondary">Refresh</button>
+      <div class="row">
+        <button id="reauth" class="secondary">Re-authenticate</button>
+        <button id="logout" class="secondary">Sign out</button>
+        <button id="revoke-all" class="danger">Sign out all</button>
+        <button id="refresh" class="secondary">Refresh</button>
+      </div>
     </header>
     <div id="error" class="error hidden"></div>
 
@@ -101,7 +107,8 @@
       <div id="booking-list" class="table-wrap"></div>
       <h3>Email jobs</h3>
       <div class="row">
-        <button id="process-email" class="secondary">Process queued jobs (dry run unless enabled)</button>
+        <button id="process-email" class="secondary">Process due jobs (dry run unless enabled)</button>
+        <button id="schedule-reminders" class="secondary">Schedule appointment reminders</button>
       </div>
       <p id="email-result" class="muted"></p>
       <div id="email-jobs" class="table-wrap"></div>

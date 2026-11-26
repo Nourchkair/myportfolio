@@ -1,6 +1,8 @@
 # AI Nour — real-device test plan
 
-This plan is for the isolated Phase 2 prototype. It does not require production deployment. Use the local Worker and portfolio; the only public exposure should be a temporary HTTPS tunnel if iOS microphone access is required.
+This plan is for the isolated Phase 3 launch candidate. It does not require production deployment. Use the local Worker and portfolio; the only public exposure should be a temporary HTTPS tunnel if iOS microphone access is required.
+
+**Status: prepared, not yet executed by a human.** No real-device result is marked passed. Automated mock UI checks cannot substitute for microphone, Bluetooth, iOS Safari, interruption, French pronunciation, or visual judgement.
 
 ## 1. Local desktop setup
 
@@ -32,6 +34,8 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 ## 2. Desktop Chrome checklist
 
 - [ ] The top-right AI Nour pill is visible on every page and is not part of the menu bar.
+- [ ] The six visual states are reachable: closed pill, standard text, mini, expanded, voice, and mobile.
+- [ ] The panel can be dragged and keeps its position after close/reopen; it never leaves the viewport.
 - [ ] Text opens the transparent panel without shifting the portfolio; Voice opens the voice view.
 - [ ] The panel can be dragged by its header, minimized, expanded, and keeps its position; it stays inside the viewport.
 - [ ] A text question shows the glowing Thinking label while generating, then hides it.
@@ -45,6 +49,7 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 - [ ] Speaking can be interrupted by talking over it; audio stops promptly.
 - [ ] Speaking can interrupt the assistant, and Stop voice ends the session; text still works.
 - [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening Voice returns to the live state.
+- [ ] The two-minute Live session limit is understandable, and a new session can be started without losing the transcript.
 - [ ] Reload restores the conversation from D1.
 - [ ] No console errors or failed network requests.
 - [ ] Reading view has no assistant UI.
@@ -104,10 +109,11 @@ Record for each device:
 
 ## 7. Known constraints
 
-- Live tokens are one-use and expire after 120 seconds; a very long voice session will need to restart. The conversation context is restored from D1.
-- Each Live token carries a prepaid evaluation reservation; a second token is blocked when the remaining daily/cumulative budget cannot cover it.
-- Gmail sends are disabled; email jobs are queued as dry runs. No real email should be sent during device testing.
+- Live tokens are one-use and expire after 120 seconds; a voice session is therefore limited to about two minutes. A new session can be started while the transcript and D1 context remain.
+- Each Live token carries a prepaid evaluation reservation; a second token is blocked when the remaining daily/cumulative budget cannot cover it. There is a global 12-token/day cap.
+- Resend is prepared but not enabled. Email jobs are dry runs (or mock deliveries in tests). No real email should be sent during device testing.
 - The real microphone and Bluetooth path are not exercised by the automated mock UI tests; this plan is the required human validation.
+- Automated checks are **not** evidence of human audio quality, Bluetooth routing, French pronunciation, or iOS behavior.
 
 ## 8. What to report back
 
@@ -117,3 +123,5 @@ Record for each device:
 - Screenshots or screen recordings of voice states.
 - Subjective French pronunciation and latency notes.
 - Whether manual portfolio navigation always took priority over the assistant.
+- Which of the six visual states needs adjustment before final production CSS.
+- Whether the two-minute voice limit is acceptable for private beta.

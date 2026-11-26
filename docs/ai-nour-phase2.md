@@ -6,6 +6,8 @@
 **Upstream merge:** `origin/main` at `8a08769` → merge commit `6d6f3f1`  
 **Status:** Integrated development prototype complete; **Conditional GO for Phase 3 production integration**, not a production launch.
 
+**Phase 3 continuation:** operational email, CRM approval package, production OAuth, admin hardening, Live-spend analysis, the six-state visual package, and current costs are in `docs/ai-nour-phase3.md`. Cost figures in this Phase 2 report are historical.
+
 ---
 
 ## 1. Executive summary

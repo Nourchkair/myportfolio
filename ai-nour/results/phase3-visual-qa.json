@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-11-26T22:12:00.000Z",
+  "mode": "mock-providers/browser",
+  "viewports": ["1440x900", "390x844"],
+  "consoleErrors": 0,
+  "realMicrophoneStarted": false,
+  "states": [
+    {
+      "name": "closed pill",
+      "screenshot": "docs/screenshots/phase3-state-1-pill.png",
+      "pill": { "x": 1265.8, "y": 82, "width": 156.2, "height": 42 },
+      "menuBanner": { "x": 403, "y": 18, "width": 634, "height": 60 },
+      "overlap": false
+    },
+    {
+      "name": "standard text panel",
+      "screenshot": "docs/screenshots/phase3-state-2-text.png",
+      "panel": { "x": 1039.8, "y": 152, "width": 390, "height": 667 },
+      "mode": "text",
+      "size": "standard"
+    },
+    {
+      "name": "mini panel",
+      "screenshot": "docs/screenshots/phase3-state-3-mini.png",
+      "panel": { "x": 1039.8, "y": 152, "width": 304, "height": 319.7 },
+      "mode": "text",
+      "size": "mini"
+    },
+    {
+      "name": "expanded panel",
+      "screenshot": "docs/screenshots/phase3-state-4-expanded.png",
+      "panel": { "x": 672, "y": 152, "width": 760, "height": 605.3 },
+      "mode": "text",
+      "size": "expanded"
+    },
+    {
+      "name": "voice mode",
+      "screenshot": "docs/screenshots/phase3-state-5-voice.png",
+      "panel": { "x": 672, "y": 152, "width": 640, "height": 740 },
+      "mode": "voice",
+      "voice": "speaking"
+    },
+    {
+      "name": "mobile bottom sheet",
+      "screenshot": "docs/screenshots/phase3-state-6-mobile.png",
+      "panel": { "x": 0, "y": 279.4, "width": 390, "height": 564.6 },
+      "mode": "text",
+      "size": "standard",
+      "viewport": "390x844"
+    }
+  ],
+  "thinking": {
+    "screenshot": "docs/screenshots/phase3-state-thinking.png",
+    "hiddenWhenIdle": true,
+    "visibleWhenThinking": true,
+    "animation": "ainour-think-glow",
+    "respectsReducedMotion": true
+  },
+  "pillChecks": {
+    "desktopStatesChecked": ["closed", "standard-text", "mini", "expanded", "voice"],
+    "outsideMenuBarDom": true,
+    "rectOverlap": false,
+    "hitAtPillCentre": "pill",
+    "aiNourTextInMenuBar": false
+  },
+  "notes": "Six-state visual approval package. Real microphone and human-device validation remain pending. No production CSS was finalized."
+}
