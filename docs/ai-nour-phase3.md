@@ -51,7 +51,7 @@ Six states plus the Thinking sub-state are documented in `ai-nour/docs/visual-pr
 | --- | --- |
 | Closed pill | `ai-nour/docs/screenshots/phase3-state-1-pill.png` |
 | Standard text | `ai-nour/docs/screenshots/phase3-state-2-text.png` |
-| Mini | `ai-nour/docs/screenshots/phase3-state-3-mini.png` |
+| Collapsed chat | `ai-nour/docs/screenshots/phase3-state-3-collapsed.png` |
 | Expanded | `ai-nour/docs/screenshots/phase3-state-4-expanded.png` |
 | Voice | `ai-nour/docs/screenshots/phase3-state-5-voice.png` |
 | Mobile sheet | `ai-nour/docs/screenshots/phase3-state-6-mobile.png` |
@@ -59,9 +59,12 @@ Six states plus the Thinking sub-state are documented in `ai-nour/docs/visual-pr
 
 Verified:
 
-- Pill is outside the menu bar in every desktop state.
-- No rect overlap or DOM containment with the banner/nav; `elementFromPoint` returns the pill.
-- Standard 390px, mini 304px, expanded 760px, voice 640px, mobile full-width bottom sheet.
+- Pill is labelled “Ask Nour AI”, sits immediately right of the menu bar, and has a text/chat icon plus a mic.
+- “Nour OS” was removed from the menu bar; the brand slot is now the home mark only.
+- No yellow orb/circle remains in the pill or panel. The yellow decorative orbs, context dot, thinking dot, and voice orb were removed.
+- Standard 390px, collapsed 390×231px (latest AI reply + input line), expanded 760px, voice 430px, mobile full-width bottom sheet.
+- Composer has the mic and send inside the text bar; EN/New are enlarged at the top right of the Viewing row.
+- The old “AI representation” disclosure text was removed.
 - Thinking is hidden when idle and visible/glowing while generating.
 - 0 browser console errors; no real microphone started.
 

@@ -33,11 +33,11 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 
 ## 2. Desktop Chrome checklist
 
-- [ ] The top-right AI Nour pill is visible on every page and is not part of the menu bar.
-- [ ] The six visual states are reachable: closed pill, standard text, mini, expanded, voice, and mobile.
+- [ ] The “Ask Nour AI” pill is visible on every page, immediately to the right of the menu bar.
+- [ ] The six visual states are reachable: closed pill, standard text, collapsed chat, expanded, voice, and mobile.
 - [ ] The panel can be dragged and keeps its position after close/reopen; it never leaves the viewport.
 - [ ] Text opens the transparent panel without shifting the portfolio; Voice opens the voice view.
-- [ ] The panel can be dragged by its header, minimized, expanded, and keeps its position; it stays inside the viewport.
+- [ ] The panel can be dragged by its header, collapsed to the latest reply plus input line, expanded, and keeps its position; it stays inside the viewport.
 - [ ] A text question shows the glowing Thinking label while generating, then hides it.
 - [ ] Text question returns a grounded answer; the transcript remains after switching modes.
 - [ ] “Open the Safiy project” opens the project via NourOS; the pill stays above the project overlay.
@@ -75,7 +75,7 @@ iOS requires HTTPS for microphone access. Use a temporary HTTPS tunnel for the p
 4. Enter the prototype access key.
 5. Test:
    - [ ] Page loads without layout breakage at 390×844 and 430×932.
-   - [ ] The top-right AI Nour pill is reachable with one hand.
+   - [ ] The Ask Nour AI pill is reachable with one hand and the mic starts voice mode.
    - [ ] Bottom sheet opens, scrolls, and respects safe-area insets.
    - [ ] Microphone permission prompt appears; denial produces a clear error.
    - [ ] Voice playback routes to the speaker; Bluetooth headset switch works.

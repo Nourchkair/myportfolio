@@ -26,39 +26,41 @@ Use `127.0.0.1:8791` for the private admin; `localhost:8791` can hit a stale IPv
 
 | # | State | Screenshot | What to judge |
 | --- | --- | --- | --- |
-| 1 | **Closed pill** | `screenshots/phase3-state-1-pill.png` | Pill is top-right, outside the menu bar, always visible, not a chatbot bubble. |
-| 2 | **Standard text panel** | `screenshots/phase3-state-2-text.png` | 390px transparent glass, thread legibility, context line, disclosure, composer balance. |
-| 3 | **Mini panel** | `screenshots/phase3-state-3-mini.png` | 304px compact panel still usable; does not cover the portfolio’s primary content. |
+| 1 | **Closed pill** | `screenshots/phase3-state-1-pill.png` | Pill says “Ask Nour AI”, sits immediately right of the menu bar, and has a text/chat icon plus a mic. |
+| 2 | **Standard text panel** | `screenshots/phase3-state-2-text.png` | 390px transparent glass, thread legibility, Viewing/EN/New row, inline composer. |
+| 3 | **Collapsed chat** | `screenshots/phase3-state-3-collapsed.png` | Only the latest AI reply plus the single-line composer; the panel no longer covers most of the portfolio. |
 | 4 | **Expanded panel** | `screenshots/phase3-state-4-expanded.png` | 760px workspace; wider thread without taking over the viewport. |
-| 5 | **Voice mode** | `screenshots/phase3-state-5-voice.png` | Orb/state treatment; transcript lives in the chat thread; Stop voice is explicit. |
+| 5 | **Voice mode** | `screenshots/phase3-state-5-voice.png` | Pill changes to “Listening”; text transcript stays in the chat thread; Stop voice is explicit; no orb. |
 | 6 | **Mobile bottom sheet** | `screenshots/phase3-state-6-mobile.png` | Full-width sheet at 390×844, safe-area awareness, pill remains reachable, composer usable. |
 
 ### Thinking sub-state
 
-`thinking(true)` shows the glowing **Thinking** chip while a text answer is generating, then hides it:
+`thinking(true)` shows the glowing **Thinking** label while a text answer is generating, then hides it:
 
 `screenshots/phase3-state-thinking.png`
 
-The chip is a state indicator, not a separate message, and respects reduced motion.
+The label is a state indicator, not a separate message, and respects reduced motion.
 
 ## Verified geometry
 
-- Pill: **156×42** at x **1265.8–1422**, y **82–124** on 1440×900.
-- Menu banner: x **403–1037**, y **18–78**. No rect overlap, no DOM containment, no “AI Nour” text in the banner; `elementFromPoint` at the pill centre returns the pill in every desktop state.
-- Standard panel: **390×667** at (1039.8, 152).
-- Mini panel: **304×319.7**, same top-left.
-- Expanded panel: **760×605.3** at (672, 152).
-- Voice panel: **640×740** in expanded mode.
-- Mobile sheet: **390×564.6** anchored to the bottom at 390×844; pill **141×40** at y 62–102.
+- Pill: **163.4×42** at (1020, 27) on 1440×900, **10.4px right of the menu bar**, vertically centred; the menu bar is 579.1×60 at (430.4, 18).
+- Menu bar no longer contains “Nour OS”; the brand slot is the home mark only.
+- Standard text panel: **390×680** at (1039.8, 152) after content; **390×599.1** empty.
+- Collapsed chat: **390×231.4** at (1039.8, 152); only the latest assistant reply (358×55.4) and the 44px composer bar.
+- Expanded panel: **760×648.9** at (672, 152).
+- Voice panel: **430×680** at (1002, 152) in the feedback pass.
+- Composer: bar **364×44**; mic **32×32**; send **32×32**, 5px right of mic and 6px inside the bar’s right edge.
+- EN **32.6×28**, New **38.9×28**, aligned with the Viewing row; New’s right edge is flush with the composer bar.
+- Mobile sheet: **390×497** at (0, 347) at 390×844; pill **149×40** at (229, 70).
 
 ## Interaction rules
 
 1. AI Nour never blocks portfolio navigation.
 2. Manual navigation takes priority; the panel does not re-open over a manual route change.
 3. Closing the panel hides the UI only. It never ends a text or voice session; only Stop voice or New ends voice.
-4. Voice states are visible in the panel and the pill; listening/speaking are not ambiguous.
+4. Voice states are visible in the panel and the pill; the pill changes from “Ask Nour AI” to “Listening”.
 5. Text is always available as a fallback.
-6. AI Nour identifies itself as AI, not Nour.
+6. The pill and panel use the “AI Nour” identity; the old representation disclosure text was removed at Nour’s request.
 7. No automated email, booking, or external write is presented as completed without the relevant confirmation.
 8. The permanent Gemini key never reaches the browser; Live uses one-use ephemeral tokens.
 
@@ -69,32 +71,32 @@ Use `docs/real-device-testing.md`. Minimum for this review:
 - [ ] Open all six states on desktop Chrome.
 - [ ] Repeat the six states on desktop Safari.
 - [ ] Open the text sheet on iOS Safari at 390×844.
-- [ ] Drag the panel, minimize, expand, close, and reopen; confirm position and thread persistence.
+- [ ] Drag the panel, collapse, expand, close, and reopen; confirm position and thread persistence.
 - [ ] Start a real voice session, close the panel while speaking, confirm the session continues, reopen Voice.
 - [ ] Test interruption by talking over the assistant.
 - [ ] Test French pronunciation.
 - [ ] Confirm the two-minute Live limit is understandable and recovery works.
-- [ ] Confirm the pill never appears to be part of the menu bar.
+- [ ] Confirm the pill sits immediately to the right of the menu bar and remains reachable.
 
 Human-device results remain **pending** until Nour runs this checklist. Automated mock tests are not a substitute.
 
 ## Approval questions
 
 1. Is Direction A approved as the production direction?
-2. Is the top-right pill the right persistent presence?
+2. Is the “Ask Nour AI” pill, beside the menu bar, the right persistent presence?
 3. Is the standard panel transparency correct, or should it be more/less transparent?
-4. Are the mini and expanded sizes useful?
+4. Is the collapsed state (latest AI reply + input line) the right behavior?
 5. Is the Thinking treatment clear without being distracting?
 6. Is the in-chat voice transcript the right treatment?
 7. Is closing without stopping the session the desired behavior?
 8. Is the mobile bottom sheet acceptable?
-9. Any changes to the disclosure, typography, motion, or control placement?
+9. Any changes to the pill label/icons, typography, motion, or control placement?
 
 ## Production directions
 
 ### Direction A — Quiet portfolio companion (implemented, recommended)
 
-Persistent top-right pill plus a movable, resizable text/voice panel. Preserves the portfolio as the primary product.
+Persistent “Ask Nour AI” pill beside the menu bar plus a movable, collapsible text/voice panel. Preserves the portfolio as the primary product.
 
 ### Direction B — Conversation workspace (optional)
 

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-26T22:12:00.000Z",
+  "generatedAt": "2026-11-26T23:47:00.000Z",
   "mode": "mock-providers/browser",
   "viewports": ["1440x900", "390x844"],
   "consoleErrors": 0,
@@ -8,45 +8,54 @@
     {
       "name": "closed pill",
       "screenshot": "docs/screenshots/phase3-state-1-pill.png",
-      "pill": { "x": 1265.8, "y": 82, "width": 156.2, "height": 42 },
-      "menuBanner": { "x": 403, "y": 18, "width": 634, "height": 60 },
-      "overlap": false
+      "pill": { "x": 1020, "y": 27, "width": 163.4, "height": 42 },
+      "menuBanner": { "x": 430.4, "y": 18, "width": 579.1, "height": 60 },
+      "gapRight": 10.4,
+      "label": "Ask Nour AI"
     },
     {
       "name": "standard text panel",
       "screenshot": "docs/screenshots/phase3-state-2-text.png",
-      "panel": { "x": 1039.8, "y": 152, "width": 390, "height": 667 },
+      "panel": { "x": 1039.8, "y": 152, "width": 390, "height": 680 },
       "mode": "text",
-      "size": "standard"
+      "size": "standard",
+      "composerBar": { "width": 364, "height": 44 },
+      "mic": { "width": 32, "height": 32 },
+      "send": { "width": 32, "height": 32 },
+      "sendGapFromMic": 5
     },
     {
-      "name": "mini panel",
-      "screenshot": "docs/screenshots/phase3-state-3-mini.png",
-      "panel": { "x": 1039.8, "y": 152, "width": 304, "height": 319.7 },
+      "name": "collapsed chat",
+      "screenshot": "docs/screenshots/phase3-state-3-collapsed.png",
+      "panel": { "x": 1039.8, "y": 152, "width": 390, "height": 231.4 },
       "mode": "text",
-      "size": "mini"
+      "size": "collapsed",
+      "visible": "latest AI reply + one-line composer"
     },
     {
       "name": "expanded panel",
       "screenshot": "docs/screenshots/phase3-state-4-expanded.png",
-      "panel": { "x": 672, "y": 152, "width": 760, "height": 605.3 },
+      "panel": { "x": 672, "y": 152, "width": 760, "height": 648.9 },
       "mode": "text",
       "size": "expanded"
     },
     {
       "name": "voice mode",
       "screenshot": "docs/screenshots/phase3-state-5-voice.png",
-      "panel": { "x": 672, "y": 152, "width": 640, "height": 740 },
+      "panel": { "x": 1002, "y": 152, "width": 430, "height": 680 },
       "mode": "voice",
-      "voice": "speaking"
+      "voice": "speaking",
+      "pillLabel": "Listening",
+      "voiceBars": 4
     },
     {
       "name": "mobile bottom sheet",
       "screenshot": "docs/screenshots/phase3-state-6-mobile.png",
-      "panel": { "x": 0, "y": 279.4, "width": 390, "height": 564.6 },
+      "panel": { "x": 0, "y": 347, "width": 390, "height": 497 },
       "mode": "text",
       "size": "standard",
-      "viewport": "390x844"
+      "viewport": "390x844",
+      "pill": { "x": 229, "y": 70, "width": 149, "height": 40 }
     }
   ],
   "thinking": {
@@ -56,12 +65,22 @@
     "animation": "ainour-think-glow",
     "respectsReducedMotion": true
   },
-  "pillChecks": {
-    "desktopStatesChecked": ["closed", "standard-text", "mini", "expanded", "voice"],
-    "outsideMenuBarDom": true,
-    "rectOverlap": false,
-    "hitAtPillCentre": "pill",
-    "aiNourTextInMenuBar": false
+  "yellowOrbChecks": {
+    "scannedElements": 89,
+    "hits": 0,
+    "selectors": {
+      ".ainour-pill-orb": 0,
+      ".ainour-orb": 0,
+      ".ainour-orb-big": 0,
+      ".ainour-thinking-dot": 0
+    }
   },
-  "notes": "Six-state visual approval package. Real microphone and human-device validation remain pending. No production CSS was finalized."
+  "menuBar": {
+    "nourOsText": false,
+    "brand": "home mark only"
+  },
+  "disclosure": {
+    "aiRepresentationText": false
+  },
+  "notes": "Six-state visual feedback package after Nour's review. Real microphone and human-device validation remain pending. No production CSS was finalized."
 }

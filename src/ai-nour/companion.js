@@ -95,22 +95,23 @@ function mountCss() {
 
 function pillMarkup() {
   return `
-    <span class="ainour-pill-orb" aria-hidden="true"></span>
-    <button type="button" data-ainour="mode-text" class="is-active">Text</button>
+    <button class="ainour-pill-main" type="button" data-ainour="mode-text" aria-label="Ask Nour AI — open text chat">
+      <svg class="ainour-pill-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2h12v8.2H8.8L5.4 16v-2.6H4z"/><path d="M7 8h6M7 10.6h4"/></svg>
+      <span id="ainourPillLabel">Ask Nour AI</span>
+    </button>
     <span class="ainour-pill-sep" aria-hidden="true"></span>
-    <button type="button" data-ainour="mode-voice">Voice</button>
+    <button class="ainour-pill-mic" type="button" data-ainour="mode-voice" aria-label="Start voice with AI Nour" title="Voice">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.1" y="3.1" width="5.8" height="9.2" rx="2.9"/><path d="M4.8 9.6a5.2 5.2 0 0 0 10.4 0M10 15v2.2M7.8 17.2h4.4"/></svg>
+    </button>
   `;
 }
 
 function panelMarkup() {
   return `
     <header class="ainour-head" data-drag-handle title="Drag to move">
-      <div class="ainour-id">
-        <span class="ainour-orb" aria-hidden="true"></span>
-        <div><b>AI Nour</b><span>AI representation · not Nour</span></div>
-      </div>
+      <div class="ainour-id"><b>AI Nour</b></div>
       <div class="ainour-head-actions">
-        <button class="ainour-icon" type="button" data-ainour="minimize" aria-label="Minimize panel" title="Minimize">
+        <button class="ainour-icon" type="button" data-ainour="minimize" aria-label="Collapse chat" title="Collapse chat">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10"/></svg>
         </button>
         <button class="ainour-icon" type="button" data-ainour="expand" aria-label="Expand panel" title="Expand">
@@ -121,7 +122,13 @@ function panelMarkup() {
         </button>
       </div>
     </header>
-    <div class="ainour-context" id="ainourContext">Reading portfolio</div>
+    <div class="ainour-context" id="ainourContext">
+      <span class="ainour-context-label" id="ainourContextLabel">Viewing <b>portfolio</b></span>
+      <div class="ainour-context-actions">
+        <button type="button" data-ainour="locale" id="ainourLocale">EN</button>
+        <button type="button" data-ainour="reset">New</button>
+      </div>
+    </div>
     <div class="ainour-gate" id="ainourGate">
       <p>Enter the local prototype access key to talk with AI Nour. The key stays in this tab; the permanent Gemini key never reaches the browser.</p>
       <form id="ainourGateForm">
@@ -132,8 +139,8 @@ function panelMarkup() {
     </div>
     <div class="ainour-body" id="ainourBody" hidden>
       <div class="ainour-live" id="ainourLive" hidden>
-        <div class="ainour-orb-stage">
-          <span class="ainour-orb-big" aria-hidden="true"></span>
+        <div class="ainour-voice-stage">
+          <div class="ainour-voice-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
           <b class="ainour-live-state" id="ainourLiveState">idle</b>
           <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation; sessions are limited to about two minutes and the transcript stays in the chat.</span>
         </div>
@@ -143,18 +150,18 @@ function panelMarkup() {
         </div>
       </div>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
-      <div class="ainour-thinking" id="ainourThinking" role="status" aria-live="polite" hidden><span class="ainour-thinking-dot" aria-hidden="true"></span>Thinking<span class="ainour-thinking-dots" aria-hidden="true">…</span></div>
+      <div class="ainour-thinking" id="ainourThinking" role="status" aria-live="polite" hidden>Thinking<span class="ainour-thinking-dots" aria-hidden="true">…</span></div>
       <form class="ainour-compose" id="ainourForm">
-        <textarea id="ainourInput" rows="2" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
-        <div class="ainour-compose-actions">
-          <button class="ainour-voice-btn" type="button" data-ainour="voice"><span class="ainour-mini-orb" aria-hidden="true"></span>Voice</button>
-          <button class="ainour-send" id="ainourSend" type="submit">Send</button>
+        <div class="ainour-compose-bar">
+          <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
+          <button class="ainour-compose-btn" type="button" data-ainour="voice" aria-label="Start voice" title="Voice">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.1" y="3.1" width="5.8" height="9.2" rx="2.9"/><path d="M4.8 9.6a5.2 5.2 0 0 0 10.4 0M10 15v2.2M7.8 17.2h4.4"/></svg>
+          </button>
+          <button class="ainour-compose-btn ainour-send" id="ainourSend" type="submit" aria-label="Send message" title="Send">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10h13M11 4.5l5.5 5.5-5.5 5.5"/></svg>
+          </button>
         </div>
       </form>
-      <div class="ainour-foot">
-        <span>AI representation · not the person</span>
-        <span><button type="button" data-ainour="locale" id="ainourLocale">EN</button> · <button type="button" data-ainour="reset">New</button></span>
-      </div>
     </div>
   `;
 }
@@ -190,8 +197,10 @@ function mount() {
     pill,
     pillText: pill.querySelector('[data-ainour="mode-text"]'),
     pillVoice: pill.querySelector('[data-ainour="mode-voice"]'),
+    pillLabel: pill.querySelector('#ainourPillLabel'),
     panel,
     context: panel.querySelector('#ainourContext'),
+    contextLabel: panel.querySelector('#ainourContextLabel'),
     gate: panel.querySelector('#ainourGate'),
     gateForm: panel.querySelector('#ainourGateForm'),
     gateInput: panel.querySelector('#ainourKey'),
@@ -215,18 +224,17 @@ function mount() {
   pill.addEventListener('click', (event) => {
     const action = event.target.closest('[data-ainour]')?.dataset.ainour;
     if (action === 'mode-text') {
-      if (!els.panel.hidden && state.mode === 'text') closePanel();
-      else openPanel('text');
+      openPanel('text');
     } else if (action === 'mode-voice') {
-      if (!els.panel.hidden && state.mode === 'voice') closePanel();
-      else openPanel('voice');
+      if (voice.active) openPanel('voice');
+      else startVoice();
     }
   });
   panel.addEventListener('click', (event) => {
     const action = event.target.closest('[data-ainour]')?.dataset.ainour;
     if (!action) return;
     if (action === 'close') closePanel();
-    else if (action === 'minimize') setSize(state.size === 'mini' ? 'standard' : 'mini');
+    else if (action === 'minimize') setSize(state.size === 'collapsed' ? 'standard' : 'collapsed');
     else if (action === 'expand') setSize(state.size === 'expanded' ? 'standard' : 'expanded');
     else if (action === 'voice' || action === 'start-voice') {
       if (voice.active) openPanel('voice');
@@ -250,6 +258,10 @@ function mount() {
       els.form.requestSubmit();
     }
   });
+  els.input.addEventListener('input', () => {
+    els.input.style.height = 'auto';
+    els.input.style.height = `${Math.min(els.input.scrollHeight, 110)}px`;
+  });
   panel.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -257,6 +269,7 @@ function mount() {
     }
   });
   window.addEventListener('resize', () => {
+    positionPill();
     if (els.panel.hidden) return;
     if (window.innerWidth <= 760) {
       els.panel.style.removeProperty('left');
@@ -274,6 +287,18 @@ function mount() {
   setSize('standard');
   updateContext();
   updatePill();
+  positionPill();
+  const toolbar = document.getElementById('toolbar');
+  if (toolbar && 'ResizeObserver' in window) {
+    new ResizeObserver(() => positionPill()).observe(toolbar);
+  }
+  if (toolbar) toolbar.addEventListener('transitionend', positionPill);
+  if ('MutationObserver' in window) {
+    new MutationObserver(() => positionPill()).observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class', 'data-mode']
+    });
+  }
   if (state.key) init();
   else showGate();
 
@@ -283,7 +308,8 @@ function mount() {
       close: closePanel,
       expand: () => setSize('expanded'),
       compact: () => setSize('standard'),
-      minimize: () => setSize('mini'),
+      minimize: () => setSize('collapsed'),
+      collapse: () => setSize('collapsed'),
       voiceView: () => openPanel('voice'),
       startVoice,
       stopVoice,
@@ -365,14 +391,38 @@ function initDrag() {
   handle.addEventListener('pointercancel', end);
 }
 
+function positionPill() {
+  if (!els.pill) return;
+  if (window.innerWidth <= 760) {
+    els.pill.style.removeProperty('left');
+    els.pill.style.removeProperty('top');
+    els.pill.style.removeProperty('right');
+    return;
+  }
+  const toolbar = document.getElementById('toolbar');
+  const rect = toolbar?.getBoundingClientRect();
+  const width = els.pill.offsetWidth || 190;
+  const height = els.pill.offsetHeight || 42;
+  const maxLeft = Math.max(10, window.innerWidth - width - 12);
+  const left = Math.min(Math.max(10, rect?.width ? rect.right + 10 : maxLeft), maxLeft);
+  const top = rect?.width ? rect.top + Math.max(0, (rect.height - height) / 2) : 26;
+  els.pill.style.left = `${Math.round(left)}px`;
+  els.pill.style.top = `${Math.round(top)}px`;
+  els.pill.style.right = 'auto';
+}
+
 function updatePill() {
   if (!els.pill) return;
   els.pill.dataset.state = state.voice;
   els.pill.dataset.live = voice.active ? 'true' : 'false';
   els.pill.dataset.unread = state.unread ? 'true' : 'false';
   els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
-  els.pillText.classList.toggle('is-active', state.mode === 'text');
-  els.pillVoice.classList.toggle('is-active', state.mode === 'voice');
+  const voiceLabel = ['connecting', 'listening', 'processing', 'speaking'].includes(state.voice) || voice.active;
+  els.pillLabel.textContent = voiceLabel ? 'Listening' : 'Ask Nour AI';
+  els.pillText.setAttribute('aria-label', voiceLabel ? 'Listening — open text chat' : 'Ask Nour AI — open text chat');
+  els.pillText.classList.toggle('is-active', !els.panel.hidden && state.mode === 'text');
+  els.pillVoice.classList.toggle('is-active', voice.active || state.mode === 'voice');
+  requestAnimationFrame(positionPill);
 }
 
 function showGate(message = '') {
@@ -423,11 +473,21 @@ function setMode(mode) {
 function setSize(size) {
   state.size = size;
   els.panel.dataset.size = size;
-  const isMini = size === 'mini';
+  const isCollapsed = size === 'collapsed';
   const isExpanded = size === 'expanded';
-  if (els.expand) els.expand.setAttribute('aria-label', isExpanded ? 'Restore panel size' : 'Expand panel');
-  if (els.minimize) els.minimize.setAttribute('aria-label', isMini ? 'Restore panel size' : 'Minimize panel');
-  requestAnimationFrame(clampPanel);
+  if (els.expand) {
+    els.expand.setAttribute('aria-label', isExpanded ? 'Restore panel size' : 'Expand panel');
+    els.expand.title = isExpanded ? 'Restore panel size' : 'Expand';
+  }
+  if (els.minimize) {
+    els.minimize.setAttribute('aria-label', isCollapsed ? 'Expand chat' : 'Collapse chat');
+    els.minimize.title = isCollapsed ? 'Expand chat' : 'Collapse chat';
+  }
+  renderThread();
+  requestAnimationFrame(() => {
+    renderThread();
+    clampPanel();
+  });
 }
 
 function setState(value) {
@@ -473,7 +533,7 @@ function updateContext() {
   if (!els.context) return;
   const status = window.NourOS?.getStatus?.();
   if (!status) {
-    els.context.textContent = 'Reading portfolio';
+    els.contextLabel.innerHTML = 'Viewing <b>portfolio</b>';
     return;
   }
   const project = status.context?.project;
@@ -488,7 +548,7 @@ function updateContext() {
   } else if (status.context?.contact?.open) {
     label = 'Contact';
   }
-  els.context.innerHTML = `Viewing <b>${escapeHtml(label)}</b>`;
+  els.contextLabel.innerHTML = `Viewing <b>${escapeHtml(label)}</b>`;
 }
 
 function escapeHtml(value) {
@@ -519,14 +579,20 @@ function addMessage(role, content, actions = []) {
 function renderThread() {
   if (!els.thread) return;
   els.thread.textContent = '';
-  if (!state.messages.length) {
+  const collapsed = state.size === 'collapsed';
+  const visibleMessages = collapsed
+    ? state.messages.filter((message) => message.role === 'assistant').slice(-1)
+    : state.messages;
+  if (!visibleMessages.length) {
     const hint = document.createElement('div');
     hint.className = 'ainour-msg system';
-    hint.textContent = 'Ask about Nour’s work, thinking, or this section. AI Nour can also open a project when you ask.';
+    hint.textContent = collapsed
+      ? 'Ask Nour AI anything.'
+      : 'Ask about Nour’s work, thinking, or this section. AI Nour can also open a project when you ask.';
     els.thread.appendChild(hint);
     return;
   }
-  for (const message of state.messages) {
+  for (const message of visibleMessages) {
     if (message.role === 'system') {
       const item = document.createElement('div');
       item.className = 'ainour-msg system';
@@ -622,6 +688,7 @@ async function sendMessage(event) {
   state.busy = true;
   els.send.disabled = true;
   els.input.value = '';
+  els.input.style.height = '';
   addMessage('user', message);
   setState('processing');
   showThinking(true);
