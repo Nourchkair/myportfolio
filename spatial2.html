@@ -2502,7 +2502,7 @@
   body.about-reveal .now-widget{
     opacity:1!important;visibility:visible!important;pointer-events:none!important
   }
-  body.about-closing #cardStage .os-card.pos-0[data-deck="main"][data-type="profile"]{
+  body.about-closing #cardStage .os-card.pos-0[data-deck="main"]{
     visibility:hidden!important;pointer-events:none!important
   }
   .about-overlay.closing{background:transparent!important}
@@ -5075,7 +5075,8 @@
     }
     .about-overlay.journey-open .about-left{display:flex;align-items:center}
     .about-overlay.journey-open .about-right{
-      height:100%;align-items:stretch;justify-content:flex-start;transform:none
+      height:100%;align-items:stretch;justify-content:flex-start;
+      transform:translateZ(-12px) rotateY(-5deg);transform-origin:0 50%
     }
     .about-overlay.journey-open .about-detail{position:absolute;inset:0}
     .about-overlay.journey-open .about-detail-body{padding:0;overflow-y:auto}
@@ -5092,6 +5093,11 @@
     .about-overlay.journey-open .pro-step-label{font-size:9px;max-width:10ch}
     .about-overlay.journey-open .pro-step-period{font-size:5.4px}
     .about-overlay.journey-open .pro-narrative p{font-size:13.4px;line-height:1.62}
+  }
+
+  /* Match the card's visible actions to the deck card during the return flight. */
+  body.about-closing #aboutHero .card-actions{
+    animation:none!important;opacity:1!important;visibility:visible!important
   }
 </style>
 </head>
@@ -6878,11 +6884,13 @@ function revealAboutIntro(){
 function animateAboutCardIn(fromRect){
   const slot=$('aboutLeftSlot'), inner=$('aboutLeftInner'), frame=$('aboutHero');
   if(!slot||!inner||!frame||!fromRect){ revealAboutIntro(); return; }
-  const to=slot.getBoundingClientRect();
-  if(!to.width||!to.height){ revealAboutIntro(); return; }
-  const dx=fromRect.left-to.left, dy=fromRect.top-to.top;
-  const sx=fromRect.width/to.width, sy=fromRect.height/to.height;
-  const start=`translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+  const innerH=inner.offsetHeight, innerW=inner.offsetWidth;
+  if(!innerH||!innerW){ revealAboutIntro(); return; }
+  const slotRect=slot.getBoundingClientRect();
+  const s=fromRect.height/innerH;
+  const dx=fromRect.left-slotRect.left-inner.offsetLeft*s;
+  const dy=fromRect.top-slotRect.top-inner.offsetTop*s;
+  const start=`translate(${dx}px, ${dy}px) scale(${s})`;
   slot.style.transformOrigin='top left';
   slot.style.transform=start;
   inner.getAnimations().forEach(a=>a.cancel());
@@ -7051,17 +7059,18 @@ function closeAbout(opts={}){
   const live=aboutSourceCard||aboutLiveProfileCard();
   const slot=$('aboutLeftSlot'), inner=$('aboutLeftInner');
   if(!live||!slot||!inner){ finishAboutClose(restoreFocus); return; }
-  const current=getComputedStyle(slot).transform;
-  slot.getAnimations().forEach(a=>a.cancel());
-  slot.style.transform=current==='none'?'':current;
-  const from=slot.getBoundingClientRect();
+  const innerH=inner.offsetHeight, innerW=inner.offsetWidth;
   const to=live.getBoundingClientRect();
-  if(!from.width||!to.width){ finishAboutClose(restoreFocus); return; }
+  if(!innerH||!innerW||!to.width){ finishAboutClose(restoreFocus); return; }
+  const slotRect=slot.getBoundingClientRect();
+  const s=to.height/innerH;
+  const dx=to.left-slotRect.left-inner.offsetLeft*s;
+  const dy=to.top-slotRect.top-inner.offsetTop*s;
+  slot.style.transformOrigin='top left';
   aboutClosing=true;
   ov.classList.add('closing');
+  ov.classList.remove('actions-hidden');
   document.body.classList.add('about-closing','about-reveal');
-  const dx=to.left-from.left, dy=to.top-from.top;
-  const sx=to.width/from.width, sy=to.height/from.height;
   const innerCurrent=getComputedStyle(inner).transform;
   inner.getAnimations().forEach(a=>a.cancel());
   inner.style.transform=innerCurrent==='none'?'':innerCurrent;
@@ -7069,10 +7078,9 @@ function closeAbout(opts={}){
     {transform:innerCurrent==='none'?'translateZ(0) rotateY(0deg)':innerCurrent},
     {transform:'translateZ(0) rotateY(0deg)'}
   ],{duration:ABOUT_FLIGHT_MS,easing:PROJECT_CLOSE_EASE,fill:'forwards'});
-  const start=current==='none'?'translate(0, 0) scale(1, 1)':current;
   const anim=slot.animate([
-    {transform:start},
-    {transform:`translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`}
+    {transform:'translate(0, 0) scale(1, 1)'},
+    {transform:`translate(${dx}px, ${dy}px) scale(${s})`}
   ],{duration:ABOUT_FLIGHT_MS,easing:PROJECT_CLOSE_EASE,fill:'forwards'});
   anim.onfinish=()=>finishAboutClose(restoreFocus);
 }
