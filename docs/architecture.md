@@ -72,7 +72,7 @@ Hover, focus and hover-triggered tooltips do not write to history. A process ste
 
 1. renders `read.html` from the shared content;
 2. writes the compatibility redirect, favicon, robots file and 404 page;
-3. writes `sitemap.xml` only when `SITE_URL` is supplied;
+3. writes `sitemap.xml` for the canonical site URL (`SITE_URL`, default `https://nourchkair.com`);
 4. copies an explicit allowlist into `dist/`;
 5. removes build-time-only `src/reading/` from the deployed copy.
 
@@ -105,10 +105,11 @@ Browser-level evidence is recorded in `docs/validation.md`.
 
 ## 8. Constraints and remaining issues
 
-- Hosting is undecided, so there is no deployment configuration.
+- Hosting is Cloudflare Pages. Production is live at https://nourchkair.com and https://www.nourchkair.com; deployments are direct uploads from this repo with `npm run deploy`.
+- The Cloudflare Pages project is `nourchkair`; the production branch is `main`.
 - The command API is local and synchronous today; a future AI backend must call it rather than manipulate the DOM.
 - `goBack()` delegates to browser history; direct-entry sessions with no prior entry fall back to Home.
 - The social preview uses the existing About portrait. A dedicated branded social image can be added later without changing the architecture.
-- `sitemap.xml` is generated only when `SITE_URL` is set.
+- `sitemap.xml` is generated for https://nourchkair.com; `SITE_URL` can override it for preview builds.
 - The compatibility redirect uses JavaScript plus a visible link fallback; it is not intended as the primary entry point.
 - Not every retired CSS declaration could be attributed to one removed component, but all selectors whose class names no longer exist in production sources were removed and visually regression-tested.

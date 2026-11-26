@@ -73,14 +73,31 @@ docs/                       architecture, API and validation notes
 `npm run build` writes:
 
 - generated `read.html`;
-- `spatial2.html`, `favicon.svg`, `robots.txt` and `404.html`;
-- `sitemap.xml` only when `SITE_URL` is set;
+- `spatial2.html`, `favicon.svg`, `robots.txt`, `sitemap.xml` and `404.html`;
 - an allowlisted `dist/` containing only runtime files, `assets/` and `src/`.
 
-`archive/`, `tests/`, `docs/`, `scripts/`, `node_modules/` and build-time reading source never enter `dist/`. Hosting is intentionally undecided, so no public deployment is performed here.
+The build uses `https://nourchkair.com` as the canonical URL by default. Override it with `SITE_URL` for previews.
+
+`archive/`, `tests/`, `docs/`, `scripts/`, `node_modules/` and build-time reading source never enter `dist/`.
+
+Production is hosted on Cloudflare Pages:
+
+- https://nourchkair.com
+- https://www.nourchkair.com
+- https://nourchkair.pages.dev
+
+Deploy the built site from this repo:
 
 ```bash
-SITE_URL="https://example.com" npm run build
+npm run deploy
+```
+
+This builds the site and uploads `dist/` to the `nourchkair` Pages project on the `main` branch. Wrangler authentication is required.
+
+For a preview build against another origin:
+
+```bash
+SITE_URL="https://preview.example.com" npm run build
 ```
 
 ## NourOS command API
@@ -121,5 +138,5 @@ Both run the build first, then validate data invariants, route canonicalization,
 
 - AI Nour or any model integration.
 - External CRM, messaging, booking or analytics integrations.
-- Public deployment or hosting-provider configuration.
 - New appearance modes or speculative visual features.
+- Automated GitHub-to-Cloudflare deployments; production is deployed directly from this repo with `npm run deploy`.
