@@ -5070,6 +5070,92 @@
     #project[data-project="communications"] .pw-impact-achievement-head b{font-size:12.4px}
     #project[data-project="communications"] .pw-impact-achievement p{font-size:11.1px;line-height:1.4}
   }
+
+  /* ============================================================
+     B.R.A.I.N. — business knowledge overview and flow
+     ============================================================ */
+  .card-subtitle{
+    margin:1px 0 5px;font-size:9.4px;line-height:1.25;font-weight:600;letter-spacing:.025em;
+    color:rgba(255,225,194,.82);text-shadow:0 1px 8px rgba(0,0,0,.36)
+  }
+  .pw-flow-link--knowledge{stroke:rgba(255,210,161,.45)}
+  .pw-flow-link--assistance{stroke:rgba(182,211,225,.45)}
+  .pw-flow-link--conceptual{stroke:rgba(255,255,255,.28);stroke-dasharray:2 6}
+  .pw-flow-label--knowledge{
+    padding:4px 9px;font-size:7.6px;letter-spacing:.11em;color:rgba(255,232,208,.9);
+    border-color:rgba(255,210,161,.34);background:rgba(7,13,17,.74)
+  }
+  .pw-flow-label--assistance{
+    padding:4px 8px;font-size:7.4px;letter-spacing:.08em;color:rgba(205,226,235,.8);
+    border-color:rgba(190,220,235,.25);background:rgba(7,13,17,.72)
+  }
+  .pw-flow-label--conceptual{
+    padding:4px 8px;font-size:7px;letter-spacing:.05em;color:rgba(255,255,255,.52);
+    border-color:rgba(255,255,255,.18);background:rgba(7,13,17,.74)
+  }
+  .pw-flow-node[data-tone="focus"]{
+    border-color:rgba(255,210,161,.44);
+    background:
+      radial-gradient(ellipse at 16% 0%,rgba(255,210,161,.13),transparent 66%),
+      linear-gradient(155deg,rgba(255,255,255,.13),rgba(255,255,255,.025)),
+      rgba(12,20,25,.84);
+    box-shadow:0 22px 48px rgba(0,0,0,.36),0 0 0 1px rgba(255,210,161,.09),inset 0 1px 0 rgba(255,255,255,.2)
+  }
+  .pw-flow-node[data-tone="focus"] .pw-flow-node-num{color:rgba(255,225,194,.95)}
+  .pw-flow-node[data-tone="focus"] .pw-flow-node-icon{
+    border-color:rgba(255,210,161,.4);background:rgba(255,210,161,.09);color:var(--accent)
+  }
+  #projectFlow .pw-flow-canvas{margin-inline:auto!important}
+  #project[data-project="knowledge"] .pw-flow-bar:before{
+    content:"";position:absolute;left:0;right:0;top:0;height:170%;z-index:-1;pointer-events:none;
+    background:linear-gradient(180deg,rgba(4,9,13,.72),rgba(4,9,13,.32) 58%,transparent)
+  }
+
+  /* B.R.A.I.N. is the densest overview: stack before the three columns become cramped */
+  @media(min-width:1021px) and (max-width:1399px),(min-width:1021px) and (max-height:879px){
+    #project[data-project="knowledge"].project-has-overview .pw-canvas{
+      overflow-y:auto!important;align-items:flex-start!important;padding-bottom:82px;perspective:none!important
+    }
+    #project[data-project="knowledge"].project-has-overview .pw-stage{
+      display:flex!important;flex-direction:column;align-items:stretch;gap:14px;height:auto;min-height:0;
+      width:100%;transform:none!important
+    }
+    #project[data-project="knowledge"].project-has-overview .pw-left,
+    #project[data-project="knowledge"].project-has-overview .pw-middle,
+    #project[data-project="knowledge"].project-has-overview .pw-right,
+    #project[data-project="knowledge"].project-has-overview .pw-project-card,
+    #project[data-project="knowledge"].project-has-overview .pw-project-frame,
+    #project[data-project="knowledge"].project-has-overview .pw-brief,
+    #project[data-project="knowledge"].project-has-overview .pw-system,
+    #project[data-project="knowledge"].project-has-overview .pw-left-slot{transform:none!important}
+    #project[data-project="knowledge"].project-has-overview .pw-left-slot{display:block!important}
+    #project[data-project="knowledge"].project-has-overview .pw-middle{display:flex!important;height:auto!important;gap:12px}
+    #project[data-project="knowledge"].project-has-overview .pw-right{display:flex!important;height:auto!important}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-what,
+    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges,
+    #project[data-project="knowledge"].project-has-overview .pw-overview-value{flex:none!important;height:auto;min-height:0}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-body{overflow:visible}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-body h2{font-size:27px}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-foot{padding:14px 16px 18px}
+    #project[data-project="knowledge"].project-has-overview .pw-project-frame{margin:0 auto}
+  }
+  /* three-column B.R.A.I.N. overview uses a slightly tighter type rhythm */
+  @media(min-width:1400px){
+    #project[data-project="knowledge"].project-has-overview .pw-overview-body{padding:14px 18px 14px}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-body h2{font-size:29px;margin-bottom:8px}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-what .pw-overview-lead{font-size:13px;line-height:1.48}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-what .pw-overview-lead+.pw-overview-lead{margin-top:7px}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges .pw-overview-list{gap:7px}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges .pw-overview-list li{font-size:12px;line-height:1.42}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-what{flex:.95 1 0}
+    #project[data-project="knowledge"].project-has-overview .pw-overview-challenges{flex:1.05 1 0}
+  }
+  @media(min-width:1021px){
+    #project[data-project="knowledge"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:48%}
+  }
+  @media(max-width:1020px){
+    #project[data-project="knowledge"].project-has-overview .pw-project-frame .os-card[data-type="project"] .card-body{max-height:66%}
+  }
 </style>
 </head>
 <body data-mode="home">
@@ -5340,7 +5426,7 @@
     <div class="enter-auto" role="status" aria-live="polite"><span class="enter-dot" aria-hidden="true"></span>Entering Nour OS</div>
     <p class="enter-note">The glasses will power on automatically. No click required.</p>
   </div>
-  <div class="enter-foot"><span id="enterFootScene">Environment / Alpine Dawn</span><span><b id="entryProjectCount">8 projects</b></span></div>
+  <div class="enter-foot"><span id="enterFootScene">Environment / Alpine Dawn</span><span><b id="entryProjectCount">5 projects</b></span></div>
 </div>
 <div class="power-flash" aria-hidden="true"></div>
 
@@ -5348,8 +5434,11 @@
 /* Project data now lives in the approved PROJECTS registry in os-app2.js. */
 
 
+/* Project data now lives in the approved PROJECTS registry in os-app2.js. */
+
+
 /* ---------- approved projects registry ---------- */
-const PROJECTS=[
+const PROJECTS_ALL=[
   {
     id:'acquisition', num:'01', title:'Customer Acquisition', project:'H2Ops', category:'Revenue & Growth',
     description:'AI-powered sales intelligence and customer acquisition automation.',
@@ -5683,11 +5772,71 @@ const PROJECTS=[
     technology:'Next.js and Supabase support the CRM, referral links, booking records and reward review. OpenAI powers conversation practice. Water-air also exposes an integration endpoint that can accept Safiy session details and recordings for a lead or demo.'
   },
   {
-    id:'knowledge', num:'05', title:'Business Knowledge Assistant', project:'H2Ops Brain', category:'AI Solutions',
-    description:'A business knowledge system and RAG assistant prototype for turning operating procedures into guidance staff can find and check.',
-    capabilities:['Retrieval-augmented generation (RAG)','Knowledge management','Governed access'],
-    cover:'assets/cards/knowledge.svg',
+    id:'knowledge', num:'04', title:'B.R.A.I.N.', subtitle:'Business Knowledge Assistant', project:'H2Ops Brain', category:'AI Solutions',
+    description:'An organizational knowledge system that transforms business documentation, operating procedures and institutional knowledge into accessible, AI-powered business intelligence.',
+    capabilities:['Knowledge Management','Retrieval-Augmented Generation (RAG)','Enterprise AI Adoption'],
+    cover:'assets/cards/knowledge.svg?v=2',
     coverAlt:'Illustration of an operating knowledge library paired with a retrieval assistant and source evidence.',
+    overview:{
+      whatItIs:[
+        'An AI-powered organizational knowledge system designed to help businesses centralize, organize and access internal knowledge.',
+        'B.R.A.I.N. combines standard operating procedures, business documentation, playbooks and organizational memory with an AI knowledge assistant designed to retrieve relevant information and provide company-specific guidance.',
+        'Its objective is to make organizational knowledge more accessible, actionable and useful across the business.'
+      ],
+      challenges:[
+        'Business knowledge scattered across multiple documents and platforms.',
+        'Employees spending excessive time searching for information.',
+        'Repeated questions consuming management time.',
+        'Inconsistent execution of business procedures.',
+        'Loss of institutional knowledge when employees leave.',
+        'Time-consuming employee onboarding.',
+        'Generic AI assistants lacking company-specific context.'
+      ],
+      value:[
+        'Centralized organizational intelligence.',
+        'Faster access to relevant business information.',
+        'More consistent execution of company procedures.',
+        'Reduced dependence on individual employees’ knowledge.',
+        'More efficient employee training and onboarding.',
+        'Company-specific AI assistance.',
+        'Better preservation of institutional knowledge.'
+      ],
+      cta:'Understand how it works'
+    },
+    flow:{
+      eyebrow:'B.R.A.I.N. / Business process',
+      title:'How B.R.A.I.N. works',
+      intro:'Organizational knowledge is captured, organized and maintained so the AI assistant can retrieve relevant context and support informed decisions. The library and retrieval prototype are complementary.',
+      nodes:[
+        {id:'documentation',num:'01',title:'Business documentation',visible:'Capture how the business operates.',icon:'clipboard',x:60,y:50,explanation:'Collect standard operating procedures, company policies, sales playbooks and operational guidelines. Transform scattered business documentation into a structured organizational resource.'},
+        {id:'memory',num:'02',title:'Organizational memory',visible:'Preserve business knowledge and experience.',icon:'book',x:60,y:300,explanation:'Document important decisions, established practices, business strategies and lessons learned. Preserve valuable institutional knowledge so that it does not remain exclusively with individual employees or managers.'},
+        {id:'organize',num:'03',title:'Organize business knowledge',visible:'Create a structured knowledge library.',icon:'layers',x:330,y:175,tone:'focus',explanation:'Organize business information into relevant categories, departments, procedures and playbooks. Establish a consistent structure that makes information easier to maintain, locate and understand.'},
+        {id:'maintain',num:'04',title:'Maintain & update knowledge',visible:'Keep organizational information relevant.',icon:'repeat',x:600,y:175,explanation:'Track changes to business documentation and maintain updated procedures as the organization evolves. Help distinguish established operating practices from outdated information.'},
+        {id:'question',num:'05',title:'Employee question',visible:'Ask questions in natural language.',icon:'message',x:60,y:480,explanation:'Allow employees to ask questions about company procedures, responsibilities, sales practices or operational requirements without manually searching through multiple documents.'},
+        {id:'retrieve',num:'06',title:'Retrieve relevant knowledge',visible:'Find the information that matters.',icon:'search',x:330,y:480,explanation:'Identify relevant passages within the assistant’s available knowledge sources based on the employee’s question. Retrieval-augmented generation helps provide company-specific context rather than relying exclusively on a general AI model’s knowledge.'},
+        {id:'assistant',num:'07',title:'AI-powered business assistance',visible:'Provide contextual business guidance.',icon:'spark',x:600,y:480,tone:'focus',explanation:'Generate responses grounded in retrieved organizational information, within the appropriate organizational access boundaries. Help employees understand procedures, locate relevant guidance and navigate business processes.'},
+        {id:'decisions',num:'08',title:'Informed decisions & execution',visible:'Turn knowledge into practical action.',icon:'check',x:870,y:480,explanation:'Help employees make better-informed decisions, follow established procedures and complete routine tasks with greater independence. The objective is to improve organizational consistency while reducing dependence on management for routine guidance.'}
+      ],
+      connections:[
+        {from:'documentation',to:'organize',kind:'knowledge'},
+        {from:'memory',to:'organize',kind:'knowledge'},
+        {from:'organize',to:'maintain',kind:'knowledge'},
+        {from:'organize',to:'retrieve',kind:'conceptual',path:'M435 325 V480'},
+        {from:'question',to:'retrieve',kind:'assistance'},
+        {from:'retrieve',to:'assistant',kind:'assistance'},
+        {from:'assistant',to:'decisions',kind:'assistance'}
+      ],
+      canvas:{width:1140,height:720},
+      labels:[
+        {text:'Knowledge management',x:165,y:36,kind:'knowledge'},
+        {text:'AI assistance',x:165,y:466,kind:'assistance'},
+        {text:'Conceptual knowledge link',x:435,y:420,kind:'conceptual'}
+      ],
+      hint:'Scroll in any direction · Hover or focus a step',
+      viewportLabel:'B.R.A.I.N. horizontal business knowledge flow',
+      scopeNote:'Business process view · The knowledge library and retrieval assistant are complementary; no automatic synchronization is verified.',
+      start:'organize'
+    },
     brief:{
       contribution:'I implemented onboarding and chat for the assistant and added playbook and organizational memory features.',
       challenge:'Scattered or outdated procedures slow onboarding and make routine decisions depend on whoever is available to answer a question.',
@@ -5709,7 +5858,7 @@ const PROJECTS=[
     technology:'The prototype uses Next.js, Supabase and PostgreSQL with pgvector. It uses OpenAI embeddings to retrieve relevant passages within an organization’s documents and passes that context to the model. The separate operating library uses Markdown and Git, with n8n for change logging.'
   },
   {
-    id:'safiy', num:'06', title:'Safiy', project:'Meeting intelligence for Mac', category:'Product & Innovation',
+    id:'safiy', num:'05', title:'Safiy', project:'Meeting intelligence for Mac', category:'Product & Innovation',
     description:'A local-first meeting intelligence app for Mac that turns recordings into transcripts and searchable context.',
     capabilities:['Meeting intelligence','Local-first AI','Privacy and user control'],
     cover:'assets/cards/safiy.webp',
@@ -5788,6 +5937,8 @@ const PROJECTS=[
     technology:'A Python core manages the local workspace, provenance and review logic. React runs in a Tauri desktop app. Agent adapters and permission grants govern how external tools access information and submit proposals for human review.'
   }
 ];
+const RETIRED_PROJECT_IDS=new Set(['waterair','afuntime','academia']);
+const PROJECTS=PROJECTS_ALL.filter(p=>!RETIRED_PROJECT_IDS.has(p.id));
 const PROJECT_BY_ID=Object.fromEntries(PROJECTS.map(p=>[p.id,p]));
 
 
@@ -5968,6 +6119,7 @@ function bodyHTML(item){
   const p=PROJECT_BY_ID[item.id];
   return `<div class="card-kicker">${escHTML(p.category)} / ${escHTML(p.project)}</div>
     <h2>${escHTML(p.title)}</h2>
+    ${p.subtitle?`<p class="card-subtitle">${escHTML(p.subtitle)}</p>`:''}
     <p class="card-desc">${escHTML(p.description)}</p>
     <div class="card-bottom-row">
       <div class="card-tags">${p.capabilities.map(s=>`<span>${escHTML(s)}</span>`).join('')}</div>
@@ -7080,6 +7232,7 @@ function flowIcon(name){
   if(name==='eye') return `<svg ${attrs}><path d="M2.5 12s3.4-5.5 9.5-5.5 9.5 5.5 9.5 5.5-3.4 5.5-9.5 5.5S2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="2.8"/></svg>`;
   if(name==='phone') return `<svg ${attrs}><path d="M6.5 3.5h2.9l1.4 3.9-2 1.4a14.2 14.2 0 0 0 6.4 6.4l1.4-2 3.9 1.4v2.9a2.5 2.5 0 0 1-2.8 2.5C10.3 20.1 3.9 13.7 4 6.3a2.5 2.5 0 0 1 2.5-2.8Z"/></svg>`;
   if(name==='clock') return `<svg ${attrs}><circle cx="12" cy="12" r="8.5"/><path d="M12 7v5l3.5 2"/></svg>`;
+  if(name==='book') return `<svg ${attrs}><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16.5H6.5A2.5 2.5 0 0 0 4 22Z"/><path d="M4 18.5A2.5 2.5 0 0 1 6.5 16H20"/></svg>`;
   if(name==='alert') return `<svg ${attrs}><path d="M12 3.5 21 20H3Z"/><path d="M12 9v5M12 17.2v.1"/></svg>`;
   return `<svg ${attrs}><path d="M4 19V5M4 19h16"/><path d="M7 16v-4M11 16V8M15 16v-6M19 16V6"/></svg>`;
 }
@@ -7573,7 +7726,7 @@ function fitProjectStage(){
   sizeProjectHero();
   resetProjectStageScale();
   const active=currentProject();
-  if(active&&active.overview&&(window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240))) return;
+  if(active&&active.overview&&(window.innerWidth<=1020||((active.id==='h2ops'||active.id==='communications')&&window.innerWidth<=1240)||(active.id==='knowledge'&&(window.innerWidth<=1399||window.innerHeight<=879)))) return;
   const cols=[document.getElementById('projectHeroSlot'),document.querySelector('.pw-middle'),document.querySelector('.pw-right')]
     .filter(c=>c&&c.getClientRects().length>0);
   if(!cols.length) return;
@@ -8299,6 +8452,7 @@ window.addEventListener('resize',()=>{
 });
 
 syncA11y();
+
 
 
 </script>
