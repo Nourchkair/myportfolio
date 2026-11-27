@@ -18,6 +18,11 @@ export async function sha256Hex(value) {
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
+export function generateOwnerToken(bytes = 32) {
+  const value = crypto.getRandomValues(new Uint8Array(bytes));
+  return [...value].map((byte) => byte.toString(16).padStart(2, '0')).join('');
+}
+
 export function ownerTokenFrom(request) {
   const token = request.headers.get('x-owner-token') || '';
   return token.length >= 16 && token.length <= 256 ? token : null;

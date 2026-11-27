@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-11-27T19:23:45.476Z",
+  "voice": "Iapetus",
+  "sessionSeconds": 300,
+  "events": [
+    "open",
+    "setup",
+    "turnComplete",
+    "close:1000"
+  ],
+  "transcript": "Paid tier voice ok.",
+  "audioBytes": 96000,
+  "usage": {
+    "promptTokenCount": 8185,
+    "responseTokenCount": 56,
+    "totalTokenCount": 8241,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 6906
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 160
+      }
+    ],
+    "responseTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 56
+      }
+    ],
+    "thoughtsTokenCount": 62
+  },
+  "costUsdMicros": 125000,
+  "passed": true,
+  "failures": [],
+  "tokenEstimateUsdMicros": 6611,
+  "tokenEstimate": {
+    "textInput": 5180,
+    "audioInput": 480,
+    "audioOutput": 672,
+    "thoughtsOutput": 279
+  },
+  "note": "The recorded costUsdMicros (125000) is the full reservation charged by the pre-change reconciliation. The token-level estimate is 6611 micros using $0.75 text input / $3.00 audio input / $12.00 audio output / $4.50 text output. The new reconciliation records actual token-estimated usage instead of the full reservation."
+}

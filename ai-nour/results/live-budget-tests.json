@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T07:43:50.517Z",
+  "generatedAt": "2026-11-27T20:47:53.656Z",
   "mode": "mock-live/no-usage-reported",
   "passed": 9,
   "failed": 0,
@@ -18,7 +18,7 @@
       "pass": true,
       "detail": {
         "sessionSeconds": 300,
-        "expiresAt": "2026-11-27T07:53:50.499Z"
+        "expiresAt": "2026-11-27T20:57:53.633Z"
       }
     },
     {
@@ -71,11 +71,11 @@
       "name": "Live instruction includes verified portfolio grounding",
       "pass": true,
       "detail": {
-        "instructionLength": 21222
+        "instructionLength": 26894
       }
     },
     {
-      "name": "Live config omits disabled web research",
+      "name": "Live config omits web research",
       "pass": true,
       "detail": {
         "declarations": [

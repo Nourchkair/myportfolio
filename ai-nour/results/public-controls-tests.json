@@ -1,0 +1,313 @@
+{
+  "generatedAt": "2026-11-27T20:48:01.272Z",
+  "mode": "public/mock-providers/local-d1",
+  "passed": 23,
+  "failed": 0,
+  "total": 23,
+  "results": [
+    {
+      "name": "public meta is reachable without an access key",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "web research is absent from the tool surface",
+      "pass": true,
+      "detail": {
+        "tools": [
+          "openSection",
+          "openProject",
+          "openProjectFlow",
+          "openJourneyChapter",
+          "openContact",
+          "presentProject",
+          "presentProjectStep",
+          "pausePresentation",
+          "resumePresentation",
+          "endPresentation",
+          "searchPortfolio",
+          "getProjectDossier",
+          "getProjectStep",
+          "getJourneyChapter",
+          "getCurrentView",
+          "getVisibleElements",
+          "getElementDetails",
+          "navigateToElement",
+          "highlightElement",
+          "spotlightElement",
+          "hoverElement",
+          "expandElement",
+          "collapseElement",
+          "pointToElement",
+          "traceConnection",
+          "traceWorkflow",
+          "scrollToElement",
+          "zoomToElement",
+          "resetZoom",
+          "compareElements",
+          "clearVisualEffects"
+        ]
+      }
+    },
+    {
+      "name": "server issues an anonymous owner credential",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "length": 64
+      }
+    },
+    {
+      "name": "public sessions require current consent",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "old consent version is rejected",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "public session is created with current consent",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "another anonymous owner cannot read the session",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "a pre-existing browser-generated owner token remains compatible",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "existing public sessions with stale consent are blocked before reading or chat",
+      "pass": true,
+      "detail": {
+        "read": 400,
+        "chat": 400
+      }
+    },
+    {
+      "name": "public text chat works after consent and with invalid Google authorization",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reply": "I'm Nupa, Nour's Unique Portfolio Assistant. I'm an independent AI guide who knows his work well; I'm not Nour. I can walk you through the portfolio or answer questions."
+      }
+    },
+    {
+      "name": "web research tool cannot be executed",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "ok": false,
+        "error": "TOOL_NOT_ALLOWED"
+      }
+    },
+    {
+      "name": "excessive tool execution is rate-limited",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          200,
+          200,
+          200,
+          429
+        ]
+      }
+    },
+    {
+      "name": "concurrent voice sessions are capped globally",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          200,
+          200,
+          429
+        ],
+        "errors": [
+          null,
+          "LIVE_SESSION_LIMIT",
+          null
+        ]
+      }
+    },
+    {
+      "name": "concurrent voice error is explicit",
+      "pass": true,
+      "detail": {
+        "error": "LIVE_SESSION_LIMIT"
+      }
+    },
+    {
+      "name": "voice cannot start web research and keeps Iapetus",
+      "pass": true,
+      "detail": {
+        "tools": [
+          "openSection",
+          "openProject",
+          "openProjectFlow",
+          "openJourneyChapter",
+          "openContact",
+          "presentProject",
+          "presentProjectStep",
+          "pausePresentation",
+          "resumePresentation",
+          "endPresentation",
+          "searchPortfolio",
+          "getProjectDossier",
+          "getProjectStep",
+          "getJourneyChapter",
+          "getCurrentView",
+          "getVisibleElements",
+          "getElementDetails",
+          "navigateToElement",
+          "highlightElement",
+          "spotlightElement",
+          "hoverElement",
+          "expandElement",
+          "collapseElement",
+          "pointToElement",
+          "traceConnection",
+          "traceWorkflow",
+          "scrollToElement",
+          "zoomToElement",
+          "resetZoom",
+          "compareElements",
+          "clearVisualEffects"
+        ],
+        "voice": "Iapetus"
+      }
+    },
+    {
+      "name": "Live usage above the reservation is recorded, not capped to the reservation",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "cost": 48000,
+        "reservation": 1000
+      }
+    },
+    {
+      "name": "active voice leases still block a new session after a reported turn",
+      "pass": true,
+      "detail": {
+        "status": 429,
+        "error": "LIVE_SESSION_LIMIT"
+      }
+    },
+    {
+      "name": "ending a session settles the reservation but keeps the lease until token expiry",
+      "pass": true,
+      "detail": {
+        "ended": 200,
+        "released": true,
+        "unreported": 0,
+        "next": 429,
+        "error": "LIVE_SESSION_LIMIT"
+      }
+    },
+    {
+      "name": "expired leases are the only way to release voice concurrency",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "admin remains authenticated",
+      "pass": true,
+      "detail": {
+        "noAuth": 401,
+        "auth": 200
+      }
+    },
+    {
+      "name": "admin exposes public mode, paid-tier estimate and concurrency limits",
+      "pass": true,
+      "detail": {
+        "security": {
+          "betaAccessRequired": false,
+          "publicAccess": true,
+          "adminEnabled": true
+        },
+        "costs": {
+          "internalEstimateOnly": true,
+          "providerBillingApiConnected": false,
+          "rates": {
+            "textInputPerMillion": 0.1,
+            "textOutputPerMillion": 0.4,
+            "liveTextInputPerMillion": 0.75,
+            "liveAudioInputPerMillion": 3,
+            "liveAudioOutputPerMillion": 12
+          },
+          "note": "Budget figures are internal token-based estimates, not confirmed Google invoices."
+        },
+        "limits": {
+          "dailyCapUsdMicros": 1000000,
+          "cumulativeCapUsdMicros": 7000000,
+          "liveSessionSeconds": 60,
+          "maxLiveSessionSeconds": 600,
+          "maxConcurrentLiveSessions": 2,
+          "maxLiveSessionsPerOwner": 1,
+          "chatRateLimit": 30,
+          "globalChatRateLimit": 3,
+          "liveRateLimit": 12,
+          "globalLiveRateLimit": 6,
+          "maxLiveTokensPerDay": 12
+        },
+        "budget": {
+          "dailyUsdMicros": 84585,
+          "cumulativeUsdMicros": 84585,
+          "dailySpentUsdMicros": 83585,
+          "cumulativeSpentUsdMicros": 83585,
+          "heldLiveReservationsUsdMicros": 1000,
+          "heldSpendReservationsUsdMicros": 0,
+          "heldReservationsUsdMicros": 1000,
+          "dailyCapUsdMicros": 1000000,
+          "cumulativeCapUsdMicros": 7000000,
+          "dailyRemainingUsdMicros": 915415,
+          "cumulativeRemainingUsdMicros": 6915415,
+          "allowed": true
+        }
+      }
+    },
+    {
+      "name": "global chat requests are rate-limited",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          200,
+          429,
+          429
+        ]
+      }
+    },
+    {
+      "name": "emergency shutdown blocks new sessions and restores",
+      "pass": true,
+      "detail": {
+        "shutdown": 200,
+        "blocked": 503,
+        "restore": 200
+      }
+    }
+  ]
+}

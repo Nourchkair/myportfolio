@@ -8,9 +8,10 @@ const PUBLIC_ACCESS = !LOCAL;
 const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
-const CONSENT_VERSION = '2026-11-27-v1.3';
+const CONSENT_VERSION = '2026-11-27-v1.4';
 const CONSENT_STORE = 'ainour:consent';
 const MIC_CONSENT_STORE = 'ainour:mic-consent';
+const OWNER_SOURCE_STORE = 'ainour:owner-source';
 
 function readConsent() {
   try {
@@ -22,7 +23,8 @@ function readConsent() {
 
 const state = {
   key: sessionStorage.getItem(STORE.key) || '',
-  owner: localStorage.getItem(STORE.owner) || randomId(48),
+  owner: localStorage.getItem(STORE.owner) || '',
+  ownerReady: localStorage.getItem(OWNER_SOURCE_STORE) === 'server' && Boolean(localStorage.getItem(STORE.owner)),
   sessionId: localStorage.getItem(STORE.session) || null,
   locale: localStorage.getItem(STORE.locale) || 'en',
   messages: [],
@@ -38,6 +40,9 @@ const state = {
   sessionConsentRequired: false,
   exploreRequested: false,
   exploreIntroStarted: false,
+  consentIntent: 'panel',
+  aiPausedUntil: 0,
+  aiPauseMessage: '',
   micConsentResolver: null,
   voiceError: ''
 };
@@ -57,7 +62,7 @@ const voice = {
   sources: [],
   nextPlayTime: 0,
   usage: null,
-  lastTotals: { text: 0, audioIn: 0, audioOut: 0 },
+  lastTotals: { text: 0, audioIn: 0, audioOut: 0, thoughts: 0 },
   userText: '',
   assistantText: '',
   userDraftId: null,
@@ -78,8 +83,6 @@ let lastLiveContext = '';
 let expectedAiRoutes = [];
 let expectedAiRoutesTimer = null;
 let aiActionEpoch = 0;
-
-localStorage.setItem(STORE.owner, state.owner);
 
 function randomId(bytes = 24) {
   return [...crypto.getRandomValues(new Uint8Array(bytes))].map((value) => value.toString(16).padStart(2, '0')).join('');
@@ -112,6 +115,9 @@ async function api(path, options = {}) {
   let body = {};
   try { body = text ? JSON.parse(text) : {}; } catch {}
   if (response.status === 401) {
+    if (PUBLIC_ACCESS) {
+      throw new Error(body?.error?.message || 'Session credential refused');
+    }
     state.key = '';
     sessionStorage.removeItem(STORE.key);
     showGate(state.locale === 'fr'
@@ -151,11 +157,37 @@ function saveConsent() {
   state.consent = consent;
 }
 
+async function ensureOwner() {
+  if (state.owner && state.ownerReady) return state.owner;
+  const response = await fetch(resolveApi('/api/owner'), {
+    method: 'POST',
+    headers: {
+      ...(state.key ? { 'x-prototype-key': state.key } : {})
+    }
+  });
+  const text = await response.text();
+  let body = {};
+  try { body = text ? JSON.parse(text) : {}; } catch {}
+  if (!response.ok || !body.ownerToken) {
+    const error = new Error(body?.error?.message || `HTTP ${response.status}`);
+    error.code = body?.error?.code || 'OWNER_UNAVAILABLE';
+    error.status = response.status;
+    throw error;
+  }
+  state.owner = body.ownerToken;
+  state.ownerReady = true;
+  state.sessionId = null;
+  localStorage.removeItem(STORE.session);
+  localStorage.setItem(STORE.owner, state.owner);
+  localStorage.setItem(OWNER_SOURCE_STORE, 'server');
+  return state.owner;
+}
+
 function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=14', import.meta.url).href;
+  link.href = new URL('./companion.css?v=16', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -231,15 +263,17 @@ function panelMarkup() {
 
 function consentMarkup() {
   return `
-    <section class="ainour-consent-modal" role="dialog" aria-modal="true" aria-labelledby="ainourConsentKicker" aria-describedby="ainourConsentIntro ainourConsentPrivacy ainourConsentAccept">
+    <section class="ainour-consent-modal" role="dialog" aria-modal="true" aria-labelledby="ainourConsentIntro" aria-describedby="ainourConsentPrivacy ainourConsentAccept">
       <div class="ainour-consent-head">
-        <p class="ainour-consent-kicker" id="ainourConsentKicker">Before we begin</p>
+        <p class="ainour-consent-kicker" id="ainourConsentKicker">Nupa · AI portfolio companion</p>
         <button class="ainour-consent-locale" id="ainourConsentLocale" type="button" aria-label="Switch language">EN</button>
       </div>
-      <p class="ainour-consent-welcome" id="ainourConsentIntro">Welcome — I’m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.</p>
-      <p class="ainour-consent-disclosure" id="ainourConsentPrivacy">Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.</p>
-      <p class="ainour-consent-accept" id="ainourConsentAccept">By clicking Continue, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
-      <button id="ainourConsentBtn" type="button" aria-describedby="ainourConsentAccept ainourConsentPrivacy">Continue and agree</button>
+      <h2 class="ainour-consent-welcome" id="ainourConsentIntro">Meet Nupa.</h2>
+      <p class="ainour-consent-lede" id="ainourConsentLede">Your intelligent portfolio companion. Explore, ask questions and discover Nour’s work at your own pace.</p>
+      <p class="ainour-consent-disclosure" id="ainourConsentPrivacy">Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.</p>
+      <p class="ainour-consent-accept" id="ainourConsentAccept">By selecting “Let’s explore”, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+      <button id="ainourConsentBtn" type="button" aria-describedby="ainourConsentAccept ainourConsentPrivacy">Let’s explore</button>
+      <button id="ainourConsentDismiss" class="ainour-consent-dismiss" type="button">Not now</button>
       <p id="ainourConsentError" role="status" aria-live="polite" class="ainour-form-error"></p>
     </section>
   `;
@@ -301,9 +335,11 @@ function mount() {
     consentKicker: consent.querySelector('#ainourConsentKicker'),
     consentLocale: consent.querySelector('#ainourConsentLocale'),
     consentIntro: consent.querySelector('#ainourConsentIntro'),
+    consentLede: consent.querySelector('#ainourConsentLede'),
     consentPrivacy: consent.querySelector('#ainourConsentPrivacy'),
     consentAccept: consent.querySelector('#ainourConsentAccept'),
     consentBtn: consent.querySelector('#ainourConsentBtn'),
+    consentDismiss: consent.querySelector('#ainourConsentDismiss'),
     consentError: consent.querySelector('#ainourConsentError'),
     micConsent: panel.querySelector('#ainourMicConsent'),
     micCopy: panel.querySelector('#ainourMicCopy'),
@@ -348,7 +384,16 @@ function mount() {
     await init();
   });
   els.consentLocale.addEventListener('click', () => toggleLocale());
+  els.consentDismiss.addEventListener('click', () => {
+    state.consentIntent = 'panel';
+    state.exploreRequested = false;
+    els.consent.hidden = true;
+    els.consentError.textContent = '';
+    updatePill();
+  });
   els.consentBtn.addEventListener('click', async () => {
+    const intent = state.consentIntent;
+    state.consentIntent = 'panel';
     els.consentError.textContent = '';
     saveConsent();
     els.consent.hidden = true;
@@ -365,7 +410,9 @@ function mount() {
         localStorage.removeItem(STORE.session);
       }
     }
-    await openPanel();
+    if (intent === 'explore') await enterExplore();
+    else if (intent === 'voice') await startVoice();
+    else await openPanel();
   });
   els.micAllow.addEventListener('click', () => resolveMicConsent(true));
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
@@ -626,36 +673,40 @@ function updatePill() {
 
 function updateLegalCopy() {
   const fr = state.locale === 'fr';
-  if (els.consentKicker) els.consentKicker.textContent = fr ? 'Avant de commencer' : 'Before we begin';
+  if (els.consentKicker) els.consentKicker.textContent = fr ? 'Nupa · compagnon de portfolio IA' : 'Nupa · AI portfolio companion';
   if (els.consentLocale) {
     els.consentLocale.textContent = fr ? 'FR' : 'EN';
     els.consentLocale.setAttribute('aria-label', fr ? 'Changer de langue' : 'Switch language');
   }
   if (els.consentIntro) {
-    els.consentIntro.textContent = fr
-      ? 'Bienvenue — je suis Nupa, un guide de portfolio indépendant propulsé par l’IA, et non Nour. Je peux vous faire découvrir son travail, répondre à vos questions et vous guider.'
-      : 'Welcome — I’m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.';
+    els.consentIntro.textContent = fr ? 'Voici Nupa.' : 'Meet Nupa.';
+  }
+  if (els.consentLede) {
+    els.consentLede.textContent = fr
+      ? 'Votre compagnon de portfolio intelligent. Explorez, posez des questions et découvrez le travail de Nour à votre rythme.'
+      : 'Your intelligent portfolio companion. Explore, ask questions and discover Nour’s work at your own pace.';
   }
   if (els.consentPrivacy) {
     els.consentPrivacy.textContent = fr
-      ? 'Le texte et la voix sont traités par Google Gemini, qui peut les utiliser pour améliorer ses produits. Les transcriptions sont conservées jusqu’à 7 jours et peuvent être consultées par l’administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
-      : 'Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.';
+      ? 'Le texte et la voix sont traités par Google Gemini selon les conditions des services payants, qui n’utilisent pas les requêtes ni les réponses pour améliorer les produits de Google. Les conversations sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
+      : 'Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.';
   }
   if (els.consentAccept) {
     els.consentAccept.innerHTML = fr
-      ? 'En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les <a href="/terms/" target="_blank" rel="noopener">Conditions d’utilisation</a> et la <a href="/privacy/" target="_blank" rel="noopener">Politique de confidentialité</a>.'
-      : 'By clicking Continue, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
+      ? 'En choisissant « Explorons », vous confirmez avoir 18 ans ou plus et accepter les <a href="/terms/" target="_blank" rel="noopener">Conditions d’utilisation</a> et la <a href="/privacy/" target="_blank" rel="noopener">Politique de confidentialité</a>.'
+      : 'By selecting “Let’s explore”, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
   }
+  if (els.consentDismiss) els.consentDismiss.textContent = fr ? 'Pas maintenant' : 'Not now';
   if (els.consentBtn) {
-    els.consentBtn.textContent = fr ? 'Continuer et accepter' : 'Continue and agree';
+    els.consentBtn.textContent = fr ? 'Explorons' : 'Let’s explore';
     els.consentBtn.setAttribute('aria-label', fr
-      ? 'Continuer et accepter : confirmer avoir 18 ans ou plus et accepter les Conditions d’utilisation et la Politique de confidentialité'
-      : 'Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy');
+      ? 'Explorons : confirmer avoir 18 ans ou plus et accepter les Conditions d’utilisation et la Politique de confidentialité'
+      : 'Let’s explore: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy');
   }
   if (els.micCopy) {
     els.micCopy.textContent = fr
-      ? 'La voix de Nupa utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours dans ce service. Ne communiquez pas de renseignements personnels ou sensibles.'
-      : 'Nupa’s voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.';
+      ? 'La voix de Nupa utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours après la dernière activité. Ne communiquez pas de renseignements personnels ou sensibles.'
+      : 'Nupa’s voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days after the last activity. Do not share personal or sensitive information.';
   }
   if (els.micAllow) els.micAllow.textContent = fr ? 'Autoriser le microphone' : 'Allow microphone';
   if (els.micCancel) els.micCancel.textContent = fr ? 'Annuler' : 'Cancel';
@@ -676,8 +727,9 @@ function showGate(message = '') {
   if (!els.panel.hidden) setTimeout(() => els.gateInput?.focus({ preventScroll: true }), 40);
 }
 
-function showConsent() {
+function showConsent(intent = 'panel') {
   if (!els.consent) return;
+  state.consentIntent = intent;
   state.ready = false;
   updateLegalCopy();
   els.panel.hidden = true;
@@ -751,6 +803,56 @@ function formatVoiceReset(ms) {
   }
 }
 
+function friendlyAiMessage(error) {
+  const fr = state.locale === 'fr';
+  const code = error?.code || '';
+  const details = error?.details || {};
+  if (code === 'CUMULATIVE_BUDGET_EXHAUSTED') {
+    return fr
+      ? 'Nupa a atteint sa limite d’évaluation. Vous pouvez continuer à explorer librement le portfolio; le clavardage IA reste indisponible.'
+      : 'Nupa has reached its evaluation limit. You can keep exploring the portfolio freely; AI chat is unavailable.';
+  }
+  if (code === 'DAILY_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope !== 'cumulative')) {
+    const reset = details.resetsAt ? formatVoiceReset(details.resetsAt) : '';
+    return fr
+      ? `Nupa se repose pour aujourd’hui. Le portfolio reste entièrement accessible${reset ? `; le clavardage revient après ${reset} (heure locale)` : ''}.`
+      : `Nupa is resting for today. The portfolio remains fully available${reset ? `; chat returns after ${reset} your time` : ''}.`;
+  }
+  if (code === 'RATE_LIMITED') {
+    return fr
+      ? 'Nupa reçoit trop de demandes. Attendez quelques minutes, puis réessayez. Le portfolio reste accessible.'
+      : 'Nupa is receiving too many requests. Wait a few minutes, then try again. The portfolio remains available.';
+  }
+  if (code === 'NETWORK_ERROR') {
+    return fr
+      ? 'La connexion à Nupa a échoué. Vérifiez votre connexion et réessayez.'
+      : 'The connection to Nupa failed. Check your connection and try again.';
+  }
+  if (code === 'UNAVAILABLE' || error?.status === 503) {
+    return fr
+      ? 'Nupa est temporairement indisponible. Vous pouvez continuer à explorer le portfolio.'
+      : 'Nupa is temporarily unavailable. You can keep exploring the portfolio.';
+  }
+  return fr
+    ? 'Nupa est temporairement indisponible. Vous pouvez continuer à explorer le portfolio.'
+    : 'Nupa is temporarily unavailable. You can keep exploring the portfolio.';
+}
+
+function pauseAi(error) {
+  const code = error?.code || '';
+  const details = error?.details || {};
+  if (code === 'CUMULATIVE_BUDGET_EXHAUSTED') {
+    state.aiPausedUntil = Number.MAX_SAFE_INTEGER;
+  } else if (code === 'DAILY_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope !== 'cumulative')) {
+    state.aiPausedUntil = Number(details.resetsAt) || nextUtcMidnight();
+  } else if (code === 'RATE_LIMITED') {
+    state.aiPausedUntil = Date.now() + 5 * 60_000;
+  } else {
+    state.aiPausedUntil = Date.now() + 60_000;
+  }
+  state.aiPauseMessage = friendlyAiMessage(error);
+}
+
 function voiceErrorMessage(error) {
   const code = error?.code || '';
   const name = error?.name || '';
@@ -759,18 +861,23 @@ function voiceErrorMessage(error) {
   const reset = formatVoiceReset(details.resetsAt);
   if (code === 'DAILY_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope === 'daily')) {
     return fr
-      ? `La voix est temporairement indisponible : l’allocation de tests vocaux du jour est épuisée. Elle se réinitialise le ${reset} (heure locale).`
-      : `Voice is temporarily unavailable because today's voice testing allowance has been used. It resets ${reset} your time.`;
+      ? `La voix est temporairement indisponible : l’allocation vocale du jour est épuisée. Elle se réinitialise le ${reset} (heure locale).`
+      : `Voice is temporarily unavailable because today's Nupa voice allowance has been used. It resets ${reset} your time.`;
   }
   if (code === 'CUMULATIVE_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope === 'cumulative')) {
     return fr
-      ? 'La voix est temporairement indisponible : l’allocation globale de tests vocaux de la bêta privée a été utilisée. Le clavardage texte reste disponible.'
-      : 'Voice is temporarily unavailable because the overall private-beta voice allowance has been used. Text chat is still available.';
+      ? 'La voix est temporairement indisponible : l’allocation vocale globale a été utilisée. Le clavardage texte reste disponible.'
+      : 'Voice is temporarily unavailable because the overall voice allowance has been used. Text chat is still available.';
   }
   if (code === 'LIVE_SESSION_LIMIT') {
+    if (details.resetsAt) {
+      return fr
+        ? `La limite quotidienne de sessions vocales est atteinte. Réessayez après le ${reset} (heure locale).`
+        : `The daily voice session limit has been reached. Try again after ${reset} your time.`;
+    }
     return fr
-      ? `La limite quotidienne de sessions vocales est atteinte. Réessayez après le ${reset} (heure locale).`
-      : `The daily voice session limit has been reached. Try again after ${reset} your time.`;
+      ? 'Une autre session vocale Nupa est encore active ou en période de refroidissement. Le clavardage texte reste disponible; réessayez la voix dans quelques minutes.'
+      : 'Another Nupa voice session is still active or cooling down. Text chat remains available; try voice again in a few minutes.';
   }
   if (code === 'RATE_LIMITED') {
     return fr
@@ -784,8 +891,8 @@ function voiceErrorMessage(error) {
   }
   if (code === 'GEMINI_LIVE_TOKEN_ERROR' || code === 'GEMINI_LIVE_TIMEOUT' || code === 'PROVIDER_ERROR' || (error?.status >= 500 && error?.status < 600)) {
     return fr
-      ? 'La voix est temporairement indisponible en raison d’un problème du fournisseur vocal. Réessayez bientôt.'
-      : 'Voice is temporarily unavailable because of a voice-provider problem. Try again shortly.';
+      ? 'La voix est temporairement indisponible en raison d’un problème du fournisseur vocal. Le portfolio et le clavardage texte restent accessibles; réessayez bientôt.'
+      : 'Voice is temporarily unavailable because of a voice-provider problem. The portfolio and text chat remain available; try again shortly.';
   }
   if (code === 'NOT_FOUND') {
     return fr
@@ -1133,7 +1240,7 @@ async function createSession() {
   renderThread();
 }
 
-async function loadSession() {
+async function loadSession({ consentIntent = 'panel' } = {}) {
   if (!state.sessionId) return createSession();
   try {
     const data = await api(`/api/session/${encodeURIComponent(state.sessionId)}`);
@@ -1148,7 +1255,7 @@ async function loadSession() {
   } catch (error) {
     if (error.code === 'CONSENT_REQUIRED') {
       state.sessionConsentRequired = true;
-      showConsent();
+      showConsent(consentIntent);
       return false;
     }
     if (String(error.message).includes('not found') || String(error.message).includes('expired')) {
@@ -1161,27 +1268,87 @@ async function loadSession() {
   }
 }
 
-async function init() {
-  if (!state.consent) return showConsent();
-  if (!PUBLIC_ACCESS && !state.key) return showGate();
+async function init({ silent = false } = {}) {
+  if (!state.consent) {
+    showConsent('panel');
+    return false;
+  }
+  if (!PUBLIC_ACCESS && !state.key) {
+    showGate();
+    return false;
+  }
   try {
+    await ensureOwner();
     state.meta = await api('/api/meta');
-    const loaded = await loadSession();
-    if (loaded === false) return;
+    const loaded = await loadSession({ consentIntent: silent ? 'explore' : 'panel' });
+    if (loaded === false) return false;
     showBody();
     state.ready = true;
     setState('idle');
     updateContext();
     startExploreIntroIfNeeded();
+    return true;
   } catch (error) {
-    if (String(error.message).includes('unauthorized')) return;
-    showGate(String(error.message || error));
+    if (String(error.message).includes('unauthorized')) return false;
+    if (silent) {
+      notify(friendlyAiMessage(error));
+      return false;
+    }
+    showServiceError(error);
+    return false;
   }
+}
+
+function showServiceError(error) {
+  const message = friendlyAiMessage(error);
+  els.gate.hidden = true;
+  els.consent.hidden = true;
+  els.body.hidden = false;
+  els.panel.hidden = false;
+  addMessage('system', message);
+  setState('idle');
+  updatePill();
+  clampPanel();
+}
+
+function notify(message) {
+  const toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('show');
+  clearTimeout(notify.timer);
+  notify.timer = setTimeout(() => toast.classList.remove('show'), 3800);
 }
 
 function openExplore() {
   state.exploreRequested = true;
-  openPanel();
+  if (!state.consent) {
+    showConsent('explore');
+    return;
+  }
+  void enterExplore();
+}
+
+async function enterExplore() {
+  state.consentIntent = 'panel';
+  state.exploreIntroStarted = true;
+  if (!PUBLIC_ACCESS && !state.key) {
+    await openPanel();
+    return;
+  }
+  const ready = await init({ silent: true });
+  state.exploreRequested = false;
+  if (!ready) return;
+  state.unread = true;
+  updatePill();
+  const fr = state.locale === 'fr';
+  notify(fr
+    ? 'Nupa est prêt. Ouvrez le panneau Nupa pour une visite guidée ou activez la voix.'
+    : 'Nupa is ready. Open the Nupa panel for a guided tour, or turn on voice.');
+  if (els.pill) {
+    els.pill.classList.add('is-cue');
+    setTimeout(() => els.pill?.classList.remove('is-cue'), 4200);
+  }
 }
 
 function startExploreIntroIfNeeded() {
@@ -1202,6 +1369,10 @@ async function startExploreIntro() {
 async function sendMessage(event, options = {}) {
   event?.preventDefault?.();
   if (state.busy || !state.ready) return;
+  if (state.aiPausedUntil && Date.now() < state.aiPausedUntil) {
+    addMessage('system', state.aiPauseMessage || friendlyAiMessage({ code: 'UNAVAILABLE' }));
+    return;
+  }
   const message = String(options.message ?? els.input.value).trim();
   if (!message) return;
   const showUser = options.showUser !== false;
@@ -1245,7 +1416,18 @@ async function sendMessage(event, options = {}) {
       setState('idle');
       return;
     }
-    addMessage('system', state.locale === 'fr' ? 'Impossible de répondre. Réessayez.' : 'Could not answer. Please try again.');
+    if (error?.code === 'NOT_FOUND') {
+      state.sessionId = null;
+      localStorage.removeItem(STORE.session);
+      try { await createSession(); } catch {}
+      addMessage('system', state.locale === 'fr'
+        ? 'Votre session Nupa a expiré. Une nouvelle session est prête; envoyez votre message de nouveau.'
+        : 'Your Nupa session expired. A new session is ready; send your message again.');
+      setState('idle');
+      return;
+    }
+    pauseAi(error);
+    addMessage('system', state.aiPauseMessage);
     setState('error');
     setTimeout(() => setState('idle'), 1800);
   } finally {
@@ -1600,7 +1782,7 @@ function usageTotals(metadata) {
   const details = (items) => Object.fromEntries((items || []).map((item) => [String(item.modality || '').toLowerCase(), Number(item.tokenCount || 0)]));
   const prompt = details(metadata?.promptTokensDetails);
   const response = details(metadata?.responseTokensDetails);
-  return { text: prompt.text || 0, audioIn: prompt.audio || 0, audioOut: response.audio || 0 };
+  return { text: prompt.text || 0, audioIn: prompt.audio || 0, audioOut: response.audio || 0, thoughts: Number(metadata?.thoughtsTokenCount || 0) };
 }
 
 function usageDelta() {
@@ -1610,7 +1792,8 @@ function usageDelta() {
   return {
     textInput: Math.max(0, current.text - previous.text),
     audioInput: Math.max(0, current.audioIn - previous.audioIn),
-    audioOutput: Math.max(0, current.audioOut - previous.audioOut)
+    audioOutput: Math.max(0, current.audioOut - previous.audioOut),
+    thoughtsTokenCount: Math.max(0, current.thoughts - (previous.thoughts || 0))
   };
 }
 
@@ -1712,7 +1895,12 @@ async function startVoice() {
     return;
   }
   if (!state.consent) {
-    showConsent();
+    showConsent('voice');
+    return;
+  }
+  if (state.aiPausedUntil && Date.now() < state.aiPausedUntil) {
+    openPanel();
+    addMessage('system', state.aiPauseMessage || friendlyAiMessage({ code: 'UNAVAILABLE' }));
     return;
   }
   if (!state.ready) {
@@ -1728,7 +1916,7 @@ async function startVoice() {
   clearVoiceError();
   setState('connecting');
   voice.turnId = randomId(12);
-  voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0 };
+  voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0, thoughts: 0 };
   voice.usage = null;
   voice.userText = '';
   voice.assistantText = '';
@@ -1870,6 +2058,13 @@ async function stopVoice() {
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
+  if (state.sessionId) {
+    void api('/api/live/end', {
+      method: 'POST',
+      body: JSON.stringify({ sessionId: state.sessionId, reservationId: voice.reservationId })
+    }).catch(() => {});
+  }
+  voice.reservationId = null;
   setState('idle');
 }
 

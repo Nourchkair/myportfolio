@@ -1,5 +1,5 @@
 import { json, readJson } from '../http/json.js';
-import { requireOwnerHash, requirePrototypeKey } from '../auth/secure.js';
+import { generateOwnerToken, requireOwnerHash, requirePrototypeKey } from '../auth/secure.js';
 import { requireAssistant, requireLive, requireText, readFlags } from '../controls/flags.js';
 import { createSessionForOwner, getOwnedSession, requireCurrentConsent, sessionView } from '../sessions/manager.js';
 import { handleChat, handleLiveToken, handleLiveTurn } from '../services/conversation.js';
@@ -8,7 +8,7 @@ import { getToolDeclarations } from '../tools/registry.js';
 import { executeToolCall } from '../tools/registry.js';
 import { normalizePortfolioContext } from '../knowledge/context.js';
 import { normalizeConsent } from '../privacy/consent.js';
-import { badRequest } from '../http/errors.js';
+import { badRequest, tooMany } from '../http/errors.js';
 import { sha256Hex } from '../auth/secure.js';
 
 export function registerSessionRoutes(router, services) {
@@ -27,14 +27,39 @@ export function registerSessionRoutes(router, services) {
         text_enabled: flags.text_enabled,
         live_enabled: flags.live_enabled
       },
-      tools: getToolDeclarations({ webResearchEnabled: config.webResearchEnabled }).map((tool) => tool.name)
+      tools: getToolDeclarations().map((tool) => tool.name)
     });
+  });
+
+  router.post('/api/owner', async ({ request }) => {
+    await requirePrototypeKey(request, config, db);
+    const clientHash = await sha256Hex(services.clientKey(request));
+    const rate = await db.checkRateLimit({
+      bucket: `owner:${clientHash}`,
+      limit: config.limits.ownerRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now: Date.now()
+    });
+    if (!rate.allowed) throw tooMany('Too many anonymous sessions were requested. Please try again later.');
+    const globalRate = await db.checkRateLimit({
+      bucket: 'owner:global',
+      limit: config.limits.globalOwnerRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now: Date.now()
+    });
+    if (!globalRate.allowed) throw tooMany('Nupa is receiving too many session requests right now. Please try again shortly.');
+    return json({ ownerToken: generateOwnerToken(32) });
   });
 
   router.post('/api/session', async ({ request }) => {
     await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
+    const clientHash = await sha256Hex(services.clientKey(request));
+    const rate = await db.checkRateLimit({ bucket: `session-create:${clientHash}`, limit: config.limits.sessionRateLimit, windowMs: config.limits.rateLimitWindowMs, now: Date.now() });
+    if (!rate.allowed) throw tooMany('Too many new sessions. Please wait before trying again.');
+    const globalRate = await db.checkRateLimit({ bucket: 'session-create:global', limit: config.limits.globalSessionRateLimit, windowMs: config.limits.rateLimitWindowMs, now: Date.now() });
+    if (!globalRate.allowed) throw tooMany('Nupa is receiving too many new sessions right now. Please try again shortly.');
     const body = await readJson(request);
     const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
     const consent = normalizeConsent(body.consent);
@@ -77,6 +102,11 @@ export function registerSessionRoutes(router, services) {
     await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
+    const clientHash = await sha256Hex(services.clientKey(request));
+    const rate = await db.checkRateLimit({ bucket: `session-read:${clientHash}`, limit: config.limits.sessionReadRateLimit, windowMs: config.limits.rateLimitWindowMs, now: Date.now() });
+    if (!rate.allowed) throw tooMany('Too many session reads. Please wait before trying again.');
+    const globalRate = await db.checkRateLimit({ bucket: 'session-read:global', limit: config.limits.globalSessionReadRateLimit, windowMs: config.limits.rateLimitWindowMs, now: Date.now() });
+    if (!globalRate.allowed) throw tooMany('Nupa is receiving too many session reads right now. Please try again shortly.');
     const session = await getOwnedSession({ db, sessionId: params.id, ownerHash, now: Date.now() });
     requireCurrentConsent(session, config);
     const messages = await db.listMessages(session.id, 100);
@@ -150,10 +180,44 @@ export function registerSessionRoutes(router, services) {
     return json(result);
   });
 
-  router.post('/api/tools/execute', async ({ request, requestId }) => {
+  router.post('/api/live/end', async ({ request }) => {
+    await requirePrototypeKey(request, config, db);
+    const ownerHash = await requireOwnerHash(request);
+    const body = await readJson(request);
+    if (!body.sessionId) throw badRequest('sessionId is required');
+    const now = Date.now();
+    await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now });
+    const settled = await cost.endLive({
+      reservationId: body.reservationId || null,
+      ownerHash,
+      sessionId: body.sessionId,
+      now
+    });
+    // Keep the active lease until the provider token expires. Closing the
+    // browser UI does not revoke the ephemeral Gemini token, so releasing the
+    // lease early would allow a second concurrent session.
+    return json({ ok: true, ...settled });
+  });
+
+  router.post('/api/tools/execute', async ({ request }) => {
     await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
+    const clientHash = await sha256Hex(services.clientKey(request));
+    const rate = await db.checkRateLimit({
+      bucket: `tool:${clientHash}`,
+      limit: config.limits.toolRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now: Date.now()
+    });
+    if (!rate.allowed) throw tooMany('Too many interface actions. Please wait before trying again.');
+    const globalRate = await db.checkRateLimit({
+      bucket: 'tool:global',
+      limit: config.limits.globalToolRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now: Date.now()
+    });
+    if (!globalRate.allowed) throw tooMany('Nupa is receiving too many interface actions right now. Please try again shortly.');
     const body = await readJson(request);
     if (!body.sessionId) throw badRequest('sessionId is required');
     if (!body.name) throw badRequest('Tool name is required');
@@ -168,16 +232,6 @@ export function registerSessionRoutes(router, services) {
       cost,
       portfolioContext: normalizePortfolioContext(body.portfolioContext)
     });
-    let researchCostUsdMicros = 0;
-    if (result.usage) {
-      researchCostUsdMicros = await cost.recordText({
-        requestId: `${requestId}:research:${body.name}`,
-        model: result.model || config.textModel,
-        usage: result.usage,
-        capability: 'web_research',
-        now: toolStarted
-      });
-    }
     if (result.ok) {
       await db.logEvent({
         level: 'info',
@@ -186,7 +240,7 @@ export function registerSessionRoutes(router, services) {
         now: toolStarted
       });
     }
-    return json({ ...result, costUsdMicros: researchCostUsdMicros });
+    return json(result);
   });
 
   router.get('/api/knowledge/search', async ({ request, url }) => {

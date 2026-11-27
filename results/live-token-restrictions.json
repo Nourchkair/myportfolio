@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-27T20:22:46.684Z",
+  "base": "https://api.nourchkair.com",
+  "model": "gemini-3.8-live",
+  "voice": "Iapetus",
+  "passed": 4,
+  "failed": 0,
+  "total": 4,
+  "results": [
+    {
+      "name": "Live token exposes a short new-session window and a longer session expiry",
+      "pass": true,
+      "detail": {
+        "newSessionExpiresAt": "2026-11-27T20:22:36.743Z",
+        "expiresAt": "2026-11-27T20:26:36.743Z"
+      }
+    },
+    {
+      "name": "the issued ephemeral token can open one Gemini Live session",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "events": [
+          "open",
+          "setup",
+          "close:1000"
+        ],
+        "usage": null
+      }
+    },
+    {
+      "name": "the same ephemeral token cannot be reused for a second Gemini Live connection",
+      "pass": true,
+      "detail": {
+        "ok": false,
+        "events": [
+          "open",
+          "close:1011",
+          "threw:Live connection closed before setup completed (code 1011): Token has been used too many times"
+        ],
+        "usage": null
+      }
+    },
+    {
+      "name": "a token cannot open a new Gemini session after its new-session window",
+      "pass": true,
+      "detail": {
+        "ok": false,
+        "events": [
+          "open",
+          "close:1011",
+          "threw:Live connection closed before setup completed (code 1011): new_session_expire_time deadline exceeded"
+        ],
+        "usage": null,
+        "newSessionExpiresAt": "2026-11-27T20:22:39.359Z"
+      }
+    }
+  ],
+  "note": "Verified directly against Gemini with production ephemeral tokens. Cleanup via /api/live/end was unavailable because the new endpoint is not deployed yet; reservations settle conservatively through the existing expiry path. Gemini itself rejected token reuse with code 1011 and rejected the expired new-session window."
+}

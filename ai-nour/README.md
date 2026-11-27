@@ -1,8 +1,8 @@
 # Nupa (formerly AI Nour) — production assistant
 
-Nupa is deployed in public mode: a Cloudflare Worker at `api.nourchkair.com`, an isolated production D1 database, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, bilingual retrieval, a feature-flagged portfolio companion, and a local private admin dashboard.
+Nupa is deployed in public beta mode: a Cloudflare Worker at `api.nourchkair.com`, an isolated production D1 database, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, bilingual retrieval, a feature-flagged portfolio companion, and a local private admin dashboard.
 
-The public portfolio is live at `https://nourchkair.com`. Nupa is available to visitors aged 18 and older; no account or access key is required. Existing rate limits and spending caps protect the service.
+The public portfolio is live at `https://nourchkair.com`. Nupa is publicly available in beta to visitors aged 18 and older; no account or access key is required. Server-issued anonymous ownership, rate limits and spending caps protect the service. Gemini runs on the reported Paid Tier 1.
 
 ## Quick start
 
@@ -32,7 +32,7 @@ Mock Worker key: `phase2-test-key`. Real Worker: `ainour-api=http://127.0.0.1:87
 https://nourchkair.com/
 ```
 
-Nupa is enabled by default on the public portfolio. No key is required. Legacy beta keys remain in the admin only for historical/administrative record keeping and are no longer checked.
+Nupa is enabled by default on the public portfolio. No key is required. “Explore with Nupa” enters the portfolio without opening the chat panel; the Nupa pill opens chat or voice on demand. Legacy beta keys remain in the admin only for historical/administrative record keeping and are no longer checked.
 
 ### Admin
 
@@ -145,14 +145,15 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 ## Safety and cost
 
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
+- Anonymous owner credentials are issued by `POST /api/owner`, stored in browser `localStorage`, and hashed in D1. They isolate sessions and can be replaced by clearing browser storage.
 - Legacy beta keys remain SHA-256 hashed in D1 for historical/administrative record keeping; they are no longer required for public access.
-- Nupa is enabled by default on the public portfolio. No beta key is required; consent is still mandatory.
+- Nupa is enabled by default on the public portfolio. No beta key is required; consent v1.4 is still mandatory. Web research is removed.
 - Live tokens are one-use, use a configurable provider-enforced expiry (default 300 seconds; 600-second maximum), use the **Iapetus** voice, carry a duration-scaled prepaid reservation (default $0.125 at 300s; $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$3.00 USD` for production acceptance testing; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
 - Gmail adapter has no send method; it creates drafts only.
 - Resend is prepared but `EMAIL_SEND_ENABLED=false` by default; local processing is dry-run.
-- No R2, paid auth, or paid database is activated. External writes, Resend and the private admin remain restricted.
+- No R2, paid auth, or paid database is activated. External writes and Resend remain disabled; the admin remains private. Gemini is on paid tier within the approved caps.
 - CRM headers are applied to the live Sheet. Production D1→Sheet sync is manual and idempotent; automatic per-event sync is not enabled.
 
 ## Documentation
@@ -168,7 +169,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
 - `../docs/ai-nour-v2-conversational.md` — Nupa V2 personality, grounding, visitor intelligence, presentations and quality results.
 - `../docs/ai-nour-v3-presentation.md` — Nupa V3 target registry, highlights, cursor, workflow tracing, presentation orchestration, tests and limitations.
-- `../privacy/index.html` and `../terms/index.html` — bilingual legal pages (version 1.3, 18+ for Nupa; public access without a beta key).
+- `../privacy/index.html` and `../terms/index.html` — bilingual legal pages (version 1.4, 18+ for Nupa; public beta without a beta key; paid Gemini processing).
 - `../docs/legal-data-audit.md` — data, retention, deletion, admin, third-party and Gemini claim audit.
 - `../docs/ai-nour-phase4.md` — historical private-beta acceptance, launch checklist, and decisions.
 

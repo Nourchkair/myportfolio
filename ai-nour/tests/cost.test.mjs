@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { textCostMicros, liveCostMicros, createCostService } from '../src/cost/service.js';
+import { textCostMicros, liveCostMicros, boundLiveUsage, createCostService } from '../src/cost/service.js';
 
 const rates = {
   textInputPerMillion: 0.10,
@@ -18,6 +18,24 @@ test('text cost uses published per-million rates', () => {
 test('live cost separates text input, audio input and audio output', () => {
   assert.equal(liveCostMicros({ textInput: 1_000_000, audioInput: 0, audioOutput: 0 }, rates), 750_000);
   assert.equal(liveCostMicros({ textInput: 0, audioInput: 1_000_000, audioOutput: 1_000_000 }, rates), 15_000_000);
+});
+
+test('Live usage is bounded by the session duration, not by the monetary reservation', () => {
+  const normal = boundLiveUsage({ textInput: 1000, audioInput: 500, audioOutput: 1500, thoughtsTokenCount: 100 }, 60);
+  assert.equal(normal.clamped, false);
+  assert.equal(normal.usage.audioOutput, 1500);
+  const absurd = boundLiveUsage({ textInput: 10_000_000, audioInput: 1_000_000, audioOutput: 1_000_000, thoughtsTokenCount: 1_000_000 }, 60);
+  assert.equal(absurd.clamped, true);
+  assert.equal(absurd.usage.audioInput, 40 * 60 + 1000);
+  assert.equal(absurd.usage.audioOutput, 60 * 60 + 1000);
+  assert.equal(absurd.usage.textInput, 60 * 60 + 20_000);
+  assert.equal(absurd.usage.thoughtsTokenCount, 60 * 60 + 1000);
+});
+
+test('Live cost includes thinking/text output at the text output rate', () => {
+  const ratesWithTextOutput = { ...rates, liveTextOutputPerMillion: 4.50 };
+  assert.equal(liveCostMicros({ audioOutput: 56, thoughtsTokenCount: 62 }, ratesWithTextOutput), 672 + 279);
+  assert.equal(liveCostMicros({ textInput: 100, thoughtsTokenCount: 10 }, ratesWithTextOutput), 75 + 45);
 });
 
 test('budget blocks when daily or cumulative caps are reached', async () => {

@@ -9,11 +9,12 @@ export function registerAdminRoutes(router, services) {
 
   router.get('/api/admin/status', async ({ request }) => {
     requireAdmin(request, config);
-    const [flags, budget, sessions, events] = await Promise.all([
+    const [flags, budget, sessions, events, activeSessionCount] = await Promise.all([
       readFlags(db),
       cost.budget(),
       db.listSessions(10),
-      db.listOpsEvents(10)
+      db.listOpsEvents(10),
+      db.countActiveSessions(Date.now())
     ]);
     return json({
       ok: true,
@@ -24,14 +25,16 @@ export function registerAdminRoutes(router, services) {
       flags,
       budget,
       corpus: getCorpusMeta(),
-      counts: { sessions: sessions.length, recentEvents: events.length },
+      counts: { sessions: sessions.length, activeSessions: activeSessionCount, recentEvents: events.length },
       google: {
         configured: Boolean(config.google.configured),
         spreadsheet: Boolean(config.google.spreadsheetId),
         calendar: Boolean(config.google.calendarId),
         knowledgeFolder: Boolean(config.google.knowledgeFolderId),
         backupFolder: Boolean(config.google.backupFolderId),
-        allowSyntheticWrites: config.google.allowSyntheticWrites
+        allowSyntheticWrites: config.google.allowSyntheticWrites,
+        oauthMode: config.google.oauthMode,
+        durability: 'Google integrations are optional. If authorization expires, CRM/Calendar/Drive/Gmail endpoints fail closed; Nupa chat, voice, portfolio, consent and spending controls do not depend on Google authorization.'
       },
       security: {
         betaAccessRequired: config.betaAccessRequired,
@@ -49,7 +52,20 @@ export function registerAdminRoutes(router, services) {
         dailyCapUsdMicros: budget.dailyCapUsdMicros,
         cumulativeCapUsdMicros: budget.cumulativeCapUsdMicros,
         liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
-        maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
+        maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds,
+        maxConcurrentLiveSessions: config.limits.maxConcurrentLiveSessions,
+        maxLiveSessionsPerOwner: config.limits.maxLiveSessionsPerOwner,
+        chatRateLimit: config.limits.chatRateLimit,
+        globalChatRateLimit: config.limits.globalChatRateLimit,
+        liveRateLimit: config.limits.liveRateLimit,
+        globalLiveRateLimit: config.limits.globalLiveRateLimit,
+        maxLiveTokensPerDay: config.limits.maxLiveTokensPerDay
+      },
+      costs: {
+        internalEstimateOnly: true,
+        providerBillingApiConnected: false,
+        rates: config.rates,
+        note: 'Budget figures are internal token-based estimates, not confirmed Google invoices.'
       }
     });
   });
@@ -81,7 +97,13 @@ export function registerAdminRoutes(router, services) {
       maxDailyCapUsdMicros: config.caps.dailyUsdMicros,
       maxCumulativeCapUsdMicros: config.caps.cumulativeUsdMicros,
       liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
-      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
+      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds,
+      maxConcurrentLiveSessions: config.limits.maxConcurrentLiveSessions,
+      maxLiveSessionsPerOwner: config.limits.maxLiveSessionsPerOwner,
+      chatRateLimit: config.limits.chatRateLimit,
+      globalChatRateLimit: config.limits.globalChatRateLimit,
+      liveRateLimit: config.limits.liveRateLimit,
+      globalLiveRateLimit: config.limits.globalLiveRateLimit
     });
   });
 
@@ -113,7 +135,13 @@ export function registerAdminRoutes(router, services) {
       dailyCapUsdMicros: budget.dailyCapUsdMicros,
       cumulativeCapUsdMicros: budget.cumulativeCapUsdMicros,
       liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
-      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
+      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds,
+      maxConcurrentLiveSessions: config.limits.maxConcurrentLiveSessions,
+      maxLiveSessionsPerOwner: config.limits.maxLiveSessionsPerOwner,
+      chatRateLimit: config.limits.chatRateLimit,
+      globalChatRateLimit: config.limits.globalChatRateLimit,
+      liveRateLimit: config.limits.liveRateLimit,
+      globalLiveRateLimit: config.limits.globalLiveRateLimit
     });
   });
 

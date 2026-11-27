@@ -78,10 +78,16 @@ function renderOverview() {
   if (!s) return;
   $('#overview-cards').innerHTML = cards([
     { label: 'Environment', value: s.environment, sub: s.version },
+    { label: 'Access', value: s.security?.publicAccess ? 'Public beta' : s.security?.betaAccessRequired ? 'Private beta' : 'Key not enforced', sub: '18+ consent required' },
     { label: 'Text model', value: s.models.text, sub: s.providers.text },
     { label: 'Live model', value: s.models.live, sub: `voice ${s.models.voice}` },
-    { label: 'Daily spend (USD)', value: money(s.budget.dailyUsdMicros), sub: `cap ${money(s.budget.dailyCapUsdMicros)}` },
-    { label: 'Cumulative spend (USD)', value: money(s.budget.cumulativeUsdMicros), sub: `cap ${money(s.budget.cumulativeCapUsdMicros)}` },
+    { label: 'Daily spend (estimate)', value: money(s.budget.dailyUsdMicros), sub: `cap ${money(s.budget.dailyCapUsdMicros)}` },
+    { label: 'Cumulative spend (estimate)', value: money(s.budget.cumulativeUsdMicros), sub: `cap ${money(s.budget.cumulativeCapUsdMicros)}` },
+    { label: 'Gemini billing', value: 'Paid Tier 1 (reported)', sub: 'API key cannot read billing metadata' },
+    { label: 'Cost basis', value: 'Internal token estimate', sub: s.costs?.providerBillingApiConnected ? 'Provider billing linked' : 'Not Google invoices' },
+    { label: 'Active sessions', value: String(s.counts.activeSessions ?? '—'), sub: 'unexpired anonymized sessions' },
+    { label: 'Voice concurrency', value: `${s.limits?.maxConcurrentLiveSessions ?? '—'} global`, sub: `${s.limits?.maxLiveSessionsPerOwner ?? '—'} per visitor` },
+    { label: 'Rate limits', value: `chat ${s.limits?.chatRateLimit ?? '—'}/${s.limits?.globalChatRateLimit ?? '—'}`, sub: `live ${s.limits?.liveRateLimit ?? '—'}/${s.limits?.globalLiveRateLimit ?? '—'} · per visitor/global per window` },
     { label: 'Knowledge corpus', value: `${s.corpus.chunks} chunks`, sub: s.corpus.contentHash },
     { label: 'Google', value: s.google.configured ? 'configured' : 'not configured', sub: `sheets ${s.google.spreadsheet ? 'yes' : 'no'} · calendar ${s.google.calendar ? 'yes' : 'no'}` },
     { label: 'Email', value: s.email?.sendEnabled ? 'send enabled' : 'dry-run', sub: `${s.email?.provider || 'not configured'} · ${s.email?.webhookConfigured ? 'webhook ready' : 'no webhook'}` },
@@ -106,7 +112,7 @@ function renderLimits() {
   $('#limit-cumulative').value = (Number(limits.cumulativeCapUsdMicros) / 1_000_000).toFixed(2);
   $('#limit-live-session').value = String(limits.liveSessionSeconds);
   $('#limit-live-session').max = String(limits.maxLiveSessionSeconds);
-  $('#limits-result').textContent = `Approved maxima: daily $${money(limits.maxDailyCapUsdMicros)} · cumulative $${money(limits.maxCumulativeCapUsdMicros)} · Live ${limits.maxLiveSessionSeconds}s`;
+  $('#limits-result').textContent = `Approved maxima: daily $${money(limits.maxDailyCapUsdMicros)} · cumulative $${money(limits.maxCumulativeCapUsdMicros)} · Live ${limits.maxLiveSessionSeconds}s · voice ${limits.maxConcurrentLiveSessions || '—'} concurrent (${limits.maxLiveSessionsPerOwner || '—'} per visitor) · chat ${limits.chatRateLimit || '—'}/${limits.globalChatRateLimit || '—'} global per window`;
 }
 
 async function saveLimits() {

@@ -474,20 +474,58 @@ export function createDb(d1) {
     return result.results || [];
   }
 
-  async function createLiveTokenReservation({ id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt }) {
-    await d1.prepare(
-      "INSERT INTO live_tokens(id,owner_hash,session_id,reserved_usd_micros,status,created_at,expires_at) VALUES(?,?,?,?,'held',?,?)"
-    ).bind(id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt).run();
+  async function createLiveTokenReservation({
+    id,
+    ownerHash,
+    sessionId,
+    reservedUsdMicros,
+    now,
+    expiresAt,
+    dayStart,
+    dailyCapUsdMicros,
+    cumulativeCapUsdMicros,
+    maxConcurrent,
+    maxPerOwner
+  }) {
+    const result = await d1.prepare(`
+      INSERT INTO live_tokens(id,owner_hash,session_id,reserved_usd_micros,status,created_at,expires_at)
+      SELECT ?1,?2,?3,?4,'held',?5,?6
+      WHERE (
+        (SELECT COALESCE(SUM(usd_micros),0) FROM cost_events WHERE created_at>=?7)
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM live_tokens WHERE status='held')
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM spend_reservations WHERE status='held')
+        + ?4 <= ?8
+      )
+      AND (
+        (SELECT COALESCE(SUM(usd_micros),0) FROM cost_events)
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM live_tokens WHERE status='held')
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM spend_reservations WHERE status='held')
+        + ?4 <= ?9
+      )
+      AND (SELECT COUNT(*) FROM live_tokens WHERE status='held' AND expires_at>?5) < ?10
+      AND (SELECT COUNT(*) FROM live_tokens WHERE owner_hash=?2 AND status='held' AND expires_at>?5) < ?11
+    `).bind(
+      id, ownerHash, sessionId, reservedUsdMicros, now, expiresAt,
+      dayStart, dailyCapUsdMicros, cumulativeCapUsdMicros, maxConcurrent, maxPerOwner
+    ).run();
+    return (result.meta?.changes || 0) === 1;
   }
 
   async function getLiveTokenReservation(id) {
     return d1.prepare('SELECT * FROM live_tokens WHERE id=?').bind(id).first();
   }
 
-  async function reconcileLiveToken({ id, reportedUsdMicros, now }) {
+  async function addLiveTokenReportedUsage({ id, usdMicros, now }) {
     const result = await d1.prepare(
-      "UPDATE live_tokens SET status='reconciled', reported_usd_micros=?, reconciled_at=? WHERE id=? AND status='held'"
-    ).bind(reportedUsdMicros, now, id).run();
+      "UPDATE live_tokens SET reported_usd_micros=COALESCE(reported_usd_micros,0)+? WHERE id=? AND status='held'"
+    ).bind(usdMicros, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function releaseLiveToken({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE live_tokens SET status='reconciled', reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(now, id).run();
     return (result.meta?.changes || 0) > 0;
   }
 
@@ -495,10 +533,13 @@ export function createDb(d1) {
     await d1.prepare("UPDATE live_tokens SET status='failed', reconciled_at=? WHERE id=? AND status='held'").bind(now, id).run();
   }
 
-  async function sumHeldLiveTokens({ since = 0, now } = {}) {
+  async function sumHeldLiveTokens({ since = 0 } = {}) {
+    // Count every held reservation until it is explicitly reconciled, failed or
+    // settled by the cron. Expired holds are charged conservatively, so they must
+    // keep counting against the budget in the meantime.
     const row = await d1.prepare(
-      "SELECT COALESCE(SUM(reserved_usd_micros),0) AS total FROM live_tokens WHERE status='held' AND created_at>=? AND expires_at>?"
-    ).bind(since, now).first();
+      "SELECT COALESCE(SUM(reserved_usd_micros),0) AS total FROM live_tokens WHERE status='held' AND created_at>=?"
+    ).bind(since).first();
     return Number(row?.total || 0);
   }
 
@@ -521,9 +562,131 @@ export function createDb(d1) {
     return (result.meta?.changes || 0) > 0;
   }
 
+  async function createSpendReservation({
+    id,
+    kind = 'text',
+    ownerHash = null,
+    sessionId = null,
+    reservedUsdMicros,
+    now,
+    expiresAt,
+    dayStart,
+    dailyCapUsdMicros,
+    cumulativeCapUsdMicros
+  }) {
+    const result = await d1.prepare(`
+      INSERT INTO spend_reservations(id,kind,owner_hash,session_id,reserved_usd_micros,status,created_at,expires_at)
+      SELECT ?1,?2,?3,?4,?5,'held',?6,?7
+      WHERE (
+        (SELECT COALESCE(SUM(usd_micros),0) FROM cost_events WHERE created_at>=?8)
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM live_tokens WHERE status='held')
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM spend_reservations WHERE status='held')
+        + ?5 <= ?9
+      )
+      AND (
+        (SELECT COALESCE(SUM(usd_micros),0) FROM cost_events)
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM live_tokens WHERE status='held')
+        + (SELECT COALESCE(SUM(reserved_usd_micros),0) FROM spend_reservations WHERE status='held')
+        + ?5 <= ?10
+      )
+    `).bind(
+      id, kind, ownerHash, sessionId, reservedUsdMicros, now, expiresAt,
+      dayStart, dailyCapUsdMicros, cumulativeCapUsdMicros
+    ).run();
+    return (result.meta?.changes || 0) === 1;
+  }
+
+  async function getSpendReservation(id) {
+    return d1.prepare('SELECT * FROM spend_reservations WHERE id=?').bind(id).first();
+  }
+
+  async function reconcileSpendReservation({ id, reportedUsdMicros, now }) {
+    const result = await d1.prepare(
+      "UPDATE spend_reservations SET status='reconciled', reported_usd_micros=?, reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(reportedUsdMicros, now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function failSpendReservation({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE spend_reservations SET status='failed', reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function sumHeldSpendReservations({ since = 0 } = {}) {
+    const row = await d1.prepare(
+      "SELECT COALESCE(SUM(reserved_usd_micros),0) AS total FROM spend_reservations WHERE status='held' AND created_at>=?"
+    ).bind(since).first();
+    return Number(row?.total || 0);
+  }
+
+  async function listExpiredSpendReservations({ now, limit = 100 }) {
+    const result = await d1.prepare(
+      "SELECT * FROM spend_reservations WHERE status='held' AND expires_at<=? ORDER BY expires_at LIMIT ?"
+    ).bind(now, limit).all();
+    return result.results || [];
+  }
+
+  async function markSpendReservationExpired({ id, now }) {
+    const result = await d1.prepare(
+      "UPDATE spend_reservations SET status='expired', reconciled_at=? WHERE id=? AND status='held'"
+    ).bind(now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function countHeldLiveTokens({ now } = {}) {
+    const row = await d1.prepare(
+      "SELECT COUNT(*) AS total FROM live_tokens WHERE status='held' AND expires_at>?"
+    ).bind(now || Date.now()).first();
+    return Number(row?.total || 0);
+  }
+
+  async function countHeldLiveTokensForOwner({ ownerHash, now } = {}) {
+    const row = await d1.prepare(
+      "SELECT COUNT(*) AS total FROM live_tokens WHERE owner_hash=? AND status='held' AND expires_at>?"
+    ).bind(ownerHash, now || Date.now()).first();
+    return Number(row?.total || 0);
+  }
+
+  async function countActiveSessions(now = Date.now()) {
+    const row = await d1.prepare('SELECT COUNT(*) AS total FROM sessions WHERE expires_at>?').bind(now).first();
+    return Number(row?.total || 0);
+  }
+
+  async function acquireLiveSessionLease({ sessionId, ownerHash, tokenId, now, expiresAt, maxConcurrent, maxPerOwner }) {
+    const result = await d1.prepare(`
+      INSERT INTO live_session_leases(session_id,owner_hash,token_id,created_at,expires_at)
+      SELECT ?1,?2,?3,?4,?5
+      WHERE (SELECT COUNT(*) FROM live_session_leases WHERE session_id<>?1 AND expires_at>?4) < ?6
+        AND (SELECT COUNT(*) FROM live_session_leases WHERE owner_hash=?2 AND session_id<>?1 AND expires_at>?4) < ?7
+      ON CONFLICT(session_id) DO UPDATE SET
+        owner_hash=excluded.owner_hash,
+        token_id=excluded.token_id,
+        created_at=excluded.created_at,
+        expires_at=excluded.expires_at
+    `).bind(sessionId, ownerHash, tokenId, now, expiresAt, maxConcurrent, maxPerOwner).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function deleteLiveSessionLease(sessionId, tokenId = null) {
+    const result = tokenId
+      ? await d1.prepare('DELETE FROM live_session_leases WHERE session_id=? AND token_id=?').bind(sessionId, tokenId).run()
+      : await d1.prepare('DELETE FROM live_session_leases WHERE session_id=?').bind(sessionId).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
+  async function countLiveSessionLeases({ now, ownerHash = null } = {}) {
+    const row = ownerHash
+      ? await d1.prepare('SELECT COUNT(*) AS total FROM live_session_leases WHERE owner_hash=? AND expires_at>?').bind(ownerHash, now || Date.now()).first()
+      : await d1.prepare('SELECT COUNT(*) AS total FROM live_session_leases WHERE expires_at>?').bind(now || Date.now()).first();
+    return Number(row?.total || 0);
+  }
+
   async function cleanup({ now, rateWindowMs }) {
     const expiredSessions = await deleteExpiredSessions(now);
     const staleRates = await d1.prepare('DELETE FROM rate_limits WHERE window_start < ?').bind(now - rateWindowMs).run();
+    const staleLeases = await d1.prepare('DELETE FROM live_session_leases WHERE expires_at < ?').bind(now).run();
     const oldEvents = await d1.prepare('DELETE FROM ops_events WHERE created_at < ?').bind(now - 30 * 86_400_000).run();
     const staleEmailJobs = await resetStaleEmailJobs({ before: now - 10 * 60_000, now });
     const oldEmailJobs = await d1.prepare(
@@ -535,6 +698,7 @@ export function createDb(d1) {
     return {
       expiredSessions,
       staleRateBuckets: staleRates.meta?.changes || 0,
+      staleLiveLeases: staleLeases.meta?.changes || 0,
       oldOpsEvents: oldEvents.meta?.changes || 0,
       staleEmailJobs,
       oldEmailJobs: oldEmailJobs.meta?.changes || 0,
@@ -598,7 +762,21 @@ export function createDb(d1) {
     listBookingsForReminder,
     createLiveTokenReservation,
     getLiveTokenReservation,
-    reconcileLiveToken,
+    addLiveTokenReportedUsage,
+    releaseLiveToken,
+    createSpendReservation,
+    getSpendReservation,
+    reconcileSpendReservation,
+    failSpendReservation,
+    sumHeldSpendReservations,
+    listExpiredSpendReservations,
+    markSpendReservationExpired,
+    countHeldLiveTokens,
+    countHeldLiveTokensForOwner,
+    acquireLiveSessionLease,
+    deleteLiveSessionLease,
+    countLiveSessionLeases,
+    countActiveSessions,
     failLiveToken,
     sumHeldLiveTokens,
     countLiveTokensSince,

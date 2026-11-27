@@ -131,8 +131,8 @@ async function main() {
       method: 'POST',
       body: { sessionId: sid, turnId: 'api-budget-1', locale: 'en', userText: 'synthetic', assistantText: 'synthetic', usage: { textInput: 0, audioInput: 0, audioOutput: 1_000_000 } }
     });
-    const blockedByBudget = await call('/api/chat', { method: 'POST', body: { sessionId: sid, message: 'hello after cap', locale: 'en', clientMessageId: 'api-budget-2' } });
-    check('cumulative budget cap blocks further text calls', overBudget.status === 200 && blockedByBudget.status === 402, { overBudget: overBudget.status, chat: blockedByBudget.status });
+    const stillWorks = await call('/api/chat', { method: 'POST', body: { sessionId: sid, message: 'hello after rejected live report', locale: 'en', clientMessageId: 'api-budget-2' } });
+    check('unreserved Live usage cannot inflate the budget', overBudget.status === 400 && stillWorks.status === 200, { overBudget: overBudget.status, chat: stillWorks.status });
 
     const output = {
       generatedAt: new Date().toISOString(),

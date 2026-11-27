@@ -169,4 +169,4 @@ Live evidence:
 - Local D1 → Sheet sync: **12/12** checks; first run inserted 8 rows, second run inserted 0 / updated 0 / left 8 unchanged; synthetic rows removed (`results/crm-sheet-sync-live.json`).
 - Production D1 → Sheet sync: **11/11** checks; first run inserted 5 rows, second run inserted 0 / updated 0 / left 5 unchanged; synthetic rows removed from the Sheet and production D1 (`results/production-crm-sheet-sync.json`).
 
-Automatic per-event sync is not enabled. The manual action is the private-beta path; scheduled sync requires approval.
+Automatic per-event sync is not enabled. The manual action is the current manual path; scheduled sync requires approval.

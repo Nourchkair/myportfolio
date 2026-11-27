@@ -38,6 +38,8 @@ function start() {
       '--var', 'MAX_LIVE_SESSION_SECONDS:600',
       '--var', 'LIVE_TOKEN_RESERVATION_USD_MICROS:125000',
       '--var', 'DAILY_SPEND_CAP_USD_MICROS:200000',
+      '--var', 'MAX_LIVE_SESSIONS_PER_OWNER:2',
+      '--var', 'MAX_CONCURRENT_LIVE_SESSIONS:2',
       '--var', 'CUMULATIVE_SPEND_CAP_USD_MICROS:7000000'
     ], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
     let log = '';
@@ -68,7 +70,7 @@ async function main() {
     const declarations = first.body.config?.tools?.[0]?.functionDeclarations?.map((tool) => tool.name) || [];
     check('Live config includes knowledge and presentation tools', ['searchPortfolio', 'getProjectDossier', 'getProjectStep', 'getCurrentView', 'presentProject', 'presentProjectStep'].every((name) => declarations.includes(name)), { declarations });
     check('Live instruction includes verified portfolio grounding', /VERIFIED PORTFOLIO FACTS/i.test(first.body.config?.systemInstruction || '') && /Customer Acquisition/i.test(first.body.config?.systemInstruction || '') && /mergers and acquisitions/i.test(first.body.config?.systemInstruction || ''), { instructionLength: first.body.config?.systemInstruction?.length || 0 });
-    check('Live config omits disabled web research', !declarations.includes('webResearch'), { declarations });
+    check('Live config omits web research', !declarations.includes('webResearch'), { declarations });
 
     const budgetAfterFirst = await call('/api/admin/cost', { admin: true });
     check('held Live reservation counts toward budget', budgetAfterFirst.status === 200 && budgetAfterFirst.body.budget.heldLiveReservationsUsdMicros === 125_000, { held: budgetAfterFirst.body.budget?.heldLiveReservationsUsdMicros });

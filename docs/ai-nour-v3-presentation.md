@@ -2,7 +2,7 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths, browser keys and API routes remain unchanged.
 
-Status: **deployed publicly on 27 November 2026.** Worker `f5e81237-f8e1-41a1-9b7b-151225d05381`; static deployment `848ef7e8-13bf-4682-9c72-45abb73f2367`; source `b1de5b2`. Public access requires no beta key; consent v1.3 remains mandatory.
+Status: **deployed publicly on 27 November 2026.** Worker `f5e81237-f8e1-41a1-9b7b-151225d05381`; static deployment `848ef7e8-13bf-4682-9c72-45abb73f2367`; source `b1de5b2`. Public beta access requires no beta key; consent v1.4 remains mandatory. Legal v1.4 and the paid-tier update are pending approval.
 
 ## 1. Architecture
 
@@ -22,9 +22,9 @@ Status: **deployed publicly on 27 November 2026.** Worker `f5e81237-f8e1-41a1-9b
 The opening greeting now offers two optional paths without blocking entry:
 
 - **Explore independently** — immediately completes the intro and leaves the portfolio in its normal state.
-- **Explore with Nupa** — available on the public portfolio; it completes the intro, opens the assistant and uses the existing consent gate. No beta key is required.
+- **Explore with Nupa** — available on the public portfolio; it completes the intro and enters the portfolio without opening the chat panel. The Nupa pill opens chat or voice on demand. On first use it shows the short “Meet Nupa.” / “Let’s explore” consent panel. No beta key is required.
 
-If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. Choosing Nupa explains the live/personalized nature, offers text first with voice as an optional switch, asks about interests, and starts with a natural AI introduction. The existing age/Terms/Privacy acceptance and separate microphone consent are reused without another screen.
+If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. The first Nupa choice shows a concise paid-processing/retention/admin disclosure with inline Terms and Privacy links and no checkbox. “Let’s explore” records consent; microphone consent remains separate and appears only when voice is activated.
 
 ## 2. Interaction modes
 
@@ -106,7 +106,7 @@ Consolidated evidence: `results/nupa-validation.json`.
 
 Local regression:
 
-- Unit tests: **73/73** (including 5 Nupa identity regressions and public-access auth)
+- Unit tests: **75/75** (including Nupa identity regressions and public-access auth)
 - API tests: **23/23**
 - CRM tests: **14/14**
 - Consent tests: **12/12**
@@ -114,15 +114,15 @@ Local regression:
 - Admin auth: **16/16**
 - Live budget/duration: **9/9**
 - Portfolio validation: **261**
-- Legal validator: **66/66**
+- Legal validator: **72/72**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **20/20** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, public Nupa path, centered consent modal outside the chat with blurred portfolio background, “Continue and agree” button, no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **21/21** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, public Nupa path, centered “Meet Nupa.” consent panel outside the chat with blurred portfolio background, “Let’s explore” action, no checkbox, paid-Gemini/retention/admin disclosure, legal links, no automatic chat panel after choosing Nupa, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 
-Production opening cards and consent (`results/nupa-production-intro.json`): **11/11** — two English panel cards inside the intro with no foreground-depth occlusion and improved contrast, no auto-close, cards below the greeting, independent entry, centered English/French consent modal outside the chat with blurred background, “Continue and agree” acceptance with no checkbox, and independent entry that never opens the Nupa panel.
+Production opening cards and consent (`results/nupa-production-intro.json`): **11/11** — two English panel cards inside the intro with no foreground-depth occlusion and improved contrast, no auto-close, cards below the greeting, independent entry, centered English/French “Meet Nupa.” consent panel outside the chat with blurred background, “Let’s explore” acceptance with no checkbox, and independent entry that never opens the Nupa panel. Production rerun is pending the approved deployment.
 
-Public default entry (`results/nupa-production-public-default.json`): **4/4** — Nupa appears on the normal portfolio URL without a query parameter, consent opens before chat, Continue starts the conversation without a key, and no console errors.
+Public default entry (`results/nupa-production-public-default.json`): **4/4** — Nupa appears on the normal portfolio URL without a query parameter. The new v1.4 flow shows “Meet Nupa.” only when Nupa is chosen, and “Let’s explore” enters the portfolio without opening chat. Public-controls validation: **23/23**.
 
 - Approved target registry on home, project deck and flow.
 - Multiple simultaneous highlights.

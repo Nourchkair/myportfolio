@@ -1,5 +1,7 @@
 # AI Nour — Phase 3 launch candidate and private-beta readiness
 
+> **Historical record:** This document describes the earlier private-beta launch candidate. Public beta access without a key and legal v1.4 supersede the access assumptions below.
+
 > Historical record: this phase was produced under the former working name **AI Nour**. The visitor-facing assistant is now **Nupa**; internal paths, browser keys, API routes and other technical identifiers remain unchanged.
 
 **Date:** 26 November 2026  

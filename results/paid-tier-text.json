@@ -1,0 +1,15 @@
+{
+  "generatedAt": "2026-11-27T19:22:08.000Z",
+  "target": "https://api.nourchkair.com/api/chat",
+  "model": "gemini-flash-lite-latest",
+  "request": "Reply with exactly: paid-tier-ok",
+  "status": 200,
+  "reply": "paid-tier-ok",
+  "costUsdMicrosAtObservation": 717,
+  "internalRatesAtObservation": {
+    "textInputPerMillion": 0.10,
+    "textOutputPerMillion": 0.40
+  },
+  "paidTierChange": "The previous HTTP 402 provider failure stopped after the Gemini project was moved to paid billing.",
+  "note": "The API key does not expose project, billing-tier or invoice metadata. This evidence proves a real paid-tier text request succeeded; the cost figure is an internal token-based estimate, not a Google invoice. Internal text rates were later raised to the highest current Flash-Lite published rates as a conservative ceiling."
+}

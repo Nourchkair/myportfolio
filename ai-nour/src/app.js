@@ -5,6 +5,7 @@ import { createTextProvider, createLiveProvider } from './providers/index.js';
 import * as retrieval from './knowledge/retrieval.js';
 import { createRouter } from './http/router.js';
 import { json, clientKey, requestId as makeRequestId } from './http/json.js';
+import { sha256Hex } from './auth/secure.js';
 import { AppError } from './http/errors.js';
 import { ProviderError } from './providers/errors.js';
 import { IntegrationError } from './integrations/errors.js';
@@ -74,6 +75,27 @@ export function createApp(env) {
       if (request.method === 'OPTIONS') {
         return withRequestId(new Response(null, { status: 204 }), requestId, cors);
       }
+      if (!url.pathname.startsWith('/api/health') && !url.pathname.startsWith('/api/admin/')) {
+        const clientHash = await sha256Hex(clientKey(request));
+        const rate = await db.checkRateLimit({
+          bucket: `api:${clientHash}`,
+          limit: config.limits.apiRateLimit,
+          windowMs: config.limits.rateLimitWindowMs,
+          now: started
+        });
+        if (!rate.allowed) {
+          return withRequestId(json({ error: { code: 'RATE_LIMITED', message: 'Too many requests. Please wait before trying again.' } }, 429), requestId, cors);
+        }
+        const globalRate = await db.checkRateLimit({
+          bucket: 'api:global',
+          limit: config.limits.globalApiRateLimit,
+          windowMs: config.limits.rateLimitWindowMs,
+          now: started
+        });
+        if (!globalRate.allowed) {
+          return withRequestId(json({ error: { code: 'RATE_LIMITED', message: 'Nupa is receiving too many requests right now. Please try again shortly.' } }, 429), requestId, cors);
+        }
+      }
       const matched = router.match(request.method, url.pathname);
       if (!matched) return withRequestId(json({ error: { code: 'NOT_FOUND', message: 'API route not found' } }, 404), requestId, cors);
       try {
@@ -132,10 +154,11 @@ export function createApp(env) {
       const reminders = await emailService.scheduleReminders({ db, now });
       const emails = await emailService.processQueued({ db, limit: 20, now });
       const liveSettlement = await services.cost.settleExpiredLiveTokens({ now });
+      const textSettlement = await services.cost.settleExpiredTextReservations({ now });
       await db.logEvent({
         level: 'info',
         event: 'scheduled.cleanup',
-        detail: { ...result, reminders: reminders.length, emails: emails.length, liveSettlement },
+        detail: { ...result, reminders: reminders.length, emails: emails.length, liveSettlement, textSettlement },
         now
       });
     } catch (error) {

@@ -149,4 +149,4 @@ The lower scores are explained by the local clock changing and the intentional H
 3. The social preview uses the existing About portrait; a dedicated branded 1200×630 image is still open.
 4. `spatial2.html` depends on JavaScript plus a visible fallback link; `index.html` is the primary entry.
 5. `sitemap.xml` is generated for the production domain; `SITE_URL` can override it for preview builds.
-6. Nupa, formerly AI Nour, is now implemented behind the `?ainour=dev`/`?ainour=1` feature flag; the default portfolio and reading view remain assistant-free. Phase 3 status, tests, and approval gates are in `docs/ai-nour-phase3.md`.
+6. Nupa, formerly AI Nour, is enabled by default on the public portfolio. “Explore with Nupa” enters the portfolio without opening the chat panel; chat and voice open from the Nupa pill. The reading view remains assistant-free. Current legal/consent status is v1.4; public-beta controls and paid-tier evidence are in `docs/legal-data-audit.md`, `docs/ai-nour-v3-presentation.md`, and `ai-nour/docs/production-deployment.md`.

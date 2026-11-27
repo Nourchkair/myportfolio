@@ -32,6 +32,16 @@ test('system prompt restates the independent identity in English and French, tex
   }
 });
 
+test('system prompt keeps Nupa portfolio-scoped and without web search', () => {
+  const prompt = buildSystemPrompt({ persona: DEFAULT_PERSONA, locale: 'en', mode: 'text' });
+  assert.match(prompt, /Your purpose is to help visitors understand Nour/);
+  assert.match(prompt, /Broad business, commercial and technical reasoning is welcome/);
+  assert.match(prompt, /Do not become a free general-purpose chatbot/);
+  assert.match(prompt, /redirect naturally/);
+  assert.match(prompt, /no web browsing or external research capability/);
+  assert.doesNotMatch(prompt, /webResearch|WEB_RESEARCH_ENABLED|googleSearch/);
+});
+
 test('Nupa answers identity questions directly in English', async () => {
   const who = await ask('Who are you?');
   assert.match(who.text, /Nupa/);

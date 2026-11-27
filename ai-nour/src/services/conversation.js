@@ -1,4 +1,4 @@
-import { badRequest, budgetExhausted, conflict, liveSessionLimit, tooMany } from '../http/errors.js';
+import { badRequest, conflict, liveSessionLimit, tooMany } from '../http/errors.js';
 import {
   appendTurn,
   buildConversationBrief,
@@ -79,6 +79,13 @@ export async function handleChat({
     now
   });
   if (!rate.allowed) throw tooMany('Too many chat requests. Please wait before trying again.');
+  const globalRate = await db.checkRateLimit({
+    bucket: 'chat:global',
+    limit: config.limits.globalChatRateLimit,
+    windowMs: config.limits.rateLimitWindowMs,
+    now
+  });
+  if (!globalRate.allowed) throw tooMany('Nupa is receiving too many requests right now. Please try again shortly.');
 
   let session;
   let newConsent = null;
@@ -87,14 +94,15 @@ export async function handleChat({
     requireCurrentConsent(session, config);
   } else {
     newConsent = normalizeConsent(body.consent);
-    if (config.betaAccessRequired && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+    if ((config.betaAccessRequired || config.publicAccess) && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
   }
 
-  const budgetBefore = await cost.assertBudget(now);
   if (!session) {
     session = await createSessionForOwner({ db, ownerHash, locale, state: newConsent ? { consent: newConsent } : {}, now, ttlMs: config.limits.sessionTtlMs });
   }
+  const reservation = await cost.reserveText({ ownerHash, sessionId: session.id, now });
 
+  try {
   if (body.clientMessageId) {
     const claimed = await db.claimAction({
       key: `chat:${session.id}:${body.clientMessageId}`,
@@ -131,7 +139,7 @@ export async function handleChat({
     response = await provider.generate({
       systemInstruction,
       contents,
-      tools: getToolDeclarations({ webResearchEnabled: config.webResearchEnabled }),
+      tools: getToolDeclarations(),
       temperature: 0.7,
       maxOutputTokens: 900
     });
@@ -151,15 +159,6 @@ export async function handleChat({
     for (const item of executed) {
       if (item.actions?.length) actions.push(...item.actions);
       else if (item.action) actions.push(item.action);
-      if (item.usage) {
-        totalCostMicros += await cost.recordText({
-          requestId: `${requestId}:research:${callIndex}:${item.call.name}`,
-          model: item.model || config.textModel,
-          usage: item.usage,
-          capability: 'web_research',
-          now
-        });
-      }
     }
     contents.push({ role: 'model', parts: response.parts || response.toolCalls.map((call) => ({ functionCall: { name: call.name, args: call.args } })) });
     contents.push({
@@ -231,6 +230,7 @@ export async function handleChat({
     // Summaries are best-effort and must never fail a visitor response.
   }
 
+  await cost.reconcileText({ id: reservation.id, reportedUsdMicros: totalCostMicros, now }).catch(() => {});
   return {
     sessionId: session.id,
     locale,
@@ -241,8 +241,12 @@ export async function handleChat({
     summaryUpdated,
     budget: await cost.budget(now),
     rateLimit: { remaining: rate.remaining, resetAt: rate.resetAt },
-    budgetBefore: { allowed: budgetBefore.allowed }
+    budgetBefore: { allowed: true }
   };
+  } catch (error) {
+    await cost.failText({ id: reservation.id, now }).catch(() => {});
+    throw error;
+  }
 }
 
 export async function handleLiveToken({
@@ -263,6 +267,13 @@ export async function handleLiveToken({
     now
   });
   if (!rate.allowed) throw tooMany('Too many Live sessions. Please wait before trying again.');
+  const globalRate = await db.checkRateLimit({
+    bucket: 'live:global',
+    limit: config.limits.globalLiveRateLimit,
+    windowMs: config.limits.rateLimitWindowMs,
+    now
+  });
+  if (!globalRate.allowed) throw tooMany('Nupa voice is receiving too many requests right now. Please try again shortly.');
 
   const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
   const tokensToday = await db.countLiveTokensSince(dayStart);
@@ -278,32 +289,45 @@ export async function handleLiveToken({
     requireCurrentConsent(session, config);
   } else {
     newConsent = normalizeConsent(body.consent);
-    if (config.betaAccessRequired && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+    if ((config.betaAccessRequired || config.publicAccess) && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
   }
 
-  const budgetBeforeToken = await cost.budget(now);
   const storedSeconds = Number(await db.getControl('live_session_seconds'));
   const requestedSeconds = Number.isFinite(storedSeconds) && storedSeconds > 0 ? storedSeconds : config.limits.liveSessionSeconds;
   const sessionSeconds = Math.min(config.limits.maxLiveSessionSeconds, Math.max(60, Math.round(requestedSeconds)));
-  const reservation = Math.max(
+  const reservationUsdMicros = Math.max(
     config.limits.liveTokenReservationUsdMicros,
     Math.ceil((sessionSeconds / 60) * config.limits.liveTokenReservationPerMinuteUsdMicros)
   );
-  const dailyShort = budgetBeforeToken.dailyUsdMicros + reservation > budgetBeforeToken.dailyCapUsdMicros;
-  const cumulativeShort = budgetBeforeToken.cumulativeUsdMicros + reservation > budgetBeforeToken.cumulativeCapUsdMicros;
-  if (dailyShort || cumulativeShort) {
-    const scope = cumulativeShort ? 'cumulative' : 'daily';
-    throw budgetExhausted({
-      scope,
-      resetsAt: scope === 'daily' ? dayStart + 86_400_000 : null,
-      message: scope === 'daily'
-        ? 'The remaining daily voice allowance cannot cover another Live session'
-        : 'The overall private-beta voice allowance has been used'
-    });
-  }
 
   if (!session) {
     session = await createSessionForOwner({ db, ownerHash, locale, state: newConsent ? { consent: newConsent } : {}, now, ttlMs: config.limits.sessionTtlMs });
+  }
+  const reservation = await cost.reserveLive({
+    ownerHash,
+    sessionId: session.id,
+    reservedUsdMicros: reservationUsdMicros,
+    now,
+    expiresAt: now + config.limits.liveTokenHoldMs
+  });
+  let lease;
+  try {
+    lease = await db.acquireLiveSessionLease({
+      sessionId: session.id,
+      ownerHash,
+      tokenId: reservation.reservationId,
+      now,
+      expiresAt: now + sessionSeconds * 1000,
+      maxConcurrent: config.limits.maxConcurrentLiveSessions,
+      maxPerOwner: config.limits.maxLiveSessionsPerOwner
+    });
+  } catch (error) {
+    await db.failLiveToken({ id: reservation.reservationId, now }).catch(() => {});
+    throw error;
+  }
+  if (!lease) {
+    await db.failLiveToken({ id: reservation.reservationId, now }).catch(() => {});
+    throw liveSessionLimit('Another Nupa voice session is already active. Wait for it to end, then try again.');
   }
   const messages = await db.listMessages(session.id, 14);
   const portfolioContext = normalizePortfolioContext(body.portfolioContext);
@@ -324,19 +348,10 @@ export async function handleLiveToken({
     portfolioContext: contextInstruction(portfolioContext),
     visitor
   });
-  const tools = getToolDeclarations({ webResearchEnabled: config.webResearchEnabled });
+  const tools = getToolDeclarations();
   const liveTools = [{ functionDeclarations: tools }];
   const voice = config.liveVoice;
-  const reservationId = crypto.randomUUID();
-  const reservationUsdMicros = reservation;
-  await db.createLiveTokenReservation({
-    id: reservationId,
-    ownerHash,
-    sessionId: session.id,
-    reservedUsdMicros: reservationUsdMicros,
-    now,
-    expiresAt: now + config.limits.liveTokenHoldMs
-  });
+  const reservationId = reservation.reservationId;
   let token;
   try {
     token = await provider.mintToken({
@@ -348,6 +363,7 @@ export async function handleLiveToken({
     });
   } catch (error) {
     await db.failLiveToken({ id: reservationId, now }).catch(() => {});
+    await db.deleteLiveSessionLease(session.id, reservationId).catch(() => {});
     throw error;
   }
 
@@ -391,6 +407,7 @@ export async function handleLiveTurn({
 }) {
   const session = await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now });
   requireCurrentConsent(session, config);
+  if (!body.reservationId) throw badRequest('reservationId is required');
   const userText = String(body.userText || '').replace(/\s+/g, ' ').trim().slice(0, config.limits.maxMessageChars);
   const assistantText = String(body.assistantText || '').replace(/\s+/g, ' ').trim().slice(0, 4000);
   if (!userText && !assistantText) throw badRequest('A live turn needs at least one transcript');

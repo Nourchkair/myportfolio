@@ -2,7 +2,7 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths and technical identifiers remain unchanged.
 
-Status: **deployed to the production Worker and validated.** Public access is enabled without a beta key; consent v1.3 remains mandatory.
+Status: **deployed to the production Worker and validated.** Public beta access is enabled without a beta key; consent v1.4 remains mandatory.
 
 ## 1. Voice
 
@@ -93,9 +93,11 @@ Verified with a real Live session: the context update produced no spoken respons
 
 ## 8. Intellectual conversations and research
 
-The prompt now allows substantive general discussion across business, sales, AI, technology, economics, politics, philosophy, psychology, leadership and entrepreneurship, with opinions and counterarguments clearly separated from Nour's verified views.
+The prompt allows substantive general discussion across business, sales, AI, technology, economics, politics, philosophy, psychology, leadership and entrepreneurship, with opinions and counterarguments clearly separated from Nour's verified views.
 
-A `webResearch` tool using Gemini Google Search grounding is implemented behind `WEB_RESEARCH_ENABLED`. The current free Gemini key returns **429 RESOURCE_EXHAUSTED** for search grounding, so the tool is omitted from model declarations and disabled in both environments. Enabling it requires available Google Search grounding quota; no billing was activated.
+Historical V2 record: a `webResearch` tool using Gemini Google Search grounding was implemented behind `WEB_RESEARCH_ENABLED`. The then-current free Gemini key returned **429 RESOURCE_EXHAUSTED** for search grounding, so the tool was omitted from model declarations and disabled in both environments.
+
+**Later update (27 November 2026):** web research and Google Search grounding were removed from the active product. There is no `webResearch` tool, `WEB_RESEARCH_ENABLED` flag, research route, provider method, admin control or prompt path; neither text nor voice can initiate external search. Nupa remains portfolio-focused and redirects unrelated requests naturally.
 
 ## 9. Professional opportunities
 
@@ -152,8 +154,8 @@ Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative
 - Daily/cumulative spending limits, beta authentication and emergency shutdown unchanged.
 - External writes and automated email remain disabled.
 - No credentials exposed, rotated or regenerated.
-- Public access is enabled without a beta key; consent v1.3 remains mandatory.
-- Web research disabled until quota is available.
+- Public beta access is enabled without a beta key; consent v1.4 remains mandatory.
+- Web research removed in the later public-beta update; no external search capability remains.
 
 ## 12. Remaining manual actions
 

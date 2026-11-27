@@ -23,7 +23,7 @@ Status: **production Worker deployed with the existing development OAuth credent
   - `http://localhost:8787/oauth/google/callback` (local operational helper)
 - Operational refresh token is stored server-side in `.dev.vars`; it never reaches the browser.
 - Admin login uses a separate OAuth flow with basic `openid`, `email`, `profile` scopes and a signed HttpOnly session cookie.
-- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.3 (public access without a beta key, effective 27 November 2026) is published and served. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
+- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.4 (paid Gemini processing, public beta, simplified onboarding, effective 27 November 2026) is prepared for the next approved deployment; version 1.3 remains live until then. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
 
 ## 2. Separate the two authorizations
 
@@ -147,6 +147,8 @@ Implication for Nupa:
 - Resend avoids the Gmail send policy entirely. Do not add Gmail send to the autonomous path.
 - This is a **post-February 2027 requirement** for continued agent access.
 
+**Graceful degradation:** if the Testing-mode refresh token expires, Nupa chat, voice, portfolio, consent, ownership, rate limits and spending controls continue to work. Only Google Workspace integration endpoints fail closed; external writes and Resend are already disabled. The admin status exposes the OAuth mode and this limitation.
+
 ## 7. Published privacy and terms
 
 Approved and published on 27 November 2026:
@@ -154,14 +156,14 @@ Approved and published on 27 November 2026:
 - `https://nourchkair.com/privacy/`
 - `https://nourchkair.com/terms/`
 
-Version 1.3 is published, English and French, effective 27 November 2026. It documents public access without a beta key while keeping the same data practices, retention, eligibility and third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
+Version 1.4 is prepared in English and French, effective 27 November 2026. It documents paid Gemini processing, public beta access, retention, eligibility and third-party processing without retroactively claiming paid-tier protections. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
 
 Operational facts reflected in the policies:
 
 - Conversations: rolling 7 days; operational/error logs and non-queued email records 30 days; CRM until business need/deletion; cost/audit/idempotency records retained longer; no active automated backup schedule.
 - Resend is disabled.
 - Google API Services User Data Policy / Limited Use statement included.
-- The production Gemini project is on the **Free tier** with no active Cloud Billing. Google's unpaid-service terms apply; do not submit personal, sensitive, confidential or third-party information. Public AI access remains disabled.
+- The production Gemini project is reported on **Paid Tier 1** with prepaid/credit funding; real paid text and Live calls succeeded. Actual invoices and credit balances are not available through the API key. Do not submit personal, sensitive, confidential or third-party information.
 - External CRM/Calendar/email writes remain disabled except for separately approved synthetic tests.
 
 ## 7b. Current Google Console state (verified read-only, 27 November 2026)

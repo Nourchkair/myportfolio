@@ -16,7 +16,7 @@ const base = process.env.PRODUCTION_API_URL || 'https://api.nourchkair.com';
 const owner = `production-safety-${crypto.randomUUID()}`;
 const results = [];
 const check = (name, pass, detail = {}) => results.push({ name, pass: Boolean(pass), detail });
-const consent = { age18: true, termsVersion: '2026-11-27-v1.3', privacyVersion: '2026-11-27-v1.3', acceptedAt: Date.now() };
+const consent = { age18: true, termsVersion: '2026-11-27-v1.4', privacyVersion: '2026-11-27-v1.4', acceptedAt: Date.now() };
 let restored = false;
 
 async function request(pathname, { method = 'GET', beta = false, adminAuth = false, body } = {}) {
@@ -65,11 +65,14 @@ const turn = await request('/api/live/turn', {
     userText: 'Production voice limit check',
     assistantText: 'Token minted without a provider connection.',
     reservationId: live.body.reservationId,
-    usage: { textInput: 0, audioInput: 0, audioOutput: 0 }
+    usage: { textInput: 10, audioInput: 10, audioOutput: 10 }
   }
 });
-check('production Live reservation settles', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 125000, { status: turn.status, costUsdMicros: turn.body.costUsdMicros });
-check('spending remains within caps', turn.body.budget?.allowed === true && turn.body.budget?.cumulativeUsdMicros <= 7_000_000, { budget: turn.body.budget });
+check('production Live turn reports bounded token usage', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 158, { status: turn.status, costUsdMicros: turn.body.costUsdMicros });
+const ended = await request('/api/live/end', { method: 'POST', beta: true, body: { sessionId, reservationId: live.body.reservationId } });
+check('production Live session releases its reservation', ended.status === 200 && ended.body.ok === true && ended.body.released === true, { status: ended.status, released: ended.body.released });
+const afterEnd = await request('/api/admin/status', { adminAuth: true });
+check('spending remains within caps', afterEnd.status === 200 && afterEnd.body.budget?.allowed === true && afterEnd.body.budget?.heldLiveReservationsUsdMicros === 0 && afterEnd.body.budget?.cumulativeUsdMicros <= 7_000_000, { held: afterEnd.body.budget?.heldLiveReservationsUsdMicros, budget: afterEnd.body.budget });
 
 const output = {
   generatedAt: new Date().toISOString(),

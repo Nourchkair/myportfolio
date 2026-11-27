@@ -9,7 +9,7 @@ const aiNourEnabled = !aiNourLocal
   || (aiNourLocal && aiNourMode === 'dev');
 
 if (aiNourEnabled) {
-  import('./ai-nour/companion.js?v=27')
+  import('./ai-nour/companion.js?v=32')
     .then((module) => module.mountCompanion())
     .catch((error) => console.warn('Nupa companion could not start', error));
 }

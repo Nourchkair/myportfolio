@@ -14,8 +14,8 @@ const keyHash = createHash('sha256').update(key).digest('hex');
 const owner = `consent-test-${crypto.randomUUID()}`;
 const consent = {
   age18: true,
-  termsVersion: '2026-11-27-v1.3',
-  privacyVersion: '2026-11-27-v1.3',
+  termsVersion: '2026-11-27-v1.4',
+  privacyVersion: '2026-11-27-v1.4',
   acceptedAt: Date.now()
 };
 const results = [];

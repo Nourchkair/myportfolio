@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production deployment
 
-Status: **Nupa V3 is publicly deployed. Legal version 1.3 is published, consent `2026-11-27-v1.3` is enforced, no beta key is required, the production persona is Nupa, and the daily testing cap is $3.00. External writes, Resend and the private admin remain restricted.**
+Status: **Nupa V3 is publicly deployed. The paid-tier/public-beta update (legal v1.4, consent `2026-11-27-v1.4`, $1 daily cap, web research removed, simplified onboarding) is implemented and pending approval/deployment. Production currently serves legal v1.3, consent v1.3 and a $3.00 daily cap. External writes, Resend and the private admin remain restricted.**
 
 ## 1. Live endpoints
 
@@ -16,18 +16,19 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 
 ## 2. Public access
 
-- Nupa is available to visitors aged 18 and older.
+- Nupa is publicly available in beta to visitors aged 18 and older.
 - No account or beta key is required.
-- The separate consent gate records 18+, Terms and Privacy acceptance before processing.
+- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” enters the portfolio without opening the chat panel; chat and voice open from the Nupa pill on demand.
 - Legacy beta keys and tester records remain in D1 for historical/admin purposes only; they are no longer checked for access.
-- Rate limits, spending caps, tool allowlists and the admin bearer-token boundary remain in force.
+- Anonymous owner credentials are server-issued; per-visitor and global API/chat/Live/tool limits, concurrent voice leases, spending caps, tool allowlists and the admin bearer-token boundary remain in force.
+- Cloudflare Free edge rate limiting is active: rule **Nupa API edge rate limit**, hostname `api.nourchkair.com`, path starts with `/api/`, excluding `/api/health`; **30 requests per 10 seconds per IP**, action **Block** for 10 seconds. Cloudflare Free provides one rate limiting rule; managed WAF rules are a paid-plan feature, so application validation and the free rule provide the edge layer.
 
 ## 3. Cloudflare resources
 
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap) |
+| Worker version | `f5e81237-f8e1-41a1-9b7b-151225d05381` (live; legal v1.3, $3 daily cap). New Worker version to be created after approval. |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -43,7 +44,7 @@ Installed in Cloudflare Workers Secrets:
 
 `ADMIN_TOKEN`, `BACKUP_ENCRYPTION_KEY`, `GEMINI_API_KEY`, `GOOGLE_BACKUP_FOLDER_ID`, `GOOGLE_CALENDAR_ID`, `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_CRM_SPREADSHEET_ID`, `GOOGLE_KNOWLEDGE_FOLDER_ID`, `GOOGLE_REFRESH_TOKEN`.
 
-No Resend key is installed. No permanent Google, Gemini, owner, or admin credential is sent to the browser.
+No Resend key is installed. No permanent Google, Gemini or admin credential is sent to the browser. The anonymous owner bearer token is server-issued and stored in browser `localStorage` by design; D1 stores only its hash.
 
 ## 3b. Conversational V2
 
@@ -53,26 +54,27 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - Visitor profile: inferred per session and persisted in D1 session state.
 - Presentation controls: start, step, pause, resume and end; manual navigation cancels the presentation.
 - Dynamic page context: silent `[Context update]` messages while Live is active.
-- Web research: implemented with Gemini Google Search grounding, but **disabled** (`WEB_RESEARCH_ENABLED=false`) because the current free key returns 429 for that capability.
+- Web research: **removed**. There is no `webResearch` tool, Google Search grounding, research endpoint, configuration flag, provider method, admin control or dependency. Neither text nor voice can initiate external search.
+- Scope: the system prompt keeps Nupa portfolio-focused, allows relevant business/technical reasoning, and redirects unrelated requests naturally without inventing Nour facts.
 - V2 evidence: `docs/ai-nour-v2-conversational.md` and `results/v2-*`.
 
 ## 3c. Legal pages, consent and voice policy
 
-- Production serves bilingual Privacy Policy and Terms of Use version 1.3 at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
+- Production currently serves bilingual legal version 1.3. The pending release publishes version 1.4 with paid Gemini processing, public beta, no beta-key requirement, and no retroactive paid-tier claim for earlier conversations.
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
-- Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.3` before reading, chat, Live voice or tools.
-- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The daily cap is currently $3.00; the cumulative cap is $7.00. Iapetus is the voice. Admin can restore up to 600 seconds.
+- Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.4` before reading, chat, Live voice or tools. Enforcement applies in public mode, not only when a beta key is required.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$1.00**; the cumulative cap is **$7.00**. Production still has the temporary $3.00 daily cap until the approved release. Iapetus is the voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 
 ## 3d. Nupa identity release (deployed)
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
-- Legal version **1.3** and consent **`2026-11-27-v1.3`** are live. Existing v1.2 sessions must re-accept before reading, chat, Live voice or tools.
+- Live production: legal version **1.3** and consent **`2026-11-27-v1.3`**. Pending release: legal **1.4** and consent **`2026-11-27-v1.4`**; existing sessions must re-accept.
 - Public access is enabled: `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; no beta key is requested.
 - Worker `f5e81237-f8e1-41a1-9b7b-151225d05381` and Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) are live.
-- The daily spending cap is **$3.00**; the cumulative cap remains **$7.00**.
+- The live daily spending cap is **$3.00**; the pending release restores **$1.00**. The cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
@@ -111,23 +113,33 @@ CRM inquiry/appointment creation currently returns **403** by design. Calendar/M
 - `GET https://api.nourchkair.com/api/health`
 - Admin **Overview**, **Usage & cost**, **CRM**, **Audit**
 - D1 `ops_events`, `cost_events`, `admin_audit`
-- Live reservations and `live_unreported` settlements
+- Live reservations, text spend reservations, and `live_unreported`/`text_unreported` settlements
 - No paid observability service
 
 ## 7. Spending
 
-Production ledger at the final V2 check:
+Production ledger before the paid-tier verification calls:
 
-- Cumulative: **$2.089523 USD**
-- Today: **$1.192660 USD**
-- Held reservations: **$0**
-- Daily cap: **$3.00 USD** (production acceptance testing; cumulative cap unchanged)
-- Cumulative cap: **$7.00 USD (~$9.95 CAD)**
+- Cumulative: **$2.342721 USD** (read at report time)
+- Today: **$1.445858 USD** (read at report time)
+- Paid text test: **+$0.000717** internal estimate at the rates then configured
+- Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
+- Current internal estimate: **$1.445858 USD today / $2.342721 cumulative**
+- Held reservations: **$0** before the paid Live test
+- Approved daily cap: **$1.00 USD**; live production temporarily **$3.00** until the pending release
+- Cumulative cap: **$7.00 USD**
 - Live default: **300 seconds / $0.125 reservation**; 600-second maximum remains available in admin
 - Fixed monthly infrastructure: **$0**
-- Gemini billing: **Free tier, no active Cloud Billing** (verified 27 November 2026); public access is enabled with caps
+- Gemini billing: **reportedly Paid Tier 1** under the funded Portfolio Nour project; real paid text and Live calls succeeded
+- Funding reported by Nour: CA$14.05 eligible credits, CA$8.00 purchased credits, $10 USD/month Google AI Pro developer credits, automatic reload disabled
 
-The production ledger includes prior evaluation carryover. The $10 CAD budget remains intact.
+These are internal token-based estimates, not confirmed Google invoices. The Gemini API key cannot read the project, billing tier, credit balance or invoices, so those figures remain user-provided. Text requests hold a $0.02 atomic reservation while in flight. Live holds an atomic session reservation; each reported turn is charged at actual token-estimated usage, capped by the reservation remainder, and `/api/live/end` releases the hold. A session that ends with no reported usage is charged the reservation conservatively; an expired unreported reservation is settled to the unreserved remainder. The old Live code charged the full $0.125 reservation instead of reported token usage, so the ledger overstates the two paid Live tests; the token-level estimate for the first test is $0.006611, not $0.125. The ledger is intentionally left intact as a conservative audit record.
+
+**Deployment timing:** the current internal daily estimate ($1.445858) is already above the approved $1.00 daily cap because production has been running under the temporary $3.00 cap. Deploying the $1.00 cap today will pause new AI requests until the next UTC daily reset. Deploy after the UTC reset or accept that short pause.
+
+**Rate review (27 November 2026):** `gemini-3.8-live` matches Google's published paid rates: $0.75 text input, $3.00 audio input, $12.00 audio output per 1M tokens. The `gemini-flash-lite-latest` alias is not documented on Google's pricing page. Google publishes $0.10/$0.40 for 2.5 Flash-Lite, $0.25/$1.50 for 3.1 Flash-Lite and $0.30/$2.50 for 3.5 Flash-Lite. The application now uses the highest current Flash-Lite rates ($0.30 input/$2.50 output) as a conservative ceiling, so the internal ledger may overstate text cost if the alias resolves to an older generation. Review these rates whenever the alias changes or a pinned model is adopted.
+
+**Hard-limit limitation:** the application enforces reservations and caps before and during requests, but it cannot guarantee Google's final billed amount. Provider-side pricing changes, rounding, failed/abandoned requests, retries, model routing, and billing lag can produce a difference between the internal ledger and the Google invoice. The caps are a best-effort application control, not a provider-enforced hard budget.
 
 ## 8. Emergency shutdown
 
@@ -140,7 +152,7 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap)
+- Current Worker version: `f5e81237-f8e1-41a1-9b7b-151225d05381` (live public access, $3 daily cap)
 - Previous Nupa Worker: `28bcef6b-4260-495e-94bc-4fc7e90d203a` (private-beta mode, $3 daily cap)
 - Previous Nupa Worker: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3, $1 daily cap)
 - Previous production Worker: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
@@ -150,7 +162,7 @@ This was tested in production, including recovery.
 - Static/legal rollback: Pages deployment `d3dd93bb-2bf5-4c60-a6ff-87792958a27c` (source `868b606`) or redeploy that commit.
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
-- Daily cap rollback: restore `DAILY_SPEND_CAP_USD_MICROS = "1000000"` in `wrangler.production.toml`, redeploy the Worker, and PATCH `/api/admin/limits` with `dailyCapUsdMicros: 1000000` if a stored control exists. Cumulative cap remains $7.00.
+- Daily cap: the pending release restores `DAILY_SPEND_CAP_USD_MICROS = "1000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 1000000` if a stored $3.00 control exists. Cumulative cap remains $7.00.
 - Safe notes: rolling back the Worker does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Full details are in `ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md`.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
@@ -161,21 +173,40 @@ npx wrangler rollback 5596ba7b-c4a9-4256-8eea-aa46dd9f4735 --config wrangler.pro
 
 For the static site, redeploy the prior commit with `npm run deploy` from the repository root. D1 migrations are additive; do not delete production records during a rollback.
 
+## 9b. v1.4 backward compatibility and rollback
+
+**Backward compatibility**
+
+- Migrations `0007` and `0008` are additive; they create `spend_reservations` and `live_session_leases` without changing or deleting existing rows.
+- The previous Worker ignores the new tables, so a Worker-only rollback is schema-safe.
+- Pre-existing browser-generated owner tokens remain accepted; `POST /api/owner` is the new server-issued path.
+- The deployed client already sends `reservationId` on Live turns. Older clients that do not call `/api/live/end` still work; their leases expire with the Gemini token.
+- Consent v1.4 requires re-acceptance. Do not roll the Worker back to v1.3 while serving the v1.4 client: the mismatch causes a consent loop. Roll back Worker and Pages together.
+- Daily cap: the effective cap is `min(config, stored control)`, so the $1 config takes effect even if D1 still stores $3. A stored $3 control does not raise the cap.
+
+**Rollback**
+
+1. Record the new Worker version and Pages deployment ID.
+2. Deploy the previous Pages build (`848ef7e8-13bf-4682-9c72-45abb73f2367`, source `b1de5b2`) or redeploy the prior static commit.
+3. Roll back the Worker to `f5e81237-f8e1-41a1-9b7b-151225d05381` with `npx wrangler rollback`.
+4. Keep D1 migrations `0007`/`0008`; do not drop the new tables. The old Worker ignores them.
+5. Restore legal/consent v1.3 only as part of the same Worker+Pages rollback.
+6. Re-run production preflight against the rolled-back release; expect the $3 daily cap and v1.3 consent.
+
 ## 10. Deployment commands
 
 ```bash
-# Worker
+# 1. D1 first (additive; 0007 adds text spend reservations, 0008 adds active voice-session leases)
 cd ai-nour
-npx wrangler deploy --config wrangler.production.toml
-
-# D1 (additive; 0006 clears only the untouched legacy persona seed)
 npx wrangler d1 migrations apply ai-nour-production --remote --config wrangler.production.toml
 
-# Stored persona override (dry run, then --apply after confirming the diff)
-node scripts/migrate-persona-nupa.mjs
-node scripts/migrate-persona-nupa.mjs --apply
+# 2. Worker (requires the new tables)
+npx wrangler deploy --config wrangler.production.toml
 
-# Static portfolio
+# 3. Optional persona audit (portfolio scope rules are enforced in code and do not require a stored-persona migration)
+node scripts/migrate-persona-nupa.mjs
+
+# 4. Static portfolio (legal v1.4 + consent UI)
 cd ..
 npm run deploy
 ```
@@ -187,12 +218,18 @@ npm run deploy
 | Production health/D1 | 16/16 preflight | `results/production-preflight.json` |
 | Text + Live voice + navigation | 12/12 | `results/production-smoke.json` |
 | Local admin → production Worker | 9/9 | `results/production-admin-connectivity.json` |
-| Emergency shutdown + Live limits | 10/10 | `results/production-safety.json` |
+| Emergency shutdown + Live limits | updated test prepared | `results/production-safety.json` (rerun after deployment) |
 | Production D1 → Google Sheet | 11/11 | `results/production-crm-sheet-sync.json` |
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
-| Nupa legal validator (v1.3 public) | 66/66 | `npm run validate:legal` |
+| Nupa legal validator (v1.4 paid/public) | 72/72 | `npm run validate:legal` |
+| Public-beta controls (local public Worker) | 23/23 | `results/public-controls-tests.json` |
+| Unit tests | 75/75 | `npm test` |
+| Paid-tier production text | passed | `results/paid-tier-text.json` (if retained) |
+| Paid-tier production Live voice | passed | `results/paid-tier-live.json` |
+| Gemini-enforced Live token reuse/expiry | 4/4 | `results/live-token-restrictions.json` |
+| Cloudflare Free edge rate limit | active | `Nupa API edge rate limit`, 30 req/10s/IP, Block 10s |
 | Nupa opening browser (local mock) | 20/20 | `results/nupa-v3-opening-browser.json` |
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
@@ -216,8 +253,12 @@ Production Nupa checks were run against `https://nourchkair.com/` and `https://a
 
 ## 12. Remaining manual action
 
-**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires. The published legal URLs are now set in the OAuth branding page: `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Next manual action: remove unused `gmail.send`, `gmail.compose`, and `documents.readonly` scopes from Data Access before publishing/verification.
+**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publishing/verification requires separate approval and OAuth-console changes; it is not part of this release.
+
+**Graceful degradation is in place:** Nupa text, Live voice, portfolio, consent, anonymous ownership, rate limits and spending controls do **not** use the Google OAuth token. If authorization expires, only CRM/Calendar/Drive/Gmail integration endpoints fail closed with an `IntegrationError`; external writes and Resend are already disabled. No AI request, portfolio route or spending control depends on Google authorization. The admin status reports the OAuth mode and this limitation. Reauthorize with the local helper when durability is addressed; no automatic retry queue or destructive fallback is used.
+
+The published legal URLs are set in the OAuth branding page: `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Next manual action: remove unused `gmail.send`, `gmail.compose`, and `documents.readonly` scopes from Data Access before publishing/verification.
 
 A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine Nupa administration does not require Cloudflare access.
 
-**Public access is enabled with rate limits and spending caps. The Gemini project remains on the free tier; do not submit personal, sensitive, confidential or third-party information. Paid-tier/DPA decisions remain separate.**
+**Public access is enabled with server-issued anonymous ownership, per-visitor and global rate limits, concurrent voice limits, atomic spending reservations and a $1 daily / $7 cumulative approved cap. Gemini is on the reported Paid Tier 1; real text and Live calls succeeded. Actual invoices and remaining credits are not available through the API key. Nupa remains an experimental AI service: do not submit personal, sensitive, confidential or third-party information.**

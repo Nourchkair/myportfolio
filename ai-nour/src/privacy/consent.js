@@ -1,4 +1,4 @@
-export const CONSENT_VERSION = '2026-11-27-v1.3';
+export const CONSENT_VERSION = '2026-11-27-v1.4';
 
 function timestamp(value, fallback) {
   const parsed = typeof value === 'string' ? Date.parse(value) : Number(value);

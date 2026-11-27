@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T18:59:14.897Z",
-  "passed": 20,
+  "generatedAt": "2026-11-27T20:48:38.730Z",
+  "passed": 21,
   "failed": 0,
-  "total": 20,
+  "total": 21,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -72,11 +72,12 @@
         "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
         "buttonColor": "rgb(33, 23, 14)",
         "gateHidden": true,
-        "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.",
-        "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.",
-        "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy.",
-        "button": "Continue and agree",
-        "buttonAria": "Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "welcome": "Meet Nupa.",
+        "lede": "Your intelligent portfolio companion. Explore, ask questions and discover Nour\u2019s work at your own pace.",
+        "disclosure": "Text and voice are processed by Google Gemini under Google\u2019s paid API terms, which do not use prompts or responses to improve Google\u2019s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.",
+        "accept": "By selecting \u201cLet\u2019s explore\u201d, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy.",
+        "button": "Let\u2019s explore",
+        "buttonAria": "Let\u2019s explore: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
         "checkboxCount": 0,
         "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
@@ -97,10 +98,11 @@
       }
     },
     {
-      "name": "consent welcomes the visitor with a short independent identity",
+      "name": "consent opens with a short Meet Nupa introduction",
       "pass": true,
       "detail": {
-        "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around."
+        "welcome": "Meet Nupa.",
+        "lede": "Your intelligent portfolio companion. Explore, ask questions and discover Nour\u2019s work at your own pace."
       }
     },
     {
@@ -111,12 +113,12 @@
       }
     },
     {
-      "name": "consent button says Continue and agree while age is confirmed in the acceptance line",
+      "name": "consent uses one Let\u2019s explore action with age and legal confirmation",
       "pass": true,
       "detail": {
-        "button": "Continue and agree",
-        "buttonAria": "Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
-        "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy."
+        "button": "Let\u2019s explore",
+        "buttonAria": "Let\u2019s explore: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "accept": "By selecting \u201cLet\u2019s explore\u201d, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy."
       }
     },
     {
@@ -136,10 +138,10 @@
       }
     },
     {
-      "name": "consent discloses Gemini, improvement use, retention, admin access and sensitive-data warning",
+      "name": "consent discloses paid Gemini processing, retention, admin access and sensitive-data warning",
       "pass": true,
       "detail": {
-        "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information."
+        "disclosure": "Text and voice are processed by Google Gemini under Google\u2019s paid API terms, which do not use prompts or responses to improve Google\u2019s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information."
       }
     },
     {
@@ -155,23 +157,24 @@
       "pass": true,
       "detail": {
         "locale": "FR",
-        "kicker": "AVANT DE COMMENCER",
-        "welcome": "Bienvenue \u2014 je suis Nupa, un guide de portfolio ind\u00e9pendant propuls\u00e9 par l\u2019IA, et non Nour. Je peux vous faire d\u00e9couvrir son travail, r\u00e9pondre \u00e0 vos questions et vous guider.",
-        "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini, qui peut les utiliser pour am\u00e9liorer ses produits. Les transcriptions sont conserv\u00e9es jusqu\u2019\u00e0 7 jours et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
-        "accept": "En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
-        "button": "Continuer et accepter"
+        "kicker": "NUPA \u00b7 COMPAGNON DE PORTFOLIO IA",
+        "welcome": "Voici Nupa.",
+        "lede": "Votre compagnon de portfolio intelligent. Explorez, posez des questions et d\u00e9couvrez le travail de Nour \u00e0 votre rythme.",
+        "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini selon les conditions des services payants, qui n\u2019utilisent pas les requ\u00eates ni les r\u00e9ponses pour am\u00e9liorer les produits de Google. Les conversations sont conserv\u00e9es jusqu\u2019\u00e0 7 jours apr\u00e8s la derni\u00e8re activit\u00e9 et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site pour le soutien et la s\u00e9curit\u00e9. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
+        "accept": "En choisissant \u00ab Explorons \u00bb, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
+        "button": "Explorons"
       }
     },
     {
-      "name": "Continue alone records age, Terms and Privacy acceptance",
+      "name": "Let\u2019s explore alone records age, Terms and Privacy acceptance",
       "pass": true,
       "detail": {
         "consent": {
-          "version": "2026-11-27-v1.3",
+          "version": "2026-11-27-v1.4",
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T18:59:07.973Z"
+          "acceptedAt": "2026-11-27T20:48:32.438Z"
         },
         "gateVisible": true,
         "consentHidden": true
@@ -188,15 +191,25 @@
       }
     },
     {
-      "name": "AI choice starts a text introduction after authorization",
+      "name": "AI choice enters the portfolio without opening the chat panel",
       "pass": true,
       "detail": {
-        "assistantMessages": [
-          "Hey, I'm Nupa, your interactive guide to Nour's portfolio. I can show you around, walk you through his projects, answer questions or simply have a conversation. Where should we start?"
-        ],
+        "assistantMessages": [],
+        "panelHidden": true,
         "bodyVisible": true,
         "consentHidden": true,
-        "gateHidden": true
+        "gateHidden": true,
+        "toast": "NUPA IS READY. OPEN THE NUPA PANEL FOR A GUIDED TOUR, OR TURN ON VOICE.",
+        "unread": "true"
+      }
+    },
+    {
+      "name": "the Nupa pill opens the chat panel on demand",
+      "pass": true,
+      "detail": {
+        "panelHidden": false,
+        "bodyVisible": true,
+        "consentHidden": true
       }
     },
     {

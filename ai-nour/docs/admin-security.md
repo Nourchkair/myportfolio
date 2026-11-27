@@ -56,6 +56,15 @@ Browser (127.0.0.1:8791)
 | Legacy beta access | The dashboard can create, list, and revoke individually hashed legacy beta keys. Public access no longer requires them; revocation still takes effect if beta mode is restored. |
 | Restart | Stateless signed cookies remain valid across a restart only if the secret and epoch are unchanged. Rotate the secret for a durable emergency revocation. |
 
+## Public-beta controls visible to the administrator
+
+- **Access mode:** the admin Overview shows public beta vs private beta and the 18+ consent requirement.
+- **Anonymous ownership:** `POST /api/owner` issues a random 256-bit owner credential; D1 stores only its SHA-256 hash. Cross-owner session reads return 404.
+- **Spending:** text and Live reservations are atomic; the admin sees internal token estimates, held reservations, the $1 daily / $7 cumulative caps, and a note that figures are not Google invoices.
+- **Rate and concurrency limits:** a global API request limit plus per-visitor/global chat, Live, tool, session-create, session-read and owner-issuance limits; 2 concurrent voice sessions globally and 1 per visitor; active voice leases survive a reported turn and are released by `POST /api/live/end`.
+- **Emergency shutdown:** `assistant_enabled=false` blocks new sessions and AI requests while the static portfolio remains available.
+- **Removed web research:** no research flag, tool or admin control remains.
+
 ## Browser and transport protections
 
 - `Content-Security-Policy`: self-only scripts/styles, no framing, no form exfiltration.

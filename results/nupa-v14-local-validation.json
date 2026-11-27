@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-11-27T20:05:00Z",
+  "status": "implemented, validated locally, not committed or deployed pending approval",
+  "release": {
+    "legalVersion": "1.4",
+    "consentVersion": "2026-11-27-v1.4",
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "liveSessionSeconds": 300,
+    "maxLiveSessionSeconds": 600,
+    "liveVoice": "Iapetus",
+    "textModel": "gemini-flash-lite-latest",
+    "liveModel": "gemini-3.8-live"
+  },
+  "production": {
+    "worker": "f5e81237-f8e1-41a1-9b7b-151225d05381",
+    "pages": "848ef7e8-13bf-4682-9c72-45abb73f2367",
+    "source": "b1de5b2",
+    "legalVersion": "1.3",
+    "consentVersion": "2026-11-27-v1.3",
+    "dailyCapUsdMicros": 3000000,
+    "note": "Production still serves the pre-v1.4 code until approval.",
+    "budgetAtReport": {
+      "dailyUsdMicros": 1445858,
+      "cumulativeUsdMicros": 2342721,
+      "dailyCapUsdMicros": 3000000,
+      "cumulativeCapUsdMicros": 7000000,
+      "note": "Internal estimate; current daily estimate is above the approved $1 cap, so deploying the $1 cap today pauses AI until the next UTC reset."
+    }
+  },
+  "paidTier": {
+    "reportedByUser": {
+      "project": "Portfolio Nour",
+      "tier": "Paid Tier 1",
+      "billingAccount": "Nour's Projects",
+      "eligibleCreditsCad": 14.05,
+      "purchasedCreditsCad": 8.0,
+      "googleAiProMonthlyUsd": 10.0,
+      "automaticReload": false
+    },
+    "operationalVerification": {
+      "text": {
+        "status": 200,
+        "reply": "paid-tier-ok",
+        "evidence": "results/paid-tier-text.json"
+      },
+      "live": {
+        "voice": "Iapetus",
+        "transcript": "Paid tier voice ok.",
+        "audioBytes": 96000,
+        "evidence": "results/paid-tier-live.json"
+      }
+    },
+    "limitation": "The Gemini API key does not expose project, billing tier, credit balance or invoices. Funding figures are user-provided; real paid requests succeeded."
+  },
+  "rates": {
+    "text": {
+      "inputPerMillion": 0.3,
+      "outputPerMillion": 2.5,
+      "note": "Conservative ceiling for the undocumented gemini-flash-lite-latest alias. 2.5 Flash-Lite is $0.10/$0.40, 3.1 is $0.25/$1.50, 3.5 is $0.30/$2.50."
+    },
+    "live": {
+      "textInputPerMillion": 0.75,
+      "audioInputPerMillion": 3.0,
+      "audioOutputPerMillion": 12.0,
+      "textOutputPerMillion": 4.5,
+      "note": "Matches Google's published Gemini 3.8 Live paid rates."
+    },
+    "providerSpendRateLimit": "Tier 1 spend-based limit: $10 per rolling 10 minutes; billing tier cap $250."
+  },
+  "validation": {
+    "unit": {
+      "passed": 75,
+      "failed": 0
+    },
+    "api": {
+      "passed": 23,
+      "failed": 0
+    },
+    "consent": {
+      "passed": 12,
+      "failed": 0
+    },
+    "liveBudget": {
+      "passed": 9,
+      "failed": 0
+    },
+    "publicControls": {
+      "passed": 23,
+      "failed": 0,
+      "evidence": "ai-nour/results/public-controls-tests.json"
+    },
+    "openingBrowser": {
+      "passed": 21,
+      "failed": 0,
+      "evidence": "results/nupa-v3-opening-browser.json"
+    },
+    "presentationBrowser": {
+      "passed": 22,
+      "failed": 0,
+      "evidence": "results/nupa-v3-presentation-browser.json"
+    },
+    "legal": {
+      "passed": 72,
+      "failed": 0
+    },
+    "portfolio": {
+      "passed": 261,
+      "failed": 0
+    },
+    "liveTokenRestrictions": {
+      "passed": 4,
+      "failed": 0,
+      "evidence": "results/live-token-restrictions.json"
+    }
+  },
+  "notRun": [
+    "Production deployment of v1.4",
+    "Real-device microphone, Bluetooth and iOS acceptance",
+    "Subjective voice naturalness and presentation-quality scoring",
+    "Independent Google Cloud Billing invoice/credit verification",
+    "Production browser rerun against the v1.4 build"
+  ],
+  "edge": {
+    "cloudflareFreeRateLimit": {
+      "name": "Nupa API edge rate limit",
+      "expression": "hostname api.nourchkair.com and path starts /api/ except /api/health",
+      "limit": "30 requests / 10 seconds / IP",
+      "action": "Block 10 seconds",
+      "status": "active",
+      "managedWaf": "paid-plan feature; app validation + free rule used"
+    }
+  }
+}

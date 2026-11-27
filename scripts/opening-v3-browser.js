@@ -87,6 +87,7 @@ const consent = await beta.evaluate(() => ({
   buttonColor: getComputedStyle(document.querySelector('#ainourConsentBtn')).color,
   gateHidden: document.querySelector('#ainourGate').hidden,
   welcome: document.querySelector('#ainourConsentIntro').innerText,
+  lede: document.querySelector('#ainourConsentLede').innerText,
   disclosure: document.querySelector('#ainourConsentPrivacy').innerText,
   accept: document.querySelector('#ainourConsentAccept').innerText,
   button: document.querySelector('#ainourConsentBtn').innerText.trim(),
@@ -99,12 +100,12 @@ const consent = await beta.evaluate(() => ({
 }));
 check('AI choice opens a centered consent modal outside the chat', consent.introDone === true && consent.panelHidden === true && consent.consentVisible === true && consent.consentModal === true && /blur/i.test(consent.blur) && consent.gateHidden === true, consent);
 check('opening choice and companion use Nupa branding', /explore with nupa/i.test(consent.choice) && !/AI Nour/i.test(consent.choice) && consent.pill === 'Nupa' && /intelligent portfolio companion/i.test(consent.tagline), { choice: consent.choice, pill: consent.pill, tagline: consent.tagline });
-check('consent welcomes the visitor with a short independent identity', /independent AI(-powered)? portfolio guide/i.test(consent.welcome) && /not Nour/i.test(consent.welcome) && !/live, interactive, personalized/i.test(consent.welcome), { welcome: consent.welcome });
+check('consent opens with a short Meet Nupa introduction', /Meet Nupa\./i.test(consent.welcome) && /intelligent portfolio companion/i.test(consent.lede) && !/live, interactive, personalized/i.test(consent.welcome), { welcome: consent.welcome, lede: consent.lede });
 check('consent has no separate acceptance checkbox', consent.checkboxCount === 0, { checkboxCount: consent.checkboxCount });
-check('consent button says Continue and agree while age is confirmed in the acceptance line', /Continue and agree/i.test(consent.button) && !/18/.test(consent.button) && /18 or older/i.test(consent.accept) && /Terms of Use/i.test(consent.accept) && /Privacy Policy/i.test(consent.accept) && /18 or older/i.test(consent.buttonAria) && /Terms of Use/i.test(consent.buttonAria) && /Privacy Policy/i.test(consent.buttonAria), { button: consent.button, buttonAria: consent.buttonAria, accept: consent.accept });
+check('consent uses one Let’s explore action with age and legal confirmation', /Let’s explore/i.test(consent.button) && !/18/.test(consent.button) && /18 or older/i.test(consent.accept) && /Terms of Use/i.test(consent.accept) && /Privacy Policy/i.test(consent.accept) && /18 or older/i.test(consent.buttonAria) && /Terms of Use/i.test(consent.buttonAria) && /Privacy Policy/i.test(consent.buttonAria), { button: consent.button, buttonAria: consent.buttonAria, accept: consent.accept });
 check('consent button text has strong contrast', /linear-gradient/i.test(consent.buttonBgImage) && !/255, 255, 255/.test(consent.buttonColor) && !/rgba\(0, 0, 0, 0\)/.test(consent.buttonBgImage), { buttonBgImage: consent.buttonBgImage, buttonColor: consent.buttonColor });
 check('consent modal is light transparent glass, not a dark slab', /rgba\(255, 255, 255/.test(consent.modalBg) && /rgba\(2, 6, 9, 0\.3\)/.test(consent.overlayBg), { modalBg: consent.modalBg, overlayBg: consent.overlayBg });
-check('consent discloses Gemini, improvement use, retention, admin access and sensitive-data warning', /Google Gemini/i.test(consent.disclosure) && /improve its products/i.test(consent.disclosure) && /7 days/i.test(consent.disclosure) && /administrator/i.test(consent.disclosure) && /Do not share personal, sensitive or confidential information/i.test(consent.disclosure), { disclosure: consent.disclosure });
+check('consent discloses paid Gemini processing, retention, admin access and sensitive-data warning', /Google Gemini/i.test(consent.disclosure) && /paid API terms/i.test(consent.disclosure) && /do not use prompts or responses to improve/i.test(consent.disclosure) && /7 days/i.test(consent.disclosure) && /administrator/i.test(consent.disclosure) && /Do not share personal, sensitive or confidential information/i.test(consent.disclosure), { disclosure: consent.disclosure });
 check('consent carries legal links', consent.links.includes('/terms/') && consent.links.includes('/privacy/'), consent.links);
 await beta.locator('#ainourConsentLocale').click();
 await beta.waitForTimeout(150);
@@ -112,11 +113,12 @@ const consentFr = await beta.evaluate(() => ({
   locale: document.querySelector('#ainourConsentLocale')?.textContent.trim(),
   kicker: document.querySelector('#ainourConsentKicker')?.innerText.trim(),
   welcome: document.querySelector('#ainourConsentIntro')?.innerText.trim(),
+  lede: document.querySelector('#ainourConsentLede')?.innerText.trim(),
   disclosure: document.querySelector('#ainourConsentPrivacy')?.innerText.trim(),
   accept: document.querySelector('#ainourConsentAccept')?.innerText.trim(),
   button: document.querySelector('#ainourConsentBtn')?.innerText.trim()
 }));
-check('French consent is short, welcoming and complete', consentFr.locale === 'FR' && /Avant de commencer/i.test(consentFr.kicker) && /Bienvenue/i.test(consentFr.welcome) && /et non Nour/i.test(consentFr.welcome) && /Google Gemini/i.test(consentFr.disclosure) && /améliorer ses produits/i.test(consentFr.disclosure) && /7 jours/i.test(consentFr.disclosure) && /administrateur/i.test(consentFr.disclosure) && /18 ans ou plus/i.test(consentFr.accept) && /Conditions d’utilisation/i.test(consentFr.accept) && /Politique de confidentialité/i.test(consentFr.accept) && /Continuer/i.test(consentFr.button), consentFr);
+check('French consent is short, welcoming and complete', consentFr.locale === 'FR' && /compagnon de portfolio IA/i.test(consentFr.kicker) && /Voici Nupa/i.test(consentFr.welcome) && /Google Gemini/i.test(consentFr.disclosure) && /services payants/i.test(consentFr.disclosure) && /n’utilisent pas les requêtes/i.test(consentFr.disclosure) && /7 jours/i.test(consentFr.disclosure) && /administrateur/i.test(consentFr.disclosure) && /18 ans ou plus/i.test(consentFr.accept) && /Conditions d’utilisation/i.test(consentFr.accept) && /Politique de confidentialité/i.test(consentFr.accept) && /Explorons/i.test(consentFr.button), consentFr);
 await beta.locator('#ainourConsentLocale').click();
 await beta.waitForTimeout(150);
 await beta.locator('#ainourConsentBtn').click();
@@ -126,13 +128,13 @@ const accepted = await beta.evaluate(() => ({
   gateVisible: !document.querySelector('#ainourGate').hidden,
   consentHidden: document.querySelector('#ainourConsent').hidden
 }));
-check('Continue alone records age, Terms and Privacy acceptance', accepted.consent.version === '2026-11-27-v1.3' && accepted.consent.age18 === true && accepted.consent.terms === true && accepted.consent.privacy === true && accepted.gateVisible === true && accepted.consentHidden === true, accepted);
+check('Let’s explore alone records age, Terms and Privacy acceptance', accepted.consent.version === '2026-11-27-v1.4' && accepted.consent.age18 === true && accepted.consent.terms === true && accepted.consent.privacy === true && accepted.gateVisible === true && accepted.consentHidden === true, accepted);
 
 const indie = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent(api)}&v=${Date.now()}`);
 await indie.setViewportSize({ width: 1440, height: 900 });
 await indie.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 30000 });
 await indie.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.3', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.4', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');
@@ -155,7 +157,7 @@ const ready = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent
 await ready.setViewportSize({ width: 1440, height: 900 });
 await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 30000 });
 await ready.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.3', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.4', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');
@@ -164,15 +166,27 @@ await ready.evaluate((key) => {
 await ready.reload({ ignoreCache: true });
 await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 20000 });
 await ready.locator('[data-explore="ai"]').click();
-await ready.waitForSelector('#ainourBody:not([hidden])', { timeout: 30000 });
-await ready.waitForTimeout(1800);
-const aiIntro = await ready.evaluate(() => ({
+await ready.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'), { timeout: 30000 });
+await ready.waitForTimeout(600);
+const aiExplore = await ready.evaluate(() => ({
   assistantMessages: [...document.querySelectorAll('.ainour-msg.assistant')].map((message) => message.innerText),
+  panelHidden: document.querySelector('#ainourPanel')?.hidden,
   bodyVisible: !document.querySelector('#ainourBody').hidden,
   consentHidden: document.querySelector('#ainourConsent')?.hidden,
-  gateHidden: document.querySelector('#ainourGate')?.hidden
+  gateHidden: document.querySelector('#ainourGate')?.hidden,
+  toast: document.querySelector('#toast')?.innerText,
+  unread: document.querySelector('#ainourPill')?.dataset.unread
 }));
-check('AI choice starts a text introduction after authorization', aiIntro.bodyVisible === true && aiIntro.consentHidden === true && aiIntro.gateHidden === true && aiIntro.assistantMessages.length > 0, aiIntro);
+check('AI choice enters the portfolio without opening the chat panel', aiExplore.panelHidden === true && aiExplore.consentHidden === true && aiExplore.gateHidden === true && aiExplore.assistantMessages.length === 0 && /Nupa is ready/i.test(aiExplore.toast) && aiExplore.unread === 'true', aiExplore);
+await ready.locator('[data-ainour="mode-text"]').click();
+await ready.waitForSelector('#ainourBody:not([hidden])', { timeout: 30000 });
+await ready.waitForTimeout(500);
+const aiPanel = await ready.evaluate(() => ({
+  panelHidden: document.querySelector('#ainourPanel')?.hidden,
+  bodyVisible: !document.querySelector('#ainourBody').hidden,
+  consentHidden: document.querySelector('#ainourConsent')?.hidden
+}));
+check('the Nupa pill opens the chat panel on demand', aiPanel.panelHidden === false && aiPanel.bodyVisible === true && aiPanel.consentHidden === true, aiPanel);
 await ready.evaluate(() => document.querySelector('[data-ainour="locale"]').click());
 await ready.waitForTimeout(150);
 const french = await ready.evaluate(() => ({

@@ -1,5 +1,7 @@
 # AI Nour — Phase 4 product acceptance and private-beta preparation
 
+> **Historical record:** This document describes the earlier private-beta phase. Public beta access without a key, legal v1.4 and paid Gemini processing supersede the private-beta assumptions below. Technical identifiers and historical validation remain accurate for their date.
+
 > Historical record: this phase was produced under the former working name **AI Nour**. The visitor-facing assistant is now **Nupa**; internal paths, browser keys, API routes and other technical identifiers remain unchanged.
 
 **Date:** 26 November 2026  

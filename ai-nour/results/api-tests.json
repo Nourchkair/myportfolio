@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T07:43:43.998Z",
+  "generatedAt": "2026-11-27T20:47:42.237Z",
   "mode": "mock-providers/local-d1",
   "passed": 23,
   "failed": 0,
@@ -118,7 +118,7 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "cost": 125000
+        "cost": 466
       }
     },
     {
@@ -177,28 +177,28 @@
       "pass": true,
       "detail": {
         "liveStatuses": [
-          200,
-          200,
-          200,
-          200,
-          200,
-          200,
-          402,
-          402,
-          402,
-          402,
-          402,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
+          429,
           429,
           429
         ]
       }
     },
     {
-      "name": "cumulative budget cap blocks further text calls",
+      "name": "unreserved Live usage cannot inflate the budget",
       "pass": true,
       "detail": {
-        "overBudget": 200,
-        "chat": 402
+        "overBudget": 400,
+        "chat": 200
       }
     }
   ]

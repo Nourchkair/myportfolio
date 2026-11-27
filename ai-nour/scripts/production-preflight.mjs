@@ -39,10 +39,12 @@ check('an arbitrary key is ignored in public mode', badKey.status === 200 && Arr
 const validMeta = await request('/api/meta', { headers: { 'x-prototype-key': validation.key } });
 check('public meta exposes the tool surface', validMeta.status === 200 && Array.isArray(validMeta.body.tools), { status: validMeta.status, version: validMeta.body.version, flags: validMeta.body.flags });
 
+const issuedOwner = await request('/api/owner', { method: 'POST' });
+check('public owner credential is server-issued', issuedOwner.status === 200 && /^[a-f0-9]{64}$/.test(issuedOwner.body.ownerToken || ''), { status: issuedOwner.status, length: issuedOwner.body.ownerToken?.length });
 const session = await request('/api/session', {
   method: 'POST',
-  headers: { 'x-owner-token': owner },
-  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.3', privacyVersion: '2026-11-27-v1.3', acceptedAt: Date.now() } }
+  headers: { 'x-owner-token': issuedOwner.body.ownerToken || owner },
+  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.4', privacyVersion: '2026-11-27-v1.4', acceptedAt: Date.now() } }
 });
 check('public session is created without a key', session.status === 201 && Boolean(session.body.session?.id), { status: session.status });
 const sessionId = session.body.session?.id;
@@ -50,7 +52,7 @@ const sessionId = session.body.session?.id;
 const adminStatus = await request('/api/admin/status', { headers: { authorization: `Bearer ${admin.ADMIN_TOKEN}` } });
 check('production admin bearer works', adminStatus.status === 200 && adminStatus.body.ok === true, { status: adminStatus.status, environment: adminStatus.body.environment, version: adminStatus.body.version });
 check('production public access is enabled', adminStatus.body.security?.publicAccess === true && adminStatus.body.security?.betaAccessRequired === false, { security: adminStatus.body.security });
-check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 3_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
+check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 1_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
 check('Google integrations are configured', adminStatus.body.google?.configured === true && adminStatus.body.google?.spreadsheet === true && adminStatus.body.google?.calendar === true, { google: adminStatus.body.google });
 check('external writes remain disabled', adminStatus.body.flags?.google_writes_enabled === false, { google_writes_enabled: adminStatus.body.flags?.google_writes_enabled });
 check('Resend remains disabled', adminStatus.body.email?.sendEnabled === false, { email: adminStatus.body.email });

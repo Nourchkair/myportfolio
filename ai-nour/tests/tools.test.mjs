@@ -10,7 +10,6 @@ test('tool declarations are allowlisted and schema-shaped', () => {
   }
   assert.ok(!names.includes('sendEmail'));
   assert.ok(!names.includes('webResearch'));
-  assert.ok(getToolDeclarations({ webResearchEnabled: true }).some((tool) => tool.name === 'webResearch'));
   for (const tool of tools) assert.equal(tool.parameters.type, 'OBJECT');
 });
 
@@ -62,25 +61,6 @@ test('knowledge tools return verified project and step content', async () => {
   assert.equal(search.ok, true);
   assert.ok(search.modelResponse.results.length > 0);
 });
-
-test('web research is implemented but disabled unless explicitly enabled', async () => {
-  const textProvider = {
-    research: async ({ query }) => ({
-      text: `Researched: ${query}`,
-      sources: [{ title: 'Example', url: 'https://example.invalid' }],
-      usage: { prompt: 10, output: 5, total: 15 },
-      model: 'mock-text'
-    })
-  };
-  const disabled = await executeToolCall('webResearch', { query: 'current AI news' }, { config: { webResearchEnabled: false }, textProvider });
-  assert.equal(disabled.ok, false);
-  assert.equal(disabled.error.code, 'WEB_RESEARCH_DISABLED');
-  const enabled = await executeToolCall('webResearch', { query: 'current AI news' }, { config: { webResearchEnabled: true }, textProvider });
-  assert.equal(enabled.ok, true);
-  assert.equal(enabled.modelResponse.researched, true);
-  assert.match(enabled.modelResponse.content, /Researched/);
-});
-
 
 test('presentation targets and visual actions are validated', () => {
   const highlight = validateToolCall('highlightElement', {

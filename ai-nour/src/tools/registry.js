@@ -30,8 +30,7 @@ const KNOWLEDGE_TOOLS = new Set([
   'getJourneyChapter',
   'getCurrentView',
   'getVisibleElements',
-  'getElementDetails',
-  'webResearch'
+  'getElementDetails'
 ]);
 
 const TARGET_ACTIONS = new Set(['navigate', 'scroll', 'highlight', 'spotlight', 'hover', 'expand', 'collapse', 'point', 'trace', 'zoom', 'compare']);
@@ -346,24 +345,11 @@ const definitions = [
     description: 'Return the visitor’s current section, project, flow step or journey chapter and the verified content for that view. Use for "what is this?", "explain this step" and "how does this work?"',
     parameters: { type: 'OBJECT', properties: {} }
   },
-  ...presentationDefinitions,
-  {
-    name: 'webResearch',
-    description: 'Research current or external information with Google Search. Use only when the visitor asks about current events, external facts, companies, markets or ideas that are not covered by the portfolio. Identify the answer as researched and cite sources.',
-    parameters: {
-      type: 'OBJECT',
-      properties: {
-        query: { type: 'STRING', description: 'Research question.' }
-      },
-      required: ['query']
-    }
-  }
+  ...presentationDefinitions
 ];
 
-export function getToolDeclarations({ webResearchEnabled = false } = {}) {
-  return definitions
-    .filter((definition) => definition.name !== 'webResearch' || webResearchEnabled)
-    .map((definition) => JSON.parse(JSON.stringify(definition)));
+export function getToolDeclarations() {
+  return definitions.map((definition) => JSON.parse(JSON.stringify(definition)));
 }
 
 function projectOrError(projectId) {
@@ -699,11 +685,6 @@ export function validateToolCall(name, args = {}) {
   if (name === 'getCurrentView') {
     return { ok: true, knowledge: true, args: {} };
   }
-  if (name === 'webResearch') {
-    const query = String(args.query || '').trim();
-    if (!query) return { ok: false, code: 'QUERY_REQUIRED', message: 'A research query is required' };
-    return { ok: true, knowledge: true, args: { query: query.slice(0, 1200) } };
-  }
   return { ok: false, code: 'TOOL_NOT_IMPLEMENTED', message: 'Tool is not implemented' };
 }
 
@@ -793,30 +774,6 @@ async function executeKnowledgeTool(name, args, services) {
     ].filter(Boolean).join('\n');
     return { ok: true, action: null, actions: [], data: target, modelResponse: { ok: true, content, target } };
   }
-  if (name === 'webResearch') {
-    if (services.config?.webResearchEnabled === false) {
-      return { ok: false, error: { code: 'WEB_RESEARCH_DISABLED', message: 'Web research is disabled' }, action: null, actions: [] };
-    }
-    if (!services.textProvider?.research) {
-      return { ok: false, error: { code: 'WEB_RESEARCH_UNAVAILABLE', message: 'Web research is unavailable' }, action: null, actions: [] };
-    }
-    const result = await services.textProvider.research({ query: args.query });
-    const sourceLines = (result.sources || []).map((source) => `${source.title || 'Source'}: ${source.url || ''}`).filter(Boolean);
-    return {
-      ok: true,
-      action: null,
-      actions: [],
-      data: { sources: result.sources || [] },
-      modelResponse: {
-        ok: true,
-        researched: true,
-        content: [result.text, sourceLines.length ? `Sources:\n${sourceLines.join('\n')}` : ''].filter(Boolean).join('\n\n'),
-        sources: result.sources || []
-      },
-      usage: result.usage,
-      model: result.model
-    };
-  }
   return { ok: false, error: { code: 'TOOL_NOT_IMPLEMENTED', message: 'Knowledge tool is not implemented' }, action: null, actions: [] };
 }
 
@@ -871,6 +828,6 @@ export async function executeToolCall(name, args = {}, services = {}) {
 
 export async function executeToolCalls(calls = [], services = {}) {
   const results = [];
-  for (const call of calls) results.push({ call, ...(await executeToolCall(call.name, call.args || {}, services)) });
+  for (const call of calls.slice(0, 8)) results.push({ call, ...(await executeToolCall(call.name, call.args || {}, services)) });
   return results;
 }
