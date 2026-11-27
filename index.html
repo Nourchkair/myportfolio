@@ -18,8 +18,8 @@
 
 
 
-  <link rel="stylesheet" href="src/styles/base.css?v=5">
-  <link rel="stylesheet" href="src/styles/app.css?v=5">
+  <link rel="stylesheet" href="src/styles/base.css?v=34">
+  <link rel="stylesheet" href="src/styles/app.css?v=34">
 </head>
 <body data-mode="home">
 <a class="skip-link" href="#mainContent" id="skipLink">Skip to content</a>
@@ -213,36 +213,24 @@
 
 
 <div class="enter-screen" id="enterScreen" aria-hidden="true">
-  <div class="intro-hud">
-    <span class="intro-grid"></span>
-    <svg class="intro-wire" viewBox="0 0 1440 900" preserveAspectRatio="none" aria-hidden="true">
-      <path class="intro-line intro-line--accent" pathLength="1" style="--d:.45s" d="M0 176H268L316 224H486"/>
-      <path class="intro-line intro-line--accent" pathLength="1" style="--d:.6s" d="M1440 724H1172L1124 676H954"/>
-      <path class="intro-line" pathLength="1" style="--d:.75s" d="M160 0V138H244M160 138V206"/>
-      <path class="intro-line" pathLength="1" style="--d:.85s" d="M1280 900V762H1196M1280 762V694"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.55s" d="M0 450H212M1228 450H1440"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.95s" d="M720 0V128M720 772V900"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.45s" d="M36 132V40H128"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.5s" d="M1404 132V40H1312"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.6s" d="M36 768V860H128"/>
-      <path class="intro-line intro-line--soft" pathLength="1" style="--d:.65s" d="M1404 768V860H1312"/>
-      <circle class="intro-node" cx="486" cy="224" r="2.2" style="--d:1.3s"/>
-      <circle class="intro-node" cx="954" cy="676" r="2.2" style="--d:1.38s"/>
-    </svg>
-    <span class="intro-scan"></span>
-  </div>
   <div class="intro-welcome" id="introWelcome">
-    <div class="intro-welcome-inner">
-      <svg class="intro-welcome-svg" viewBox="0 0 1200 340" aria-hidden="true">
-        <text class="intro-welcome-fill" x="600" y="132">Welcome to</text>
-        <text class="intro-welcome-fill intro-welcome-fill--accent" x="600" y="262">Nour’s Portfolio</text>
-        <text class="intro-welcome-outline" x="600" y="132">Welcome to</text>
-        <text class="intro-welcome-outline intro-welcome-outline--accent" x="600" y="262">Nour’s Portfolio</text>
-      </svg>
+    <div class="intro-depth-greeting">
+      <div class="intro-depth-position">
+        <div class="intro-depth-text">
+          <span class="intro-depth-kicker">Welcome to</span>
+          <strong>Nour’s Portfolio</strong>
+        </div>
+      </div>
     </div>
   </div>
+  <div class="intro-fg" aria-hidden="true">
+    <div class="intro-fg-img"></div>
+  </div>
+  <div class="intro-shade" aria-hidden="true"></div>
+  <div class="intro-glow" aria-hidden="true"></div>
+  <div class="intro-grain" aria-hidden="true"></div>
 </div>
 
-  <script type="module" src="src/main.js?v=5"></script>
+  <script type="module" src="src/main.js?v=34"></script>
 </body>
 </html>

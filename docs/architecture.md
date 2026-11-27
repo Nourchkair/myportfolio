@@ -86,7 +86,7 @@ Hover, focus and hover-triggered tooltips do not write to history. A process ste
 - `archive/data/` preserves retired project records;
 - `archive/assets/` preserves legacy assets and project illustrations for future evidence.
 
-Active `assets/` contains only four scenes, five covers and two portraits.
+Active `assets/` contains only four scenes, five covers, two portraits and five foreground masks (four landscape and one portrait).
 
 ## 7. Validation
 

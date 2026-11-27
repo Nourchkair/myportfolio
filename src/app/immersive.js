@@ -2021,14 +2021,15 @@ function publishState(){
 }
 
 /* ---------- entry ---------- */
-const WELCOME_DELAY_MS=1400;
-const WELCOME_HOLD_MS=3000;
+const WELCOME_DELAY_MS=300;
+const WELCOME_HOLD_MS=1700;
 function enterWorld(){
   if(entered) return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const screen=$('enterScreen');
   const finish=()=>{
     entered=true;
+    document.body.classList.remove('intro-frozen');
     if(screen) screen.classList.add('done');
     document.body.classList.add('intro-reveal','ready');
     syncA11y();
@@ -2056,6 +2057,7 @@ function enterWorld(){
 }
 
 /* ---------- boot ---------- */
+document.body.classList.add('intro-frozen');
 buildScenes();
 buildCards();
 renderDots();
@@ -2100,7 +2102,7 @@ if(initialRoute&&initialRoute.name==='reading'){
   const reducedStart=matchMedia('(prefers-reduced-motion: reduce)').matches;
   setTimeout(()=>{
     if(!entered) enterWorld();
-  },reducedStart?60:900);
+  },reducedStart?60:200);
 }
 function warmProjectArt(){
   const urls=[...new Set([...PROJECTS.map(p=>p.cover),...SCENES.map(s=>s.img)])];

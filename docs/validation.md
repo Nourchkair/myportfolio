@@ -19,7 +19,7 @@ Validation passed: 261 checks
   "projects": 5,
   "chapters": 6,
   "apiVersion": "1.0.0",
-  "activeAssets": 11
+  "activeAssets": 16
 }
 ```
 
@@ -120,7 +120,7 @@ Source size changes:
 | `src/styles/app.css` | ~183.3 KB | ~112.8 KB |
 | `src/styles/base.css` | ~107.5 KB | ~47.7 KB |
 | `src/app/immersive.js` | ~177 KB | ~96.8 KB |
-| Active assets | — | 11 files / ~1.9 MB |
+| Active assets | — | 16 files / ~2.1 MB |
 
 ## Visual regression
 

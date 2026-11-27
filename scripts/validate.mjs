@@ -140,7 +140,7 @@ const activeAssets=[];
     if(entry.isDirectory()) walk(rel); else activeAssets.push(rel);
   }
 })('assets');
-check('active asset set is small',activeAssets.length<=12,`${activeAssets.length} files`);
+check('active asset set is small',activeAssets.length<=18,`${activeAssets.length} files`);
 check('retired covers not active',activeAssets.every(file=>!/(waterair|afuntime|academia|chefskiss|trackit)\./.test(file)));
 
 /* ---------- dist allowlist ---------- */
