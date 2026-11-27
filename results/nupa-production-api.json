@@ -1,0 +1,210 @@
+{
+  "generatedAt": "2026-11-27T08:27:26.616Z",
+  "target": "https://api.nourchkair.com",
+  "betaTester": {
+    "id": "c12b3c7b-fd1b-41b4-a71f-f25fe6f8da7e",
+    "purpose": "primary-acceptance",
+    "prefix": "ainour_beta_bb9628…"
+  },
+  "passed": 21,
+  "failed": 0,
+  "total": 21,
+  "budget": {
+    "dailyUsdMicros": 928062,
+    "cumulativeUsdMicros": 1824925,
+    "dailySpentUsdMicros": 928062,
+    "cumulativeSpentUsdMicros": 1824925,
+    "heldLiveReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 71938,
+    "cumulativeRemainingUsdMicros": 5175075,
+    "allowed": true
+  },
+  "results": [
+    {
+      "name": "production health and D1",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "version": "phase4-0.4.0"
+      }
+    },
+    {
+      "name": "old v1.1 consent is rejected",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "code": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "v1.2 consent creates a session",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "beta key remains valid and meta loads",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Iapetus remains the Live voice",
+      "pass": true,
+      "detail": {
+        "voice": "Iapetus"
+      }
+    },
+    {
+      "name": "English text identity is Nupa and not Nour",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reply": "I am Nupa, an independent AI portfolio assistant operated by Nour Chkair, and I am not Nour. My role is to help you explore Nour's background, projects, and work without impersonating him."
+      }
+    },
+    {
+      "name": "French text identity is Nupa and not Nour",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reply": "Je ne suis pas Nour, mais Nupa, un assistant de portefeuille virtuel indépendant exploité par Nour Chkair. Mon rôle est de vous guider à travers ses projets et son parcours sans jamais l'incarner."
+      }
+    },
+    {
+      "name": "acronym answered only when asked",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reply": "Nupa stands for Nour's Unique Portfolio Assistant, the independent AI guide designed to help you explore Nour's professional background and projects."
+      }
+    },
+    {
+      "name": "text request returns a presentation action",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "actions": [
+          "presentationStart",
+          "openProject",
+          "openProjectFlow",
+          "highlightElement"
+        ],
+        "reply": "Customer Acquisition is an AI-assisted sales and growth system built to help businesses solve a very familiar bottleneck: the gap between generic outreach and a prospect who actually understands the value of an offer. \n\nSales teams often waste significant time researching unsuitable prospects, managing fragmented data, and sending repetitive messages that fail to cut through the noise. This projec"
+      }
+    },
+    {
+      "name": "text request returns a visual action",
+      "pass": true,
+      "detail": {
+        "actions": [
+          {
+            "type": "presentationStart",
+            "projectId": "acquisition"
+          },
+          {
+            "type": "openProject",
+            "projectId": "acquisition"
+          },
+          {
+            "type": "openProjectFlow",
+            "projectId": "acquisition"
+          },
+          {
+            "type": "highlightElement"
+          }
+        ]
+      }
+    },
+    {
+      "name": "admin API remains authenticated",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "five-minute Live default remains configured",
+      "pass": true,
+      "detail": {
+        "liveSessionSeconds": 300
+      }
+    },
+    {
+      "name": "spending caps remain $1/day and $7 cumulative",
+      "pass": true,
+      "detail": {
+        "dailyCapUsdMicros": 1000000,
+        "cumulativeCapUsdMicros": 7000000,
+        "liveSessionSeconds": 300,
+        "maxLiveSessionSeconds": 600
+      }
+    },
+    {
+      "name": "Iapetus remains the configured production voice",
+      "pass": true,
+      "detail": {
+        "voice": "Iapetus"
+      }
+    },
+    {
+      "name": "external writes remain disabled",
+      "pass": true,
+      "detail": {
+        "googleWrites": false
+      }
+    },
+    {
+      "name": "Live spending control blocks below the five-minute reservation",
+      "pass": true,
+      "detail": {
+        "remainingUsdMicros": 71938,
+        "status": 402,
+        "code": "DAILY_BUDGET_EXHAUSTED"
+      }
+    },
+    {
+      "name": "production persona is Nupa",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "length": 3986,
+        "sha256": "3754d125495465a74c8ab2bd71ce2867c440b19acf4390d54ccc84e85aa16f0f"
+      }
+    },
+    {
+      "name": "production persona has one identity paragraph",
+      "pass": true,
+      "detail": {
+        "length": 3986
+      }
+    },
+    {
+      "name": "production persona preserves personality independence",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "production persona preserves grounding and conversation rules",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "conversation history remains accessible",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "messages": 8
+      }
+    }
+  ],
+  "notes": [
+    "No Live voice session was opened: the remaining daily budget is below the five-minute reservation and caps were not changed.",
+    "No CRM, email, Calendar, Google or external write was performed.",
+    "No beta key or administrator credential is included in this evidence."
+  ]
+}

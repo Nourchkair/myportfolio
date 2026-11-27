@@ -154,7 +154,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=9', import.meta.url).href;
+  link.href = new URL('./companion.css?v=10', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
