@@ -4,7 +4,7 @@
 **Scope:** `nourchkair.com`, Nupa production Worker (formerly AI Nour), D1, local admin, Google integrations, optional Resend
 **Purpose:** verify every material statement in the Privacy Policy and Terms of Use against actual code and configuration before publication.
 
-**Approval:** Nour approved the earlier release on 27 November 2026 under the former AI Nour name: eligibility is 18+, eligibility is combined with Terms/Privacy acceptance, Live sessions are 5 minutes, and voice errors distinguish budget, microphone, network, provider, session and disabled states. The portfolio remains available to everyone. The Nupa identity update preserves those provisions at version 1.2.
+**Approval:** Nour approved the earlier release on 27 November 2026 under the former AI Nour name: eligibility is 18+, eligibility is combined with Terms/Privacy acceptance, Live sessions are 5 minutes, and voice errors distinguish budget, microphone, network, provider, session and disabled states. The portfolio remains available to everyone. The Nupa identity update preserved those provisions at version 1.2; the public-access update publishes them at version 1.3.
 
 This is an engineering/privacy audit, not a legal opinion. Canadian counsel should review the final texts, and French counsel should review the French version, before public launch.
 
@@ -13,7 +13,6 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 | Data | Source | Stored where | Purpose | Actual retention | Deletion / access |
 | --- | --- | --- | --- | --- | --- |
 | Visual environment preference | Portfolio | Browser `localStorage` (`nour-os-scene`) | Remember scene | Until browser storage cleared | User clears storage |
-| Beta key | Visitor entry | Browser `sessionStorage`; SHA-256 hash and prefix in D1 `beta_testers` | Restricted beta access | Browser tab; server record until revoked/deleted | Admin revoke; manual D1 deletion |
 | Owner token | Generated in browser | Browser `localStorage`; SHA-256 hash in D1 session/CRM rows | Pseudonymous ownership | Browser until cleared; D1 depending on record | Clear browser; request deletion |
 | Session ID / locale / consent version | Browser and D1 | `localStorage`; D1 `sessions` | Conversation continuity, language, consent record | Rolling 7 days after last activity; current consent version with session | Session cleanup; manual deletion |
 | Text messages and replies | Visitor / Gemini | D1 `session_messages` | Conversation, recovery, quality | Deleted with expired session; explicit message delete added | Session cleanup; manual deletion |
@@ -50,31 +49,29 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 | CRM records kept as long as needed | No cleanup for contacts/inquiries/consents/bookings; manual deletion | Verified |
 | Cost/security records kept longer | No cleanup for `cost_events`, `live_tokens`, `admin_audit`, `action_ledger` | Verified; policy says retained longer |
 | No automated backup schedule | No scheduled backup job in code; only encrypted backup capability and synthetic round-trip test | Verified; policy states no active schedule |
-| Beta keys individually revocable | D1 `beta_testers.status`/`revoked_at`; auth checks active hash | Verified |
-| Beta key full value not stored server-side | Only SHA-256 hash and prefix stored | Verified |
 
 ## 3. Consent verification
 
 | Consent | Implementation | Status |
 | --- | --- | --- |
 | 18+ eligibility and Terms/Privacy before AI use | One Continue button confirms 18+ and Terms/Privacy acceptance; `CONSENT_VERSION=2026-11-27-v1.3`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
-| Server-side consent | When `BETA_ACCESS_REQUIRED=true`, `/api/session`, new `/api/chat` sessions and new Live sessions require a valid `age18`/terms/privacy consent object; test returned `CONSENT_REQUIRED` without it and `201` with it | Verified with temporary beta-gated Worker (12/12) |
+| Server-side consent | In public mode, `/api/session`, new `/api/chat` sessions and new Live sessions require a valid `age18`/terms/privacy consent object; test returned `CONSENT_REQUIRED` without it and `201` with it | Verified in the public-mode local Worker and production |
 | Existing sessions | `GET /api/session/:id`, chat, Live token/turn and tools reject stale or missing consent with `CONSENT_REQUIRED`; `POST /api/session/:id/consent` records the current version and timestamp without extending the session expiry | Verified with temporary beta-gated Worker |
 | Microphone consent | Inline assistant consent strip before `getUserMedia`; consent stored in `sessionStorage` for the tab; no microphone request occurs if cancelled | Verified in browser (cancel, budget, permission and missing-device paths) |
 | Contact information | `createInquiry` requires `store` and `contact` consent booleans and creates scoped consent rows | Verified server-side |
 | Email | Visitor email jobs require active `email` consent; expired consents are excluded | Verified code |
 | Calendar invitations | Guests are added only when active `email` consent exists | Verified code + synthetic production test |
 | Appointment booking | `createAppointment` now requires active `store` and `contact` consent | Verified code; existing CRM/lifecycle tests pass |
-| Consent withdrawal | Status/expiry checked; admin can revoke beta keys; user can clear local storage; manual deletion/withdrawal request process | Verified; self-service CRM consent withdrawal not exposed |
+| Consent withdrawal | Status/expiry checked; user can clear local storage; manual deletion/withdrawal request process | Verified; self-service CRM consent withdrawal not exposed |
 
 ## 4. Administrator access verification
 
 - Production admin runs locally on `127.0.0.1:8791`.
 - Google OAuth with allowlisted `ADMIN_EMAIL`, PKCE/state, signed HttpOnly session, 8-hour expiry, logout, reauthentication, sign-out-all/epoch revocation, CSRF origin checks, CSP/frame denial/no-store.
 - Worker admin APIs require a server-side bearer token (`ADMIN_TOKEN`); the token is not sent to the browser.
-- The administrator can read sessions and messages, CRM/inquiries/bookings, email job content/metadata, cost data, audit and ops events. The administrator cannot read plaintext beta keys (only prefix/hash).
+- The administrator can read sessions and messages, CRM/inquiries/bookings, email job content/metadata, cost data, audit and ops events. The administrator cannot read any plaintext legacy beta keys (only prefix/hash); beta keys are no longer required for public access.
 - There is no second administrator account. Cloudflare/Google personnel may process data under their own terms.
-- Admin actions such as flags/persona/beta keys are audited; ordinary page reads are not necessarily audited.
+- Admin actions such as flags, persona and legacy beta keys are audited; ordinary page reads are not necessarily audited.
 - No self-service CRM deletion UI; deletion is a manual operator action via D1/Sheet/Calendar.
 
 ## 5. Third-party processing verification
@@ -121,7 +118,7 @@ Current implementation:
 - No legal pop-up or consent modal appears when the portfolio opens; the assistant gate appears only after the visitor opens Nupa.
 - No console errors in the consent/microphone checks.
 - Local `/privacy` and `/terms` resolve through directory redirects to `/privacy/` and `/terms/` (200). Cloudflare Pages may apply its own directory redirect; the final page is publicly readable. After deployment, verify the exact OAuth-console URLs and follow redirects.
-- The daily-budget path shows the local reset time, the cumulative path explains the private-beta allowance, and microphone permission/missing-device paths are distinct. The budget path makes **zero** microphone calls. No “Mic error” label remains.
+- The daily-budget path shows the local reset time, the cumulative path explains the service allowance, and microphone permission/missing-device paths are distinct. The budget path makes **zero** microphone calls. No “Mic error” label remains.
 
 ## 7. Claim-by-claim policy audit
 
@@ -140,8 +137,8 @@ Current implementation:
 | Admin local/private access | Verified | 127.0.0.1, Google OAuth allowlist, signed session, bearer token. |
 | No automated backups | Verified | No scheduled backup; policy states this. |
 | Google Limited Use | Supported | Statement included; Google's own processing remains governed by Google. |
-| External writes disabled | Verified | `google_writes_enabled=false`, `ENABLE_CRM_WRITES=false`; beta key active. |
-| Public access disabled | Verified | `BETA_ACCESS_REQUIRED=true`; one active beta tester. |
+| External writes disabled | Verified | `google_writes_enabled=false`, `ENABLE_CRM_WRITES=false`; public access active. |
+| Public access enabled | Verified | `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; beta-key prompt removed; consent v1.3 still enforced. |
 | Five-minute Live sessions | Verified | Production default `LIVE_SESSION_SECONDS=300`; reservation `$0.125`; admin can restore up to 600 seconds. |
 | Voice error distinction | Verified | Daily budget, cumulative budget, microphone permission, missing device, rate limit, disabled, provider, network and expiry paths mapped; no raw provider/financial details shown. |
 
@@ -153,14 +150,14 @@ Current implementation:
 4. **Cost/audit retention:** `cost_events`, `live_tokens`, `admin_audit`, and `action_ledger` are not auto-expired. The policy says they may be retained longer for accounting/security. Consider documented maximum periods.
 5. **Google processing:** The policy cannot guarantee Google's retention or model-improvement behaviour. Do not add a "never used for training" claim about Google. If a paid Gemini tier with stronger data-processing terms is adopted, update the policy.
 6. **Microphone consent record:** Consent is stored in browser `sessionStorage`; it is not written to the server as a separate audit record. The policy only says the interface asks for microphone consent. If a server-side consent record is required, add one.
-7. **Age/consent enforcement:** New and existing production sessions are enforced when `BETA_ACCESS_REQUIRED=true`. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.3`.
+7. **Age/consent enforcement:** New and existing production sessions require the current consent object. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.3`.
 8. **Data residency:** D1 is ENAM; Google/Cloudflare may process globally. The policy discloses this and does not promise Canadian-only processing.
 9. **CRM Sheet deletion:** Removing a D1 row does not automatically remove the Sheet row. The operator must delete the mirror row. Document this in the deletion runbook.
 10. **OAuth token:** The current Testing refresh token expires in about 6.5 days. This is operational, not a privacy statement, but it must be resolved for a durable beta.
 11. **French review:** The French text should be reviewed by a native/legal reviewer for terminology and enforceability.
-12. **Billing status:** The production Gemini project is confirmed Free tier with no active Cloud Billing account. The paid-service DPA does not apply. Keep public AI disabled; do not submit personal/confidential information. Activating paid billing requires explicit approval, a payment method, and a prepaid balance (minimum $5 at the time of review).
-13. **EEA/UK:** Google requires Paid Services for API clients available in the EEA, Switzerland, or the UK. The private beta is restricted and public AI access is disabled; do not enable public access in those regions on unpaid quota.
-14. **Publication:** Version 1.1 of `/privacy/` and `/terms/` was published and returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and Nupa links use the trailing-slash URLs. Version 1.2 (Nupa identity) was published on 27 November 2026; both pages return 200 with English and French sections.
+12. **Billing status:** The production Gemini project is confirmed Free tier with no active Cloud Billing account. The paid-service DPA does not apply. Public access is enabled with daily/cumulative caps; Google’s unpaid-service terms still apply. Activating paid billing requires explicit approval, a payment method, and a prepaid balance (minimum $5 at the time of review).
+13. **EEA/UK:** Google requires Paid Services for API clients available in the EEA, Switzerland, or the UK. Public access is now enabled; before targeting those regions, the paid Gemini tier/DPA decision must be resolved.
+14. **Publication:** Version 1.1 and 1.2 were published historically. Version 1.3 (public access without a beta key) is published on 27 November 2026; both pages return 200 with English and French sections.
 
 ## 9. Approval record
 
@@ -179,18 +176,20 @@ Approved by Nour on **27 November 2026** with these amendments:
 - [x] Publish `/privacy/` and `/terms/`, verify both URLs, language sections and links.
 - [ ] Add the published URLs to the Google OAuth Console and complete verification/publishing; this remains the next manual action.
 - [x] Confirm current AI Studio billing tier: Free tier, no active Cloud Billing.
-- [ ] Decide whether to activate paid Gemini billing; do not enable public AI before that decision.
+- [ ] Decide whether to activate paid Gemini billing. Public access is enabled on the free tier with rate limits and spending caps.
 
 
-## 10. Nupa identity update (version 1.2)
+## 10. Nupa identity and public access (version 1.3)
 
-**Status:** deployed to the production private beta on 27 November 2026. Legal version 1.2 is published, consent version `2026-11-27-v1.3` is enforced, and the production persona is Nupa.
+**Status:** deployed publicly on 27 November 2026. Legal version 1.3 is published, consent version `2026-11-27-v1.3` is enforced, public access requires no beta key, and the production persona is Nupa.
+
+**Public-access approval:** Nour approved removing the beta-key gate and enabling public Nupa access on 27 November 2026.
 
 - The assistant is now **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour, not a digital version, twin, replica or AI representation of him, and it never impersonates him.
 - Nupa speaks about Nour in the third person and about itself in the first person. Its own opinions and conclusions are expressly distinguished from Nour's documented beliefs.
-- The Privacy Policy and Terms of Use are published at version **1.2**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.3`**, so existing sessions must re-accept before text, voice or tools.
-- No data practice, retention period, eligibility rule, third-party processor, spending cap or security control changed for the rename. The existing 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state and restricted private beta remain.
+- The Privacy Policy and Terms of Use are published at version **1.3**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.3`**, so existing sessions must re-accept before text, voice or tools.
+- No data practice, retention period, eligibility rule, third-party processor or security control changed for the rename. Public access removes the beta-key requirement while retaining the 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state, rate limits and spending caps.
 - The stored production persona override requires migration because changing source defaults alone does not update D1. `ai-nour/scripts/migrate-persona-nupa.mjs` performs a non-destructive identity replacement, preserves unrelated custom text, and supports `--self-test` and dry-run before `--apply`.
 - The Google Drive folder names, OAuth client identifiers, Worker/D1 names, API routes, environment variables, secrets, beta-key prefix and browser storage keys are intentionally unchanged to avoid destructive migration.
 
-**Pending:** deployment approval, publication of version 1.2, application of the production persona migration, and production verification.
+**Pending:** real-device microphone/Bluetooth/iOS acceptance and subjective conversational-quality review.

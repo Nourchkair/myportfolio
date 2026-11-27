@@ -1,0 +1,51 @@
+{
+  "generatedAt": "2026-11-27T18:51:10.059Z",
+  "url": "https://nourchkair.com/",
+  "passed": 4,
+  "failed": 0,
+  "total": 4,
+  "checks": [
+    {
+      "name": "public portfolio exposes Explore with Nupa without a query parameter",
+      "pass": true,
+      "detail": {
+        "aiChoice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
+        "panelHidden": true,
+        "consentHidden": true,
+        "keyGateVisible": true,
+        "introDone": false
+      }
+    },
+    {
+      "name": "public Nupa opens consent before chat",
+      "pass": true,
+      "detail": {
+        "modal": true,
+        "gateHidden": true,
+        "panelHidden": true,
+        "button": "Continue and agree"
+      }
+    },
+    {
+      "name": "public Continue opens chat without a key",
+      "pass": true,
+      "detail": {
+        "panelVisible": true,
+        "bodyVisible": true,
+        "keyGateHidden": true,
+        "keyStored": false,
+        "messages": [
+          "I am Nupa, an independent AI-powered portfolio guide operated by Nour Chkair. Think of this as a live, interactive, and personalized presentation of Nour's work, experience, and projects. \n\nYou are completely in the driver's seat: you can interrupt with questions, ask for deeper details on any project or career chapter, navigate independently, skip around, pause, or end whenever you like. \n\nWhat would you like to explore first \u2014 Nour's projects, his career journey, or how he approaches business and systems?"
+        ],
+        "consentVersion": "2026-11-27-v1.3"
+      }
+    },
+    {
+      "name": "public default flow has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

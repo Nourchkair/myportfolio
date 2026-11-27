@@ -124,4 +124,4 @@ Record for each device:
 - Subjective French pronunciation and latency notes.
 - Whether manual portfolio navigation always took priority over the assistant.
 - Which of the six visual states needs adjustment before final production CSS.
-- Whether the configured 5-minute voice limit is acceptable for private beta.
+- Whether the configured 5-minute voice limit is acceptable for the public deployment.

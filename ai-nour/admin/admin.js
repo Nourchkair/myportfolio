@@ -351,7 +351,7 @@ async function loadAudit() {
 async function loadBeta() {
   const data = await api('/api/admin/beta-testers');
   $('#beta-status').innerHTML = cards([
-    { label: 'Server validation', value: data.betaAccessRequired ? 'required' : 'local key', sub: 'private-beta credentials' },
+    { label: 'Access mode', value: data.publicAccess ? 'public' : data.betaAccessRequired ? 'required' : 'local key', sub: data.publicAccess ? 'no beta key required' : 'private-beta credentials' },
     { label: 'Active testers', value: String((data.testers || []).filter((item) => item.status === 'active').length), sub: `of ${data.testers?.length || 0} total` }
   ]);
   $('#beta-testers').innerHTML = table(
@@ -363,7 +363,7 @@ async function loadBeta() {
     ])
   );
   $$('#beta-testers button[data-revoke-beta]').forEach((button) => button.addEventListener('click', async () => {
-    if (!window.confirm(`Revoke beta key for this tester?`)) return;
+    if (!window.confirm(`Revoke legacy beta key for this tester?`)) return;
     await api(`/api/admin/beta-testers/${encodeURIComponent(button.dataset.revokeBeta)}/revoke`, { method: 'POST', body: '{}' });
     await loadBeta();
   }));
@@ -426,7 +426,7 @@ $('#create-beta').addEventListener('click', () => createBeta().catch((error) => 
 $('#copy-beta-key').addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText($('#beta-key').value);
-    $('#beta-result').textContent = 'Beta key copied.';
+    $('#beta-result').textContent = 'Legacy beta key copied.';
   } catch {
     $('#beta-key').select();
     $('#beta-result').textContent = 'Select and copy the key manually.';

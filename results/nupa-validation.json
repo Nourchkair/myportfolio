@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-27T08:29:00Z",
+  "generatedAt": "2026-11-27T18:57:00Z",
   "release": "Nupa identity update + V3 interactive presentation",
-  "status": "deployed to production; see results/nupa-production-validation.json",
+  "status": "deployed publicly; see results/nupa-production-validation.json",
   "validation": {
     "portfolioBuild": true,
     "portfolioValidation": {
@@ -9,11 +9,11 @@
       "failed": 0
     },
     "legalValidator": {
-      "passed": 64,
+      "passed": 66,
       "failed": 0
     },
     "unitTests": {
-      "passed": 72,
+      "passed": 73,
       "failed": 0,
       "identityRegressions": 5
     },
@@ -88,12 +88,12 @@
     "impersonatesNour": false
   },
   "legal": {
-    "privacyVersion": "1.2",
-    "termsVersion": "1.2",
+    "privacyVersion": "1.3",
+    "termsVersion": "1.3",
     "effectiveDate": "2026-11-27",
-    "consentVersion": "2026-11-27-v1.2",
-    "productionVersion": "1.1",
-    "published": false
+    "consentVersion": "2026-11-27-v1.3",
+    "publicAccess": true,
+    "betaKeyRequired": false
   },
   "preserved": [
     "ai-nour/ directory",
@@ -108,10 +108,8 @@
     "spending caps and restricted private beta"
   ],
   "notRun": [
-    "Production Nupa deployment",
-    "Production persona migration --apply",
-    "Real-device voice, Bluetooth and iOS testing",
-    "Real Gemini identity/voice conversation under the Nupa production persona",
-    "Google OAuth consent-screen brand rename"
+    "Real-device microphone, Bluetooth and iOS testing",
+    "Subjective conversational-quality scoring",
+    "Full production Live barge-in/real-device voice acceptance"
   ]
 }

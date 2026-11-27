@@ -2,12 +2,12 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths and technical identifiers remain unchanged.
 
-Status: **deployed to the production private beta and validated.** Public access remains disabled.
+Status: **deployed to the production Worker and validated.** Public access is enabled without a beta key; consent v1.3 remains mandatory.
 
 ## 1. Voice
 
 - Default Live voice is **Iapetus** (changed from Schedar on 27 November 2026), configured in `src/config.js`, `wrangler.toml`, and `wrangler.production.toml`.
-- Schedar was verified in the original V2 session. The current private-beta default is Iapetus; the same Live path and token configuration are used.
+- Schedar was verified in the original V2 session. The current default is Iapetus; the same Live path and token configuration are used.
 - No Voice Studio or extra voice interface was added.
 - Live prompting now asks for natural rhythm, varied sentence lengths, expressive emphasis, brief pauses and a conversational rather than narrated delivery.
 - Pronunciation guidance is included for Nour Chkair, Safiy, H2Ops, B.R.A.I.N., H2Ops Brain and MPN Capital Markets.
@@ -138,7 +138,7 @@ Additional evidence:
 - Portfolio validation: **261 checks**.
 - Secret scan: **429 files, 0 hits**.
 - Production voice config: **Iapetus**; production persona control updated to 3,606 characters.
-- Production beta key inventory: **1 active**, 3 revoked validation keys.
+- Production beta key inventory is legacy only; public access no longer requires a key.
 
 Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative, **$0.790668 USD** daily, no held reservations. External writes and Resend remain off.
 
@@ -152,7 +152,7 @@ Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative
 - Daily/cumulative spending limits, beta authentication and emergency shutdown unchanged.
 - External writes and automated email remain disabled.
 - No credentials exposed, rotated or regenerated.
-- Public access remains disabled.
+- Public access is enabled without a beta key; consent v1.3 remains mandatory.
 - Web research disabled until quota is available.
 
 ## 12. Remaining manual actions

@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-27T18:54:42.049Z",
+  "target": "https://api.nourchkair.com",
+  "passed": 7,
+  "failed": 0,
+  "total": 7,
+  "checks": [
+    {
+      "name": "public meta without key",
+      "pass": true
+    },
+    {
+      "name": "consent required for new public session",
+      "pass": true
+    },
+    {
+      "name": "public session with v1.3 consent",
+      "pass": true
+    },
+    {
+      "name": "legacy key is ignored in public mode",
+      "pass": true
+    },
+    {
+      "name": "admin bearer remains authenticated",
+      "pass": true
+    },
+    {
+      "name": "public access and private admin boundaries",
+      "pass": true
+    },
+    {
+      "name": "unauthenticated admin remains rejected",
+      "pass": true
+    }
+  ],
+  "security": {
+    "betaAccessRequired": false,
+    "publicAccess": true,
+    "adminEnabled": true
+  },
+  "limits": {
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "liveSessionSeconds": 300,
+    "maxLiveSessionSeconds": 600
+  },
+  "budget": {
+    "dailyUsdMicros": 1195141,
+    "cumulativeUsdMicros": 2092004,
+    "dailySpentUsdMicros": 1195141,
+    "cumulativeSpentUsdMicros": 2092004,
+    "heldLiveReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 1804859,
+    "cumulativeRemainingUsdMicros": 4907996,
+    "allowed": true
+  }
+}

@@ -50,7 +50,7 @@ Do not add: `consent_status` (derived from Consent), `notes` (unbounded personal
 | `created_at` | Datetime UTC | Yes | Record creation. |
 | `updated_at` | Datetime UTC | Yes | Last material change. |
 
-Do not add: `owner` (single operator in private beta), `notes`, duplicate contact fields, or a pipeline stage in this tab.
+Do not add: `owner` (single operator in the current deployment), `notes`, duplicate contact fields, or a pipeline stage in this tab.
 
 ## 3. Consent
 
@@ -111,7 +111,7 @@ Do not add: `owner`, `notes`, duplicate email/name, or a second Meet link histor
 
 Do not add: email subject/body copies, open/click tracking, marketing consent, or raw webhook payloads. Bodies remain in D1 only as long as needed for retry/diagnostics; the sheet stores metadata.
 
-## 6. Follow-ups (optional, not required for private beta)
+## 6. Follow-ups (optional, not required for the current deployment)
 
 Only create this tab if human follow-up is tracked in the Sheet. It is deliberately small.
 
@@ -133,7 +133,7 @@ Only create this tab if human follow-up is tracked in the Sheet. It is deliberat
 The following are **not** proposed for private beta because they add data collection or maintenance without a validated workflow:
 
 - **Pipeline/opportunity tab:** no multi-stage sales process is running; `Inquiries.status` covers the current workflow.
-- **Owner field:** the private beta has one operator; adding owners would duplicate identity data.
+- **Owner field:** the current deployment has one operator; adding owners would duplicate identity data.
 - **Free-text notes:** unbounded personal data with no retention control.
 - **Full email bodies or conversation transcripts:** already retained in D1 under a separate retention policy; duplicating them in Sheets increases exposure.
 - **Marketing consent/segments:** no marketing email is being sent.

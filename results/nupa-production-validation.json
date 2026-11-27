@@ -1,27 +1,27 @@
 {
-  "generatedAt": "2026-11-27T17:34:00Z",
+  "generatedAt": "2026-11-27T18:55:00Z",
   "status": "Nupa V3 private beta deployed",
-  "sourceCommit": "bcfa0e0",
+  "sourceCommit": "b1de5b2",
   "worker": {
-    "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
+    "version": "6f291984-9a00-4585-a6a5-68e4e6e3fcd7",
     "url": "https://api.nourchkair.com",
     "health": "ok",
     "d1": true
   },
   "pages": {
-    "deploymentId": "646d8b2c-e735-4c0f-ad0f-9e6c494a4773",
+    "deploymentId": "848ef7e8-13bf-4682-9c72-45abb73f2367",
     "url": "https://nourchkair.com",
-    "preview": "https://646d8b2c.nourchkair.pages.dev"
+    "preview": "https://848ef7e8.nourchkair.pages.dev"
   },
   "legal": {
-    "privacyVersion": "1.2",
-    "termsVersion": "1.2",
+    "privacyVersion": "1.3",
+    "termsVersion": "1.3",
     "published": true,
     "english": true,
     "french": true,
-    "note": "Cloudflare email obfuscation makes full-page hashes non-deterministic; content/version checks are used instead."
+    "noBetaKey": true
   },
-  "consentVersion": "2026-11-27-v1.2",
+  "consentVersion": "2026-11-27-v1.3",
   "persona": {
     "length": 3986,
     "sha256": "3754d125495465a74c8ab2bd71ce2867c440b19acf4390d54ccc84e85aa16f0f",
@@ -48,15 +48,15 @@
     ]
   },
   "budget": {
-    "dailyUsdMicros": 1192660,
-    "cumulativeUsdMicros": 2089523,
-    "dailyRemainingUsdMicros": 1807340,
+    "dailyUsdMicros": 1195141,
+    "cumulativeUsdMicros": 2092004,
+    "dailyRemainingUsdMicros": 1804859,
     "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000
   },
   "checks": {
     "productionStatic": {
-      "passed": 6,
+      "passed": 5,
       "failed": 0,
       "evidence": "results/nupa-production-static.json"
     },
@@ -83,22 +83,23 @@
       "evidence": "results/nupa-production-admin.json"
     },
     "localRegression": {
-      "unit": 72,
+      "unit": 73,
       "api": 23,
       "crm": 14,
       "consent": 12,
       "lifecycle": 28,
       "adminAuth": 16,
       "liveBudget": 9,
-      "legal": 64,
+      "legal": 66,
       "portfolio": 261
     },
     "finalState": {
       "evidence": "results/nupa-production-final-state.json",
       "health": 200,
       "personaLength": 3986,
-      "legalVersion": "1.2",
-      "dailyRemainingUsdMicros": 1807340
+      "legalVersion": "1.3",
+      "dailyRemainingUsdMicros": 1804859,
+      "publicAccess": true
     },
     "productionLive": {
       "passed": 6,
@@ -110,6 +111,16 @@
       "passed": 11,
       "failed": 0,
       "evidence": "results/nupa-production-intro.json"
+    },
+    "productionPublicApi": {
+      "passed": 7,
+      "failed": 0,
+      "evidence": "results/nupa-production-public-api.json"
+    },
+    "productionPublicDefault": {
+      "passed": 4,
+      "failed": 0,
+      "evidence": "results/nupa-production-public-default.json"
     }
   },
   "notRun": [
@@ -124,5 +135,6 @@
     "approvedBy": "Nour",
     "reason": "Production acceptance testing",
     "workerVersion": "28bcef6b-4260-495e-94bc-4fc7e90d203a"
-  }
+  },
+  "publicAccess": true
 }

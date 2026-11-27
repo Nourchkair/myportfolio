@@ -7,7 +7,7 @@ Status: **Resend Free approved as the preferred transactional provider, subject 
 | Limit | Free plan | Implication |
 | --- | --- | --- |
 | Fixed price | **$0/month**, no card, no trial | Keeps the $0 fixed-cost constraint. |
-| Transactional volume | **3,000 emails/month** | Enough for private beta. |
+| Transactional volume | **3,000 emails/month** | Enough for the current deployment. |
 | Daily limit | **100 emails/day**, UTC calendar day, sent + received combined | Hard stop; Resend returns `429 daily_quota_exceeded` and does not queue. |
 | Recipients | Each To/Cc/Bcc address counts as one email | Keep one recipient per job; no bulk recipient lists. |
 | Domains | 3 verified domains | One is enough: `mail.nourchkair.com`. |
@@ -137,7 +137,7 @@ Visitor email requires an active `email` consent scope. Internal notifications g
 
 ## Private-beta fallback
 
-Private beta does not require Resend credentials. With `EMAIL_SEND_ENABLED=false`, the Worker records every email job and processes it as `dry_run`; no Resend key, domain, or webhook is needed. The admin can inspect the queue, retries, and statuses. Enabling real delivery is a separate approved step.
+The current deployment does not require Resend credentials. With `EMAIL_SEND_ENABLED=false`, the Worker records every email job and processes it as `dry_run`; no Resend key, domain, or webhook is needed. The admin can inspect the queue, retries, and statuses. Enabling real delivery is a separate approved step.
 
 ## Approval gates
 

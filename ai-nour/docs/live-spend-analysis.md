@@ -1,6 +1,6 @@
 # Live voice spending and exposure analysis — Phase 4
 
-Status: **5-minute sessions are the current private-beta default (27 November 2026); 10 minutes remains the admin-configurable maximum. No WebSocket proxy.** The provider-issued ephemeral token expiry and the prepaid reservation are the enforcement points, not a frontend timer.
+Status: **5-minute sessions are the current public deployment default (27 November 2026); 10 minutes remains the admin-configurable maximum. No WebSocket proxy.** The provider-issued ephemeral token expiry and the prepaid reservation are the enforcement points, not a frontend timer.
 
 ## Current controls
 
@@ -83,4 +83,4 @@ A server-side WebSocket proxy is **not implemented**.
 | Cost | $0 fixed; Gemini usage only | Worker/WebSocket runtime can add CPU/duration or Durable Object cost |
 | Bilingual/interruption/recovery | Already working | Must be reimplemented and retested |
 
-With a 10-minute token expiry and a reservation above the modeled maximum, the direct architecture is adequate for private beta. Revisit a proxy if sessions need to exceed 10 minutes, the gate becomes public, abuse appears, exact per-second metering is required, or a zero-fixed-cost WebSocket path can preserve tool calls, interruptions, bilingual transcription, and recovery.
+With a 10-minute token expiry and a reservation above the modeled maximum, the direct architecture is adequate for the current deployment. Revisit a proxy if sessions need to exceed 10 minutes, abuse appears, exact per-second metering is required, or a zero-fixed-cost WebSocket path can preserve tool calls, interruptions, bilingual transcription, and recovery.

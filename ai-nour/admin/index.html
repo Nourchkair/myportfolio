@@ -15,7 +15,7 @@
     <nav>
       <button data-tab="overview" class="active">Overview</button>
       <button data-tab="controls">Controls</button>
-      <button data-tab="beta">Private beta</button>
+      <button data-tab="beta">Legacy keys</button>
       <button data-tab="persona">Personality</button>
       <button data-tab="cost">Usage &amp; cost</button>
       <button data-tab="sessions">Sessions</button>
@@ -65,12 +65,13 @@
     </section>
 
     <section id="tab-beta" class="panel hidden">
-      <h2>Private beta access</h2>
+      <h2>Legacy beta access</h2>
+      <p class="muted">Beta keys are no longer required for public Nupa access. These records are retained for history and explicit revocation only.</p>
       <p class="muted">Each tester gets a unique, server-validated key. Only a hash is stored; revoking a key takes effect immediately.</p>
       <div id="beta-status" class="cards"></div>
       <div class="row">
         <input id="beta-label" placeholder="Tester name or label">
-        <button id="create-beta">Create beta key</button>
+        <button id="create-beta">Create legacy key</button>
       </div>
       <p id="beta-result" class="muted"></p>
       <div id="beta-key-wrap" class="block" hidden>
@@ -80,7 +81,7 @@
           <button id="copy-beta-key" class="secondary">Copy</button>
         </div>
       </div>
-      <h3>Beta testers</h3>
+      <h3>Legacy beta testers</h3>
       <div id="beta-testers" class="table-wrap"></div>
     </section>
 
@@ -171,6 +172,6 @@
       <div id="ops-list" class="table-wrap"></div>
     </section>
   </main>
-  <script type="module" src="/admin.js"></script>
+  <script type="module" src="/admin.js?v=2"></script>
 </body>
 </html>

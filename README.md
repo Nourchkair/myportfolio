@@ -136,7 +136,7 @@ Both run the build first, then validate data invariants, route canonicalization,
 
 ## Nupa (formerly AI Nour)
 
-Nupa is implemented in the existing `ai-nour/` directory (technical identifiers are intentionally unchanged) and mounts only with `?ainour=dev` or `?ainour=1`; the default portfolio and reading view remain assistant-free. The Phase 4 private-beta candidate, acceptance checklist, approval packages, and validation are documented in `docs/ai-nour-phase4.md`.
+Nupa is implemented in the existing `ai-nour/` directory (technical identifiers are intentionally unchanged) and is enabled by default on the public portfolio. Local development can still use `?ainour=dev`; the reading view remains assistant-free. The Phase 4 private-beta candidate, acceptance checklist, approval packages, and validation are documented in `docs/ai-nour-phase4.md`.
 
 ## Deliberately out of scope for the default portfolio
 

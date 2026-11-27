@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-11-27T08:38:21.477Z",
-  "passed": 6,
+  "generatedAt": "2026-11-27T18:54:51.096Z",
+  "passed": 5,
   "failed": 0,
-  "total": 6,
+  "total": 5,
   "checks": [
     {
-      "name": "Privacy v1.2 published",
+      "name": "Privacy v1.3 published",
       "pass": true
     },
     {
-      "name": "Terms v1.2 published",
+      "name": "Terms v1.3 published",
       "pass": true
     },
     {
@@ -17,33 +17,18 @@
       "pass": true
     },
     {
-      "name": "Public portfolio has no assistant by default",
+      "name": "Public home includes Explore with Nupa",
       "pass": true
     },
     {
-      "name": "Beta entry exposes Explore with Nupa",
-      "pass": true
-    },
-    {
-      "name": "Unauthenticated meta and admin APIs are rejected",
+      "name": "No beta-key UI on public home",
       "pass": true
     }
   ],
-  "evidence": {
-    "privacy": {
-      "status": 200,
-      "version": "1.2",
-      "english": true,
-      "french": true
-    },
-    "terms": {
-      "status": 200,
-      "version": "1.2",
-      "english": true,
-      "french": true
-    },
-    "unauthMeta": 401,
-    "unauthAdmin": 401,
-    "note": "Response hashes are intentionally omitted because Cloudflare email obfuscation randomizes protected email markup on each request."
+  "legal": {
+    "privacyVersion": "1.3",
+    "termsVersion": "1.3",
+    "english": true,
+    "french": true
   }
 }

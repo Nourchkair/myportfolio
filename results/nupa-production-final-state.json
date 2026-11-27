@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T17:34:00Z",
+  "generatedAt": "2026-11-27T18:55:00Z",
   "health": {
     "status": 200,
     "ok": true,
@@ -12,19 +12,20 @@
     "time": "2026-11-27T16:04:07.741Z"
   },
   "worker": {
-    "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
+    "version": "6f291984-9a00-4585-a6a5-68e4e6e3fcd7",
     "environment": "production"
   },
   "pages": {
-    "deploymentId": "646d8b2c-e735-4c0f-ad0f-9e6c494a4773",
-    "source": "bcfa0e0"
+    "deploymentId": "848ef7e8-13bf-4682-9c72-45abb73f2367",
+    "source": "b1de5b2"
   },
   "flags": {
     "assistant_enabled": true,
     "text_enabled": true,
     "live_enabled": true,
     "prototype_enabled": true,
-    "google_writes_enabled": false
+    "google_writes_enabled": false,
+    "public_access": true
   },
   "models": {
     "text": "gemini-flash-lite-latest",
@@ -38,15 +39,15 @@
     "maxLiveSessionSeconds": 600
   },
   "budget": {
-    "dailyUsdMicros": 1192660,
-    "cumulativeUsdMicros": 2089523,
-    "dailySpentUsdMicros": 1192660,
-    "cumulativeSpentUsdMicros": 2089523,
+    "dailyUsdMicros": 1195141,
+    "cumulativeUsdMicros": 2092004,
+    "dailySpentUsdMicros": 1195141,
+    "cumulativeSpentUsdMicros": 2092004,
     "heldLiveReservationsUsdMicros": 0,
     "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 1807340,
-    "cumulativeRemainingUsdMicros": 4910477,
+    "dailyRemainingUsdMicros": 1804859,
+    "cumulativeRemainingUsdMicros": 4907996,
     "allowed": true
   },
   "persona": {
@@ -57,8 +58,8 @@
     "personalityIndependence": true
   },
   "legal": {
-    "privacyVersion": "1.2",
-    "termsVersion": "1.2",
+    "privacyVersion": "1.3",
+    "termsVersion": "1.3",
     "privacyNupa": 35,
     "termsNupa": 51,
     "aiNour": false,

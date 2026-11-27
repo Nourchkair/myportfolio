@@ -53,7 +53,7 @@ Browser (127.0.0.1:8791)
 | Knowledge | Published overrides are editable/deletable and are appended to text retrieval immediately; drafts stay out of retrieval. |
 | Limits | The dashboard can lower daily/cumulative spend caps and set Live duration (60–600s) within the deployment maxima. |
 | CRM sync | The dashboard can run an idempotent D1→Google Sheet sync. It refuses tabs whose headers do not match the approved schema and records the result in ops events. |
-| Beta access | The dashboard can create, list, and revoke individually hashed beta keys. Revocation takes effect on the next request. |
+| Legacy beta access | The dashboard can create, list, and revoke individually hashed legacy beta keys. Public access no longer requires them; revocation still takes effect if beta mode is restored. |
 | Restart | Stateless signed cookies remain valid across a restart only if the secret and epoch are unchanged. Rotate the secret for a durable emergency revocation. |
 
 ## Browser and transport protections
@@ -94,7 +94,7 @@ Test mode: local admin server + mock Worker + a test-only signed session. The re
 
 | Option | Fixed cost | Status |
 | --- | --- | --- |
-| Keep admin local/private (VPN or approved tunnel) | $0 | Recommended for private beta |
+| Keep admin local/private (VPN or approved tunnel) | $0 | Recommended |
 | Private hostname + Cloudflare Access | $0 on Free, but introduces a service the user deferred | Not implemented; requires approval |
 | Public admin hostname without Access | $0 but higher risk | Not recommended |
 | Paid auth provider | >$0 | Not approved |

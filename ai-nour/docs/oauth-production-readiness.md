@@ -23,7 +23,7 @@ Status: **production Worker deployed with the existing development OAuth credent
   - `http://localhost:8787/oauth/google/callback` (local operational helper)
 - Operational refresh token is stored server-side in `.dev.vars`; it never reaches the browser.
 - Admin login uses a separate OAuth flow with basic `openid`, `email`, `profile` scopes and a signed HttpOnly session cookie.
-- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.2 (Nupa identity, effective 27 November 2026) is published and served. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
+- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.3 (public access without a beta key, effective 27 November 2026) is published and served. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
 
 ## 2. Separate the two authorizations
 
@@ -92,7 +92,7 @@ Google issues a **7-day refresh token** to an External app in Testing, unless th
 Resolution for production:
 
 - Publish the app and complete sensitive-scope verification, **or**
-- Keep the prototype in Testing and accept weekly reauthorization (not acceptable for private beta operations), **or**
+- Keep the prototype in Testing and accept weekly reauthorization (not acceptable for public operations), **or**
 - Use an Internal app only if Nour operates through a Google Workspace organization that can own the app (not the current assumption).
 
 Admin login uses only basic identity scopes and no refresh token, so its 7-day operational-token issue does not apply; it still needs a production-quality sign-in host and published brand for user trust.
@@ -140,12 +140,12 @@ Current facts, checked 26 November 2026:
 
 Implication for Nupa:
 
-- The current private beta uses direct Workspace REST APIs for Sheets, Calendar, and Drive. That is acceptable for the private-beta window before **1 February 2027**.
+- The current public deployment uses direct Workspace REST APIs for Sheets, Calendar, and Drive. That is acceptable before **1 February 2027**.
 - A production launch that continues after that date needs either:
   1. A Google Workspace MCP migration for agent access, with an agentic OAuth client and human confirmation for sensitive actions; or
   2. A documented Google-approved architecture that is not classified as an agent accessing Workspace data.
 - Resend avoids the Gmail send policy entirely. Do not add Gmail send to the autonomous path.
-- This is a **post-February 2027 launch blocker**, not a blocker for the current private beta.
+- This is a **post-February 2027 requirement** for continued agent access.
 
 ## 7. Published privacy and terms
 
@@ -154,7 +154,7 @@ Approved and published on 27 November 2026:
 - `https://nourchkair.com/privacy/`
 - `https://nourchkair.com/terms/`
 
-Version 1.2 is published, English and French, effective 27 November 2026. It updates the assistant identity to Nupa without changing data practices, retention, eligibility or third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
+Version 1.3 is published, English and French, effective 27 November 2026. It documents public access without a beta key while keeping the same data practices, retention, eligibility and third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
 
 Operational facts reflected in the policies:
 
