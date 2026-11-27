@@ -1,0 +1,93 @@
+{
+  "generatedAt": "2026-11-27T08:39:06.082Z",
+  "status": "Nupa V3 private beta deployed",
+  "sourceCommit": "afe2c43",
+  "worker": {
+    "version": "bffabd0f-d1ca-4663-a897-b42ea9e7b08c",
+    "url": "https://api.nourchkair.com",
+    "health": "ok",
+    "d1": true
+  },
+  "pages": {
+    "deploymentId": "93ce9423-261b-480c-98dd-a1aad6925234",
+    "url": "https://nourchkair.com",
+    "preview": "https://93ce9423.nourchkair.pages.dev"
+  },
+  "legal": {
+    "privacyVersion": "1.2",
+    "termsVersion": "1.2",
+    "privacySha256": "9b70f2b9e803603815df03a447192d9e25f27e2080b6f3b52d97484a1c5f0b97",
+    "termsSha256": "029178b11623f42a8811ebfd227a98e7fc2ec873cc70b6f506b37f15a849c0b5"
+  },
+  "consentVersion": "2026-11-27-v1.2",
+  "persona": {
+    "length": 3986,
+    "sha256": "3754d125495465a74c8ab2bd71ce2867c440b19acf4390d54ccc84e85aa16f0f",
+    "identityParagraphs": 1,
+    "legacyNames": 0,
+    "personalityIndependence": true
+  },
+  "migration": {
+    "d1_0006": "applied",
+    "persona": "applied"
+  },
+  "voice": {
+    "configured": "Iapetus",
+    "liveSessionSeconds": 300,
+    "maxLiveSessionSeconds": 600,
+    "actualProductionVoiceSession": "not run"
+  },
+  "budget": {
+    "dailyUsdMicros": 942660,
+    "cumulativeUsdMicros": 1839523,
+    "dailyRemainingUsdMicros": 57340,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000
+  },
+  "checks": {
+    "productionStatic": {
+      "passed": 6,
+      "failed": 0,
+      "evidence": "results/nupa-production-static.json"
+    },
+    "productionApi": {
+      "passed": 21,
+      "failed": 0,
+      "evidence": "results/nupa-production-api.json"
+    },
+    "productionBrowser": {
+      "passed": 16,
+      "failed": 1,
+      "total": 17,
+      "evidence": "results/nupa-production-browser.json",
+      "note": "The one failed assertion expected a highlight/cursor during the 7-second observation window of a real-model presentation run. The direct production visual test independently verified highlighting, cursor, spotlight, workflow tracing and cleanup."
+    },
+    "productionVisual": {
+      "passed": 6,
+      "failed": 0,
+      "evidence": "results/nupa-production-visual.json"
+    },
+    "productionAdmin": {
+      "passed": 1,
+      "failed": 0,
+      "evidence": "results/nupa-production-admin.json"
+    },
+    "localRegression": {
+      "unit": 72,
+      "api": 23,
+      "crm": 14,
+      "consent": 12,
+      "lifecycle": 28,
+      "adminAuth": 16,
+      "liveBudget": 9,
+      "legal": 63,
+      "portfolio": 261
+    }
+  },
+  "notRun": [
+    "Real production Live voice identity and speech/visual synchronization: remaining daily budget $0.05734 is below the $0.125 five-minute reservation; caps were not changed.",
+    "Real-device microphone/Bluetooth/iOS acceptance.",
+    "Subjective conversational-quality scoring."
+  ],
+  "rollback": "ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md"
+}

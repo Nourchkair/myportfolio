@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production private beta
 
-Status: **production backend is deployed under the former AI Nour identity with legal version 1.1. The Nupa identity update, V3 presentation layer and legal version 1.2 are implemented and validated locally but are not deployed. Public/unrestricted AI access remains disabled.**
+Status: **Nupa V3 is deployed to the production private beta. Legal version 1.2 is published, consent `2026-11-27-v1.2` is enforced, and the production persona is Nupa. Public/unrestricted AI access remains disabled.**
 
 ## 1. Live endpoints
 
@@ -30,7 +30,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release) |
+| Worker version | `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3 release) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -51,7 +51,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 ## 3b. Conversational V2
 
 - Live voice: **Iapetus** (production Worker updated and verified in `/api/meta`).
-- Persona: source defaults now define Nupa. Production `persona_instruction` still contains the former AI Nour override and must be migrated separately with `scripts/migrate-persona-nupa.mjs` after deployment approval.
+- Persona: source defaults and the production `persona_instruction` both define Nupa. The production persona is 3,986 characters, has one identity paragraph, and preserves the existing character, grounding and conversation instructions.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
 - Presentation controls: start, step, pause, resume and end; manual navigation cancels the presentation.
@@ -61,7 +61,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 ## 3c. Legal pages, consent and voice policy
 
-- Production serves bilingual Privacy Policy and Terms of Use version 1.1 at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.2 (Nupa identity) is prepared locally and is published only with deployment approval.
+- Production serves bilingual Privacy Policy and Terms of Use version 1.2 at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.2` before reading, chat, Live voice or tools.
@@ -69,12 +69,12 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 
-## 3d. Nupa identity release (pending approval)
+## 3d. Nupa identity release (deployed)
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
-- Legal version **1.2** and consent **`2026-11-27-v1.2`** require existing sessions to re-accept. Production remains on version 1.1 and `2026-11-27-v1.1` until deployment.
-- The V3 presentation layer, Nupa branding and identity regression tests are validated locally. Do not push or deploy before explicit approval.
-- Deploy the Worker and static site, then run `node scripts/migrate-persona-nupa.mjs` as a dry run. Apply with `--apply` only after confirming the diff and preserving the prior persona for rollback.
+- Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
+- Worker `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` and Pages deployment `93ce9423-261b-480c-98dd-a1aad6925234` (source `afe2c43`) are live.
+- D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
 ## 4. Administration
@@ -141,11 +141,15 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
+- Current Worker version: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3)
+- Previous production Worker: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Before applying the Nupa persona migration, capture the current value from `GET /api/admin/persona`; restoring that text is the persona rollback.
+- Static/legal rollback: Pages deployment `d3dd93bb-2bf5-4c60-a6ff-87792958a27c` (source `868b606`) or redeploy that commit.
+- Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
+- D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
+- Safe notes: rolling back the Worker does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Full details are in `ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md`.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
 ```bash
@@ -187,16 +191,21 @@ npm run deploy
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
-| Nupa legal validator (v1.2 local) | 63/63 | `npm run validate:legal` |
-| Nupa opening browser | 9/9 | `results/nupa-v3-opening-browser.json` |
-| Nupa presentation browser | 22/22 | `results/nupa-v3-presentation-browser.json` |
-| Nupa identity in text, EN/FR | 2/2 | `results/nupa-v3-chat.json` |
-| Consolidated local Nupa evidence | all pass | `results/nupa-validation.json` |
+| Nupa legal validator | 63/63 | `npm run validate:legal` |
+| Nupa opening browser (local mock) | 9/9 | `results/nupa-v3-opening-browser.json` |
+| Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
+| Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
+| Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |
+| Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
+| Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |
+| Production Nupa visual layer | 6/6 | `results/nupa-production-visual.json` |
+| Production admin startup | 1/1 | `results/nupa-production-admin.json` |
+| Consolidated production evidence | see record | `results/nupa-production-validation.json` |
 | Consent integration | 12/12 | `results/consent-tests.json` |
 | Live budget at 5 minutes | 9/9 | `results/live-budget-tests.json` |
 | Secret scan (current tree) | 7 credential patterns, 0 hits | `results/nupa-validation.json` |
 
-Earlier production live browser check: `?ainour=beta` pill, gate, grounded reply, zero console errors; plain `https://nourchkair.com` showed no AI pill or panel. The Nupa rows above are local mock-provider validation; a production Nupa browser/model check follows deployment.
+Production Nupa checks were run against `https://nourchkair.com` and `https://api.nourchkair.com` with the primary beta key. The browser run passed 16/17; the one failed assertion expected a highlight/cursor within a fixed observation window of a non-deterministic real-model presentation turn. The separate production visual test verified highlighting, cursor, spotlight, workflow tracing and cleanup at 6/6.
 
 ## 12. Remaining manual action
 

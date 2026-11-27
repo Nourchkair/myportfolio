@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-11-27T08:38:21.477Z",
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "checks": [
+    {
+      "name": "Privacy v1.2 published",
+      "pass": true
+    },
+    {
+      "name": "Terms v1.2 published",
+      "pass": true
+    },
+    {
+      "name": "English and French legal sections",
+      "pass": true
+    },
+    {
+      "name": "Public portfolio has no assistant by default",
+      "pass": true
+    },
+    {
+      "name": "Beta entry exposes Explore with Nupa",
+      "pass": true
+    },
+    {
+      "name": "Unauthenticated meta and admin APIs are rejected",
+      "pass": true
+    }
+  ],
+  "evidence": {
+    "privacy": {
+      "status": 200,
+      "version": "1.2",
+      "sha256": "3add16f213ccc50780e618e7cbef85a959d998c250e88d0bfcdf0c71e154d4ba"
+    },
+    "terms": {
+      "status": 200,
+      "version": "1.2",
+      "sha256": "66305b947cec5ba9c6f3dcd95a6793e7f8720948390d48ebcda9069a1bc1075d"
+    },
+    "unauthMeta": 401,
+    "unauthAdmin": 401
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "generatedAt": "2026-11-27T08:38:33.792Z",
+  "adminServer": "http://127.0.0.1:8791",
+  "status": 302,
+  "location": "/auth/google/start",
+  "cacheControl": "no-store",
+  "xfo": "DENY",
+  "csp": true,
+  "passed": 1,
+  "failed": 0,
+  "total": 1,
+  "checks": [
+    {
+      "name": "Production-connected admin starts and redirects unauthenticated visitors to Google sign-in",
+      "pass": true
+    }
+  ]
+}

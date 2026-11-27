@@ -168,7 +168,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
 - `../docs/ai-nour-v2-conversational.md` — Nupa V2 personality, grounding, visitor intelligence, presentations and quality results.
 - `../docs/ai-nour-v3-presentation.md` — Nupa V3 target registry, highlights, cursor, workflow tracing, presentation orchestration, tests and limitations.
-- `../privacy/index.html` and `../terms/index.html` — bilingual legal pages (version 1.2, 18+ for Nupa); version 1.1 remains production until deployment approval.
+- `../privacy/index.html` and `../terms/index.html` — bilingual legal pages (version 1.2, 18+ for Nupa; published 27 November 2026).
 - `../docs/legal-data-audit.md` — data, retention, deletion, admin, third-party and Gemini claim audit.
 - `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
 

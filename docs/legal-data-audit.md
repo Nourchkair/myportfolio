@@ -160,7 +160,7 @@ Current implementation:
 11. **French review:** The French text should be reviewed by a native/legal reviewer for terminology and enforceability.
 12. **Billing status:** The production Gemini project is confirmed Free tier with no active Cloud Billing account. The paid-service DPA does not apply. Keep public AI disabled; do not submit personal/confidential information. Activating paid billing requires explicit approval, a payment method, and a prepaid balance (minimum $5 at the time of review).
 13. **EEA/UK:** Google requires Paid Services for API clients available in the EEA, Switzerland, or the UK. The private beta is restricted and public AI access is disabled; do not enable public access in those regions on unpaid quota.
-14. **Publication:** Version 1.1 of `/privacy/` and `/terms/` was published and returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and Nupa links use the trailing-slash URLs. Version 1.2 (Nupa identity) is prepared locally but remains unpublished until deployment approval; production still serves version 1.1.
+14. **Publication:** Version 1.1 of `/privacy/` and `/terms/` was published and returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and Nupa links use the trailing-slash URLs. Version 1.2 (Nupa identity) was published on 27 November 2026; both pages return 200 with English and French sections.
 
 ## 9. Approval record
 
@@ -184,11 +184,11 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 10. Nupa identity update (version 1.2)
 
-**Status:** implemented and validated locally; not deployed. Production remains on version 1.1 and the former AI Nour persona until approval.
+**Status:** deployed to the production private beta on 27 November 2026. Legal version 1.2 is published, consent version `2026-11-27-v1.2` is enforced, and the production persona is Nupa.
 
 - The assistant is now **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour, not a digital version, twin, replica or AI representation of him, and it never impersonates him.
 - Nupa speaks about Nour in the third person and about itself in the first person. Its own opinions and conclusions are expressly distinguished from Nour's documented beliefs.
-- The Privacy Policy and Terms of Use are prepared at version **1.2**, effective **27 November 2026**, in English and French; they are not published until deployment approval. The consent version is **`2026-11-27-v1.2`**, so existing sessions must re-accept before text, voice or tools.
+- The Privacy Policy and Terms of Use are published at version **1.2**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.2`**, so existing sessions must re-accept before text, voice or tools.
 - No data practice, retention period, eligibility rule, third-party processor, spending cap or security control changed for the rename. The existing 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state and restricted private beta remain.
 - The stored production persona override requires migration because changing source defaults alone does not update D1. `ai-nour/scripts/migrate-persona-nupa.mjs` performs a non-destructive identity replacement, preserves unrelated custom text, and supports `--self-test` and dry-run before `--apply`.
 - The Google Drive folder names, OAuth client identifiers, Worker/D1 names, API routes, environment variables, secrets, beta-key prefix and browser storage keys are intentionally unchanged to avoid destructive migration.

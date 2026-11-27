@@ -1,0 +1,331 @@
+{
+  "generatedAt": "2026-11-27T08:38:01.949Z",
+  "url": "https://nourchkair.com/?ainour=beta",
+  "passed": 16,
+  "failed": 1,
+  "total": 17,
+  "checks": [
+    {
+      "name": "public portfolio remains assistant-free by default",
+      "pass": true,
+      "detail": {
+        "pill": false,
+        "panel": false,
+        "independent": "Explore independently \u2192",
+        "aiChoice": "Explore with Nupa \u2726",
+        "title": "Nour Chkair \u2014 Business Strategy, Sales & Applied AI"
+      }
+    },
+    {
+      "name": "Explore with Nupa is available on the beta entry",
+      "pass": true,
+      "detail": {
+        "choice": "Explore with Nupa \u2726",
+        "note": "Browsing is always available. Nupa is optional.",
+        "pill": "Nupa",
+        "tagline": "Your intelligent portfolio companion."
+      }
+    },
+    {
+      "name": "legal v1.2 consent gate identifies Nupa as independent",
+      "pass": true,
+      "detail": {
+        "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice lat"
+      }
+    },
+    {
+      "name": "consent links point to published v1.2 policies",
+      "pass": true,
+      "detail": [
+        "/terms/",
+        "/privacy/"
+      ]
+    },
+    {
+      "name": "v1.2 consent is stored and the session opens",
+      "pass": true,
+      "detail": {
+        "consentVersion": "2026-11-27-v1.2",
+        "bodyVisible": true,
+        "gateHidden": true
+      }
+    },
+    {
+      "name": "Nupa introduces itself after authorization",
+      "pass": true,
+      "detail": {
+        "messages": [
+          "I am Nupa, Nour's independent AI portfolio guide. Think of this as a live, interactive walkthrough of Nour's work across sales, business systems, and applied AI. \n\nWe can move at whatever pace fits you. You can interrupt with questions, dive deeper into a specific project, skip around, pause, or take the wheel and navigate on your own at any point. \n\nWhat would you like to explore first? We can look at one of his projects, walk through his career journey, or examine how he combines commercial strategy with applied AI."
+        ]
+      }
+    },
+    {
+      "name": "production English text identity is independent Nupa",
+      "pass": true,
+      "detail": {
+        "reply": "I am Nupa, an independent AI-powered portfolio guide operated by Nour Chkair. I am not Nour, and I do not impersonate him."
+      }
+    },
+    {
+      "name": "production presentation opens with synchronized text narration and visuals",
+      "pass": true,
+      "detail": {
+        "reply": "Let's start with Customer Acquisition. I'll show you the key steps.\nStarted presentation\nOpened Customer Acquisition\nOpened Customer Acquisition flow\nHighlighted",
+        "bar": true,
+        "barTitle": "Customer Acquisition",
+        "projectOpen": false,
+        "flowMode": false,
+        "highlights": 0,
+        "cursor": false,
+        "spotlight": false,
+        "presentation": {
+          "active": true,
+          "paused": false,
+          "projectId": "acquisition",
+          "nodeId": null,
+          "stepIndex": 0,
+          "totalSteps": 9,
+          "label": "Customer Acquisition"
+        }
+      }
+    },
+    {
+      "name": "production highlighting and cursor are visible",
+      "pass": false,
+      "detail": {
+        "visualSeen": {
+          "highlight": false,
+          "cursor": false,
+          "spotlight": false
+        },
+        "presentation": {
+          "bar": true,
+          "barTitle": "Customer Acquisition",
+          "projectOpen": false,
+          "flowMode": false,
+          "highlights": 0,
+          "cursor": false,
+          "spotlight": false,
+          "presentation": {
+            "active": true,
+            "paused": false,
+            "projectId": "acquisition",
+            "nodeId": null,
+            "stepIndex": 0,
+            "totalSteps": 9,
+            "label": "Customer Acquisition"
+          }
+        }
+      }
+    },
+    {
+      "name": "production spotlight and cursor movement work",
+      "pass": true,
+      "detail": {
+        "target": "flow-node:acquisition:target",
+        "result": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "flow-node:acquisition:target"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/target",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "target",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "visible": true,
+        "cursor": true,
+        "transform": "translate3d(331px, 400px, 0px)"
+      }
+    },
+    {
+      "name": "production workflow traversal produces traced connections",
+      "pass": true,
+      "detail": {
+        "result": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "projectId": "acquisition",
+            "mode": "sequence",
+            "nodes": [
+              "target",
+              "find",
+              "improve",
+              "prioritize",
+              "demo",
+              "outreach",
+              "nurture",
+              "replies",
+              "crm"
+            ],
+            "links": 10
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/target",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "target",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "traced": 3,
+        "pulse": 1,
+        "highlights": 16,
+        "route": "/projects/acquisition/flow/target"
+      }
+    },
+    {
+      "name": "manual navigation interrupts and pauses the presentation",
+      "pass": true,
+      "detail": {
+        "bar": true,
+        "paused": true,
+        "presentation": {
+          "active": true,
+          "paused": true,
+          "projectId": "acquisition",
+          "nodeId": null,
+          "stepIndex": 0,
+          "totalSteps": 9,
+          "label": "Customer Acquisition"
+        },
+        "highlights": 0,
+        "cursorHidden": true
+      }
+    },
+    {
+      "name": "presentation resumes after interruption",
+      "pass": true,
+      "detail": {
+        "paused": false,
+        "presentation": {
+          "active": true,
+          "paused": false,
+          "projectId": "acquisition",
+          "nodeId": null,
+          "stepIndex": 0,
+          "totalSteps": 9,
+          "label": "Customer Acquisition"
+        }
+      }
+    },
+    {
+      "name": "French UI and presentation controls are localized",
+      "pass": true,
+      "detail": {
+        "locale": "FR",
+        "tagline": "Votre compagnon de portfolio intelligent.",
+        "inputLabel": "Message \u00e0 Nupa",
+        "end": "Terminer"
+      }
+    },
+    {
+      "name": "production French text identity is independent Nupa",
+      "pass": true,
+      "detail": {
+        "reply": "Non, je suis Nupa, un guide de portfolio propuls\u00e9 par l'IA ind\u00e9pendant, exploit\u00e9 par Nour Chkair. Je ne suis pas Nour."
+      }
+    },
+    {
+      "name": "explicit end clears the presentation",
+      "pass": true,
+      "detail": {
+        "barHidden": true,
+        "presentation": {
+          "active": false,
+          "paused": false,
+          "projectId": null,
+          "nodeId": null,
+          "stepIndex": 0,
+          "totalSteps": 0,
+          "label": ""
+        },
+        "highlights": 0
+      }
+    },
+    {
+      "name": "production browser has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

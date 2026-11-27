@@ -23,7 +23,7 @@ Status: **production Worker deployed with the existing development OAuth credent
   - `http://localhost:8787/oauth/google/callback` (local operational helper)
 - Operational refresh token is stored server-side in `.dev.vars`; it never reaches the browser.
 - Admin login uses a separate OAuth flow with basic `openid`, `email`, `profile` scopes and a signed HttpOnly session cookie.
-- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.1 is currently served; version 1.2 (Nupa identity, effective 27 November 2026) is prepared locally and requires deployment approval. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
+- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.2 (Nupa identity, effective 27 November 2026) is published and served. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
 
 ## 2. Separate the two authorizations
 
@@ -154,7 +154,7 @@ Approved and published on 27 November 2026:
 - `https://nourchkair.com/privacy/`
 - `https://nourchkair.com/terms/`
 
-Version 1.1 is currently published, English and French, effective 27 November 2026. Version 1.2 updates the assistant identity to Nupa without changing data practices, retention, eligibility or third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
+Version 1.2 is published, English and French, effective 27 November 2026. It updates the assistant identity to Nupa without changing data practices, retention, eligibility or third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
 
 Operational facts reflected in the policies:
 

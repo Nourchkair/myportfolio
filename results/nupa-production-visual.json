@@ -1,0 +1,239 @@
+{
+  "generatedAt": "2026-11-27T08:36:19.379Z",
+  "url": "https://nourchkair.com",
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "checks": [
+    {
+      "name": "production project flow opens",
+      "pass": true,
+      "detail": {
+        "route": "/projects/acquisition/flow/demo",
+        "project": {
+          "open": true,
+          "id": "acquisition",
+          "view": "flow",
+          "nodeId": "demo",
+          "closing": false
+        },
+        "targets": 19,
+        "flowOk": {
+          "route": "/projects/acquisition/flow/demo",
+          "open": true,
+          "view": "flow",
+          "node": "demo",
+          "targets": 19
+        }
+      }
+    },
+    {
+      "name": "production connection trace animates the real workflow path",
+      "pass": true,
+      "detail": {
+        "result": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "projectId": "acquisition",
+            "from": "demo",
+            "to": "outreach"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": false,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "demo",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "traced": 1,
+        "pulse": 1,
+        "highlighted": 3
+      }
+    },
+    {
+      "name": "production full workflow traversal traces the sequence",
+      "pass": true,
+      "detail": {
+        "result": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "projectId": "acquisition",
+            "mode": "sequence",
+            "nodes": [
+              "target",
+              "find",
+              "improve",
+              "prioritize",
+              "demo",
+              "outreach",
+              "nurture",
+              "replies",
+              "crm"
+            ],
+            "links": 10
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": false,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "demo",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "traced": 3,
+        "pulse": 1,
+        "highlighted": 16
+      }
+    },
+    {
+      "name": "production spotlight and cursor work on a workflow node",
+      "pass": true,
+      "detail": {
+        "result": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "flow-node:acquisition:demo"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "demo",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "visible": true,
+        "cursor": true,
+        "transform": "translate3d(1141px, 430px, 0px)"
+      }
+    },
+    {
+      "name": "production visual cleanup works",
+      "pass": true,
+      "detail": {
+        "highlights": 0,
+        "spotlightHidden": true,
+        "cursorHidden": true
+      }
+    },
+    {
+      "name": "production visual run has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

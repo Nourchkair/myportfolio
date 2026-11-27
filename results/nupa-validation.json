@@ -1,7 +1,7 @@
 {
   "generatedAt": "2026-11-27T08:29:00Z",
   "release": "Nupa identity update + V3 interactive presentation",
-  "status": "validated locally; not pushed or deployed",
+  "status": "deployed to production; see results/nupa-production-validation.json",
   "validation": {
     "portfolioBuild": true,
     "portfolioValidation": {
