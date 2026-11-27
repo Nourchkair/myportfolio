@@ -30,7 +30,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `6df5e7b6-e447-49f9-804c-5ba6ab114719` (27 November 2026 legal/voice release) |
+| Worker version | `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -50,7 +50,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 ## 3b. Conversational V2
 
-- Live voice: **Iapetus** (production Worker and control updated).
+- Live voice: **Iapetus** (production Worker updated and verified in `/api/meta`).
 - Persona: production `persona_instruction` updated to the V2 character/grounding prompt.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
@@ -133,7 +133,8 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `6df5e7b6-e447-49f9-804c-5ba6ab114719` (legal/voice release)
+- Current Worker version: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
+- Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
 - Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended.
