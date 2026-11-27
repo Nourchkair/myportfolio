@@ -1,0 +1,25 @@
+{
+  "generatedAt": "2026-11-26T18:02:00Z",
+  "provider": "Cloudflare",
+  "accountName": "Nourchkair@gmail.com's Account",
+  "accountId": "29b4018a66ed4f192f2324f95704eb71",
+  "zeroTrustActivated": false,
+  "accessEnabled": false,
+  "accessApiError": "access.api.error.not_enabled",
+  "existingAccessApplications": 0,
+  "googleIdentityProviderConfigured": false,
+  "wizard": {
+    "step1": "Choose a plan. Zero Trust Free is available at $0/seat/month with a 50-seat limit.",
+    "step2": "Activate Zero Trust Free. A payment card is required even on the Free plan, plus acceptance of terms and authorization for usage-based overage charges.",
+    "teamName": "Not requested in the live wizard; set after activation under Zero Trust > Settings > Team name and domain.",
+    "observedCheckoutUrl": "https://dash.cloudflare.com/29b4018a66ed4f192f2324f95704eb71/zero-trust/checkout/payment"
+  },
+  "blocker": "Enabling Access Free requires a card on file and authorization for monthly overage charges. That conflicts with the approved no-billing and $0 fixed-cost boundaries.",
+  "actionTaken": "Wizard inspected only. Checkout was exited without submitting. No Zero Trust organization or subscription was created; the account remains unchanged.",
+  "verification": {
+    "subscriptionsAfterInspection": 0,
+    "accessOrganizationsApi": "403 access.api.error.not_enabled",
+    "accessApplicationsApi": "403 access.api.error.not_enabled"
+  },
+  "approvalNeeded": "Explicit approval to add/confirm a payment method for the Free plan, or a decision to defer Access and use the server-side admin token for Phase 0A."
+}

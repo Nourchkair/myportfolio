@@ -1,0 +1,182 @@
+{
+  "generatedAt": "2026-11-26T17:53:56.431Z",
+  "base": "https://ai-nour-phase0a-dev.phase0a.workers.dev",
+  "passed": 22,
+  "failed": 0,
+  "total": 22,
+  "results": [
+    {
+      "name": "health and D1",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "assistantEnabled": true
+      }
+    },
+    {
+      "name": "session requires owner",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "session create",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "session owner read",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "session cross-owner denied",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "session read requires owner",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "booking rejects invalid window",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "concurrent booking yields one winner",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          201,
+          409
+        ]
+      }
+    },
+    {
+      "name": "booking cancel requires owner",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "booking owner cancel",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "cancelled slot can be rebooked",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "duplicate prevention",
+      "pass": true,
+      "detail": {
+        "rows": [
+          1,
+          1
+        ]
+      }
+    },
+    {
+      "name": "rate limit 3/minute",
+      "pass": true,
+      "detail": {
+        "rateStatuses": [
+          200,
+          200,
+          200,
+          429
+        ]
+      }
+    },
+    {
+      "name": "invalid JSON returns 400",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "unknown route returns 404",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "control requires admin",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "admin reads control",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "enabled": true
+      }
+    },
+    {
+      "name": "emergency shutdown blocks sessions",
+      "pass": true,
+      "detail": {
+        "disabledStatus": 200,
+        "sessionStatus": 503
+      }
+    },
+    {
+      "name": "shutdown is reversible",
+      "pass": true,
+      "detail": {
+        "enabledStatus": 200,
+        "sessionStatus": 201
+      }
+    },
+    {
+      "name": "spend endpoint requires admin",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "actual Live validation cost recorded under cap",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "totalUsdMicros": 12426,
+        "capUsdMicros": 1000000
+      }
+    },
+    {
+      "name": "spending cap rejects over-cap usage",
+      "pass": true,
+      "detail": {
+        "underCap": 200,
+        "overCap": 402,
+        "totalUsdMicros": 1000001
+      }
+    }
+  ]
+}

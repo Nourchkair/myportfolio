@@ -1,0 +1,29 @@
+{
+  "transcript": "Safiy is a contextual AI assistant designed to provide intelligent and relevant support based on the user's specific situation.You mentioned the Safiy project.",
+  "usage": {
+    "prompt": 896,
+    "response": 65,
+    "promptDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 389
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 456
+      }
+    ],
+    "responseDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 65
+      }
+    ]
+  },
+  "events": [
+    "setup",
+    "turnComplete",
+    "textTurnDone",
+    "turnComplete"
+  ]
+}

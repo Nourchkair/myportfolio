@@ -1,0 +1,243 @@
+{
+  "generatedAt": "2026-11-26T18:02:05.698Z",
+  "passed": 30,
+  "failed": 0,
+  "total": 30,
+  "results": [
+    {
+      "name": "access token refresh",
+      "pass": true,
+      "detail": {
+        "expiresIn": 3599,
+        "scopeCount": 5
+      }
+    },
+    {
+      "name": "required scopes present",
+      "pass": true,
+      "detail": {
+        "scopes": [
+          "calendar.readonly",
+          "drive.file",
+          "gmail.compose",
+          "calendar.events",
+          "spreadsheets"
+        ]
+      }
+    },
+    {
+      "name": "CRM spreadsheet readable",
+      "pass": true,
+      "detail": {
+        "title": "AI Nour CRM",
+        "tabs": [
+          "Contacts",
+          "Inquiries",
+          "Pipeline",
+          "Appointments",
+          "Follow-ups",
+          "Consent"
+        ]
+      }
+    },
+    {
+      "name": "scratch tab created",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "CRM headers written to scratch tab",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "synthetic record appended",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "duplicate check sees one record",
+      "pass": true,
+      "detail": {
+        "duplicateRows": 1
+      }
+    },
+    {
+      "name": "synthetic record status updated",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "invalid write fails cleanly",
+      "pass": true,
+      "detail": {
+        "status": 400
+      }
+    },
+    {
+      "name": "write recovers after failure",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "scratch tab cleaned up",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "calendar readable",
+      "pass": true,
+      "detail": {
+        "summary": "AI Nour - Appointments",
+        "timeZone": "America/Toronto"
+      }
+    },
+    {
+      "name": "free/busy query",
+      "pass": true,
+      "detail": {
+        "busyBlocks": 0
+      }
+    },
+    {
+      "name": "synthetic event created with Meet link",
+      "pass": true,
+      "detail": {
+        "timeZone": "America/Toronto",
+        "meetLinkPresent": true
+      }
+    },
+    {
+      "name": "event rescheduled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "event cancelled",
+      "pass": true,
+      "detail": {
+        "status": 204
+      }
+    },
+    {
+      "name": "calendar permits overlapping events",
+      "pass": true,
+      "detail": {
+        "statuses": [
+          200,
+          200
+        ],
+        "applicationLockRequired": true
+      }
+    },
+    {
+      "name": "concurrent Meet links are unique",
+      "pass": true,
+      "detail": {
+        "bothPresent": true,
+        "distinct": true
+      }
+    },
+    {
+      "name": "calendar test events cleaned up",
+      "pass": true,
+      "detail": {
+        "deleted": 2
+      }
+    },
+    {
+      "name": "knowledge and backup folders available",
+      "pass": true,
+      "detail": {
+        "knowledgeReused": true,
+        "backupReused": true
+      }
+    },
+    {
+      "name": "knowledge file uploaded",
+      "pass": true,
+      "detail": {
+        "size": "73"
+      }
+    },
+    {
+      "name": "knowledge file round-trip",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "knowledge file cleaned up",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "encrypted backup uploaded",
+      "pass": true,
+      "detail": {
+        "size": "162"
+      }
+    },
+    {
+      "name": "encrypted backup decrypts exactly",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "encrypted backup cleaned up",
+      "pass": true,
+      "detail": {}
+    },
+    {
+      "name": "Gmail draft created without sending",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Gmail draft read",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Gmail draft deleted",
+      "pass": true,
+      "detail": {
+        "status": 204
+      }
+    },
+    {
+      "name": "Workspace MCP catalog reachable",
+      "pass": true,
+      "detail": {
+        "counts": {
+          "gmail": 23,
+          "calendar": 9,
+          "sheets": 6,
+          "drive": 9
+        },
+        "gmailSendTools": []
+      }
+    }
+  ]
+}

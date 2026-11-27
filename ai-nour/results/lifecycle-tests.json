@@ -1,0 +1,230 @@
+{
+  "generatedAt": "2026-11-27T01:06:01.577Z",
+  "mode": "mock-email/real-synthetic-google-calendar/synthetic-consenting-attendee",
+  "passed": 28,
+  "failed": 0,
+  "total": 28,
+  "results": [
+    {
+      "name": "local lifecycle worker is healthy",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "admin email API rejects missing authorization",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "scheduled maintenance runs without a runtime error",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "error": null
+      }
+    },
+    {
+      "name": "inquiry, contact and consent created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "inquiry acknowledgement and internal notification queued",
+      "pass": true,
+      "detail": {
+        "jobs": 2
+      }
+    },
+    {
+      "name": "duplicate inquiry is idempotent and queues no duplicate email",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "before": 2,
+        "after": 2
+      }
+    },
+    {
+      "name": "inquiry emails deliver through the mock provider",
+      "pass": true,
+      "detail": {
+        "processed": 2,
+        "status": "sent"
+      }
+    },
+    {
+      "name": "signed delivery webhook updates the email lifecycle",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "emailStatus": "delivered"
+      }
+    },
+    {
+      "name": "duplicate webhook replay is harmless",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "body": {
+          "ok": true,
+          "applied": false,
+          "duplicate": true,
+          "type": "email.delivered",
+          "emailId": "mock-f021945e-4bc9-4301-889c-5278d8e6196e"
+        }
+      }
+    },
+    {
+      "name": "unsigned/tampered webhook is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "real synthetic Google writes enabled for this test",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "appointment confirmed with unique Meet link",
+      "pass": true,
+      "detail": {
+        "status": 201,
+        "bookingStatus": "confirmed",
+        "meet": true
+      }
+    },
+    {
+      "name": "appointment confirmation and internal notification queued",
+      "pass": true,
+      "detail": {
+        "jobs": 4
+      }
+    },
+    {
+      "name": "appointment idempotency prevents duplicate confirmation",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "before": 4,
+        "after": 4
+      }
+    },
+    {
+      "name": "appointment confirmation delivers",
+      "pass": true,
+      "detail": {
+        "processed": 2,
+        "hasMeet": true
+      }
+    },
+    {
+      "name": "24-hour reminder is queued once",
+      "pass": true,
+      "detail": {
+        "queued": 1,
+        "jobs": 1
+      }
+    },
+    {
+      "name": "reminder duplicate-send protection holds",
+      "pass": true,
+      "detail": {
+        "queued": 0
+      }
+    },
+    {
+      "name": "reminder delivers",
+      "pass": true,
+      "detail": {
+        "status": "sent"
+      }
+    },
+    {
+      "name": "appointment rescheduled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "reschedule confirmation queued",
+      "pass": true,
+      "detail": {
+        "jobs": 1,
+        "status": "queued"
+      }
+    },
+    {
+      "name": "appointment cancelled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "cancellation confirmation queued",
+      "pass": true,
+      "detail": {
+        "jobs": 9
+      }
+    },
+    {
+      "name": "duplicate cancellation is idempotent",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "before": 9,
+        "after": 9
+      }
+    },
+    {
+      "name": "failure-path inquiry accepted",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "transient email failure is retried",
+      "pass": true,
+      "detail": {
+        "status": "queued",
+        "attempts": 1
+      }
+    },
+    {
+      "name": "second delivery attempt is tracked",
+      "pass": true,
+      "detail": {
+        "attempts": 2,
+        "status": "queued"
+      }
+    },
+    {
+      "name": "failed email reaches dead-letter after max attempts",
+      "pass": true,
+      "detail": {
+        "status": "dead_letter",
+        "attempts": 3
+      }
+    },
+    {
+      "name": "admin can requeue a dead-letter job",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "jobStatus": "queued"
+      }
+    }
+  ]
+}

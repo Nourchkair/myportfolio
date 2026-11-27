@@ -1,0 +1,204 @@
+{
+  "generatedAt": "2026-11-27T01:09:21.640Z",
+  "mode": "mock-providers/local-d1",
+  "passed": 23,
+  "failed": 0,
+  "total": 23,
+  "results": [
+    {
+      "name": "health and D1",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "prototype key required",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "meta and corpus",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "chunks": 107
+      }
+    },
+    {
+      "name": "session create",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "session cross-owner denied",
+      "pass": true,
+      "detail": {
+        "status": 404
+      }
+    },
+    {
+      "name": "text chat",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reply": "Safiy is a contextual AI assistant that captures conversations and workplace knowledge.",
+        "cost": 26
+      }
+    },
+    {
+      "name": "duplicate chat message rejected",
+      "pass": true,
+      "detail": {
+        "status": 409
+      }
+    },
+    {
+      "name": "tool call returns navigation action",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "actions": [
+          {
+            "type": "openProject",
+            "projectId": "safiy",
+            "route": "/projects/safiy"
+          }
+        ]
+      }
+    },
+    {
+      "name": "external provider failure returns 503 and recovers",
+      "pass": true,
+      "detail": {
+        "failure": 503,
+        "recovery": 200
+      }
+    },
+    {
+      "name": "server-side tool execution",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "route": "/projects/safiy"
+      }
+    },
+    {
+      "name": "tool allowlist rejects unknown project",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "code": "UNKNOWN_PROJECT"
+      }
+    },
+    {
+      "name": "session recovery returns messages",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "messages": 6
+      }
+    },
+    {
+      "name": "mock Live token",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "model": "gemini-3.8-live",
+        "reservation": true
+      }
+    },
+    {
+      "name": "Live turn persists shared context and cost",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "cost": 250000
+      }
+    },
+    {
+      "name": "duplicate Live turn rejected",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "duplicate": true
+      }
+    },
+    {
+      "name": "admin status",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "admin auth required",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "emergency shutdown blocks chat",
+      "pass": true,
+      "detail": {
+        "disable": 200,
+        "chat": 503
+      }
+    },
+    {
+      "name": "shutdown is reversible",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "synthetic writes disabled by default",
+      "pass": true,
+      "detail": {
+        "status": 403
+      }
+    },
+    {
+      "name": "prototype UI served",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Live rate limit eventually returns 429",
+      "pass": true,
+      "detail": {
+        "liveStatuses": [
+          200,
+          200,
+          402,
+          402,
+          402,
+          402,
+          402,
+          402,
+          402,
+          402,
+          402,
+          429,
+          429
+        ]
+      }
+    },
+    {
+      "name": "cumulative budget cap blocks further text calls",
+      "pass": true,
+      "detail": {
+        "overBudget": 200,
+        "chat": 402
+      }
+    }
+  ]
+}

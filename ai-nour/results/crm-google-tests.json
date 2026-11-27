@@ -1,0 +1,87 @@
+{
+  "generatedAt": "2026-11-27T01:02:58.464Z",
+  "mode": "real-google-calendar/synthetic-consenting-attendee",
+  "passed": 10,
+  "failed": 0,
+  "total": 10,
+  "results": [
+    {
+      "name": "Google writes enabled for synthetic test",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "synthetic inquiry created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "Google appointment confirmed with Meet link",
+      "pass": true,
+      "detail": {
+        "status": 201,
+        "bookingStatus": "confirmed",
+        "meetLink": true
+      }
+    },
+    {
+      "name": "calendar event exists",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "timeZone": "America/Toronto"
+      }
+    },
+    {
+      "name": "calendar event invites only the consenting synthetic attendee",
+      "pass": true,
+      "detail": {
+        "attendees": [
+          "synthetic.google@example.invalid"
+        ]
+      }
+    },
+    {
+      "name": "appointment rescheduled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "calendar event moved",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "start": "2027-02-15T11:00:00-05:00"
+      }
+    },
+    {
+      "name": "appointment cancelled",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "bookingStatus": "cancelled"
+      }
+    },
+    {
+      "name": "calendar event cancelled/deleted",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "calendarStatus": "cancelled"
+      }
+    },
+    {
+      "name": "confirmation/reschedule/cancel email jobs queued",
+      "pass": true,
+      "detail": {
+        "jobs": 8
+      }
+    }
+  ]
+}

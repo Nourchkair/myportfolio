@@ -1,0 +1,13 @@
+{
+  "corpus": {
+    "version": 1,
+    "contentHash": "5fce1ae962dac4a2",
+    "generatedAt": "2026-11-26T20:02:21.120Z",
+    "chunks": 107
+  },
+  "queries": 55,
+  "top1": 0.8727,
+  "top3": 1,
+  "mrr": 0.9364,
+  "misses": []
+}

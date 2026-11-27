@@ -134,9 +134,12 @@ npm test
 
 Both run the build first, then validate data invariants, route canonicalization, build artifacts, dist separation, dead-CSS removal and the command API contract. Browser-level route, history, hover/focus, accessibility and visual-regression results are recorded in `docs/validation.md`.
 
-## Deliberately out of scope
+## AI Nour
 
-- AI Nour or any model integration.
-- External CRM, messaging, booking or analytics integrations.
+AI Nour is implemented in `ai-nour/` and mounts only with `?ainour=dev` or `?ainour=1`; the default portfolio and reading view remain assistant-free. The Phase 4 private-beta candidate, acceptance checklist, approval packages, and validation are documented in `docs/ai-nour-phase4.md`.
+
+## Deliberately out of scope for the default portfolio
+
+- External CRM, messaging, booking or analytics integrations in the default experience.
 - New appearance modes or speculative visual features.
 - Automated GitHub-to-Cloudflare deployments; production is deployed directly from this repo with `npm run deploy`.

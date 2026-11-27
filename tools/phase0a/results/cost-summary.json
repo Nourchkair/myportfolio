@@ -1,0 +1,34 @@
+{
+  "generatedAt": "2026-11-26T18:03:00Z",
+  "currency": {
+    "source": "USD",
+    "display": "CAD",
+    "fxCadPerUsd": 1.4219
+  },
+  "listRatesPerMillionUsd": {
+    "textInput": 0.75,
+    "audioInput": 3.0,
+    "audioOutput": 12.0
+  },
+  "measuredSessions": [
+    { "name": "suite-english", "textInput": 438, "audioInput": 342, "audioOutput": 258, "usd": 0.004450 },
+    { "name": "suite-french", "textInput": 440, "audioInput": 341, "audioOutput": 290, "usd": 0.004833 },
+    { "name": "suite-tool", "textInput": 458, "audioInput": 269, "audioOutput": 166, "usd": 0.003142 },
+    { "name": "barge-turn1", "textInput": 353, "audioInput": 342, "audioOutput": 175, "usd": 0.003391 },
+    { "name": "barge-turn2", "textInput": 369, "audioInput": 465, "audioOutput": 140, "usd": 0.003352 },
+    { "name": "shared-context", "textInput": 389, "audioInput": 456, "audioOutput": 65, "usd": 0.002440 },
+    { "name": "audio-debug", "textInput": 335, "audioInput": 342, "audioOutput": 194, "usd": 0.003605 }
+  ],
+  "knownUsd": 0.025213,
+  "knownCad": 0.035851,
+  "unmeteredButSmall": [
+    "One session-resume test (two short text turns; usage not captured).",
+    "Six Gemini Flash-Lite prompt-injection calls (text-only).",
+    "Ephemeral token creation calls (no Live audio)."
+  ],
+  "allInEstimateCad": "< 0.05",
+  "approvedBudgetCad": 10,
+  "workerSpendLedgerUsdMicros": 25213,
+  "workerDailyCapUsdMicros": 1000000,
+  "fixedInfrastructureCostCad": 0
+}

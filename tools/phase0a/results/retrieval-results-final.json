@@ -1,0 +1,532 @@
+{
+  "docs": 91,
+  "queries": 35,
+  "top1": 0.7714285714285715,
+  "top3": 0.8571428571428571,
+  "mrr": 0.8142857142857143,
+  "avgMsPerQuery": 1.0187730594285715,
+  "misses": [
+    {
+      "q": "Where did he get his first job?",
+      "expected": [
+        "journey:entry"
+      ],
+      "got": [
+        "h2ops:flow:assess",
+        "h2ops:what",
+        "safiy:identity"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which project handles incoming customer questions?",
+      "expected": [
+        "communications:identity",
+        "communications:what"
+      ],
+      "got": [
+        "communications:flow:inquiries",
+        "communications:flow:voice",
+        "knowledge:flow:question"
+      ],
+      "rank": null
+    },
+    {
+      "q": "What did he do before working in tech?",
+      "expected": [
+        "journey:entry",
+        "journey:sales",
+        "journey:commercial"
+      ],
+      "got": [
+        "journey:technology",
+        "site:contact",
+        "journey:direction"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which work deals with scheduling service visits?",
+      "expected": [
+        "h2ops:identity",
+        "h2ops:what"
+      ],
+      "got": [
+        "h2ops:flow:assess",
+        "communications:flow:appointment",
+        "journey:entry"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which project helps employees find internal answers?",
+      "expected": [
+        "knowledge:identity",
+        "knowledge:what",
+        "safiy:identity"
+      ],
+      "got": [
+        "knowledge:flow:retrieve",
+        "acquisition:flow:find",
+        "knowledge:flow:question"
+      ],
+      "rank": null
+    }
+  ],
+  "rows": [
+    {
+      "q": "What did Nour do at H&M?",
+      "expected": [
+        "journey:entry",
+        "journey:sales",
+        "journey:entry:role:H&M",
+        "journey:sales:role:H&M"
+      ],
+      "got": [
+        "journey:entry:role:H&M",
+        "journey:sales:role:H&M",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How did Nour improve team sales?",
+      "expected": [
+        "journey:sales"
+      ],
+      "got": [
+        "journey:sales",
+        "journey:sales:role:H&M",
+        "acquisition:flow:improve"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What is Customer Acquisition?",
+      "expected": [
+        "acquisition:identity",
+        "acquisition:what"
+      ],
+      "got": [
+        "acquisition:identity",
+        "acquisition:value",
+        "acquisition:what"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does dispatch handle contractor supply?",
+      "expected": [
+        "h2ops:identity",
+        "h2ops:flow:coverage",
+        "h2ops:flow:activate"
+      ],
+      "got": [
+        "h2ops:flow:match",
+        "h2ops:identity",
+        "h2ops:value"
+      ],
+      "rank": 2
+    },
+    {
+      "q": "Which project uses AI voice and SMS?",
+      "expected": [
+        "communications:identity",
+        "communications:what",
+        "communications:flow:sms",
+        "communications:flow:voice"
+      ],
+      "got": [
+        "communications:contribution",
+        "communications:flow:sms",
+        "communications:flow:voice"
+      ],
+      "rank": 2
+    },
+    {
+      "q": "What is B.R.A.I.N.?",
+      "expected": [
+        "knowledge:identity",
+        "knowledge:what"
+      ],
+      "got": [
+        "knowledge:identity",
+        "knowledge:what",
+        "knowledge:challenges"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What does Safiy do?",
+      "expected": [
+        "safiy:identity",
+        "safiy:what"
+      ],
+      "got": [
+        "safiy:identity",
+        "safiy:what",
+        "safiy:flow:capture"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What was Nour’s contribution to Safiy?",
+      "expected": [
+        "safiy:contribution"
+      ],
+      "got": [
+        "safiy:contribution",
+        "h2ops:contribution",
+        "knowledge:contribution"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "Where did Nour study?",
+      "expected": [
+        "journey:entry:role:Longfields-Davidson Heights Secondary School",
+        "journey:entry"
+      ],
+      "got": [
+        "journey:entry",
+        "journey:entry:role:H&M",
+        "journey:entry:role:Longfields-Davidson Heights Secondary School"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What is Nour’s consulting direction?",
+      "expected": [
+        "profile:direction",
+        "profile:work"
+      ],
+      "got": [
+        "profile:direction",
+        "journey:direction",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What are Nour’s technical capabilities?",
+      "expected": [
+        "profile:work",
+        "journey:technology"
+      ],
+      "got": [
+        "profile:work",
+        "journey:technology",
+        "journey:technology:role:H2Ops"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does Nour approach business and technology?",
+      "expected": [
+        "profile:work",
+        "profile:direction"
+      ],
+      "got": [
+        "profile:work",
+        "journey:technology",
+        "journey:technology:role:H2Ops"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What is Nour’s professional ambition?",
+      "expected": [
+        "profile:direction",
+        "journey:direction"
+      ],
+      "got": [
+        "profile:direction",
+        "profile:work",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "Show me the customer acquisition flow",
+      "expected": [
+        "acquisition:flow:target",
+        "acquisition:flow:find",
+        "acquisition:flow:demo"
+      ],
+      "got": [
+        "acquisition:flow:demo",
+        "acquisition:flow:target",
+        "acquisition:flow:nurture"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What happens after the demo in Customer Acquisition?",
+      "expected": [
+        "acquisition:flow:outreach",
+        "acquisition:flow:nurture"
+      ],
+      "got": [
+        "acquisition:flow:nurture",
+        "acquisition:flow:demo",
+        "acquisition:flow:target"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does Dispatch match customers and contractors?",
+      "expected": [
+        "h2ops:flow:match",
+        "h2ops:flow:coverage"
+      ],
+      "got": [
+        "h2ops:flow:match",
+        "journey:entry:role:H&M",
+        "journey:sales:role:H&M"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What is the exception path in Dispatch?",
+      "expected": [
+        "h2ops:flow:exception"
+      ],
+      "got": [
+        "h2ops:flow:exception",
+        "h2ops:identity",
+        "h2ops:contribution"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does AI Customer Communications assess needs?",
+      "expected": [
+        "communications:flow:understand"
+      ],
+      "got": [
+        "communications:flow:understand",
+        "communications:flow:crm",
+        "communications:what"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What is the knowledge library process?",
+      "expected": [
+        "knowledge:flow:organize",
+        "knowledge:flow:maintain"
+      ],
+      "got": [
+        "knowledge:flow:organize",
+        "knowledge:flow:retrieve",
+        "knowledge:flow:maintain"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does Safiy capture conversations?",
+      "expected": [
+        "safiy:flow:capture"
+      ],
+      "got": [
+        "safiy:flow:capture",
+        "safiy:what",
+        "safiy:flow:realtime"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What did Nour do at Browns?",
+      "expected": [
+        "journey:commercial",
+        "journey:commercial:role:Browns"
+      ],
+      "got": [
+        "journey:commercial:role:Browns",
+        "journey:commercial",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What did Nour learn in retail?",
+      "expected": [
+        "journey:entry"
+      ],
+      "got": [
+        "journey:entry",
+        "profile:work",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What are Nour’s core capabilities?",
+      "expected": [
+        "journey:technology",
+        "journey:commercial",
+        "profile:work"
+      ],
+      "got": [
+        "profile:work",
+        "profile:direction",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "Where is Nour based?",
+      "expected": [
+        "profile:intro"
+      ],
+      "got": [
+        "profile:intro",
+        "profile:think",
+        "profile:direction"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How can I contact Nour?",
+      "expected": [
+        "site:contact"
+      ],
+      "got": [
+        "site:contact",
+        "acquisition:flow:improve",
+        "profile:intro"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "Where did he get his first job?",
+      "expected": [
+        "journey:entry"
+      ],
+      "got": [
+        "h2ops:flow:assess",
+        "h2ops:what",
+        "safiy:identity"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which project handles incoming customer questions?",
+      "expected": [
+        "communications:identity",
+        "communications:what"
+      ],
+      "got": [
+        "communications:flow:inquiries",
+        "communications:flow:voice",
+        "knowledge:flow:question"
+      ],
+      "rank": null
+    },
+    {
+      "q": "How does the system organize company memory?",
+      "expected": [
+        "knowledge:identity",
+        "knowledge:what"
+      ],
+      "got": [
+        "knowledge:what",
+        "knowledge:flow:memory",
+        "knowledge:contribution"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "What did he do before working in tech?",
+      "expected": [
+        "journey:entry",
+        "journey:sales",
+        "journey:commercial"
+      ],
+      "got": [
+        "journey:technology",
+        "site:contact",
+        "journey:direction"
+      ],
+      "rank": null
+    },
+    {
+      "q": "How does the portfolio show customer outreach?",
+      "expected": [
+        "acquisition:identity",
+        "acquisition:flow:outreach"
+      ],
+      "got": [
+        "acquisition:flow:outreach",
+        "acquisition:flow:demo",
+        "acquisition:what"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "Which work deals with scheduling service visits?",
+      "expected": [
+        "h2ops:identity",
+        "h2ops:what"
+      ],
+      "got": [
+        "h2ops:flow:assess",
+        "communications:flow:appointment",
+        "journey:entry"
+      ],
+      "rank": null
+    },
+    {
+      "q": "What is his long-term goal?",
+      "expected": [
+        "profile:direction",
+        "journey:direction"
+      ],
+      "got": [
+        "profile:direction",
+        "journey:sales",
+        "journey:direction"
+      ],
+      "rank": 1
+    },
+    {
+      "q": "How does he combine business and technology?",
+      "expected": [
+        "profile:work",
+        "profile:direction"
+      ],
+      "got": [
+        "journey:technology",
+        "profile:work",
+        "journey:technology:role:H2Ops"
+      ],
+      "rank": 2
+    },
+    {
+      "q": "Which project helps employees find internal answers?",
+      "expected": [
+        "knowledge:identity",
+        "knowledge:what",
+        "safiy:identity"
+      ],
+      "got": [
+        "knowledge:flow:retrieve",
+        "acquisition:flow:find",
+        "knowledge:flow:question"
+      ],
+      "rank": null
+    },
+    {
+      "q": "What did he learn about leading a team?",
+      "expected": [
+        "journey:sales"
+      ],
+      "got": [
+        "journey:sales",
+        "acquisition:flow:replies",
+        "h2ops:flow:communicate"
+      ],
+      "rank": 1
+    }
+  ]
+}

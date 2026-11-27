@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Nour — isolated Live microphone test</title>
+  <style>
+    :root { color-scheme: dark; font-family: ui-sans-serif, system-ui, sans-serif; }
+    body { margin: 0; background: #101114; color: #e8e8ea; }
+    main { max-width: 820px; margin: 0 auto; padding: 32px 20px 64px; }
+    h1 { font-size: 1.3rem; letter-spacing: .02em; }
+    p { line-height: 1.5; color: #b9bac2; }
+    button { appearance: none; border: 1px solid #3a3c45; background: #1c1e24; color: #fff; border-radius: 999px; padding: 10px 18px; font: inherit; cursor: pointer; }
+    button:disabled { opacity: .45; cursor: default; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 18px 0; }
+    #status { font-variant-numeric: tabular-nums; color: #9ad1a7; }
+    #transcript { min-height: 130px; white-space: pre-wrap; background: #17191f; border: 1px solid #292b33; border-radius: 14px; padding: 16px; line-height: 1.55; }
+    #log { max-height: 240px; overflow: auto; font: 12px/1.5 ui-monospace, monospace; color: #9fa2ad; background: #0c0d10; border-radius: 12px; padding: 12px; }
+    .note { font-size: .85rem; color: #8e909a; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>AI Nour — isolated Live microphone test</h1>
+  <p>Localhost only. The browser receives a one-use ephemeral token; the permanent Gemini key never leaves the local Node process. Allow microphone access when prompted. No audio is recorded to disk.</p>
+  <div class="row">
+    <button id="start" type="button">Start microphone session</button>
+    <button id="stop" type="button" disabled>Stop</button>
+    <span id="status">idle</span>
+  </div>
+  <p class="note">Try: “Bonjour, parle-moi du projet Safiy.” Then interrupt with “Wait, tell me about Dispatch instead.”</p>
+  <div id="transcript" aria-live="polite">Transcript will appear here.</div>
+  <h2 style="font-size:1rem;margin-top:24px">Events</h2>
+  <div id="log" aria-live="polite"></div>
+</main>
+<script type="module">
+import { GoogleGenAI, Modality } from 'https://esm.sh/@google/genai@3.6.1';
+
+const startButton = document.querySelector('#start');
+const stopButton = document.querySelector('#stop');
+const status = document.querySelector('#status');
+const transcript = document.querySelector('#transcript');
+const log = document.querySelector('#log');
+let session = null;
+let micStream = null;
+let inputContext = null;
+let outputContext = null;
+let processor = null;
+let sources = [];
+let nextPlayTime = 0;
+let running = false;
+
+const append = (node, text) => { node.textContent += text; node.scrollTop = node.scrollHeight; };
+const event = (text) => append(log, `[${new Date().toLocaleTimeString()}] ${text}\n`);
+const setStatus = (text) => { status.textContent = text; };
+
+function base64FromInt16(samples) {
+  const bytes = new Uint8Array(samples.length * 2);
+  const view = new DataView(bytes.buffer);
+  samples.forEach((sample, index) => view.setInt16(index * 2, sample, true));
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 0x8000) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 0x8000));
+  }
+  return btoa(binary);
+}
+
+function downsampleTo16k(float32, sourceRate) {
+  const targetRate = 16000;
+  const ratio = sourceRate / targetRate;
+  const length = Math.floor(float32.length / ratio);
+  const output = new Int16Array(length);
+  for (let i = 0; i < length; i++) {
+    const sample = float32[Math.floor(i * ratio)] || 0;
+    output[i] = Math.max(-1, Math.min(1, sample)) * 0x7fff;
+  }
+  return output;
+}
+
+function base64FromPcm24k(base64) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Int16Array(bytes.buffer);
+}
+
+function stopPlayback() {
+  for (const source of sources) {
+    try { source.stop(); } catch {}
+  }
+  sources = [];
+  nextPlayTime = 0;
+}
+
+function playAudio(base64) {
+  if (!outputContext) return;
+  const pcm = base64FromPcm24k(base64);
+  const buffer = outputContext.createBuffer(1, pcm.length, 24000);
+  const channel = buffer.getChannelData(0);
+  for (let i = 0; i < pcm.length; i++) channel[i] = pcm[i] / 0x8000;
+  const source = outputContext.createBufferSource();
+  source.buffer = buffer;
+  source.connect(outputContext.destination);
+  const now = outputContext.currentTime;
+  if (nextPlayTime < now) nextPlayTime = now;
+  source.start(nextPlayTime);
+  nextPlayTime += buffer.duration;
+  sources.push(source);
+  source.onended = () => { sources = sources.filter((item) => item !== source); };
+}
+
+async function start() {
+  if (running) return;
+  running = true;
+  startButton.disabled = true;
+  stopButton.disabled = false;
+  setStatus('requesting microphone');
+  transcript.textContent = '';
+  log.textContent = '';
+
+  try {
+    const tokenResponse = await fetch('/token', { method: 'POST' });
+    if (!tokenResponse.ok) throw new Error(`token endpoint HTTP ${tokenResponse.status}`);
+    const token = await tokenResponse.json();
+    event(`ephemeral token received; model ${token.model}`);
+
+    micStream = await navigator.mediaDevices.getUserMedia({
+      audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true }
+    });
+    inputContext = new AudioContext();
+    outputContext = new AudioContext({ sampleRate: 24000 });
+    event(`microphone sample rate ${inputContext.sampleRate} Hz; output 24000 Hz`);
+
+    const ai = new GoogleGenAI({ apiKey: token.token, httpOptions: { apiVersion: 'v1alpha' } });
+    session = await ai.live.connect({
+      model: token.model,
+      config: token.config,
+      callbacks: {
+        onopen: () => { event('websocket open'); setStatus('live'); },
+        onmessage: (message) => {
+          if (message.setupComplete) event('setup complete');
+          if (message.serverContent?.interrupted) {
+            stopPlayback();
+            event('interrupted=true; playback stopped');
+          }
+          const inputText = message.serverContent?.inputTranscription?.text;
+          if (inputText) append(transcript, `\nYou: ${inputText}`);
+          const outputText = message.serverContent?.outputTranscription?.text;
+          if (outputText) append(transcript, `\nAI Nour: ${outputText}`);
+          for (const part of message.serverContent?.modelTurn?.parts || []) {
+            if (part.inlineData?.data) playAudio(part.inlineData.data);
+          }
+          if (message.serverContent?.turnComplete) event('turn complete');
+          if (message.toolCall?.functionCalls?.length) {
+            const calls = message.toolCall.functionCalls;
+            event(`tool call ${calls.map((call) => `${call.name}(${JSON.stringify(call.args)})`).join(', ')}`);
+            session.sendToolResponse({
+              functionResponses: calls.map((call) => ({
+                id: call.id,
+                name: call.name,
+                response: { ok: true, message: 'Portfolio navigation is visual in the production UI; this harness only acknowledges the call.' }
+              }))
+            });
+          }
+        },
+        onerror: (error) => { event(`error ${error?.message || error}`); setStatus('error'); },
+        onclose: (close) => { event(`close ${close?.code || ''} ${close?.reason || ''}`); setStatus('closed'); }
+      }
+    });
+
+    const source = inputContext.createMediaStreamSource(micStream);
+    processor = inputContext.createScriptProcessor(4096, 1, 1);
+    processor.onaudioprocess = (audioEvent) => {
+      if (!session || !running) return;
+      const pcm16 = downsampleTo16k(audioEvent.inputBuffer.getChannelData(0), inputContext.sampleRate);
+      session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm16), mimeType: 'audio/pcm;rate=16000' } });
+    };
+    source.connect(processor);
+    const silentGain = inputContext.createGain();
+    silentGain.gain.value = 0;
+    processor.connect(silentGain);
+    silentGain.connect(inputContext.destination);
+    event('streaming microphone at 16 kHz PCM');
+  } catch (error) {
+    event(`start failed: ${error?.message || error}`);
+    setStatus('error');
+    await stop();
+  }
+}
+
+async function stop() {
+  running = false;
+  startButton.disabled = false;
+  stopButton.disabled = true;
+  setStatus('idle');
+  if (processor) { processor.disconnect(); processor = null; }
+  if (micStream) { for (const track of micStream.getTracks()) track.stop(); micStream = null; }
+  if (inputContext) { await inputContext.close(); inputContext = null; }
+  stopPlayback();
+  if (outputContext) { await outputContext.close(); outputContext = null; }
+  if (session) { try { session.close(); } catch {} session = null; }
+  event('session stopped');
+}
+
+startButton.addEventListener('click', start);
+stopButton.addEventListener('click', stop);
+window.addEventListener('beforeunload', stop);
+</script>
+</body>
+</html>

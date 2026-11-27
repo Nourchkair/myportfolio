@@ -3,6 +3,10 @@ Thumbs.db
 *.log
 .env
 .env.*
+.dev.vars
+.dev.vars.*
+.wrangler/
+.oauth/
 node_modules/
 dist/
-.wrangler/
+tools/phase0a/audio/

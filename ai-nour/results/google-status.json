@@ -1,0 +1,62 @@
+{
+  "google": {
+    "configured": true,
+    "ok": true,
+    "token": {
+      "ok": true,
+      "scopes": [
+        "https://www.googleapis.com/auth/calendar.events",
+        "https://www.googleapis.com/auth/gmail.compose",
+        "https://www.googleapis.com/auth/spreadsheets",
+        "https://www.googleapis.com/auth/calendar.readonly",
+        "https://www.googleapis.com/auth/drive.file"
+      ],
+      "expiresAt": 1795728753071
+    },
+    "sheets": {
+      "ok": true,
+      "title": "AI Nour CRM",
+      "tabs": [
+        {
+          "title": "Contacts",
+          "sheetId": 0
+        },
+        {
+          "title": "Inquiries",
+          "sheetId": 1046492422
+        },
+        {
+          "title": "Pipeline",
+          "sheetId": 876807864
+        },
+        {
+          "title": "Appointments",
+          "sheetId": 366092181
+        },
+        {
+          "title": "Follow-ups",
+          "sheetId": 1490511928
+        },
+        {
+          "title": "Consent",
+          "sheetId": 430838077
+        }
+      ]
+    },
+    "calendar": {
+      "ok": true,
+      "summary": "AI Nour - Appointments",
+      "timeZone": "America/Toronto",
+      "accessRole": null
+    },
+    "drive": {
+      "ok": true,
+      "knowledgeFolder": true,
+      "backupFolder": true
+    },
+    "gmail": {
+      "ok": true,
+      "draftCount": 1
+    }
+  }
+}

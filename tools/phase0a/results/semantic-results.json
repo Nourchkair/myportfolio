@@ -1,0 +1,119 @@
+{
+  "model": "Xenova/paraphrase-multilingual-MiniLM-L12-v2",
+  "docs": 91,
+  "queries": 40,
+  "top1": 0.625,
+  "top3": 0.8,
+  "mrr": 0.7041666666666666,
+  "misses": [
+    {
+      "q": "How does dispatch handle contractor supply?",
+      "expected": [
+        "h2ops:identity",
+        "h2ops:flow:coverage",
+        "h2ops:flow:activate"
+      ],
+      "got": [
+        "h2ops:flow:onboard",
+        "h2ops:flow:communicate",
+        "h2ops:challenges"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Where did Nour study?",
+      "expected": [
+        "journey:entry:role:Longfields-Davidson Heights Secondary School",
+        "journey:entry"
+      ],
+      "got": [
+        "profile:think",
+        "profile:work",
+        "profile:intro"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Show me the customer acquisition flow",
+      "expected": [
+        "acquisition:flow:target",
+        "acquisition:flow:find",
+        "acquisition:flow:demo"
+      ],
+      "got": [
+        "acquisition:value",
+        "acquisition:flow:crm",
+        "acquisition:what"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which work deals with scheduling service visits?",
+      "expected": [
+        "h2ops:flow:operations",
+        "h2ops:flow:confirm",
+        "h2ops:identity"
+      ],
+      "got": [
+        "h2ops:challenges",
+        "h2ops:flow:assess",
+        "h2ops:what"
+      ],
+      "rank": null
+    },
+    {
+      "q": "How does he combine business and technology?",
+      "expected": [
+        "profile:work",
+        "profile:direction"
+      ],
+      "got": [
+        "journey:technology:role:H2Ops",
+        "profile:intro",
+        "profile:journey-intro"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Which project helps employees find internal answers?",
+      "expected": [
+        "knowledge:flow:retrieve",
+        "knowledge:identity",
+        "safiy:identity"
+      ],
+      "got": [
+        "profile:work",
+        "journey:direction",
+        "journey:technology:role:Independent product work"
+      ],
+      "rank": null
+    },
+    {
+      "q": "Quels projets utilisent l\u2019IA ?",
+      "expected": [
+        "communications:identity",
+        "knowledge:identity",
+        "safiy:identity"
+      ],
+      "got": [
+        "journey:technology:role:Independent product work",
+        "knowledge:flow:assistant",
+        "knowledge:what"
+      ],
+      "rank": null
+    },
+    {
+      "q": "O\u00f9 Nour a-t-il \u00e9tudi\u00e9 ?",
+      "expected": [
+        "journey:entry:role:Longfields-Davidson Heights Secondary School",
+        "journey:entry"
+      ],
+      "got": [
+        "profile:think",
+        "profile:intro",
+        "profile:work"
+      ],
+      "rank": null
+    }
+  ]
+}

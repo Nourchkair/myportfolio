@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Nour — Phase 1 prototype</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark">AI</span>
+      <div>
+        <strong>AI Nour</strong>
+        <span>Phase 1 isolated prototype</span>
+      </div>
+    </div>
+    <div class="topbar-actions">
+      <span id="connection" class="pill idle">idle</span>
+      <select id="locale" aria-label="Language">
+        <option value="auto">Auto</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+      <button id="reset" class="ghost" type="button">New session</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="gate" class="gate card">
+      <h1>Enter the prototype access key</h1>
+      <p>This isolated prototype requires the local <code>PROTOTYPE_ACCESS_KEY</code>. It is stored in this browser only and sent to the local Worker. The permanent Gemini key never reaches the browser.</p>
+      <form id="gate-form">
+        <input id="access-key" type="password" autocomplete="off" placeholder="Prototype access key" required>
+        <button type="submit">Open prototype</button>
+      </form>
+      <p id="gate-error" class="error-text"></p>
+    </section>
+
+    <div id="app" class="app hidden">
+      <section class="chat card">
+        <div class="section-head">
+          <div>
+            <h2>Conversation</h2>
+            <p id="session-note">Starting a session…</p>
+          </div>
+          <span id="chat-state" class="pill idle">idle</span>
+        </div>
+        <div id="messages" class="messages" aria-live="polite"></div>
+        <form id="composer" class="composer">
+          <textarea id="message" rows="2" maxlength="2000" placeholder="Ask about Nour's work, journey, projects, or contact…"></textarea>
+          <button id="send" type="submit">Send</button>
+        </form>
+        <p id="chat-meta" class="meta"></p>
+      </section>
+
+      <aside class="side">
+        <section class="card voice-card">
+          <div class="section-head">
+            <div>
+              <h2>Live voice</h2>
+              <p>Ephemeral token · one use</p>
+            </div>
+            <span id="voice-state" class="pill idle">idle</span>
+          </div>
+          <div class="voice-actions">
+            <button id="voice-start" type="button">Start microphone</button>
+            <button id="voice-stop" type="button" class="ghost" disabled>Stop</button>
+          </div>
+          <p class="hint">Allow microphone access. Try English, French, an interruption, and a request to open a project.</p>
+          <div id="live-transcript" class="live-transcript">Live transcript will appear here.</div>
+        </section>
+
+        <section class="card">
+          <h2>Navigation</h2>
+          <p class="hint">Server-validated NourOS actions are previewed here. When embedded in the portfolio, the same actions call <code>window.NourOS</code>.</p>
+          <div id="actions" class="actions">No navigation yet.</div>
+        </section>
+
+        <section class="card">
+          <h2>Activity</h2>
+          <div id="activity" class="activity">Ready.</div>
+          <p id="budget" class="meta"></p>
+        </section>
+      </aside>
+    </div>
+  </main>
+  <div id="toast" class="toast hidden"></div>
+  <script type="module" src="/dist/app.js"></script>
+</body>
+</html>

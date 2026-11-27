@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-11-26T22:15:00.000Z",
+  "branch": "phase2/ai-nour-production",
+  "phase": 3,
+  "status": "launch candidate prepared; visual and human-device approval pending",
+  "tests": {
+    "unit": {
+      "passed": 45,
+      "total": 45
+    },
+    "api": {
+      "passed": 23,
+      "total": 23
+    },
+    "crm": {
+      "passed": 14,
+      "total": 14
+    },
+    "lifecycle": {
+      "passed": 28,
+      "total": 28
+    },
+    "adminAuth": {
+      "passed": 15,
+      "total": 15
+    },
+    "liveBudget": {
+      "passed": 3,
+      "total": 3
+    },
+    "security": {
+      "passed": 8,
+      "total": 8
+    },
+    "portfolio": {
+      "passed": 261,
+      "total": 261
+    }
+  },
+  "retrieval": {
+    "chunks": 107,
+    "queries": 55,
+    "top1": 0.8727,
+    "top3": 1,
+    "mrr": 0.9364
+  },
+  "cost": {
+    "actualSpentUsdMicros": 360233,
+    "heldReservationUsdMicros": 240000,
+    "committedUsdMicros": 600233,
+    "actualCad": 0.5122,
+    "committedCad": 0.8535,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000
+  },
+  "secretScan": {
+    "files": 383,
+    "valueHits": 0,
+    "patternHits": 0
+  },
+  "ui": {
+    "states": 6,
+    "thinkingState": true,
+    "thinkingBubble": false,
+    "messageLabels": 0,
+    "inPanelVoiceControls": 0,
+    "yellowOrbs": 0,
+    "consoleErrors": 0,
+    "realMicrophoneStarted": false
+  },
+  "email": {
+    "provider": "resend",
+    "sendEnabled": false,
+    "realEmailsSent": false,
+    "templates": 7,
+    "messageKinds": 8,
+    "retryMaxAttempts": 5,
+    "webhookSignatureVerifiedInTest": true,
+    "webhookConfiguredInLocalWorker": false
+  },
+  "crm": {
+    "d1Implemented": true,
+    "googleSheetApplied": false
+  },
+  "live": {
+    "model": "gemini-3.8-live",
+    "tokenTtlSeconds": 120,
+    "reservationUsdMicros": 80000,
+    "holdSeconds": 900,
+    "maxTokensPerDay": 12,
+    "proxyImplemented": false
+  },
+  "blockers": [
+    "Visual approval pending",
+    "Real-device Chrome/Safari/iOS/Bluetooth/French testing pending",
+    "Resend domain DNS and test send not approved",
+    "OAuth production publishing/verification not submitted",
+    "Google Sheets CRM schema not applied",
+    "Production admin hostname not approved",
+    "Google Workspace MCP migration required before 1 February 2027 if applicable",
+    "D1 residency ENAM/ORD"
+  ]
+}

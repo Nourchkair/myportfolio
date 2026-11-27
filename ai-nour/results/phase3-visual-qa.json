@@ -1,0 +1,145 @@
+{
+  "generatedAt": "2026-11-26T23:59:40.000Z",
+  "mode": "mock-providers/browser",
+  "viewports": [
+    "1440x900",
+    "390x844"
+  ],
+  "consoleErrors": 0,
+  "realMicrophoneStarted": false,
+  "states": [
+    {
+      "name": "closed pill",
+      "screenshot": "docs/screenshots/phase3-state-1-pill.png",
+      "viewport": "1440x900",
+      "pill": {
+        "x": 1020,
+        "y": 27,
+        "width": 163.4,
+        "height": 42
+      },
+      "menuBanner": {
+        "x": 430.4,
+        "y": 18,
+        "width": 579.1,
+        "height": 60
+      },
+      "label": "Ask Nour AI"
+    },
+    {
+      "name": "standard text panel",
+      "screenshot": "docs/screenshots/phase3-state-2-text.png",
+      "panel": {
+        "x": 1040,
+        "y": 152,
+        "width": 390,
+        "height": 680
+      },
+      "size": "standard",
+      "messageLabels": 0
+    },
+    {
+      "name": "collapsed chat",
+      "screenshot": "docs/screenshots/phase3-state-3-collapsed.png",
+      "panel": {
+        "x": 1040,
+        "y": 152,
+        "width": 390,
+        "height": 217
+      },
+      "size": "collapsed",
+      "visible": "latest AI reply + one-line composer"
+    },
+    {
+      "name": "expanded panel",
+      "screenshot": "docs/screenshots/phase3-state-4-expanded.png",
+      "panel": {
+        "x": 672,
+        "y": 152,
+        "width": 760,
+        "height": 740
+      },
+      "size": "expanded"
+    },
+    {
+      "name": "voice transcript",
+      "screenshot": "docs/screenshots/phase3-state-5-voice.png",
+      "panel": {
+        "x": 672,
+        "y": 152,
+        "width": 760,
+        "height": 740
+      },
+      "voice": "speaking",
+      "pillLabel": "Listening",
+      "inPanelVoiceControls": 0,
+      "note": "Pill mic is the only voice control; chat is transcript-only, with no mic/orb/bars/start/stop."
+    },
+    {
+      "name": "mobile bottom sheet",
+      "screenshot": "docs/screenshots/phase3-state-6-mobile.png",
+      "panel": {
+        "x": 0,
+        "y": 347,
+        "width": 390,
+        "height": 497
+      },
+      "viewport": "390x844",
+      "pill": {
+        "x": 229,
+        "y": 70,
+        "width": 149,
+        "height": 40
+      }
+    }
+  ],
+  "thinking": {
+    "screenshot": "docs/screenshots/phase3-state-thinking.png",
+    "hiddenWhenIdle": true,
+    "visibleWhenThinking": true,
+    "background": "rgba(0, 0, 0, 0)",
+    "border": "0px none",
+    "boxShadow": "none",
+    "textShadow": "rgba(255, 210, 161, 0.694) 0px 0px 17.38px, rgba(255, 210, 161, 0.263) 0px 0px 28.13px",
+    "animation": "ainour-think-glow 1.7s",
+    "rect": {
+      "x": 1056,
+      "y": 743,
+      "width": 358,
+      "height": 17
+    }
+  },
+  "messageLabels": {
+    "selectorCount": 0,
+    "labelChildCount": 0,
+    "pseudoContent": [
+      "none",
+      "none"
+    ]
+  },
+  "voiceControls": {
+    "inPanel": 0,
+    "orbCount": 0,
+    "voiceBars": 0,
+    "startControls": 0,
+    "stopControls": 0,
+    "pill": "Listening / mic toggles voice"
+  },
+  "yellowOrbChecks": {
+    "hits": 0,
+    "selectors": {
+      ".ainour-orb": 0,
+      ".ainour-voice-bars": 0,
+      ".ainour-start": 0,
+      ".ainour-stop": 0
+    }
+  },
+  "menuBar": {
+    "nourOsText": false,
+    "brand": "home mark only"
+  },
+  "disclosure": {
+    "aiRepresentationText": false
+  },
+  "notes": "Visual feedback pass. Chat is text/transcript-only; voice is controlled from the pill. Real microphone and human-device validation remain pending. No production CSS finalized."
+}

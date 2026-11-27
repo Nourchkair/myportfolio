@@ -1,0 +1,354 @@
+{
+  "generatedAt": "2026-11-27T01:09:04.248Z",
+  "mode": "real-google-sheets/D1-sync-with-synthetic-cleanup",
+  "base": "http://127.0.0.1:8797",
+  "passed": 12,
+  "failed": 0,
+  "total": 12,
+  "sync": {
+    "first": {
+      "inserted": 8,
+      "updated": 0,
+      "unchanged": 0
+    },
+    "second": {
+      "inserted": 0,
+      "updated": 0,
+      "unchanged": 8
+    }
+  },
+  "keyRows": [
+    {
+      "tab": "Contacts",
+      "count": 1,
+      "header": "contact_id"
+    },
+    {
+      "tab": "Inquiries",
+      "count": 1,
+      "header": "inquiry_id"
+    },
+    {
+      "tab": "Consent",
+      "count": 3,
+      "header": "consent_id"
+    },
+    {
+      "tab": "Appointments",
+      "count": 1,
+      "header": "appointment_id"
+    },
+    {
+      "tab": "Email Log",
+      "count": 2,
+      "header": "email_id"
+    }
+  ],
+  "cleanup": [
+    {
+      "tab": "Contacts",
+      "deleted": 1
+    },
+    {
+      "tab": "Inquiries",
+      "deleted": 1
+    },
+    {
+      "tab": "Consent",
+      "deleted": 3
+    },
+    {
+      "tab": "Appointments",
+      "deleted": 1
+    },
+    {
+      "tab": "Email Log",
+      "deleted": 2
+    },
+    {
+      "tab": "Follow-ups",
+      "deleted": 0
+    }
+  ],
+  "results": [
+    {
+      "name": "synthetic D1 inquiry created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "synthetic D1 appointment created",
+      "pass": true,
+      "detail": {
+        "status": 202
+      }
+    },
+    {
+      "name": "admin sync completes",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "totals": {
+          "inserted": 8,
+          "updated": 0,
+          "unchanged": 0
+        },
+        "tabs": [
+          {
+            "tab": "Contacts",
+            "error": null
+          },
+          {
+            "tab": "Inquiries",
+            "error": null
+          },
+          {
+            "tab": "Consent",
+            "error": null
+          },
+          {
+            "tab": "Appointments",
+            "error": null
+          },
+          {
+            "tab": "Email Log",
+            "error": null
+          },
+          {
+            "tab": "Follow-ups",
+            "error": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "sync inserts the synthetic records",
+      "pass": true,
+      "detail": {
+        "totals": {
+          "inserted": 8,
+          "updated": 0,
+          "unchanged": 0
+        }
+      }
+    },
+    {
+      "name": "second sync is idempotent",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "totals": {
+          "inserted": 0,
+          "updated": 0,
+          "unchanged": 8
+        }
+      }
+    },
+    {
+      "name": "live Sheet contains the D1 contact",
+      "pass": true,
+      "detail": {
+        "keyRows": [
+          {
+            "tab": "Contacts",
+            "count": 1,
+            "header": "contact_id"
+          },
+          {
+            "tab": "Inquiries",
+            "count": 1,
+            "header": "inquiry_id"
+          },
+          {
+            "tab": "Consent",
+            "count": 3,
+            "header": "consent_id"
+          },
+          {
+            "tab": "Appointments",
+            "count": 1,
+            "header": "appointment_id"
+          },
+          {
+            "tab": "Email Log",
+            "count": 2,
+            "header": "email_id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "live Sheet contains the D1 inquiry",
+      "pass": true,
+      "detail": {
+        "keyRows": [
+          {
+            "tab": "Contacts",
+            "count": 1,
+            "header": "contact_id"
+          },
+          {
+            "tab": "Inquiries",
+            "count": 1,
+            "header": "inquiry_id"
+          },
+          {
+            "tab": "Consent",
+            "count": 3,
+            "header": "consent_id"
+          },
+          {
+            "tab": "Appointments",
+            "count": 1,
+            "header": "appointment_id"
+          },
+          {
+            "tab": "Email Log",
+            "count": 2,
+            "header": "email_id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "live Sheet contains the three granted consents",
+      "pass": true,
+      "detail": {
+        "keyRows": [
+          {
+            "tab": "Contacts",
+            "count": 1,
+            "header": "contact_id"
+          },
+          {
+            "tab": "Inquiries",
+            "count": 1,
+            "header": "inquiry_id"
+          },
+          {
+            "tab": "Consent",
+            "count": 3,
+            "header": "consent_id"
+          },
+          {
+            "tab": "Appointments",
+            "count": 1,
+            "header": "appointment_id"
+          },
+          {
+            "tab": "Email Log",
+            "count": 2,
+            "header": "email_id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "live Sheet contains the D1 appointment",
+      "pass": true,
+      "detail": {
+        "keyRows": [
+          {
+            "tab": "Contacts",
+            "count": 1,
+            "header": "contact_id"
+          },
+          {
+            "tab": "Inquiries",
+            "count": 1,
+            "header": "inquiry_id"
+          },
+          {
+            "tab": "Consent",
+            "count": 3,
+            "header": "consent_id"
+          },
+          {
+            "tab": "Appointments",
+            "count": 1,
+            "header": "appointment_id"
+          },
+          {
+            "tab": "Email Log",
+            "count": 2,
+            "header": "email_id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "live Sheet contains both inquiry email jobs",
+      "pass": true,
+      "detail": {
+        "keyRows": [
+          {
+            "tab": "Contacts",
+            "count": 1,
+            "header": "contact_id"
+          },
+          {
+            "tab": "Inquiries",
+            "count": 1,
+            "header": "inquiry_id"
+          },
+          {
+            "tab": "Consent",
+            "count": 3,
+            "header": "consent_id"
+          },
+          {
+            "tab": "Appointments",
+            "count": 1,
+            "header": "appointment_id"
+          },
+          {
+            "tab": "Email Log",
+            "count": 2,
+            "header": "email_id"
+          }
+        ]
+      }
+    },
+    {
+      "name": "synthetic Sheet rows cleaned up",
+      "pass": true,
+      "detail": {
+        "cleanup": [
+          {
+            "tab": "Contacts",
+            "deleted": 1
+          },
+          {
+            "tab": "Inquiries",
+            "deleted": 1
+          },
+          {
+            "tab": "Consent",
+            "deleted": 3
+          },
+          {
+            "tab": "Appointments",
+            "deleted": 1
+          },
+          {
+            "tab": "Email Log",
+            "deleted": 2
+          },
+          {
+            "tab": "Follow-ups",
+            "deleted": 0
+          }
+        ]
+      }
+    },
+    {
+      "name": "no synthetic Sheet rows remain",
+      "pass": true,
+      "detail": {
+        "remaining": 0
+      }
+    }
+  ]
+}

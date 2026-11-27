@@ -1,0 +1,75 @@
+{
+  "interrupted": true,
+  "transcript": "Nour focuses on advancing innovation in artificial intelligence, with the Safe AI project dedicated to developing reliableDispatch highlights the power of sharing knowledge through concise and insightful summaries.",
+  "events": [
+    {
+      "type": "setup"
+    },
+    {
+      "type": "firstAudio",
+      "ms": 5262
+    },
+    {
+      "type": "secondAudio",
+      "ms": 5264
+    },
+    {
+      "type": "interrupted",
+      "ms": 6050
+    },
+    {
+      "type": "turnComplete",
+      "ms": 6199
+    },
+    {
+      "type": "usage",
+      "usage": {
+        "prompt": 722,
+        "response": 175,
+        "promptDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 353
+          },
+          {
+            "modality": "AUDIO",
+            "tokenCount": 342
+          }
+        ],
+        "responseDetails": [
+          {
+            "modality": "AUDIO",
+            "tokenCount": 175
+          }
+        ]
+      }
+    },
+    {
+      "type": "turnComplete",
+      "ms": 14161
+    },
+    {
+      "type": "usage",
+      "usage": {
+        "prompt": 877,
+        "response": 140,
+        "promptDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 369
+          },
+          {
+            "modality": "AUDIO",
+            "tokenCount": 465
+          }
+        ],
+        "responseDetails": [
+          {
+            "modality": "AUDIO",
+            "tokenCount": 140
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "generatedAt": "2026-11-26T18:02:35.965Z",
+  "applied": false,
+  "spreadsheetTitle": "AI Nour CRM",
+  "tabs": [
+    {
+      "tab": "Contacts",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "contact_id",
+        "full_name",
+        "email",
+        "phone",
+        "organization",
+        "role",
+        "locale",
+        "timezone",
+        "source",
+        "consent_status",
+        "created_at",
+        "updated_at",
+        "notes"
+      ]
+    },
+    {
+      "tab": "Inquiries",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "inquiry_id",
+        "contact_id",
+        "received_at",
+        "channel",
+        "inquiry_type",
+        "summary",
+        "requested_service",
+        "budget_range",
+        "timeline",
+        "status",
+        "owner",
+        "consent_id",
+        "source_url",
+        "created_at",
+        "updated_at",
+        "notes"
+      ]
+    },
+    {
+      "tab": "Pipeline",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "opportunity_id",
+        "inquiry_id",
+        "contact_id",
+        "stage",
+        "value_cad",
+        "probability",
+        "next_action",
+        "next_action_at",
+        "owner",
+        "last_contact_at",
+        "loss_reason",
+        "created_at",
+        "updated_at",
+        "notes"
+      ]
+    },
+    {
+      "tab": "Appointments",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "appointment_id",
+        "inquiry_id",
+        "contact_id",
+        "start_utc",
+        "end_utc",
+        "timezone",
+        "calendar_event_id",
+        "meet_link",
+        "status",
+        "owner",
+        "idempotency_key",
+        "created_at",
+        "updated_at",
+        "notes"
+      ]
+    },
+    {
+      "tab": "Follow-ups",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "followup_id",
+        "inquiry_id",
+        "contact_id",
+        "due_at",
+        "channel",
+        "purpose",
+        "status",
+        "owner",
+        "sent_at",
+        "consent_id",
+        "created_at",
+        "updated_at",
+        "notes"
+      ]
+    },
+    {
+      "tab": "Consent",
+      "status": "empty_ready_for_approval",
+      "expected": [
+        "consent_id",
+        "contact_id",
+        "scope",
+        "status",
+        "captured_at",
+        "expires_at",
+        "source",
+        "evidence",
+        "created_at",
+        "updated_at"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "generatedAt": "2026-11-27T00:32:25.957Z",
+  "mode": "mock-live/no-usage-reported",
+  "passed": 4,
+  "failed": 0,
+  "total": 4,
+  "results": [
+    {
+      "name": "first Live token reserves budget",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "reservationUsdMicros": 600000
+      }
+    },
+    {
+      "name": "Live token carries the configured 10-minute session duration",
+      "pass": true,
+      "detail": {
+        "sessionSeconds": 600,
+        "expiresAt": "2026-11-27T00:42:25.867Z"
+      }
+    },
+    {
+      "name": "held Live reservation counts toward budget",
+      "pass": true,
+      "detail": {
+        "held": 600000
+      }
+    },
+    {
+      "name": "second Live token blocked before unreported usage can bypass cap",
+      "pass": true,
+      "detail": {
+        "status": 402,
+        "error": "BUDGET_EXCEEDED"
+      }
+    }
+  ]
+}

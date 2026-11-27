@@ -1,0 +1,50 @@
+{
+  "generatedAt": "2026-11-26T20:31:39.433Z",
+  "checks": {
+    "frenchText": true,
+    "frenchReply": "Safiy est un assistant IA local et professionnel qui capture les conversations, organise les connaissances et fournit une assistance contextuelle pour connecter les discussions au travail quotidien.",
+    "frenchLiveToken": true,
+    "frenchLiveSetup": true,
+    "frenchLiveAudio": true,
+    "frenchLiveTranscript": true,
+    "frenchLiveTurnPersisted": true,
+    "sharedFrenchContext": true
+  },
+  "costs": {
+    "textUsdMicros": 121,
+    "liveUsdMicros": 80000
+  },
+  "live": {
+    "events": [
+      "open",
+      "setup",
+      "turnComplete"
+    ],
+    "transcript": "Safiy est un assistant IA local et professionnel qui capture vos conversations, organise les connaissances et fournit une assistance contextuelle pour connecter vos discussions au travail quotidien.",
+    "audioBytes": 476642,
+    "usage": {
+      "promptTokenCount": 1363,
+      "responseTokenCount": 254,
+      "totalTokenCount": 1617,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 895
+        },
+        {
+          "modality": "AUDIO",
+          "tokenCount": 194
+        }
+      ],
+      "responseTokensDetails": [
+        {
+          "modality": "AUDIO",
+          "tokenCount": 254
+        }
+      ],
+      "thoughtsTokenCount": 83
+    }
+  },
+  "passed": 7,
+  "failed": 0
+}

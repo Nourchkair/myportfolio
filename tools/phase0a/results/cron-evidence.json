@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-11-26T18:01:00Z",
+  "worker": "ai-nour-phase0a-dev",
+  "hostname": "ai-nour-phase0a-dev.phase0a.workers.dev",
+  "schedule": "*/5 * * * *",
+  "registeredAt": "2026-11-26T17:47:19Z",
+  "schedulesApi": {
+    "success": true,
+    "cron": "*/5 * * * *",
+    "modifiedOn": "2026-11-26T17:47:19Z"
+  },
+  "observedTicks": [
+    {
+      "at": "2026-11-26T17:55:38Z",
+      "detail": {
+        "expiredSessions": 0,
+        "staleRateBuckets": 0
+      }
+    },
+    {
+      "at": "2026-11-26T18:00:37Z",
+      "detail": {
+        "expiredSessions": 0,
+        "staleRateBuckets": 0
+      }
+    },
+    {
+      "at": "2026-11-26T18:05:37Z",
+      "detail": {
+        "expiredSessions": 0,
+        "staleRateBuckets": 0
+      }
+    }
+  ],
+  "propagationDelay": "First tick observed about 8 minutes after the trigger was registered; Cloudflare documents propagation of up to 15 minutes.",
+  "status": "passed; three consecutive ticks observed"
+}
