@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-27T16:24:00Z",
+  "generatedAt": "2026-11-27T16:33:00Z",
   "status": "Nupa V3 private beta deployed",
-  "sourceCommit": "3c842f5",
+  "sourceCommit": "8910918",
   "worker": {
     "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
     "url": "https://api.nourchkair.com",
@@ -9,9 +9,9 @@
     "d1": true
   },
   "pages": {
-    "deploymentId": "ec5f1368-ca75-486a-9d29-5def4b1b6682",
+    "deploymentId": "c807b7f0-6d25-4736-b02a-2c9c68d4d70d",
     "url": "https://nourchkair.com",
-    "preview": "https://ec5f1368.nourchkair.pages.dev"
+    "preview": "https://c807b7f0.nourchkair.pages.dev"
   },
   "legal": {
     "privacyVersion": "1.2",
@@ -107,7 +107,7 @@
       "note": "Raw identity file preserves one automated French-regex false negative; the transcript itself satisfies the requirement and a derived 6/6 verification is included."
     },
     "productionIntro": {
-      "passed": 8,
+      "passed": 9,
       "failed": 0,
       "evidence": "results/nupa-production-intro.json"
     }

@@ -36,7 +36,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `https://ec5f1368.nourchkair.pages.dev` |
+| Latest Pages deployment | `https://c807b7f0.nourchkair.pages.dev` |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -73,7 +73,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
 - Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
-- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `ec5f1368-ca75-486a-9d29-5def4b1b6682` (source `3c842f5`) are live.
+- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `c807b7f0-6d25-4736-b02a-2c9c68d4d70d` (source `8910918`) are live.
 - The daily spending cap was raised to **$3.00** for production acceptance testing; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
@@ -199,7 +199,7 @@ npm run deploy
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
 | Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |
-| Production opening cards and explicit choice | 8/8 | `results/nupa-production-intro.json` |
+| Production opening cards and simplified consent | 9/9 | `results/nupa-production-intro.json` |
 | Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
 | Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |
 | Production Nupa visual layer | 6/6 | `results/nupa-production-visual.json` |
