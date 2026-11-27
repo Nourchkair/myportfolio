@@ -30,13 +30,13 @@ Production currently has one active tester (Nour) and two revoked validation key
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `5596ba7b-c4a9-4256-8eea-aa46dd9f4735` |
+| Worker version | `6df5e7b6-e447-49f9-804c-5ba6ab114719` (27 November 2026 legal/voice release) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `https://6d306529.nourchkair.pages.dev` |
+| Latest Pages deployment | `https://d3dd93bb.nourchkair.pages.dev` |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -111,8 +111,8 @@ CRM inquiry/appointment creation currently returns **403** by design. Calendar/M
 
 Production ledger at the final V2 check:
 
-- Cumulative: **$1.687531 USD / ~$2.3994 CAD**
-- Today: **$0.790668 USD**
+- Cumulative: **$1.689069 USD / ~$2.4016 CAD**
+- Today: **$0.792206 USD**
 - Held reservations: **$0**
 - Daily cap: **$1.00 USD**
 - Cumulative cap: **$7.00 USD (~$9.95 CAD)**
@@ -133,7 +133,8 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `6dfcd430-e175-4f70-842a-076516c921bb` (V2)
+- Current Worker version: `6df5e7b6-e447-49f9-804c-5ba6ab114719` (legal/voice release)
+- Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
 - Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
@@ -169,7 +170,10 @@ npm run deploy
 | Production D1 → Google Sheet | 11/11 | `results/production-crm-sheet-sync.json` |
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
-| Secret scan | 413 files, 0 hits | `results/secret-scan.txt` |
+| Legal validator | 46/46 | `npm run validate:legal` |
+| Consent integration | 12/12 | `results/consent-tests.json` |
+| Live budget at 5 minutes | 9/9 | `results/live-budget-tests.json` |
+| Secret scan | 437 files, 0 hits | `results/secret-scan.txt` |
 
 Live browser check: `?ainour=beta` pill, gate, grounded reply, zero console errors; plain `https://nourchkair.com` showed no AI pill or panel.
 
@@ -179,4 +183,4 @@ Live browser check: `?ainour=beta` pill, gate, grounded reply, zero console erro
 
 A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine AI Nour administration does not require Cloudflare access.
 
-**Do not enable unrestricted public access until Nour completes product acceptance and explicitly approves the public launch.**
+**Do not enable unrestricted public access until Nour completes product acceptance and explicitly approves the public launch. The Gemini project is on the free tier; do not submit personal/confidential information and do not enable public AI until the paid-tier/DPA decision is approved.**

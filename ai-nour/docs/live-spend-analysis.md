@@ -30,7 +30,7 @@ Status: **5-minute sessions are the current private-beta default (27 November 20
 ## Provider-side vs application-side duration
 
 - Gemini Live audio-only sessions have a provider limit of about **15 minutes**; the WebSocket connection is limited to about **10 minutes**.
-- An ephemeral token’s `expireTime` limits how long messages can be sent on that connection. The server sets it to the selected session duration (default 600s), so the cap is enforced by Gemini, not by a browser timer.
+- An ephemeral token’s `expireTime` limits how long messages can be sent on that connection. The server sets it to the selected session duration (default 300s; 600s maximum), so the cap is enforced by Gemini, not by a browser timer.
 - The browser does have no countdown that ends the session; it only cleans up when the provider closes or the user stops voice.
 - `newSessionExpireTime` remains 60s, so a token cannot be minted and held indefinitely before connecting.
 - The server does not use a frontend timer as the duration enforcement mechanism.

@@ -181,7 +181,7 @@ Full details: `ai-nour/docs/oauth-production-readiness.md`.
 - Brand verification then sensitive-scope verification; allow about 10 days; no restricted-scope assessment if Gmail is excluded.
 - Gmail remains out of production; Resend handles transactional email. Gmail drafts remain an optional human-review fallback.
 - Google Workspace MCP: agents must use Google MCP for Workspace access from **1 February 2027**. Direct REST is acceptable for the private-beta window; a post-February-2027 launch needs migration or a documented exception.
-- Final bilingual policies are prepared at `privacy/index.html` and `terms/index.html`; not published pending approval. Public URLs will be `https://nourchkair.com/privacy` and `https://nourchkair.com/terms`.
+- Final bilingual policies (version 1.1, 18+ for AI Nour) are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
 
 Manual authorization steps are in the OAuth document: production project, redirects, brand verification, scope justification/demo, publish, reauthorize with offline access, store secrets. No publish or verification has been submitted.
 

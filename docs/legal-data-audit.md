@@ -160,7 +160,7 @@ Current implementation:
 11. **French review:** The French text should be reviewed by a native/legal reviewer for terminology and enforceability.
 12. **Billing status:** The production Gemini project is confirmed Free tier with no active Cloud Billing account. The paid-service DPA does not apply. Keep public AI disabled; do not submit personal/confidential information. Activating paid billing requires explicit approval, a payment method, and a prepaid balance (minimum $5 at the time of review).
 13. **EEA/UK:** Google requires Paid Services for API clients available in the EEA, Switzerland, or the UK. The private beta is restricted and public AI access is disabled; do not enable public access in those regions on unpaid quota.
-14. **Publication gate:** `/privacy` and `/terms` are published only with this release; verify both URLs, language sections, redirects and links after deployment.
+14. **Publication:** `/privacy/` and `/terms/` are published (version 1.1). Both returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and AI Nour links use the trailing-slash URLs.
 
 ## 9. Approval record
 
@@ -176,5 +176,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 - [x] English and French texts.
 - [x] Five-minute Live sessions with the $1 daily and $7 cumulative caps unchanged; Schedar retained; admin can restore up to 10 minutes.
 - [x] Voice error distinction and local-time daily reset message.
-- [ ] Publish `/privacy` and `/terms`, verify both URLs, add them to Google OAuth Console, and re-run the policy link audit.
-- [ ] Manual Cloud Billing/AI Studio status confirmation and any public-launch decision.
+- [x] Publish `/privacy/` and `/terms/`, verify both URLs, language sections and links.
+- [ ] Add the published URLs to the Google OAuth Console and complete verification/publishing; this remains the next manual action.
+- [x] Confirm current AI Studio billing tier: Free tier, no active Cloud Billing.
+- [ ] Decide whether to activate paid Gemini billing; do not enable public AI before that decision.

@@ -164,6 +164,22 @@ Operational facts reflected in the policies:
 - The production Gemini project is on the **Free tier** with no active Cloud Billing. Google's unpaid-service terms apply; do not submit personal, sensitive, confidential or third-party information. Public AI access remains disabled.
 - External CRM/Calendar/email writes remain disabled except for separately approved synthetic tests.
 
+## 7b. Current Google Console state (verified read-only, 27 November 2026)
+
+- Project: `ai-nour`.
+- App name: `AI Nour`.
+- Homepage: `https://nourchkair.com`.
+- Authorized domain: `nourchkair.com`.
+- Privacy policy URL: **empty**.
+- Terms of service URL: **empty**.
+- Publishing status: **Testing**; user type **External**; one test user (`nourchkair@gmail.com`), 100-user testing cap.
+- OAuth client: `AI Nour - Development`; authorized redirect URIs are local only:
+  - `http://localhost:8787/oauth/google/callback`
+  - `http://127.0.0.1:8791/auth/google/callback`
+- No production redirect URI is configured because the Worker has no OAuth callback route.
+
+The blank privacy/terms fields currently block publishing. The first manual action is to set them to the published URLs and save.
+
 ## 8. Remaining Google Console actions requiring the user
 
 1. Confirm whether to keep the existing `ai-nour` OAuth project or create a separate production project/client.

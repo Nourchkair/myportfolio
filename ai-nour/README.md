@@ -167,7 +167,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/architecture.md` — module map and data flows.
 - `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
 - `../docs/ai-nour-v2-conversational.md` — V2 personality, grounding, visitor intelligence, presentations and quality results.
-- `../privacy/index.html` and `../terms/index.html` — final bilingual legal pages (prepared, not published until approved).
+- `../privacy/index.html` and `../terms/index.html` — published bilingual legal pages (version 1.1, 18+ for AI Nour).
 - `../docs/legal-data-audit.md` — data, retention, deletion, admin, third-party and Gemini claim audit.
 - `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
 
