@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-27T16:41:15.262Z",
+  "generatedAt": "2026-11-27T16:55:26.403Z",
   "url": "https://nourchkair.com/?ainour=beta",
-  "passed": 9,
+  "passed": 10,
   "failed": 0,
-  "total": 9,
+  "total": 10,
   "checks": [
     {
       "name": "production intro waits for an explicit choice",
@@ -102,18 +102,22 @@
         "welcome": "Bienvenue \u2014 je suis Nupa, un guide de portfolio ind\u00e9pendant propuls\u00e9 par l\u2019IA, et non Nour. Je peux vous faire d\u00e9couvrir son travail, r\u00e9pondre \u00e0 vos questions et vous guider.",
         "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini, qui peut les utiliser pour am\u00e9liorer ses produits. Les transcriptions sont conserv\u00e9es jusqu\u2019\u00e0 7 jours et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
         "accept": "En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
-        "button": "Continuer \u2014 18 ans et j\u2019accepte",
-        "buttonAria": "Continuer : confirmer avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9",
+        "button": "Continuer et accepter",
+        "buttonAria": "Continuer et accepter : confirmer avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9",
         "checkboxCount": 0,
         "links": [
           "/terms/",
           "/privacy/"
         ],
-        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour."
+        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
+        "panelHidden": true,
+        "modal": true,
+        "backdropFilter": "blur(18px) saturate(0.78)",
+        "centered": true
       }
     },
     {
-      "name": "French consent has no checkbox and puts acceptance in Continue",
+      "name": "French consent is centered, outside chat, and has no checkbox",
       "pass": true,
       "detail": {
         "locale": "FR",
@@ -121,14 +125,18 @@
         "welcome": "Bienvenue \u2014 je suis Nupa, un guide de portfolio ind\u00e9pendant propuls\u00e9 par l\u2019IA, et non Nour. Je peux vous faire d\u00e9couvrir son travail, r\u00e9pondre \u00e0 vos questions et vous guider.",
         "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini, qui peut les utiliser pour am\u00e9liorer ses produits. Les transcriptions sont conserv\u00e9es jusqu\u2019\u00e0 7 jours et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
         "accept": "En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
-        "button": "Continuer \u2014 18 ans et j\u2019accepte",
-        "buttonAria": "Continuer : confirmer avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9",
+        "button": "Continuer et accepter",
+        "buttonAria": "Continuer et accepter : confirmer avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9",
         "checkboxCount": 0,
         "links": [
           "/terms/",
           "/privacy/"
         ],
-        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour."
+        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
+        "panelHidden": true,
+        "modal": true,
+        "backdropFilter": "blur(18px) saturate(0.78)",
+        "centered": true
       }
     },
     {
@@ -140,14 +148,34 @@
         "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.",
         "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.",
         "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy.",
-        "button": "Continue \u2014 I\u2019m 18+ and agree",
-        "buttonAria": "Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "button": "Continue and agree",
+        "buttonAria": "Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
         "checkboxCount": 0,
         "links": [
           "/terms/",
           "/privacy/"
         ],
-        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour."
+        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
+        "panelHidden": true,
+        "modal": true,
+        "backdropFilter": "blur(18px) saturate(0.78)",
+        "centered": true
+      }
+    },
+    {
+      "name": "Continue and agree records acceptance and opens the chat gate",
+      "pass": true,
+      "detail": {
+        "consent": {
+          "version": "2026-11-27-v1.2",
+          "age18": true,
+          "terms": true,
+          "privacy": true,
+          "acceptedAt": "2026-11-27T16:55:25.919Z"
+        },
+        "gateVisible": true,
+        "panelHidden": false,
+        "consentHidden": true
       }
     },
     {
