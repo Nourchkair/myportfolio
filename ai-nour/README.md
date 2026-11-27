@@ -1,8 +1,8 @@
-# AI Nour — Phase 4 private-beta candidate
+# AI Nour — production private beta
 
-Isolated Phase 4 private-beta candidate for AI Nour: a Cloudflare Worker, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, D1 conversation/CRM/cost stores, bilingual retrieval, a feature-flagged portfolio companion, a private admin dashboard, and a transactional email pipeline prepared for Resend Free.
+AI Nour is deployed in restricted private-beta mode: a Cloudflare Worker at `api.nourchkair.com`, an isolated production D1 database, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, bilingual retrieval, a feature-flagged portfolio companion, and a local private admin dashboard.
 
-This is **not deployed to production**, is not merged into `main`, and does not activate billing or paid services. The portfolio companion mounts only when explicitly enabled.
+The public portfolio is live at `https://nourchkair.com`. The AI companion mounts only through the private-beta entry, and every API request requires an individually revocable beta key. Unrestricted public access remains disabled.
 
 ## Quick start
 
@@ -26,14 +26,25 @@ http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
 
 Mock Worker key: `phase2-test-key`. Real Worker: `ainour-api=http://127.0.0.1:8789` and the key from `.dev.vars`.
 
-### Local admin
+### Production private beta
+
+```text
+https://nourchkair.com/?ainour=beta
+```
+
+The query parameter only reveals the companion. The server accepts only an active beta key created in **Admin → Private beta**. Keys are hashed in D1 and revocable individually.
+
+### Admin
 
 ```bash
-# separate terminal, Worker running
+# local admin connected to the production Worker
+npm run admin:production
+
+# local development admin
 npm run admin
 ```
 
-Open <http://127.0.0.1:8791> using the allowlisted Google account. The admin server binds to `127.0.0.1`; the Worker bearer token never reaches the browser. Sign out, re-authenticate, and sign out all are available in the header.
+Open <http://127.0.0.1:8791> using the allowlisted Google account. The admin server binds to `127.0.0.1`; the Worker bearer token never reaches the browser. The production admin token and Worker URL live in `ai-nour/.dev.vars.production` (mode `600`, gitignored).
 
 ## Tests
 
@@ -131,13 +142,15 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 ## Safety and cost
 
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
+- Production beta keys are SHA-256 hashed in D1; the full key is shown once at creation and can be revoked immediately.
+- The public portfolio does not mount AI Nour; the beta entry and server-side key check are both required.
 - Live tokens are one-use, use a configurable provider-enforced expiry (default 600 seconds), carry a duration-scaled prepaid reservation (default $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
 - Gmail adapter has no send method; it creates drafts only.
 - Resend is prepared but `EMAIL_SEND_ENABLED=false` by default; local processing is dry-run.
-- No R2, paid auth, paid database, or production deployment is activated.
-- CRM headers are applied to the live Sheet. D1→Sheet sync is manual and idempotent; automatic per-event sync is not enabled.
+- No R2, paid auth, or paid database is activated. Production deployment is restricted to the private beta.
+- CRM headers are applied to the live Sheet. Production D1→Sheet sync is manual and idempotent; automatic per-event sync is not enabled.
 
 ## Documentation
 
@@ -149,14 +162,15 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/admin-security.md` — admin authentication, authorization, logout/revocation, tests.
 - `docs/live-spend-analysis.md` — Live exposure, abandoned connections, proxy comparison.
 - `docs/architecture.md` — module map and data flows.
+- `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
 - `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
 
 ## Known limitations
 
 - Visual approval and real-device microphone/Bluetooth/iOS testing remain pending.
-- OAuth production publishing/verification and production redirect URIs are not submitted.
+- OAuth production publishing/verification is pending; the current Testing-mode refresh token expires in about 6.5 days. No production OAuth callback route is implemented; reauthorization uses the local helper.
 - Resend DNS/DKIM/DMARC and a real test send are not configured.
 - Google Workspace MCP migration is a post-1-February-2027 requirement if direct REST agent access is disallowed.
 - CRM Sheet sync is manual; scheduled per-event sync is not enabled.
-- Cloudflare Access is not introduced; production admin hosting is undecided.
-- D1 remains ENAM/ORD; the historical third-party key remains in Git history without rewriting.
+- Cloudflare Access is not introduced; production admin remains local on `127.0.0.1:8791`.
+- Production D1 is ENAM; the historical third-party key remains in Git history without rewriting.

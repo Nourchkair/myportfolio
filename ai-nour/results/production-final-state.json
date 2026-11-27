@@ -1,0 +1,107 @@
+{
+  "generatedAt": "2026-11-27T04:08:17.599Z",
+  "base": "https://api.nourchkair.com",
+  "passed": 8,
+  "failed": 0,
+  "total": 8,
+  "budget": {
+    "dailyUsdMicros": 535085,
+    "cumulativeUsdMicros": 1431948,
+    "dailySpentUsdMicros": 535085,
+    "cumulativeSpentUsdMicros": 1431948,
+    "heldLiveReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 464915,
+    "cumulativeRemainingUsdMicros": 5568052,
+    "allowed": true
+  },
+  "d1Counts": {
+    "contacts": 0,
+    "inquiries": 0,
+    "consents": 0,
+    "bookings": 0,
+    "email_jobs": 0
+  },
+  "results": [
+    {
+      "name": "production health",
+      "pass": true,
+      "detail": {
+        "ok": true,
+        "service": "ai-nour-production",
+        "version": "phase4-0.4.0",
+        "d1": true,
+        "error": null,
+        "textProvider": "gemini",
+        "liveProvider": "gemini",
+        "time": "2026-11-27T04:08:15.485Z"
+      }
+    },
+    {
+      "name": "external writes off",
+      "pass": true,
+      "detail": {
+        "google_writes_enabled": false
+      }
+    },
+    {
+      "name": "Resend disabled",
+      "pass": true,
+      "detail": {
+        "sendEnabled": false
+      }
+    },
+    {
+      "name": "beta access required",
+      "pass": true,
+      "detail": {
+        "betaAccessRequired": true,
+        "adminEnabled": true
+      }
+    },
+    {
+      "name": "spending caps intact",
+      "pass": true,
+      "detail": {
+        "dailyUsdMicros": 535085,
+        "cumulativeUsdMicros": 1431948,
+        "dailySpentUsdMicros": 535085,
+        "cumulativeSpentUsdMicros": 1431948,
+        "heldLiveReservationsUsdMicros": 0,
+        "dailyCapUsdMicros": 1000000,
+        "cumulativeCapUsdMicros": 7000000,
+        "dailyRemainingUsdMicros": 464915,
+        "cumulativeRemainingUsdMicros": 5568052,
+        "allowed": true
+      }
+    },
+    {
+      "name": "CRM external writes remain blocked",
+      "pass": true,
+      "detail": {
+        "status": 403,
+        "error": "FORBIDDEN"
+      }
+    },
+    {
+      "name": "only the primary beta key is active",
+      "pass": true,
+      "detail": {
+        "active": 1,
+        "revoked": 2
+      }
+    },
+    {
+      "name": "no synthetic CRM rows remain in production D1",
+      "pass": true,
+      "detail": {
+        "contacts": 0,
+        "inquiries": 0,
+        "consents": 0,
+        "bookings": 0,
+        "email_jobs": 0
+      }
+    }
+  ]
+}

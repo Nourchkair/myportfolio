@@ -10,14 +10,25 @@ const env = Object.fromEntries(fs.readFileSync(path.join(root, '.dev.vars'), 'ut
   return [line.slice(0, index), line.slice(index + 1)];
 }));
 const owner = `crm-google-${crypto.randomUUID()}`;
-const prototypeKey = 'phase2-crm-key';
+const production = process.env.PHASE4_PRODUCTION === '1';
+const productionEnv = production
+  ? Object.fromEntries(fs.readFileSync(path.join(root, '.dev.vars.production'), 'utf8').split(/\r?\n/).filter((line) => line && !line.startsWith('#')).map((line) => {
+    const index = line.indexOf('=');
+    return [line.slice(0, index), line.slice(index + 1)];
+  }))
+  : {};
+const betaKeys = production ? JSON.parse(fs.readFileSync(path.join(root, '.private-beta-keys.json'), 'utf8')) : null;
+const integrationTester = betaKeys?.testers.find((item) => item.purpose === 'integration-validation');
+const prototypeKey = production ? integrationTester?.key : 'phase2-crm-key';
+const adminToken = production ? productionEnv.ADMIN_TOKEN : env.ADMIN_TOKEN;
+if (production && !prototypeKey) throw new Error('Integration validation beta key is missing');
 const results = [];
 const check = (name, pass, detail = {}) => results.push({ name, pass: Boolean(pass), detail });
 
 async function api(pathname, { method = 'GET', body, admin = false } = {}) {
   const headers = { 'x-prototype-key': prototypeKey, 'x-owner-token': owner };
   if (body !== undefined) headers['content-type'] = 'application/json';
-  if (admin) headers.authorization = `Bearer ${env.ADMIN_TOKEN}`;
+  if (admin) headers.authorization = `Bearer ${adminToken}`;
   const response = await fetch(base + pathname, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
   const text = await response.text();
   let parsed = {};
@@ -63,7 +74,7 @@ const inquiry = await api('/api/crm/inquiries', {
     inquiryType: 'consulting',
     summary: 'Synthetic Phase 2 Google Calendar appointment validation.',
     consent: { store: true, contact: true, email: true },
-    clientRequestId: 'crm-google-inquiry-1'
+    clientRequestId: `crm-google-inquiry-${owner}`
   }
 });
 check('synthetic inquiry created', inquiry.status === 201 && Boolean(inquiry.body.inquiry?.id), { status: inquiry.status });
@@ -71,7 +82,7 @@ const inquiryId = inquiry.body.inquiry?.id;
 
 const appointment = await api('/api/crm/appointments', {
   method: 'POST',
-  body: { inquiryId, startUtc: start, endUtc: end, timezone: 'America/Toronto', idempotencyKey: 'crm-google-appointment-1' }
+  body: { inquiryId, startUtc: start, endUtc: end, timezone: 'America/Toronto', idempotencyKey: `crm-google-appointment-${owner}` }
 });
 check('Google appointment confirmed with Meet link', appointment.status === 201 && appointment.body.booking?.status === 'confirmed' && Boolean(appointment.body.booking?.meetLink) && Boolean(appointment.body.booking?.calendarEventId), {
   status: appointment.status,
@@ -79,6 +90,18 @@ check('Google appointment confirmed with Meet link', appointment.status === 201 
   meetLink: Boolean(appointment.body.booking?.meetLink)
 });
 const booking = appointment.body.booking;
+
+const duplicateAppointment = await api('/api/crm/appointments', {
+  method: 'POST',
+  body: { inquiryId, startUtc: start, endUtc: end, timezone: 'America/Toronto', idempotencyKey: `crm-google-appointment-${owner}` }
+});
+check('duplicate appointment is idempotent', duplicateAppointment.status === 200 && duplicateAppointment.body.duplicate === true, { status: duplicateAppointment.status, duplicate: duplicateAppointment.body.duplicate });
+
+const overlap = await api('/api/crm/appointments', {
+  method: 'POST',
+  body: { inquiryId, startUtc: start, endUtc: end, timezone: 'America/Toronto', idempotencyKey: `crm-google-overlap-${owner}` }
+});
+check('overlapping appointment is rejected', overlap.status === 409, { status: overlap.status, error: overlap.body.error?.code });
 
 let token;
 try { token = await accessToken(); } catch {}
@@ -106,6 +129,11 @@ check('appointment cancelled', cancel.status === 200 && cancel.body.booking?.sta
 if (token && booking?.calendarEventId) {
   const event = await calendarEvent(booking.calendarEventId, token);
   check('calendar event cancelled/deleted', [404, 410].includes(event.status) || event.body.status === 'cancelled', { status: event.status, calendarStatus: event.body.status });
+  const hardDelete = await fetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(env.GOOGLE_CALENDAR_ID)}/events/${encodeURIComponent(booking.calendarEventId)}`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${token}` }
+  });
+  check('synthetic calendar event removed', [204, 404, 410].includes(hardDelete.status), { status: hardDelete.status });
 }
 
 const emailJobs = await api('/api/admin/email', { admin: true });
@@ -115,13 +143,14 @@ await api('/api/admin/flags', { method: 'PATCH', admin: true, body: { flags: { g
 
 const output = {
   generatedAt: new Date().toISOString(),
-  mode: 'real-google-calendar/synthetic-consenting-attendee',
+  mode: production ? 'production-real-google-calendar/synthetic-consenting-attendee' : 'real-google-calendar/synthetic-consenting-attendee',
+  ids: { inquiryId, contactId: inquiry.body.contact?.id, bookingId: booking?.id },
   passed: results.filter((item) => item.pass).length,
   failed: results.filter((item) => !item.pass).length,
   total: results.length,
   results
 };
 fs.mkdirSync(path.join(root, 'results'), { recursive: true });
-fs.writeFileSync(path.join(root, 'results/crm-google-tests.json'), JSON.stringify(output, null, 2));
+fs.writeFileSync(path.join(root, production ? 'results/production-crm-google.json' : 'results/crm-google-tests.json'), JSON.stringify(output, null, 2));
 console.log(JSON.stringify(output, null, 2));
 if (output.failed) process.exitCode = 1;

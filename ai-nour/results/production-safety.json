@@ -1,0 +1,101 @@
+{
+  "generatedAt": "2026-11-27T04:05:44.268Z",
+  "base": "https://api.nourchkair.com",
+  "sessionId": "ba2d6ad8-42a4-4f02-b04e-7f19db4f46ad",
+  "passed": 10,
+  "failed": 0,
+  "total": 10,
+  "results": [
+    {
+      "name": "emergency shutdown flag applies",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "assistant_enabled": false
+      }
+    },
+    {
+      "name": "shutdown is visible in public flags",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "flags": {
+          "assistant_enabled": false,
+          "text_enabled": true,
+          "live_enabled": true
+        }
+      }
+    },
+    {
+      "name": "new sessions are blocked during shutdown",
+      "pass": true,
+      "detail": {
+        "status": 503,
+        "error": "UNAVAILABLE"
+      }
+    },
+    {
+      "name": "emergency shutdown restored",
+      "pass": true,
+      "detail": {
+        "restored": true
+      }
+    },
+    {
+      "name": "sessions recover after restore",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "production Live token uses the 10-minute limit",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "sessionSeconds": 600,
+        "expiresIn": 600
+      }
+    },
+    {
+      "name": "production Live reservation is $0.25",
+      "pass": true,
+      "detail": {
+        "reservationUsdMicros": 250000
+      }
+    },
+    {
+      "name": "ephemeral token is not exposed in results",
+      "pass": true,
+      "detail": {
+        "tokenReturned": true
+      }
+    },
+    {
+      "name": "production Live reservation settles",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "costUsdMicros": 250000
+      }
+    },
+    {
+      "name": "spending remains within caps",
+      "pass": true,
+      "detail": {
+        "budget": {
+          "dailyUsdMicros": 535085,
+          "cumulativeUsdMicros": 1431948,
+          "dailySpentUsdMicros": 535085,
+          "cumulativeSpentUsdMicros": 1431948,
+          "heldLiveReservationsUsdMicros": 0,
+          "dailyCapUsdMicros": 1000000,
+          "cumulativeCapUsdMicros": 7000000,
+          "dailyRemainingUsdMicros": 464915,
+          "cumulativeRemainingUsdMicros": 5568052,
+          "allowed": true
+        }
+      }
+    }
+  ]
+}

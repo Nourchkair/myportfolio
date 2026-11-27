@@ -1,0 +1,115 @@
+{
+  "generatedAt": "2026-11-27T04:07:46.097Z",
+  "mode": "production-real-google-calendar/synthetic-consenting-attendee",
+  "ids": {
+    "inquiryId": "27ed8940-143a-471e-b4da-ef6c5233c379",
+    "contactId": "d4a0dbb0-2428-44c3-8302-ff86cf240108",
+    "bookingId": "fea33db2-4f53-4f66-a20d-2a5ce03ced00"
+  },
+  "passed": 13,
+  "failed": 0,
+  "total": 13,
+  "results": [
+    {
+      "name": "Google writes enabled for synthetic test",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "synthetic inquiry created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "Google appointment confirmed with Meet link",
+      "pass": true,
+      "detail": {
+        "status": 201,
+        "bookingStatus": "confirmed",
+        "meetLink": true
+      }
+    },
+    {
+      "name": "duplicate appointment is idempotent",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "duplicate": true
+      }
+    },
+    {
+      "name": "overlapping appointment is rejected",
+      "pass": true,
+      "detail": {
+        "status": 409,
+        "error": "CONFLICT"
+      }
+    },
+    {
+      "name": "calendar event exists",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "timeZone": "America/Toronto"
+      }
+    },
+    {
+      "name": "calendar event invites only the consenting synthetic attendee",
+      "pass": true,
+      "detail": {
+        "attendees": [
+          "synthetic.google@example.invalid"
+        ]
+      }
+    },
+    {
+      "name": "appointment rescheduled",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "calendar event moved",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "start": "2027-02-15T11:00:00-05:00"
+      }
+    },
+    {
+      "name": "appointment cancelled",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "bookingStatus": "cancelled"
+      }
+    },
+    {
+      "name": "calendar event cancelled/deleted",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "calendarStatus": "cancelled"
+      }
+    },
+    {
+      "name": "synthetic calendar event removed",
+      "pass": true,
+      "detail": {
+        "status": 410
+      }
+    },
+    {
+      "name": "confirmation/reschedule/cancel email jobs queued",
+      "pass": true,
+      "detail": {
+        "jobs": 4
+      }
+    }
+  ]
+}

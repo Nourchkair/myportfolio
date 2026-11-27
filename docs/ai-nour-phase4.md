@@ -2,24 +2,28 @@
 
 **Date:** 26 November 2026  
 **Branch:** `phase2/ai-nour-production`  
-**Status:** latest integrated candidate running locally. CRM schema, live Sheet round-trip, D1→Sheet sync, and consent-gated Calendar invitations are applied and validated. Private-beta launch remains gated by Nour’s personal acceptance and the external account decisions below.
+**Status:** **production private beta deployed and restricted.** The production Worker, D1, custom domain, beta keys, admin, text/Live voice, portfolio navigation, Sheets sync, and Calendar/Meet were validated. Public access remains disabled. Personal acceptance and Google OAuth durability remain pending.
 
 ---
 
 ## 1. Launch for review
 
 ```text
-Portfolio:  http://127.0.0.1:8771
-Real API:   http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8789
-Mock API:   http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
-Admin:      http://127.0.0.1:8791
+Production portfolio: https://nourchkair.com
+Private-beta entry:   https://nourchkair.com/?ainour=beta
+Production API:       https://api.nourchkair.com
+Local admin:          http://127.0.0.1:8791
+
+Local portfolio:      http://127.0.0.1:8771
+Local real API:       http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8789
+Local mock API:       http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8792
 ```
 
-- Mock key: `phase2-test-key`.
-- Real key: `PROTOTYPE_ACCESS_KEY` from `.dev.vars`.
-- Admin uses Google OAuth; use `127.0.0.1:8791`.
+- The production query parameter only reveals the companion; every API request requires an active, server-validated beta key.
+- Your primary beta key is in `ai-nour/.private-beta-keys.json` (mode `600`, gitignored).
+- Admin uses Google OAuth at `127.0.0.1:8791` and is connected to the production Worker.
 - The default portfolio and reading view remain assistant-free.
-- No production merge, push, deployment, DNS change, or billing activation has occurred.
+- Production infrastructure is live; no billing or paid services are activated.
 
 ---
 
@@ -27,27 +31,24 @@ Admin:      http://127.0.0.1:8791
 
 ### Required from Nour
 
-1. **Visual acceptance.** Review all six interface states and approve, or list changes. The production CSS pass waits on this.
-2. **Real-device acceptance.** Run Chrome, Safari, iOS Safari, microphone, Bluetooth, interruption, recovery, French, and mobile checks. Automated tests cannot substitute.
-3. **Resend.** Approve the DNS records for `mail.nourchkair.com`; add the sending-only API key and webhook signing secret; approve one controlled test send. Private beta can run without these.
-4. **OAuth production.** Approve the production project/clients, production redirect URIs, brand/scope verification, and publishing out of Testing. Approve whether the admin stays local/private or gets a private hostname.
-5. **Sheet update cadence.** Confirm whether the implemented manual **Sync D1 → Google Sheet** action is sufficient for private beta, or approve automatic scheduled sync.
-6. **Voice policy.** Confirm the default 10-minute session and $0.25 reservation at that duration, or set a different value up to 10 minutes.
+1. **Google OAuth durability.** Publish and verify the OAuth app out of Testing, then reauthorize for a durable refresh token. The current token expires in about **6.55 days**. This is the only urgent production action.
+2. **Visual acceptance.** Review all six interface states at the beta entry and approve, or list changes.
+3. **Real-device acceptance.** Run Chrome, Safari, iOS Safari, microphone, Bluetooth, interruption, recovery, French, and mobile checks. Automated tests cannot substitute.
+4. **Beta access list.** Confirm the authorized testers; create or revoke their keys in **Admin → Private beta**.
+5. **Resend.** Optional and disabled. Approve DNS/API key/webhook only when you want real email.
+6. **Sheet update cadence.** Confirm whether the manual **Sync D1 → Google Sheet** action is sufficient, or approve scheduled sync.
 7. **Google Workspace MCP.** Decide the post-1-February-2027 path if direct Workspace REST agent access is disallowed.
-8. **D1 residency.** Accept ENAM/ORD or change providers.
-9. **Archived key.** Acknowledge that the third-party Unsplash Maps key remains in Git history without rewrite; do not use it.
-10. **Beta access list.** Confirm the private-beta users and issue the prototype access key outside Git.
+8. **Archived key.** Acknowledge that the third-party Unsplash Maps key remains in Git history without rewrite; do not use it.
 
 ### Prioritized technical order
 
-1. Visual changes (if any).
-2. Real-device microphone/Bluetooth/iOS failures.
-3. Resend DNS/key/test send.
-4. OAuth production publish/verification.
-5. Production admin hostname/private access.
-6. Sheet sync cadence (manual vs scheduled).
+1. OAuth publishing/verification and durable reauthorization.
+2. Visual changes (if any).
+3. Real-device microphone/Bluetooth/iOS failures.
+4. Beta tester list and key distribution.
+5. Resend only if real email is required.
+6. Sheet sync cadence.
 7. MCP migration decision.
-8. D1 residency.
 
 ---
 
@@ -351,7 +352,12 @@ Personal acceptance is still required. Check each item during the review.
 | Email delivery | mock/dry-run only | **pending after DNS** |
 | OAuth Google round-trip | Phase 2 local verification | production **pending** |
 | CRM Google Sheet | headers applied; round-trip 6/6; D1 sync 12/12 | **personal review pending** |
-| Calendar invitations | 10/10 with one `@example.invalid` attendee | **pending real visitor approval** |
+| Calendar invitations | 10/10 local; **13/13 production** | **pending real visitor approval** |
+| Production preflight | **16/16** | `ai-nour/results/production-preflight.json` |
+| Production text/Live/navigation | **12/12** | `ai-nour/results/production-smoke.json` |
+| Production Sheet sync | **11/11** | `ai-nour/results/production-crm-sheet-sync.json` |
+| Production Calendar/Meet | **13/13** | `ai-nour/results/production-crm-google.json` |
+| Production admin/shutdown/limits | **9/9 + 10/10** | `ai-nour/results/production-admin-connectivity.json`, `production-safety.json` |
 
 No real-device or human-quality check is marked passed.
 
@@ -359,21 +365,21 @@ No real-device or human-quality check is marked passed.
 
 ## 12. Costs and constraints
 
-Latest ledger: **$0.931422 USD actual / ~$1.3244 CAD** cumulative; **$0.571089 USD** today; no held Live reservations. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No paid service, billing, R2, or production deployment was activated.
+Production ledger: **$1.431948 USD actual / ~$2.0361 CAD** cumulative; **$0.535085 USD** today; **$0** held Live reservations. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No billing, paid service, or R2 activation occurred.
 
-The increase from the last report is the conservative settlement of five synthetic Live-token reservations from earlier local validation (four held $0.08 tokens plus the 600-second $0.25 reservation). Local cron was not running, so expired holds were settled only when the scheduled handler was invoked. No real visitor conversation or provider-side Live session was charged. Live reservations are charged at the reservation floor when unreported; see `results/` and the admin cost view for the current figures.
+The production ledger includes prior evaluation carryover plus the production text/Live/Calendar validation. Live reservations are charged at the reservation floor when unreported; see `results/production-summary.json` and the admin cost view.
 
 ---
 
 ## 13. Remaining blockers
 
-1. Visual approval and final CSS.
-2. Real-device acceptance.
-3. Resend DNS/API key/webhook/test send.
-4. OAuth production project/verification/publishing and admin host decision.
-5. Sheet sync cadence decision (manual now; scheduled optional).
-6. Google Workspace MCP decision before 1 February 2027.
-7. D1 residency.
+1. Google OAuth publishing/verification and durable reauthorization before the Testing token expires (~6.55 days).
+2. Visual approval and final CSS.
+3. Real-device acceptance.
+4. Private-beta access key distribution and tester list.
+5. Resend DNS/API key/webhook/test send (optional, not blocking).
+6. Sheet sync cadence decision (manual now; scheduled optional).
+7. Google Workspace MCP decision before 1 February 2027.
 8. Archived third-party key acknowledgement.
-9. Private-beta access key distribution and user list.
-10. Nour’s personal acceptance of interface, conversation, personality, voice quality, French, navigation, and mobile.
+9. Nour’s personal acceptance of interface, conversation, personality, voice quality, French, navigation, and mobile.
+10. Explicit public-launch approval.

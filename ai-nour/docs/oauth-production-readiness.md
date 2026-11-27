@@ -1,6 +1,17 @@
 # Production OAuth — Phase 4 approval and configuration package
 
-Status: **prepared for approval. Do not publish the app, submit verification, change redirect URIs, or reauthorize production Google data until approved.**
+Status: **production Worker deployed with the existing development OAuth credentials. The current Testing-mode refresh token expires in about 6.5 days; publishing/verification and durable reauthorization are the remaining manual actions.**
+
+## Production status
+
+- Production Worker: `https://api.nourchkair.com`
+- Google operations use the existing client ID/secret and refresh token, installed as Workers Secrets.
+- Sheets and Calendar were validated in production with synthetic rows/events and cleaned up.
+- The refresh token currently works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the app is External/Testing.
+- No production OAuth callback route is implemented. Reauthorization uses the local helper, then the new refresh token is installed as a Worker secret.
+- A production redirect URI such as `https://api.nourchkair.com/oauth/google/callback` is **not configured** because the Worker does not implement that callback. Do not add it until the route exists.
+
+**Next manual action:** publish and verify the OAuth app out of Testing, then reauthorize once for a durable refresh token.
 
 ## 1. Current state
 

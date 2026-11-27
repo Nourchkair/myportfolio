@@ -1,6 +1,6 @@
 # Private administrator dashboard — security and operations
 
-Status: **local/private implementation validated; production hostname not approved.** No Cloudflare Access, paid authentication, or public admin exposure was introduced.
+Status: **local/private admin connected to the production Worker at `https://api.nourchkair.com`.** No Cloudflare Access, paid authentication, or public admin exposure was introduced.
 
 ## Architecture
 
@@ -15,9 +15,10 @@ Browser (127.0.0.1:8791)
 
 - The permanent Worker admin token never reaches the browser.
 - The admin server binds only to `127.0.0.1`.
-- The admin OAuth client is separate from the operational Google data client.
+- Admin login uses basic identity scopes only. The same Google Cloud OAuth client is currently reused pending separate production clients; the Worker admin token remains a separate credential.
 - The Google account must be on the `ADMIN_EMAIL` allowlist and have a verified email.
 - The admin page is not linked from the public portfolio.
+- The production-connected admin uses `npm run admin:production`, `PHASE1_WORKER_URL=https://api.nourchkair.com`, and a production `ADMIN_TOKEN` in `ai-nour/.dev.vars.production` (mode `600`, gitignored).
 
 ## Authentication
 
@@ -52,6 +53,7 @@ Browser (127.0.0.1:8791)
 | Knowledge | Published overrides are editable/deletable and are appended to text retrieval immediately; drafts stay out of retrieval. |
 | Limits | The dashboard can lower daily/cumulative spend caps and set Live duration (60–600s) within the deployment maxima. |
 | CRM sync | The dashboard can run an idempotent D1→Google Sheet sync. It refuses tabs whose headers do not match the approved schema and records the result in ops events. |
+| Beta access | The dashboard can create, list, and revoke individually hashed beta keys. Revocation takes effect on the next request. |
 | Restart | Stateless signed cookies remain valid across a restart only if the secret and epoch are unchanged. Rotate the secret for a durable emergency revocation. |
 
 ## Browser and transport protections

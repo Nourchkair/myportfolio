@@ -1,0 +1,137 @@
+{
+  "generatedAt": "2026-11-27T04:09:46.419Z",
+  "mode": "restricted-private-beta",
+  "publicLaunchEnabled": false,
+  "urls": {
+    "portfolio": "https://nourchkair.com",
+    "betaEntry": "https://nourchkair.com/?ainour=beta",
+    "api": "https://api.nourchkair.com",
+    "localAdmin": "http://127.0.0.1:8791"
+  },
+  "cloudflare": {
+    "worker": "ai-nour-production",
+    "workerVersion": "5596ba7b-c4a9-4256-8eea-aa46dd9f4735",
+    "rollbackVersion": "a1e33cbc-8a9e-4ee4-9b46-3135a1831723",
+    "customDomain": "api.nourchkair.com",
+    "d1": "ai-nour-production",
+    "d1Id": "a1fa8975-2a79-4b56-b96e-ecf814eeaa02",
+    "d1Region": "ENAM",
+    "pagesDeployment": "https://6d306529.nourchkair.pages.dev",
+    "pagesProject": "nourchkair",
+    "secretsInstalled": [
+      "ADMIN_TOKEN",
+      "BACKUP_ENCRYPTION_KEY",
+      "GEMINI_API_KEY",
+      "GOOGLE_BACKUP_FOLDER_ID",
+      "GOOGLE_CALENDAR_ID",
+      "GOOGLE_CLIENT_ID",
+      "GOOGLE_CLIENT_SECRET",
+      "GOOGLE_CRM_SPREADSHEET_ID",
+      "GOOGLE_KNOWLEDGE_FOLDER_ID",
+      "GOOGLE_REFRESH_TOKEN"
+    ]
+  },
+  "access": {
+    "betaAccessRequired": true,
+    "betaCredentials": "individually revocable, SHA-256 hashed in D1",
+    "activeBetaTesters": 1,
+    "revokedBetaTesters": 2,
+    "primaryKeyFile": "ai-nour/.private-beta-keys.json (mode 600, gitignored)",
+    "queryParameterIsAuthentication": false,
+    "defaultVisitorPill": false,
+    "adminBinding": "127.0.0.1:8791",
+    "adminConnectedTo": "https://api.nourchkair.com",
+    "adminGoogleOAuth": true
+  },
+  "externalWrites": {
+    "googleWritesEnabled": false,
+    "crmWritesEnabled": false,
+    "calendarInvitesEnabled": true,
+    "resendEnabled": false
+  },
+  "tests": {
+    "productionPreflight": {
+      "passed": 16,
+      "total": 16
+    },
+    "productionSmoke": {
+      "passed": 12,
+      "total": 12,
+      "text": true,
+      "liveVoice": true,
+      "audio": true,
+      "navigation": true,
+      "sharedContext": true
+    },
+    "betaRevocation": {
+      "passed": 4,
+      "total": 4
+    },
+    "adminConnectivity": {
+      "passed": 9,
+      "total": 9
+    },
+    "safetyAndLimits": {
+      "passed": 10,
+      "total": 10,
+      "emergencyShutdown": true,
+      "restored": true,
+      "liveSessionSeconds": 600,
+      "liveReservationUsdMicros": 250000
+    },
+    "sheetSync": {
+      "passed": 11,
+      "total": 11,
+      "inserted": 5,
+      "idempotent": true,
+      "cleanedUp": true
+    },
+    "calendarMeet": {
+      "passed": 13,
+      "total": 13,
+      "consentingSyntheticAttendee": true,
+      "duplicateProtected": true,
+      "overlapRejected": true,
+      "rescheduled": true,
+      "cancelled": true,
+      "eventRemoved": true
+    },
+    "finalRestrictedState": {
+      "passed": 8,
+      "total": 8
+    },
+    "unauthorizedRejection": {
+      "preflight": true,
+      "admin": true,
+      "revokedKey": true
+    },
+    "secretScan": {
+      "files": 413,
+      "valueHits": 0,
+      "patternHits": 0
+    }
+  },
+  "cost": {
+    "actualSpentUsdMicros": 1431948,
+    "heldReservationUsdMicros": 0,
+    "actualUsd": 1.431948,
+    "actualCad": 2.0361,
+    "dailySpentUsdMicros": 535085,
+    "dailySpentUsd": 0.535085,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "fixedMonthlyInfrastructureUsd": 0
+  },
+  "googleOAuth": {
+    "refreshTokenWorks": true,
+    "refreshTokenExpiresInSeconds": 565769,
+    "refreshTokenExpiresInDays": 6.55,
+    "durableFixRequired": "Publish and verify the OAuth app out of Testing, then reauthorize for a durable refresh token.",
+    "productionRedirectConfigured": false,
+    "note": "Private-beta reauthorization uses the local helper; a production callback is not implemented."
+  },
+  "manualAction": {
+    "next": "Google OAuth: publish/verify the app and reauthorize for a durable refresh token before the current Testing-mode token expires (about 6.5 days).",
+    "publicLaunch": "Do not enable unrestricted public access until Nour completes product acceptance and explicitly approves launch."
+  }
+}

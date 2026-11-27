@@ -15,6 +15,7 @@
     "test:api": "node scripts/test-api.mjs",
     "admin": "node scripts/admin-server.mjs",
     "admin:production": "ADMIN_ENV_FILE=.dev.vars.production ADMIN_PORT=8791 node scripts/admin-server.mjs",
+    "deploy:production": "wrangler deploy --config wrangler.production.toml",
     "retrieval": "node tests/retrieval-benchmark.mjs",
     "test:security": "node scripts/security-api.mjs",
     "test:real": "node scripts/real-smoke.mjs",

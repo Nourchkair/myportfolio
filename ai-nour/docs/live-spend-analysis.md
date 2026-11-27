@@ -1,6 +1,6 @@
 # Live voice spending and exposure analysis — Phase 4
 
-Status: **10-minute configurable sessions are implemented; no WebSocket proxy.** The provider-issued ephemeral token expiry and the prepaid reservation are the enforcement points, not a frontend timer.
+Status: **10-minute configurable sessions are implemented and validated in production; no WebSocket proxy.** The provider-issued ephemeral token expiry and the prepaid reservation are the enforcement points, not a frontend timer.
 
 ## Current controls
 
@@ -17,6 +17,14 @@ Status: **10-minute configurable sessions are implemented; no WebSocket proxy.**
 | Rate limit | 12 token requests/10 minutes per client | Burst control. |
 | Daily cap | $1.00 USD (admin-lowerable) | Blocks token issuance and text usage when reached. |
 | Cumulative cap | $7.00 USD (~$9.95 CAD; admin-lowerable) | Evaluation budget under the $10 CAD approval. |
+
+## Production validation
+
+- Production `/api/live/token` returned `sessionSeconds=600` and an `expiresAt` 600 seconds ahead.
+- A real production Live session connected, produced audio and a transcript, executed portfolio navigation, and persisted the turn (12/12).
+- The reservation settled at **$0.25**.
+- Emergency shutdown blocked new sessions and restored cleanly (10/10).
+- Production budget after validation: **$1.431948 USD / ~$2.0361 CAD** cumulative, **$0.535085 USD** daily, no held reservations.
 
 ## Provider-side vs application-side duration
 
