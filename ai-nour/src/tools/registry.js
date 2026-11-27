@@ -37,6 +37,7 @@ const KNOWLEDGE_TOOLS = new Set([
 const TARGET_ACTIONS = new Set(['navigate', 'scroll', 'highlight', 'spotlight', 'hover', 'expand', 'collapse', 'point', 'trace', 'zoom', 'compare']);
 const TARGET_ID_RE = /^(?:(?:journey|contact|about)|(?:(?:section|main-card|project-card|project|project-hero|project-overview|project-contribution|project-text|project-tag|flow|flow-node|flow-link|journey-chapter|journey-tab|journey-text|journey-chip|control):[a-zA-Z0-9_:>.-]+))$/;
 const CONTROL_IDS = new Set(['presentation-bar', 'presentation-pause', 'presentation-resume', 'presentation-prev', 'presentation-next', 'presentation-end', 'assistant']);
+const TARGET_SLUG_RE = /^[a-z0-9][a-z0-9-]{1,60}$/;
 const OVERVIEW_VIEWS = new Set(['what', 'challenges', 'value']);
 
 
@@ -392,27 +393,25 @@ function targetParts(targetId) {
   }
   if (kind === 'journey-text' || kind === 'journey-chip') {
     const chapter = chapterById.get(parts[1]);
-    const index = Number(parts[2]);
-    return chapter && parts.length === 3 && Number.isInteger(index) && index >= 0 && index < 40 ? { kind, chapter, index } : null;
+    return chapter && parts.length === 3 && TARGET_SLUG_RE.test(parts[2]) ? { kind, chapter, key: parts[2] } : null;
   }
   const project = projectById.get(parts[1]);
   if (!project) return null;
   if (kind === 'project' || kind === 'project-hero') return parts.length === 2 ? { kind, project } : null;
   if (kind === 'project-card') {
     if (parts.length === 2) return { kind, project };
-    if (parts.length === 4 && parts[2] === 'tag' && Number.isInteger(Number(parts[3])) && Number(parts[3]) >= 0 && Number(parts[3]) < 30) return { kind, project, index: Number(parts[3]) };
+    if (parts.length === 4 && parts[2] === 'tag' && TARGET_SLUG_RE.test(parts[3])) return { kind, project, tagKey: parts[3] };
     return null;
   }
-  if (kind === 'project-tag') return parts.length === 3 && Number.isInteger(Number(parts[2])) && Number(parts[2]) >= 0 && Number(parts[2]) < 30 ? { kind, project, index: Number(parts[2]) } : null;
+  if (kind === 'project-tag') return parts.length === 3 && TARGET_SLUG_RE.test(parts[2]) ? { kind, project, key: parts[2] } : null;
   if (kind === 'project-overview') return parts.length === 3 && OVERVIEW_VIEWS.has(parts[2]) ? { kind, project, view: parts[2] } : null;
   if (kind === 'project-text') {
-    if (parts.length !== 4 || !OVERVIEW_VIEWS.has(parts[2])) return null;
-    const index = Number(parts[3]);
-    return Number.isInteger(index) && index >= 0 && index < 30 ? { kind, project, view: parts[2], index } : null;
+    if (parts.length !== 4 || !OVERVIEW_VIEWS.has(parts[2]) || !TARGET_SLUG_RE.test(parts[3])) return null;
+    return { kind, project, view: parts[2], key: parts[3] };
   }
   if (kind === 'project-contribution') {
     if (parts.length === 2) return { kind, project };
-    if (parts.length === 4 && parts[2] === 'block' && Number.isInteger(Number(parts[3])) && Number(parts[3]) >= 0 && Number(parts[3]) < 20) return { kind, project, index: Number(parts[3]) };
+    if (parts.length === 4 && parts[2] === 'block' && TARGET_SLUG_RE.test(parts[3])) return { kind, project, key: parts[3] };
     return null;
   }
   if (kind === 'flow') return parts.length === 2 ? { kind, project } : null;

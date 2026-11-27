@@ -35,6 +35,8 @@ const state = {
   presentation: { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' },
   consent: readConsent(),
   sessionConsentRequired: false,
+  exploreRequested: false,
+  exploreIntroStarted: false,
   micConsentResolver: null,
   voiceError: ''
 };
@@ -149,7 +151,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=7', import.meta.url).href;
+  link.href = new URL('./companion.css?v=9', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -200,7 +202,7 @@ function panelMarkup() {
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>
     </div>
     <div class="ainour-gate ainour-consent" id="ainourConsent" hidden>
-      <p id="ainourConsentIntro">AI Nour is for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
+      <p id="ainourConsentIntro">AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
       <label class="ainour-check"><input id="ainourAgree" type="checkbox"> <span id="ainourAgreeLabel">I am 18 or older and agree to the Terms of Use and Privacy Policy.</span></label>
       <p class="ainour-legal-links"><a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> · <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a></p>
       <button id="ainourConsentBtn" type="button">Continue</button>
@@ -243,6 +245,10 @@ function mount() {
   pill.setAttribute('aria-label', 'AI Nour');
   pill.innerHTML = pillMarkup();
   document.body.appendChild(pill);
+
+  const exploreButton = document.querySelector('#introChoices [data-explore="ai"]');
+  if (exploreButton) exploreButton.hidden = false;
+  if (window.__ainourExploreRequested) state.exploreRequested = true;
 
   const panel = document.createElement('section');
   panel.className = 'ainour-panel';
@@ -347,6 +353,7 @@ function mount() {
   els.micAllow.addEventListener('click', () => resolveMicConsent(true));
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
   window.addEventListener('ainour:presentation-control', (event) => handlePresentationControl(event.detail?.action));
+  window.addEventListener('ainour:explore', openExplore);
   els.form.addEventListener('submit', sendMessage);
   els.input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -597,8 +604,8 @@ function updateLegalCopy() {
   const fr = state.locale === 'fr';
   if (els.consentIntro) {
     els.consentIntro.textContent = fr
-      ? 'AI Nour s’adresse aux visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
-      : 'AI Nour is for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
+      ? 'AI Nour est un guide de portfolio interactif, vivant et personnalisé pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Vous pouvez commencer par le texte et passer à la voix plus tard; l’autorisation du microphone est demandée séparément. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
+      : 'AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
   }
   if (els.agreeLabel) els.agreeLabel.textContent = fr
     ? 'J’ai 18 ans ou plus et j’accepte les Conditions d’utilisation et la Politique de confidentialité.'
@@ -846,6 +853,7 @@ async function openPanel() {
   if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
   updateContext();
   clampPanel();
+  startExploreIntroIfNeeded();
 }
 
 function closePanel() {
@@ -1115,28 +1123,53 @@ async function init() {
     state.ready = true;
     setState('idle');
     updateContext();
+    startExploreIntroIfNeeded();
   } catch (error) {
     if (String(error.message).includes('unauthorized')) return;
     showGate(String(error.message || error));
   }
 }
 
-async function sendMessage(event) {
-  event.preventDefault();
+function openExplore() {
+  state.exploreRequested = true;
+  openPanel();
+}
+
+function startExploreIntroIfNeeded() {
+  if (!state.exploreRequested || state.exploreIntroStarted || !state.ready || state.busy) return;
+  state.exploreRequested = false;
+  state.exploreIntroStarted = true;
+  if (state.messages.length) return;
+  void startExploreIntro();
+}
+
+async function startExploreIntro() {
+  const prompt = state.locale === 'fr'
+    ? "Présente-toi brièvement comme AI Nour. Explique que cette exploration est une présentation interactive, vivante et personnalisée, que je peux t'interrompre, poser des questions, naviguer seul ou quitter à tout moment. Demande-moi ce que je souhaite explorer en premier. Ne commence pas encore une présentation complète et ne demande pas de confirmation pour chaque étape."
+    : "Introduce yourself briefly as AI Nour. Explain that this is a live, interactive, personalized presentation, that I can interrupt, ask questions, navigate independently, or leave at any time. Ask what I want to explore first. Do not start a full presentation yet, and do not ask for permission before every step.";
+  await sendMessage(null, { message: prompt, showUser: false, pausePresentation: false });
+}
+
+async function sendMessage(event, options = {}) {
+  event?.preventDefault?.();
   if (state.busy || !state.ready) return;
-  const message = els.input.value.trim();
+  const message = String(options.message ?? els.input.value).trim();
   if (!message) return;
-  if (state.presentation.active && !state.presentation.paused) {
+  const showUser = options.showUser !== false;
+  if (options.pausePresentation !== false && state.presentation.active && !state.presentation.paused) {
     state.presentation = { ...state.presentation, paused: true };
     window.NourOS?.applyPresentationAction?.({ type: 'presentationPause' });
   }
   state.busy = true;
   els.send.disabled = true;
-  els.input.value = '';
-  els.input.style.height = '';
-  addMessage('user', message);
+  if (options.message === undefined) {
+    els.input.value = '';
+    els.input.style.height = '';
+  }
+  if (showUser) addMessage('user', message);
   setState('processing');
   try {
+    const context = portfolioContext();
     const data = await api('/api/chat', {
       method: 'POST',
       body: JSON.stringify({
@@ -1144,7 +1177,7 @@ async function sendMessage(event) {
         message,
         locale: state.locale,
         clientMessageId: randomId(12),
-        portfolioContext: portfolioContext()
+        portfolioContext: context
       })
     });
     state.sessionId = data.sessionId;
@@ -1267,9 +1300,32 @@ function onNourState(status) {
     expectedAiRoutes = [];
     aiActionEpoch += 1;
     if (state.presentation.active) {
-      state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+      const project = status?.context?.project;
+      const projectId = project?.open ? project.id : state.presentation.projectId;
+      const projectData = projectId ? PROJECT_BY_ID[projectId] : null;
+      const nodeId = project?.open ? project.nodeId : null;
+      const nodes = projectData?.flow?.nodes || [];
+      const nodeIndex = nodeId ? nodes.findIndex((node) => node.id === nodeId) : -1;
+      state.presentation = {
+        ...state.presentation,
+        active: true,
+        paused: true,
+        projectId,
+        nodeId,
+        stepIndex: nodeIndex >= 0 ? nodeIndex + 1 : 0,
+        totalSteps: nodes.length || state.presentation.totalSteps || 0,
+        label: projectData?.title || state.presentation.label || ''
+      };
       window.NourOS?.cancelPresentationActions?.();
-      window.NourOS?.applyPresentationAction?.({ type: 'presentationEnd' });
+      window.NourOS?.applyPresentationAction?.({
+        type: 'presentationPause',
+        projectId,
+        nodeId,
+        stepIndex: state.presentation.stepIndex,
+        totalSteps: state.presentation.totalSteps,
+        label: state.presentation.label
+      });
+      window.NourOS?.applyPresentationAction?.({ type: 'clearVisualEffects' });
     }
   }
   updateContext();
@@ -1344,12 +1400,20 @@ async function movePresentationStep(direction) {
   if (voice.active && voice.session) {
     try {
       voice.session.sendClientContent({
-        turns: `[Presentation control — not a visitor message] The visitor selected ${direction}. Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step. Do not restart the tour.`,
+        turns: `[Presentation control — not a visitor message] The visitor selected ${direction}. Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step and why it matters commercially or to Nour's contribution. Do not restart the tour and do not ask permission for every step.`,
         turnComplete: true
       });
     } catch {}
   } else {
     addMessage('system', `Step ${index + 1} of ${ids.length}: ${node?.title || nodeId}`);
+    if (!state.busy && state.ready) {
+      await openPanel();
+      await sendMessage(null, {
+        message: `Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step and why it matters commercially or to Nour's contribution. Keep it concise, do not restart the tour, and do not ask permission for every step.`,
+        showUser: false,
+        pausePresentation: false
+      });
+    }
   }
 }
 
@@ -1504,6 +1568,12 @@ async function persistVoiceTurn() {
   voice.assistantText = '';
 }
 
+function pausePresentationForVoiceEnd() {
+  if (!state.presentation.active || state.presentation.paused) return;
+  state.presentation = { ...state.presentation, paused: true };
+  window.NourOS?.applyPresentationAction?.({ type: 'presentationPause' });
+}
+
 async function handleLiveTool(toolCall) {
   const calls = toolCall?.functionCalls || [];
   if (!calls.length) return;
@@ -1634,11 +1704,12 @@ async function startVoice() {
         },
         onclose: async () => {
           if (!voice.active) return;
+          pausePresentationForVoiceEnd();
           await stopVoice();
           setState('error');
           showVoiceError(state.locale === 'fr'
-            ? 'La session vocale a pris fin. Relancez la voix pour continuer.'
-            : 'The voice session ended. Start voice again to continue.');
+            ? (state.presentation.active ? 'La session vocale a pris fin. La présentation est en pause; continuez en texte ou relancez la voix.' : 'La session vocale a pris fin. Relancez la voix pour continuer.')
+            : (state.presentation.active ? 'The voice session ended. The presentation is paused; continue in text or restart voice.' : 'The voice session ended. Start voice again to continue.'));
           setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
         }
       }
@@ -1647,11 +1718,12 @@ async function startVoice() {
     if (Number.isFinite(expiresAt)) {
       voice.expiryTimer = setTimeout(async () => {
         if (!voice.active) return;
+        pausePresentationForVoiceEnd();
         await stopVoice();
         setState('error');
         showVoiceError(state.locale === 'fr'
-          ? 'La session vocale a pris fin. Relancez la voix pour continuer.'
-          : 'The voice session ended. Start voice again to continue.');
+          ? (state.presentation.active ? 'La session vocale a pris fin. La présentation est en pause; continuez en texte ou relancez la voix.' : 'La session vocale a pris fin. Relancez la voix pour continuer.')
+          : (state.presentation.active ? 'The voice session ended. The presentation is paused; continue in text or restart voice.' : 'The voice session ended. Start voice again to continue.'));
         setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
       }, Math.max(1000, expiresAt - Date.now()));
     }
@@ -1751,4 +1823,5 @@ export function mountCompanion() {
   if (mounted) return;
   mount();
   waitForNour();
+  if (state.exploreRequested) setTimeout(() => openPanel(), 80);
 }

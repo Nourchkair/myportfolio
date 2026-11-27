@@ -221,6 +221,14 @@
     text-shadow:0 4px 40px rgba(0,0,0,.6),0 2px 7px rgba(0,0,0,.46)
   }
   body.intro-greeting .intro-depth-text{opacity:1;transform:none}
+  .intro-choices{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:clamp(16px,2.8vh,28px);pointer-events:auto;opacity:0;transform:translateY(8px);transition:opacity .7s ease .15s,transform .7s cubic-bezier(.2,.8,.2,1) .15s}
+  body.intro-greeting .intro-choices{opacity:1;transform:none}
+  .intro-choice{display:inline-flex;align-items:center;gap:9px;min-height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(7,13,17,.36);color:rgba(255,255,255,.82);font:9px/1 ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(10px);transition:background .2s,border-color .2s,color .2s}
+  .intro-choice:hover,.intro-choice:focus-visible{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.48);color:#fff;outline:none}
+  .intro-choice--primary{background:rgba(255,210,161,.13);border-color:rgba(255,210,161,.38);color:rgba(255,237,214,.96)}
+  .intro-choice--primary:hover,.intro-choice--primary:focus-visible{background:rgba(255,210,161,.22);border-color:rgba(255,210,161,.7)}
+  .intro-choice span{font-size:11px;line-height:1}
+  .intro-choice-note{color:rgba(255,255,255,.38);font:8px/1.4 ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;margin-top:8px}
   .intro-depth-kicker{
     font-size:clamp(11px,1.15vw,17px);font-weight:600;letter-spacing:.22em;
     text-transform:uppercase;color:rgba(255,255,255,.72)
@@ -287,6 +295,9 @@
     .intro-depth-greeting{padding:0 6vw}
     .intro-depth-text strong{font-size:clamp(46px,13.5vw,84px)}
     .intro-depth-kicker{font-size:11px;letter-spacing:.18em}
+    .intro-choices{gap:6px;margin-top:16px}
+    .intro-choice{min-height:32px;padding:0 11px;font-size:8px}
+    .intro-choice-note{max-width:240px;text-align:center}
     body[data-scene="0"] .intro-depth-greeting{--greeting-shift:5.75vh}
     body[data-scene="1"] .intro-depth-greeting{--greeting-shift:9vh}
     body[data-scene="2"] .intro-depth-greeting{--greeting-shift:1vh;--greeting-x:0vw}

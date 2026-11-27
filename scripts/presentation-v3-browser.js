@@ -16,15 +16,25 @@ const deck = await p.evaluate(async () => {
   await new Promise((resolve) => setTimeout(resolve, 450));
   return window.NourOS.getPresentationTargets({ visibleOnly: true }).targets.map((target) => target.id);
 });
-check('project card and tags become visible targets', deck.includes('project-card:acquisition') && deck.some((id) => id.startsWith('project-card:acquisition:tag:')), { deck });
+check('project card and tags use stable semantic ids', deck.includes('project-card:acquisition') && deck.includes('project-card:acquisition:tag:sales-strategy'), { deck });
 
-const multi = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'highlightElement', targetIds: ['project-card:acquisition', 'project-card:acquisition:tag:0'], style: 'glow' }));
+const multi = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'highlightElement', targetIds: ['project-card:acquisition', 'project-card:acquisition:tag:sales-strategy'], style: 'glow' }));
 const multiState = await p.evaluate(() => ({ highlights: document.querySelectorAll('.ai-highlight').length, cursor: !document.querySelector('.ai-pres-cursor').hidden }));
 check('multiple simultaneous highlights and cursor', multi.ok === true && multiState.highlights === 2 && multiState.cursor === true, { multi, multiState });
 
 const spotlight = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'spotlightElement', targetId: 'project-card:acquisition', dim: 0.6 }));
 const spotlightState = await p.evaluate(() => ({ spotlight: !document.querySelector('.ai-pres-spotlight').hidden, cursor: !document.querySelector('.ai-pres-cursor').hidden }));
 check('spotlight isolates a target', spotlight.ok === true && spotlightState.spotlight === true && spotlightState.cursor === true, { spotlight, spotlightState });
+
+const stableText = await p.evaluate(async () => {
+  const all = window.NourOS.getPresentationTargets({ visibleOnly: false, limit: 240 }).targets;
+  const target = all.find((item) => item.id.startsWith('project-text:acquisition:what:'));
+  if (!target) return { target: null };
+  const result = await window.NourOS.applyPresentationAction({ type: 'highlightElement', targetId: target.id, style: 'glow' });
+  await new Promise((resolve) => setTimeout(resolve, 250));
+  return { target, result, highlighted: document.querySelectorAll('.ai-highlight').length };
+});
+check('paragraph targets use stable semantic ids and resolve', stableText.target?.id.startsWith('project-text:acquisition:what:') && /^[a-z0-9-]+$/.test(stableText.target.id.split(':').at(-1)) && stableText.result?.ok === true && stableText.highlighted === 1, { stableText });
 
 const flow = await p.evaluate(async () => {
   await window.NourOS.openProject('acquisition');

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T07:15:50.979Z",
-  "passed": 19,
+  "generatedAt": "2026-11-27T07:44:49.485Z",
+  "passed": 20,
   "failed": 0,
-  "total": 19,
+  "total": 20,
   "checks": [
     {
       "name": "visible target registry exposes approved home targets",
@@ -73,16 +73,16 @@
       }
     },
     {
-      "name": "project card and tags become visible targets",
+      "name": "project card and tags use stable semantic ids",
       "pass": true,
       "detail": {
         "deck": [
           "section:home",
           "section:projects",
           "project-card:acquisition",
-          "project-card:acquisition:tag:0",
-          "project-card:acquisition:tag:1",
-          "project-card:acquisition:tag:2",
+          "project-card:acquisition:tag:sales-strategy",
+          "project-card:acquisition:tag:ai-automation",
+          "project-card:acquisition:tag:revenue-growth",
           "project-card:h2ops",
           "project-card:communications"
         ]
@@ -98,7 +98,7 @@
             "ok": true,
             "targetIds": [
               "project-card:acquisition",
-              "project-card:acquisition:tag:0"
+              "project-card:acquisition:tag:sales-strategy"
             ]
           },
           "state": {
@@ -208,6 +208,84 @@
         "spotlightState": {
           "spotlight": true,
           "cursor": true
+        }
+      }
+    },
+    {
+      "name": "paragraph targets use stable semantic ids and resolve",
+      "pass": true,
+      "detail": {
+        "stableText": {
+          "target": {
+            "id": "project-text:acquisition:what:an-ai-assisted-customer-acquisition-syst-vp84o9",
+            "kind": "project-text",
+            "label": "what \u00b7 An AI-assisted customer acquisition system that combines mar",
+            "description": "An AI-assisted customer acquisition system that combines market research, prospect intelligence, personalized demonstrations, intelligent outreach and automated follow-ups to help businesses identify and engage potential",
+            "actions": [
+              "highlight",
+              "spotlight",
+              "point",
+              "scroll"
+            ],
+            "relationships": [
+              "project-overview:acquisition:what"
+            ],
+            "knowledgeRef": "project:acquisition",
+            "visible": false
+          },
+          "result": {
+            "ok": true,
+            "result": {
+              "ok": true,
+              "targetIds": [
+                "project-text:acquisition:what:an-ai-assisted-customer-acquisition-syst-vp84o9"
+              ]
+            },
+            "state": {
+              "apiVersion": "1.0.0",
+              "ready": true,
+              "route": {
+                "path": "/projects/acquisition",
+                "name": "project",
+                "section": "projects"
+              },
+              "section": "projects",
+              "home": {
+                "deck": "projects",
+                "activeCard": "project",
+                "index": 0
+              },
+              "about": {
+                "open": false,
+                "view": "intro",
+                "chapterId": null,
+                "closing": false
+              },
+              "project": {
+                "open": true,
+                "id": "acquisition",
+                "view": "overview",
+                "nodeId": null,
+                "closing": false
+              },
+              "contact": {
+                "open": false
+              },
+              "environment": {
+                "index": 0,
+                "name": "Alpine Dawn"
+              },
+              "motion": {
+                "reduced": false
+              },
+              "transition": {
+                "active": false,
+                "type": null
+              },
+              "notFound": false
+            }
+          },
+          "highlighted": 1
         }
       }
     },
@@ -760,9 +838,9 @@
       "pass": true,
       "detail": {
         "mobile": {
-          "width": 291,
-          "left": 49,
-          "right": 341,
+          "width": 310,
+          "left": 40,
+          "right": 350,
           "viewport": 390,
           "overflow": false,
           "css": true

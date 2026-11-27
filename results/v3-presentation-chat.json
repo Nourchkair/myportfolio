@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T07:14:49.759Z",
+  "generatedAt": "2026-11-27T07:43:21.742Z",
   "highlighted": {
     "highlights": 1,
     "cursor": true,
@@ -25,6 +25,29 @@
     }
   },
   "manualNavigation": {
+    "barHidden": false,
+    "paused": true,
+    "presentation": {
+      "active": true,
+      "paused": true,
+      "projectId": "acquisition",
+      "nodeId": null,
+      "stepIndex": 0,
+      "totalSteps": 9,
+      "label": "Customer Acquisition"
+    },
+    "highlights": 0,
+    "cursorHidden": true
+  },
+  "textStep": {
+    "before": 2,
+    "assistantMessages": 3,
+    "barVisible": true,
+    "paused": false,
+    "node": "target",
+    "progress": "1 / 9"
+  },
+  "explicitlyEnded": {
     "barHidden": true,
     "presentation": {
       "active": false,
@@ -35,8 +58,7 @@
       "totalSteps": 0,
       "label": ""
     },
-    "highlights": 0,
-    "cursorHidden": true
+    "highlights": 0
   },
   "consoleErrors": []
 }

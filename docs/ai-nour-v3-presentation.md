@@ -15,6 +15,15 @@ Status: **implemented and validated locally. Not deployed to production.** Produ
 | `src/ai-nour/companion.js` | Orchestrates tool actions, presentation state, text/voice transitions, bar controls, pauses and cancellation. |
 | `src/ai-nour/companion.css` | Native glass highlight, spotlight, cursor, tooltip and presentation-control styling, including reduced-motion and mobile rules. |
 
+## 1b. Opening experience
+
+The opening greeting now offers two optional paths without blocking entry:
+
+- **Explore independently** — immediately completes the intro and leaves the portfolio in its normal state.
+- **Explore with AI Nour** — available only when the private-beta companion is loaded; it completes the intro, opens the assistant and uses the existing consent/key gate.
+
+If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. Choosing AI Nour explains the live/personalized nature, offers text first with voice as an optional switch, asks about interests, and starts with a natural AI introduction. The existing age/Terms/Privacy acceptance and separate microphone consent are reused without another screen.
+
 ## 2. Interaction modes
 
 AI Nour selects the mode from intent, without asking the visitor to configure one:
@@ -39,6 +48,10 @@ Stable target ids are generated for approved components only:
 The registry exposes labels, semantic descriptions, available actions, relationships and knowledge references. It is generated from the actual application state and verified project/journey data; arbitrary CSS selectors and JavaScript execution are not accepted.
 
 Backend validation rejects unknown tools, unknown projects/nodes/chapters, malformed target ids, compare requests without two targets, and out-of-range paragraph/tag indexes. The frontend re-validates against the live registry before applying an effect.
+
+## 3b. Stable semantic targets
+
+Paragraph, capability, contribution-block, and journey-text ids use semantic slugs (with a short content hash where needed) instead of numeric indexes. Examples: `project-card:acquisition:tag:sales-strategy`, `project-text:acquisition:what:an-ai-assisted-customer-acquisition-syst-vp84o9`, `project-contribution:acquisition:block:problem`. Reordering content does not change an id; editing the underlying text changes it. Resolution is by semantic text matching within the approved component, not by position.
 
 ## 4. Visual system
 
@@ -78,10 +91,11 @@ The implementation is **step-level**, not word-level.
 ## 7. Interruptions and adaptation
 
 - A monotonic action epoch cancels stale visual sequences and prevents outdated tool responses from overriding newer visitor actions.
-- Manual route changes end the presentation, clear effects and cancel pending timers.
+- Manual route changes cancel pending visual actions, clear effects and **pause** the presentation. The bar remains available, the current location is sent to AI Nour, and it can adapt or resume. Only an explicit stop/end terminates the session.
 - Live interruption pauses the presentation, stops queued audio playback and cancels pending visual sequencing while preserving the current context.
+- Text previous/next requests a contextual explanation from the model, not merely a highlight movement; the same presentation state carries across text and voice, including voice-session expiry.
 - Sending a text message during a presentation pauses it before the question is processed.
-- Presentation controls can pause/resume/end; previous/next move to real flow nodes, highlight them and, in voice mode, ask the model to continue from that step.
+- Presentation controls can pause/resume/end; previous/next move to real flow nodes, highlight them, and request a contextual explanation in text or a continuation in voice.
 - Visitor profile and current context continue to drive emphasis: recruiter, business owner, technical visitor or curious visitor.
 
 ## 8. Validation
@@ -96,7 +110,9 @@ Local regression:
 - Portfolio validation: **261**
 - Legal validator: **46/46**
 
-Browser presentation run (`results/v3-presentation-browser.json`): **19/19**
+Opening experience (`results/v3-opening-browser.json`): **7/7** — independent default, beta-only AI path, consent reuse, text-first copy, legal links and AI introduction.
+
+Browser presentation run (`results/v3-presentation-browser.json`): **20/20**
 
 - Approved target registry on home, project deck and flow.
 - Multiple simultaneous highlights.
@@ -112,13 +128,24 @@ Browser presentation run (`results/v3-presentation-browser.json`): **19/19**
 - Pause, resume and end.
 - Reduced-motion behavior.
 - Mobile bar at 390px viewport: 291px wide, no overflow.
+- Stable semantic paragraph/tag ids resolve and highlight.
 
 AI orchestration run (`results/v3-presentation-chat.json`):
 
 - Text message → `highlightElement` → highlighted project card + cursor + action chip.
 - Text message → `presentProject` → bar, project and flow open at the verified demo step with `5 / 9` progress.
-- Manual `navigateTo('home')` → presentation ended, bar hidden, highlights/cursor cleared.
+- Manual `navigateTo('home')` → pending effects cleared, presentation paused, bar retained.
+- Text **Next** → contextual assistant explanation added and progress advanced.
+- Explicit **End** → presentation terminated, bar hidden and effects cleared.
 - No browser console errors.
+
+Real Gemini opening introduction (`results/v3-opening-real-model.json`) produced a natural live/personalized greeting and asked what to explore first.
+
+Visual evidence:
+
+- `results/v3-visual/opening-paths.jpg`
+- `results/v3-visual/desktop-compare.jpg`
+- `results/v3-visual/mobile-highlight.jpg`
 
 A real Gemini text call also selected `highlightElement` for “Highlight the Customer Acquisition project card”, confirming the new tool contract is discoverable by the production text model.
 
@@ -126,8 +153,8 @@ A real Gemini text call also selected `highlightElement` for “Highlight the Cu
 
 - Word-level speech timing is unavailable; synchronisation is step-level.
 - Real-device microphone/Bluetooth/iOS voice acceptance is still pending. The presentation engine was browser-tested with text/tool orchestration and direct controller actions.
-- In text mode, the previous/next controls move and highlight the real step but do not synthesize a new spoken explanation; the visitor can ask AI Nour to explain it. In voice mode the control sends a presentation-continuation message.
-- Paragraph and capability targets are index-based within approved content. The ids are stable for the current render, but content changes that reorder paragraphs can change the index.
+- In text mode, previous/next now request an explanation through the normal text budget; in voice mode they send a presentation-continuation message. Real-device voice remains pending.
+- Paragraph/tag targets use semantic slugs. Editing the underlying content changes its id; reordering does not.
 - The reading view remains assistant-free; presentation effects apply to the immersive portfolio.
 - No unrestricted browser automation, offsite scripting, screenshots of the visitor’s screen, or arbitrary DOM control.
 
@@ -141,15 +168,16 @@ A real Gemini text call also selected `highlightElement` for “Highlight the Cu
 
 ## 11. Manual acceptance scenarios
 
-1. Ask “Guide me through what I’m looking at” from the home view.
-2. Ask “How does this flow actually work?” while on a project flow.
-3. Ask “Show me what Nour contributed to this project.”
-4. Ask “What’s the difference between these two components?” on a flow.
-5. Ask “Walk me through this from beginning to end.”
-6. Ask “Where exactly does the AI come into play?”
-7. Ask “Show me the most relevant project for an AI consulting position.”
-8. Interrupt a voice presentation with a question; verify it pauses, answers and can resume.
-9. Manually click another section/project during a presentation; verify visual effects stop immediately.
-10. Test the same scenarios on a phone/touch viewport and with reduced motion enabled.
-11. Test English and French prompts; verify narration language and visual targeting.
-12. Verify the presentation bar pause/resume/previous/next/end controls.
+1. On opening, choose Explore independently and confirm browsing continues normally; then try Explore with AI Nour and the existing consent/key flow.
+2. Ask “Guide me through what I’m looking at” from the home view.
+3. Ask “How does this flow actually work?” while on a project flow.
+4. Ask “Show me what Nour contributed to this project.”
+5. Ask “What’s the difference between these two components?” on a flow.
+6. Ask “Walk me through this from beginning to end.”
+7. Ask “Where exactly does the AI come into play?”
+8. Ask “Show me the most relevant project for an AI consulting position.”
+9. Interrupt a voice presentation with a question; verify it pauses, answers and can resume.
+10. Manually click another section/project during a presentation; verify visual effects stop immediately.
+11. Test the same scenarios on a phone/touch viewport and with reduced motion enabled.
+12. Test English and French prompts; verify narration language and visual targeting.
+13. Verify the presentation bar pause/resume/previous/next/end controls.

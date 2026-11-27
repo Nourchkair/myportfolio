@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-27T07:45:46.908Z",
+  "passed": 7,
+  "failed": 0,
+  "total": 7,
+  "checks": [
+    {
+      "name": "plain portfolio defaults to independent exploration",
+      "pass": true,
+      "detail": {
+        "aiHidden": true,
+        "independentVisible": true,
+        "panel": false
+      }
+    },
+    {
+      "name": "independent choice enters without an AI panel",
+      "pass": true,
+      "detail": {
+        "introDone": true,
+        "ready": true,
+        "aiPanel": false
+      }
+    },
+    {
+      "name": "AI choice uses the existing consent gate",
+      "pass": true,
+      "detail": {
+        "introDone": true,
+        "panelHidden": false,
+        "consentVisible": true,
+        "gateHidden": true,
+        "copy": "AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.",
+        "links": [
+          "/terms/",
+          "/privacy/"
+        ]
+      }
+    },
+    {
+      "name": "consent explains the live guide and text-first option",
+      "pass": true,
+      "detail": {
+        "copy": "AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switc"
+      }
+    },
+    {
+      "name": "consent carries legal links",
+      "pass": true,
+      "detail": [
+        "/terms/",
+        "/privacy/"
+      ]
+    },
+    {
+      "name": "AI choice starts a text introduction after authorization",
+      "pass": true,
+      "detail": {
+        "assistantMessages": [
+          "I'm AI Nour. I can walk you through Nour's background, projects, and approach."
+        ],
+        "bodyVisible": true,
+        "consentHidden": true,
+        "gateHidden": true
+      }
+    },
+    {
+      "name": "opening experience has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

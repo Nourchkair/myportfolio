@@ -111,213 +111,38 @@ function projectTargetElement(projectId, selector) {
   return document.querySelector(selector);
 }
 
-function targetDescriptor(id) {
-  const projectCard = id.match(/^project-card:([^:]+)(?::tag:(\d+))?$/);
-  const projectTag = id.match(/^project-tag:([^:]+):(\d+)$/);
-  const overview = id.match(/^project-overview:([^:]+):(what|challenges|value)$/);
-  const text = id.match(/^project-text:([^:]+):(what|challenges|value):(\d+)$/);
-  const contribution = id.match(/^project-contribution:([^:]+)(?::block:(\d+))?$/);
-  const flow = id.match(/^flow:([^:]+)$/);
-  const node = id.match(/^flow-node:([^:]+):([^:]+)$/);
-  const link = id.match(/^flow-link:([^:]+):([^>]+)->(.+)$/);
-  const chapter = id.match(/^journey-(?:chapter|tab):([^:]+)$/);
-  const journeyText = id.match(/^journey-(?:text|chip):([^:]+):(\d+)$/);
-  if (projectCard) {
-    const project = projectById(projectCard[1]);
-    if (!project) return null;
-    const tagIndex = projectCard[2] === undefined ? null : Number(projectCard[2]);
-    return {
-      id,
-      kind: 'project-card',
-      project,
-      tagIndex,
-      label: tagIndex === null ? project.title : project.capabilities?.[tagIndex] || project.title,
-      description: tagIndex === null ? project.description : `Project capability: ${project.capabilities?.[tagIndex] || ''}`,
-      actions: ['navigate', 'highlight', 'spotlight', 'hover', 'expand', 'point', 'scroll'],
-      relationships: [`project:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => tagIndex === null
-        ? cardElement('projects', projectCardIndex(project.id))
-        : cardElement('projects', projectCardIndex(project.id))?.querySelectorAll('.card-tags span')?.[tagIndex] || null
-    };
+function stableSlug(value, max = 44) {
+  const normalized = String(value ?? '')
+    .normalize('NFKD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, max)
+    .replace(/-+$/g, '');
+  return normalized || 'item';
+}
+
+function stableKey(value, { hash = false, max = 40 } = {}) {
+  const text = String(value ?? '').replace(/\s+/g, ' ').trim();
+  const slug = stableSlug(text, max);
+  if (!hash) return slug;
+  let valueHash = 2166136261;
+  for (let index = 0; index < text.length; index++) {
+    valueHash ^= text.charCodeAt(index);
+    valueHash = Math.imul(valueHash, 16777619);
   }
-  if (projectTag) {
-    const project = projectById(projectTag[1]);
-    if (!project) return null;
-    const index = Number(projectTag[2]);
-    return {
-      id,
-      kind: 'project-tag',
-      project,
-      index,
-      label: project.capabilities?.[index] || project.title,
-      description: `Project capability: ${project.capabilities?.[index] || ''}`,
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => projectTargetElement(project.id, `#projectHero .card-tags span:nth-child(${index + 1})`)
-    };
-  }
-  if (overview) {
-    const project = projectById(overview[1]);
-    if (!project) return null;
-    const view = overview[2];
-    const descriptions = {
-      what: project.overview?.whatItIs,
-      challenges: project.overview?.challenges?.join(' '),
-      value: project.overview?.value?.join(' ')
-    };
-    return {
-      id,
-      kind: 'project-overview',
-      project,
-      view,
-      label: view === 'what' ? 'What it is' : view === 'challenges' ? 'Business challenges' : 'Business value',
-      description: String(descriptions[view] || '').slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => projectTargetElement(project.id, view === 'what' ? '#projectBrief .pw-overview-what' : view === 'challenges' ? '#projectBrief .pw-overview-challenges' : '#projectGallery .pw-overview-value')
-    };
-  }
-  if (text) {
-    const project = projectById(text[1]);
-    if (!project) return null;
-    const view = text[2];
-    const index = Number(text[3]);
-    const content = view === 'what'
-      ? (Array.isArray(project.overview?.whatItIs) ? project.overview.whatItIs : [project.overview?.whatItIs])
-      : view === 'challenges' ? project.overview?.challenges : project.overview?.value;
-    return {
-      id,
-      kind: 'project-text',
-      project,
-      view,
-      index,
-      label: `${view} ${index + 1}`,
-      description: String(content?.[index] || '').slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project-overview:${project.id}:${view}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => {
-        if (!projectOpen(project.id)) return null;
-        const selector = view === 'what' ? '#projectBrief .pw-overview-what .pw-overview-lead' : view === 'challenges' ? '#projectBrief .pw-overview-challenges li' : '#projectGallery .pw-overview-value li';
-        return document.querySelectorAll(selector)[index] || null;
-      }
-    };
-  }
-  if (contribution) {
-    const project = projectById(contribution[1]);
-    if (!project) return null;
-    const blockIndex = contribution[2] === undefined ? null : Number(contribution[2]);
-    const block = project.overview?.contribution?.blocks?.[blockIndex];
-    return {
-      id,
-      kind: 'project-contribution',
-      project,
-      index: blockIndex,
-      label: blockIndex === null ? 'My contribution' : block?.label || 'My contribution',
-      description: String(block?.text || project.overview?.contribution?.lead || '').slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => projectTargetElement(project.id, blockIndex === null ? '#projectGallery .pw-overview-contribution' : `#projectGallery .pw-contribution-block:nth-child(${blockIndex + 1})`)
-    };
-  }
-  if (flow) {
-    const project = projectById(flow[1]);
-    if (!project?.flow) return null;
-    return {
-      id,
-      kind: 'flow',
-      project,
-      label: project.flow.title,
-      description: project.flow.intro,
-      actions: ['navigate', 'highlight', 'spotlight', 'point', 'trace', 'zoom', 'scroll'],
-      relationships: project.flow.nodes.map((item) => `flow-node:${project.id}:${item.id}`),
-      knowledgeRef: `project:${project.id}:flow:intro`,
-      element: () => flowOpen(project.id) ? document.getElementById('projectFlow') : null
-    };
-  }
-  if (node) {
-    const project = projectById(node[1]);
-    const item = flowNode(node[1], node[2]);
-    if (!project || !item) return null;
-    const connections = flowConnections(project.id).filter((connection) => connection.from === item.id || connection.to === item.id);
-    return {
-      id,
-      kind: 'flow-node',
-      project,
-      nodeId: item.id,
-      label: item.title,
-      description: item.explanation,
-      actions: ['navigate', 'highlight', 'spotlight', 'hover', 'expand', 'collapse', 'point', 'trace', 'zoom', 'scroll'],
-      relationships: connections.map((connection) => `flow-link:${project.id}:${connection.from}->${connection.to}`),
-      knowledgeRef: `project:${project.id}:flow:${item.id}`,
-      element: () => flowOpen(project.id) ? document.querySelector(`#projectFlow [data-flow-node="${item.id}"]`) : null
-    };
-  }
-  if (link) {
-    const project = projectById(link[1]);
-    const from = flowNode(link[1], link[2]);
-    const to = flowNode(link[1], link[3]);
-    if (!project || !from || !to) return null;
-    const connection = flowConnections(project.id).find((item) => item.from === from.id && item.to === to.id);
-    if (!connection) return null;
-    return {
-      id,
-      kind: 'flow-link',
-      project,
-      from: from.id,
-      to: to.id,
-      label: `${from.title} → ${to.title}`,
-      description: connection.label || `${connection.kind || 'verified'} connection`,
-      actions: ['highlight', 'spotlight', 'point', 'trace', 'zoom', 'scroll'],
-      relationships: [`flow-node:${project.id}:${from.id}`, `flow-node:${project.id}:${to.id}`],
-      knowledgeRef: `project:${project.id}:flow:${from.id}`,
-      element: () => flowOpen(project.id) ? document.querySelector(`#projectFlow .pw-flow-link[data-from="${from.id}"][data-to="${to.id}"]`) : null
-    };
-  }
-  if (chapter) {
-    const item = CHAPTER_BY_ID[chapter[1]];
-    if (!item) return null;
-    return {
-      id,
-      kind: chapter[0].includes('tab') ? 'journey-tab' : 'journey-chapter',
-      chapter: item,
-      label: item.title,
-      description: String(item.paragraphs?.[0] || item.label || '').slice(0, 220),
-      actions: ['navigate', 'highlight', 'spotlight', 'hover', 'expand', 'point', 'scroll'],
-      relationships: [`journey`],
-      knowledgeRef: `journey:${item.id}`,
-      element: () => chapter[0].includes('tab')
-        ? document.querySelector(`[data-pro-chapter="${item.id}"]`)
-        : aboutOpen() && document.querySelector(`[data-pro-chapter="${item.id}"][aria-selected="true"]`) ? document.getElementById('proChapter') : null
-    };
-  }
-  if (journeyText) {
-    const item = CHAPTER_BY_ID[journeyText[1]];
-    if (!item) return null;
-    const index = Number(journeyText[2]);
-    const isChip = id.startsWith('journey-chip:');
-    return {
-      id,
-      kind: isChip ? 'journey-chip' : 'journey-text',
-      chapter: item,
-      index,
-      label: isChip ? item.capabilities?.[index] || item.title : `${item.title} paragraph ${index + 1}`,
-      description: isChip ? `Capability: ${item.capabilities?.[index] || ''}` : String(item.paragraphs?.[index] || '').slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`journey-chapter:${item.id}`],
-      knowledgeRef: `journey:${item.id}`,
-      element: () => {
-        if (!journeyChapterOpen(item.id)) return null;
-        const selector = isChip ? '#proChapter .pro-chips span' : '#proChapter .pro-narrative p';
-        return document.querySelectorAll(selector)[index] || null;
-      }
-    };
-  }
-  return null;
+  return `${slug}-${(valueHash >>> 0).toString(36).slice(0, 6)}`;
+}
+
+function textNode(selector, value, root = document) {
+  if (!root) return null;
+  const wanted = String(value ?? '').replace(/\s+/g, ' ').trim();
+  if (!wanted) return null;
+  const nodes = [...root.querySelectorAll(selector)];
+  return nodes.find((node) => String(node.textContent || '').replace(/\s+/g, ' ').trim() === wanted)
+    || nodes.find((node) => String(node.textContent || '').replace(/\s+/g, ' ').trim().includes(wanted.slice(0, 40)))
+    || null;
 }
 
 function buildTargets() {
@@ -359,26 +184,28 @@ function buildTargets() {
       id: `project-card:${project.id}`,
       kind: 'project-card',
       project,
-      tagIndex: null,
       label: project.title,
       description: project.description,
       actions: ['navigate', 'highlight', 'spotlight', 'hover', 'expand', 'point', 'scroll'],
-      relationships: [`project:${project.id}`, ...(project.capabilities || []).map((_, tagIndex) => `project-card:${project.id}:tag:${tagIndex}`)],
+      relationships: [`project:${project.id}`, ...(project.capabilities || []).map((capability) => `project-card:${project.id}:tag:${stableSlug(capability)}`)],
       knowledgeRef: `project:${project.id}`,
       element: () => cardElement('projects', index)
     });
-    (project.capabilities || []).slice(0, 8).forEach((capability, tagIndex) => add({
-      id: `project-card:${project.id}:tag:${tagIndex}`,
-      kind: 'project-card',
-      project,
-      tagIndex,
-      label: capability,
-      description: `Project capability: ${capability}`,
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project-card:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => document.querySelectorAll(`#cardStage .os-card[data-deck="projects"][data-deck-index="${index}"] .card-tags span`)[tagIndex] || null
-    }));
+    (project.capabilities || []).slice(0, 8).forEach((capability) => {
+      const key = stableSlug(capability);
+      add({
+        id: `project-card:${project.id}:tag:${key}`,
+        kind: 'project-card',
+        project,
+        tagKey: key,
+        label: capability,
+        description: `Project capability: ${capability}`,
+        actions: ['highlight', 'spotlight', 'point', 'scroll'],
+        relationships: [`project-card:${project.id}`],
+        knowledgeRef: `project:${project.id}`,
+        element: () => textNode('.card-tags span', capability, cardElement('projects', index))
+      });
+    });
     add({
       id: `project:${project.id}`,
       kind: 'project',
@@ -425,51 +252,64 @@ function buildTargets() {
       knowledgeRef: `project:${project.id}`,
       element: () => projectTargetElement(project.id, '#projectGallery .pw-overview-contribution')
     });
-    (project.capabilities || []).slice(0, 8).forEach((capability, index) => add({
-      id: `project-tag:${project.id}:${index}`,
-      kind: 'project-tag',
-      project,
-      index,
-      label: capability,
-      description: `Project capability: ${capability}`,
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => projectTargetElement(project.id, `#projectHero .card-tags span:nth-child(${index + 1})`)
-    }));
-    (project.overview?.contribution?.blocks || []).slice(0, 8).forEach((block, index) => add({
-      id: `project-contribution:${project.id}:block:${index}`,
-      kind: 'project-contribution',
-      project,
-      index,
-      label: block.label || 'My contribution',
-      description: String(block.text || '').slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`project-contribution:${project.id}`],
-      knowledgeRef: `project:${project.id}`,
-      element: () => projectTargetElement(project.id, `#projectGallery .pw-contribution-block:nth-child(${index + 1})`)
-    }));
+    (project.capabilities || []).slice(0, 8).forEach((capability) => {
+      const key = stableSlug(capability);
+      add({
+        id: `project-tag:${project.id}:${key}`,
+        kind: 'project-tag',
+        project,
+        key,
+        label: capability,
+        description: `Project capability: ${capability}`,
+        actions: ['highlight', 'spotlight', 'point', 'scroll'],
+        relationships: [`project:${project.id}`],
+        knowledgeRef: `project:${project.id}`,
+        element: () => textNode('.card-tags span', capability, projectTargetElement(project.id, '#projectHero'))
+      });
+    });
+    (project.overview?.contribution?.blocks || []).slice(0, 8).forEach((block) => {
+      const key = stableSlug(block.label || block.text);
+      add({
+        id: `project-contribution:${project.id}:block:${key}`,
+        kind: 'project-contribution',
+        project,
+        key,
+        label: block.label || 'My contribution',
+        description: String(block.text || '').slice(0, 220),
+        actions: ['highlight', 'spotlight', 'point', 'scroll'],
+        relationships: [`project-contribution:${project.id}`],
+        knowledgeRef: `project:${project.id}`,
+        element: () => {
+          const root = projectTargetElement(project.id, '#projectGallery .pw-contribution-blocks');
+          if (!root) return null;
+          return [...root.querySelectorAll('.pw-contribution-block')].find((element) => textNode('span', block.label || 'My contribution', element)) || null;
+        }
+      });
+    });
     ['what', 'challenges', 'value'].forEach((view) => {
       const content = view === 'what'
         ? (Array.isArray(project.overview?.whatItIs) ? project.overview.whatItIs : [project.overview?.whatItIs])
         : view === 'challenges' ? (project.overview?.challenges || []) : (project.overview?.value || []);
-      content.slice(0, 12).forEach((paragraph, index) => add({
-        id: `project-text:${project.id}:${view}:${index}`,
-        kind: 'project-text',
-        project,
-        view,
-        index,
-        label: `${view} ${index + 1}`,
-        description: String(paragraph || '').slice(0, 220),
-        actions: ['highlight', 'spotlight', 'point', 'scroll'],
-        relationships: [`project-overview:${project.id}:${view}`],
-        knowledgeRef: `project:${project.id}`,
-        element: () => {
-          if (!projectOpen(project.id)) return null;
-          const selector = view === 'what' ? '#projectBrief .pw-overview-what .pw-overview-lead' : view === 'challenges' ? '#projectBrief .pw-overview-challenges li' : '#projectGallery .pw-overview-value li';
-          return document.querySelectorAll(selector)[index] || null;
-        }
-      }));
+      content.slice(0, 12).forEach((paragraph) => {
+        const key = stableKey(paragraph, { hash: true });
+        add({
+          id: `project-text:${project.id}:${view}:${key}`,
+          kind: 'project-text',
+          project,
+          view,
+          key,
+          label: `${view} · ${String(paragraph || '').slice(0, 60)}`,
+          description: String(paragraph || '').slice(0, 220),
+          actions: ['highlight', 'spotlight', 'point', 'scroll'],
+          relationships: [`project-overview:${project.id}:${view}`],
+          knowledgeRef: `project:${project.id}`,
+          element: () => {
+            if (!projectOpen(project.id)) return null;
+            const selector = view === 'what' ? '#projectBrief .pw-overview-what .pw-overview-lead' : view === 'challenges' ? '#projectBrief .pw-overview-challenges li' : '#projectGallery .pw-overview-value li';
+            return textNode(selector, paragraph);
+          }
+        });
+      });
     });
     (project.flow?.nodes || []).forEach((node) => add({
       id: `flow-node:${project.id}:${node.id}`,
@@ -532,30 +372,36 @@ function buildTargets() {
       knowledgeRef: `journey:${chapter.id}`,
       element: () => journeyChapterOpen(chapter.id) ? document.getElementById('proChapter') : null
     });
-    (chapter.paragraphs || []).slice(0, 12).forEach((paragraph, index) => add({
-      id: `journey-text:${chapter.id}:${index}`,
-      kind: 'journey-text',
-      chapter,
-      index,
-      label: `${chapter.title} paragraph ${index + 1}`,
-      description: String(paragraph).slice(0, 220),
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`journey-chapter:${chapter.id}`],
-      knowledgeRef: `journey:${chapter.id}`,
-      element: () => journeyChapterOpen(chapter.id) ? document.querySelectorAll('#proChapter .pro-narrative p')[index] || null : null
-    }));
-    (chapter.capabilities || []).slice(0, 12).forEach((capability, index) => add({
-      id: `journey-chip:${chapter.id}:${index}`,
-      kind: 'journey-chip',
-      chapter,
-      index,
-      label: capability,
-      description: `Journey capability: ${capability}`,
-      actions: ['highlight', 'spotlight', 'point', 'scroll'],
-      relationships: [`journey-chapter:${chapter.id}`],
-      knowledgeRef: `journey:${chapter.id}`,
-      element: () => journeyChapterOpen(chapter.id) ? document.querySelectorAll('#proChapter .pro-chips span')[index] || null : null
-    }));
+    (chapter.paragraphs || []).slice(0, 12).forEach((paragraph) => {
+      const key = stableKey(paragraph, { hash: true });
+      add({
+        id: `journey-text:${chapter.id}:${key}`,
+        kind: 'journey-text',
+        chapter,
+        key,
+        label: `${chapter.title} · ${String(paragraph).slice(0, 60)}`,
+        description: String(paragraph).slice(0, 220),
+        actions: ['highlight', 'spotlight', 'point', 'scroll'],
+        relationships: [`journey-chapter:${chapter.id}`],
+        knowledgeRef: `journey:${chapter.id}`,
+        element: () => journeyChapterOpen(chapter.id) ? textNode('#proChapter .pro-narrative p', paragraph) : null
+      });
+    });
+    (chapter.capabilities || []).slice(0, 12).forEach((capability) => {
+      const key = stableSlug(capability);
+      add({
+        id: `journey-chip:${chapter.id}:${key}`,
+        kind: 'journey-chip',
+        chapter,
+        key,
+        label: capability,
+        description: `Journey capability: ${capability}`,
+        actions: ['highlight', 'spotlight', 'point', 'scroll'],
+        relationships: [`journey-chapter:${chapter.id}`],
+        knowledgeRef: `journey:${chapter.id}`,
+        element: () => journeyChapterOpen(chapter.id) ? textNode('#proChapter .pro-chips span', capability) : null
+      });
+    });
   });
 
   Object.entries(CONTROL_TARGETS).forEach(([control, label]) => add({
@@ -1099,7 +945,15 @@ async function applyPresentation(action) {
     return { ok: true };
   }
   if (action.type === 'presentationPause') {
-    presentation.paused = true;
+    presentation = {
+      ...presentation,
+      paused: true,
+      ...(action.projectId ? { projectId: action.projectId } : {}),
+      ...(action.nodeId !== undefined ? { nodeId: action.nodeId } : {}),
+      ...(action.stepIndex !== undefined ? { stepIndex: Number(action.stepIndex) || 0 } : {}),
+      ...(action.totalSteps !== undefined ? { totalSteps: Number(action.totalSteps) || 0 } : {}),
+      ...(action.label ? { label: action.label } : {})
+    };
     updateBar();
     return { ok: true, paused: true };
   }

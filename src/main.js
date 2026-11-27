@@ -1,4 +1,4 @@
-import './app/immersive.js?v=39';
+import './app/immersive.js?v=44';
 
 const aiNourParams = new URLSearchParams(location.search);
 const aiNourMode = aiNourParams.get('ainour');
@@ -8,7 +8,7 @@ const aiNourEnabled = aiNourMode === 'beta'
   || (aiNourLocal && aiNourMode === 'dev');
 
 if (aiNourEnabled) {
-  import('./ai-nour/companion.js?v=7')
+  import('./ai-nour/companion.js?v=17')
     .then((module) => module.mountCompanion())
     .catch((error) => console.warn('AI Nour companion could not start', error));
 }

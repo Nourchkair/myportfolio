@@ -5,7 +5,7 @@ import { SCENES } from '../data/environments.js';
 import { parseRoute, normalizePath } from './routes.js';
 import { createStore, initialState } from './store.js';
 import { installCommandApi } from './commands.js';
-import { createPresentationController } from './presentation.js?v=6';
+import { createPresentationController } from './presentation.js?v=11';
 
 
 /* Project data now lives in the approved PROJECTS registry in os-app2.js. */
@@ -28,6 +28,8 @@ let projectIndex=0;
 let mode='home';
 let sceneIndex=0;
 let entered=false;
+let introStarted=false;
+let introFinish=null;
 let suppressClick=false;
 let drag=null;
 let currentRoute=null;
@@ -2025,9 +2027,10 @@ function publishState(){
 
 /* ---------- entry ---------- */
 const WELCOME_DELAY_MS=300;
-const WELCOME_HOLD_MS=1700;
+const WELCOME_HOLD_MS=2600;
 function enterWorld(){
-  if(entered) return;
+  if(entered||introStarted) return;
+  introStarted=true;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const screen=$('enterScreen');
   const finish=()=>{
@@ -2048,6 +2051,7 @@ function enterWorld(){
     }
     setTimeout(()=>document.body.classList.remove('intro-reveal','intro-greeting'),reduced?0:1500);
   };
+  introFinish=finish;
   if(reduced){
     finish();
     return;
@@ -2102,6 +2106,18 @@ if(initialRoute&&initialRoute.name==='reading'){
     }
   }
   announce('Loading Nour OS.');
+  document.addEventListener('click', event => {
+    const button = event.target.closest?.('#introChoices [data-explore]');
+    if (!button || entered) return;
+    event.preventDefault();
+    event.stopPropagation();
+    if (button.dataset.explore === 'ai') {
+      window.__ainourExploreRequested = true;
+      window.dispatchEvent(new CustomEvent('ainour:explore'));
+    }
+    if (!entered && !introStarted) enterWorld();
+    introFinish?.();
+  }, true);
   const reducedStart=matchMedia('(prefers-reduced-motion: reduce)').matches;
   setTimeout(()=>{
     if(!entered) enterWorld();

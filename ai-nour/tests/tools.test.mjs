@@ -98,6 +98,9 @@ test('presentation targets and visual actions are validated', () => {
 
   assert.equal(validateToolCall('highlightElement', { targetId: 'body > script' }).ok, false);
   assert.equal(validateToolCall('highlightElement', { targetId: 'flow-node:acquisition:invented' }).ok, false);
+  assert.equal(validateToolCall('highlightElement', { targetId: 'project-card:acquisition:tag:sales-strategy' }).ok, true);
+  assert.equal(validateToolCall('highlightElement', { targetId: 'project-text:acquisition:what:an-ai-assisted-customer-acquisition-system-abc123' }).ok, true);
+  assert.equal(validateToolCall('highlightElement', { targetId: 'project-card:acquisition:tag:0' }).ok, false);
   assert.equal(validateToolCall('spotlightElement', { targetId: 'project-card:acquisition' }).ok, true);
   assert.equal(validateToolCall('hoverElement', { targetId: 'journey-tab:education' }).ok, true);
   assert.equal(validateToolCall('expandElement', { targetId: 'flow-node:acquisition:demo' }).ok, true);

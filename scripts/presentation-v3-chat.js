@@ -45,10 +45,26 @@ await p.evaluate(() => window.NourOS.navigateTo('home'));
 await p.waitForTimeout(900);
 const manualNavigation = await p.evaluate(() => ({
   barHidden: document.querySelector('.ai-pres-bar')?.hidden,
+  paused: document.querySelector('.ai-pres-bar')?.classList.contains('is-paused'),
   presentation: window.NourOS.getPresentationState().presentation,
   highlights: document.querySelectorAll('.ai-highlight').length,
   cursorHidden: document.querySelector('.ai-pres-cursor')?.hidden
 }));
+
+const beforeTextStep = await p.evaluate(() => document.querySelectorAll('.ainour-msg.assistant').length);
+await p.locator('[data-ai-pres="next"]').click();
+await p.waitForTimeout(2200);
+const textStep = await p.evaluate(() => ({
+  assistantMessages: document.querySelectorAll('.ainour-msg.assistant').length,
+  barVisible: !document.querySelector('.ai-pres-bar').hidden,
+  paused: document.querySelector('.ai-pres-bar').classList.contains('is-paused'),
+  node: window.NourOS.getPresentationState().presentation.nodeId,
+  progress: document.querySelector('.ai-pres-progress')?.textContent
+}));
+
+await p.locator('[data-ai-pres="end"]').click();
+await p.waitForTimeout(300);
+const explicitlyEnded = await p.evaluate(() => ({ barHidden: document.querySelector('.ai-pres-bar').hidden, presentation: window.NourOS.getPresentationState().presentation, highlights: document.querySelectorAll('.ai-highlight').length }));
 
 const consoleErrors = (await p.console.logs()).filter((entry) => entry.type === 'error');
 console.log(JSON.stringify({
@@ -56,5 +72,7 @@ console.log(JSON.stringify({
   highlighted,
   presented,
   manualNavigation,
+  textStep: { before: beforeTextStep, ...textStep },
+  explicitlyEnded,
   consoleErrors: consoleErrors.map((entry) => entry.text || entry.message || String(entry))
 }, null, 2));
