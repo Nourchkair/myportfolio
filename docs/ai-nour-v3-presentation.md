@@ -2,7 +2,7 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths, browser keys and API routes remain unchanged.
 
-Status: **deployed to the production private beta on 27 November 2026.** Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a`; static deployment `13f85f66-363f-48f9-996c-a205ef12e6ec`; source `c6142e8`.
+Status: **deployed to the production private beta on 27 November 2026.** Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a`; static deployment `b17bc76a-8b7e-4860-9534-8e0d94d3f678`; source `2a835a3`.
 
 ## 1. Architecture
 
@@ -120,7 +120,7 @@ Nupa opening experience (`results/nupa-v3-opening-browser.json`): **17/17** — 
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 
-Production opening cards and explicit choice (`results/nupa-production-intro.json`): **10/10** — two English panel cards inside the intro, no auto-close, cards below the greeting, independent entry, centered English/French consent modal outside the chat with blurred background, “Continue and agree” acceptance with no checkbox, and Nupa consent path.
+Production opening cards and explicit choice (`results/nupa-production-intro.json`): **10/10** — two English panel cards inside the intro with no foreground-depth occlusion and improved contrast, no auto-close, cards below the greeting, independent entry, centered English/French consent modal outside the chat with blurred background, “Continue and agree” acceptance with no checkbox, and Nupa consent path.
 
 - Approved target registry on home, project deck and flow.
 - Multiple simultaneous highlights.

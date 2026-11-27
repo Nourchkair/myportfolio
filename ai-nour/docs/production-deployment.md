@@ -36,7 +36,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `https://13f85f66.nourchkair.pages.dev` |
+| Latest Pages deployment | `https://b17bc76a.nourchkair.pages.dev` |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -73,7 +73,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
 - Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
-- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `13f85f66-363f-48f9-996c-a205ef12e6ec` (source `c6142e8`) are live.
+- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `b17bc76a-8b7e-4860-9534-8e0d94d3f678` (source `2a835a3`) are live.
 - The daily spending cap was raised to **$3.00** for production acceptance testing; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.

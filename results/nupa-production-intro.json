@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T16:55:26.403Z",
+  "generatedAt": "2026-11-27T17:04:41.885Z",
   "url": "https://nourchkair.com/?ainour=beta",
   "passed": 10,
   "failed": 0,
@@ -45,12 +45,16 @@
         "belowGreeting": true,
         "insideIntro": true,
         "english": true,
+        "cardsTopmost": true,
+        "noteVisible": true,
+        "depthLayerHidden": true,
+        "welcomeAboveOverlays": true,
         "note": "Choose how you want to begin. The portfolio is always available without Nupa.",
         "overflow": false
       }
     },
     {
-      "name": "production cards are panels below the greeting, not pills",
+      "name": "production cards are unobstructed panels below the greeting, not pills",
       "pass": true,
       "detail": [
         {
@@ -171,7 +175,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T16:55:25.919Z"
+          "acceptedAt": "2026-11-27T17:04:41.586Z"
         },
         "gateVisible": true,
         "panelHidden": false,

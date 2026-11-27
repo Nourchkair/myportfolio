@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-27T16:43:00Z",
+  "generatedAt": "2026-11-27T16:52:00Z",
   "status": "Nupa V3 private beta deployed",
-  "sourceCommit": "c6142e8",
+  "sourceCommit": "2a835a3",
   "worker": {
     "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
     "url": "https://api.nourchkair.com",
@@ -9,9 +9,9 @@
     "d1": true
   },
   "pages": {
-    "deploymentId": "13f85f66-363f-48f9-996c-a205ef12e6ec",
+    "deploymentId": "b17bc76a-8b7e-4860-9534-8e0d94d3f678",
     "url": "https://nourchkair.com",
-    "preview": "https://13f85f66.nourchkair.pages.dev"
+    "preview": "https://b17bc76a.nourchkair.pages.dev"
   },
   "legal": {
     "privacyVersion": "1.2",
