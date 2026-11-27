@@ -200,6 +200,7 @@ export function registerAdminRoutes(router, services) {
     requireAdmin(request, config);
     return json({
       betaAccessRequired: config.betaAccessRequired,
+      publicAccess: config.publicAccess,
       testers: await db.listBetaTesters(200)
     });
   });
