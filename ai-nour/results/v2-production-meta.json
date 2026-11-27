@@ -1,0 +1,43 @@
+{
+  "generatedAt": "2026-11-27T05:32:48.083Z",
+  "status": 200,
+  "version": "phase4-0.4.0",
+  "voice": "Schedar",
+  "tools": [
+    "openSection",
+    "openProject",
+    "openProjectFlow",
+    "openJourneyChapter",
+    "openContact",
+    "presentProject",
+    "presentProjectStep",
+    "pausePresentation",
+    "resumePresentation",
+    "endPresentation",
+    "searchPortfolio",
+    "getProjectDossier",
+    "getProjectStep",
+    "getJourneyChapter",
+    "getCurrentView"
+  ],
+  "knowledgeTools": [
+    "searchPortfolio",
+    "getProjectDossier",
+    "getProjectStep",
+    "getJourneyChapter",
+    "getCurrentView"
+  ],
+  "presentationTools": [
+    "presentProject",
+    "presentProjectStep",
+    "pausePresentation",
+    "resumePresentation",
+    "endPresentation"
+  ],
+  "webResearchExposed": false,
+  "flags": {
+    "assistant_enabled": true,
+    "text_enabled": true,
+    "live_enabled": true
+  }
+}

@@ -50,7 +50,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 ## 3b. Conversational V2
 
-- Live voice: **Schedar**.
+- Live voice: **Schedar** (production Worker and control updated).
 - Persona: production `persona_instruction` updated to the V2 character/grounding prompt.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
@@ -99,10 +99,10 @@ CRM inquiry/appointment creation currently returns **403** by design. Calendar/M
 
 ## 7. Spending
 
-Production ledger at the final check:
+Production ledger at the final V2 check:
 
-- Cumulative: **$1.431948 USD / ~$2.0361 CAD**
-- Today: **$0.535085 USD**
+- Cumulative: **$1.687531 USD / ~$2.3994 CAD**
+- Today: **$0.790668 USD**
 - Held reservations: **$0**
 - Daily cap: **$1.00 USD**
 - Cumulative cap: **$7.00 USD (~$9.95 CAD)**
@@ -121,13 +121,14 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Safe rollback target (writes off): `a1e33cbc-8a9e-4ee4-9b46-3135a1831723`
+- Current Worker version: `6dfcd430-e175-4f70-842a-076516c921bb` (V2)
+- Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
+- Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
 ```bash
 cd ai-nour
-npx wrangler rollback a1e33cbc-8a9e-4ee4-9b46-3135a1831723 --config wrangler.production.toml
+npx wrangler rollback 5596ba7b-c4a9-4256-8eea-aa46dd9f4735 --config wrangler.production.toml
 ```
 
 For the static site, redeploy the prior commit with `npm run deploy` from the repository root. D1 migrations are additive; do not delete production records during a rollback.

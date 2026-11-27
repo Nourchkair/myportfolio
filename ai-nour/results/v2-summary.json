@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-11-27T05:28:34.431Z",
-  "status": "V2 implemented and validated locally; production update pending at the time of this file",
+  "status": "V2 deployed to the production private beta and validated",
   "voice": {
     "default": "Schedar",
     "provider": "gemini-3.8-live",
@@ -9,7 +9,7 @@
   },
   "persona": {
     "defaultLength": 3606,
-    "productionControlUpdated": false
+    "productionControlUpdated": true
   },
   "grounding": {
     "liveFoundation": true,
@@ -103,7 +103,7 @@
       "totalLatencyMs": 60699
     },
     "secretScan": {
-      "files": 429,
+      "files": 428,
       "valueHits": 0,
       "patternHits": 0
     }
@@ -123,12 +123,54 @@
       "cumulativeCad": 2.3918,
       "dailySpentUsdMicros": 785228
     },
-    "fixedMonthlyInfrastructureUsd": 0
+    "fixedMonthlyInfrastructureUsd": 0,
+    "productionAfterV2Validation": {
+      "cumulativeUsdMicros": 1687531,
+      "cumulativeUsd": 1.687531,
+      "cumulativeCad": 2.3994,
+      "dailySpentUsdMicros": 790668,
+      "dailyCapUsdMicros": 1000000,
+      "cumulativeCapUsdMicros": 7000000,
+      "heldReservationUsdMicros": 0
+    }
   },
   "manualActions": [
     "Google OAuth publishing/verification and durable refresh token (current Testing token expires in about 6.5 days)",
     "Real-device voice acceptance: microphone, Bluetooth, iOS Safari, interruptions, French pronunciation and mobile feel",
     "Visual acceptance of the pill/panel expansion, placement and listening orb",
     "Public launch approval remains withheld"
-  ]
+  ],
+  "production": {
+    "worker": "ai-nour-production",
+    "workerVersion": "6dfcd430-e175-4f70-842a-076516c921bb",
+    "pagesDeployment": "https://4b2a023b.nourchkair.pages.dev",
+    "customDomain": "https://nourchkair.com",
+    "betaEntry": "https://nourchkair.com/?ainour=beta",
+    "api": "https://api.nourchkair.com",
+    "voice": "Schedar",
+    "personaLength": 3606,
+    "activeBetaTesters": 1,
+    "revokedBetaTesters": 3,
+    "webResearchEnabled": false,
+    "externalWritesEnabled": false,
+    "resendEnabled": false,
+    "textValidation": {
+      "passed": 5,
+      "total": 5,
+      "evidence": "results/v2-production-text.json"
+    },
+    "browserValidation": {
+      "passed": 7,
+      "total": 7,
+      "evidence": "results/v2-production-browser.json"
+    },
+    "metaValidation": {
+      "status": 200,
+      "voice": "Schedar",
+      "knowledgeTools": 5,
+      "presentationTools": 5,
+      "webResearchExposed": false,
+      "evidence": "results/v2-production-meta.json"
+    }
+  }
 }

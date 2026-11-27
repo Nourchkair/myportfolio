@@ -1,6 +1,6 @@
 # AI Nour V2 — conversational intelligence upgrade
 
-Status: **implemented and validated locally; production private beta updated after the local suite passed.** Public access remains disabled.
+Status: **deployed to the production private beta and validated.** Public access remains disabled.
 
 ## 1. Voice
 
@@ -123,6 +123,8 @@ Final merged result: **13/13 scenarios passed**, average score **1.0**, with ret
 
 Additional evidence:
 
+- Production text: **5/5** (`results/v2-production-text.json`).
+- Production browser: **7/7**, including 34px pill, versioned CSS/JS, gate, tour and manual cancellation (`results/v2-production-browser.json`).
 - Live voice smoke: **12/12** (`results/v2-smoke.json`).
 - Live context/page awareness: **6/6** (`results/v2-live-context.json`).
 - Live budget/tool/Schedar checks: **8/8** (`results/live-budget-tests.json`).
@@ -133,6 +135,10 @@ Additional evidence:
 - Admin: **16/16**.
 - Portfolio validation: **261 checks**.
 - Secret scan: **429 files, 0 hits**.
+- Production voice config: **Schedar**; production persona control updated to 3,606 characters.
+- Production beta key inventory: **1 active**, 3 revoked validation keys.
+
+Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative, **$0.790668 USD** daily, no held reservations. External writes and Resend remain off.
 
 ## 11. Constraints preserved
 

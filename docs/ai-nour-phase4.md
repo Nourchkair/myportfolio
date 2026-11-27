@@ -365,7 +365,7 @@ No real-device or human-quality check is marked passed.
 
 ## 12. Costs and constraints
 
-Production ledger: **$1.431948 USD actual / ~$2.0361 CAD** cumulative; **$0.535085 USD** today; **$0** held Live reservations. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No billing, paid service, or R2 activation occurred.
+Production ledger after V2: **$1.687531 USD actual / ~$2.3994 CAD** cumulative; **$0.790668 USD** today; **$0** held Live reservations. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No billing, paid service, or R2 activation occurred.
 
 The production ledger includes prior evaluation carryover plus the production text/Live/Calendar validation. Live reservations are charged at the reservation floor when unreported; see `results/production-summary.json` and the admin cost view.
 

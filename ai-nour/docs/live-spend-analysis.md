@@ -24,7 +24,8 @@ Status: **10-minute configurable sessions are implemented and validated in produ
 - A real production Live session connected, produced audio and a transcript, executed portfolio navigation, and persisted the turn (12/12).
 - The reservation settled at **$0.25**.
 - Emergency shutdown blocked new sessions and restored cleanly (10/10).
-- Production budget after validation: **$1.431948 USD / ~$2.0361 CAD** cumulative, **$0.535085 USD** daily, no held reservations.
+- Production budget after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative, **$0.790668 USD** daily, no held reservations.
+- Production voice: **Schedar**.
 
 ## Provider-side vs application-side duration
 

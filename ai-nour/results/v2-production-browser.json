@@ -1,0 +1,63 @@
+{
+  "generatedAt": "2026-11-27T05:32:25.293Z",
+  "mode": "production-browser/private-beta",
+  "home": {
+    "pillHeight": 34,
+    "pillWidth": 144.98,
+    "css": "https://nourchkair.com/src/ai-nour/companion.css?v=3",
+    "main": "https://nourchkair.com/src/main.js?v=36",
+    "pillVisible": true
+  },
+  "presented": {
+    "projectOpen": true,
+    "route": "#/projects/safiy",
+    "panelVisible": true,
+    "panel": {
+      "left": 772,
+      "top": 75,
+      "width": 390,
+      "height": 680
+    }
+  },
+  "afterManualNavigation": {
+    "projectOpen": false,
+    "route": "#/home"
+  },
+  "defaultPage": {
+    "pillCount": 0,
+    "panelCount": 0
+  },
+  "consoleErrors": 0,
+  "passed": 7,
+  "total": 7,
+  "results": [
+    {
+      "name": "new CSS/JS assets load",
+      "pass": true
+    },
+    {
+      "name": "pill is 34px",
+      "pass": true
+    },
+    {
+      "name": "private-beta gate authenticates",
+      "pass": true
+    },
+    {
+      "name": "guided tour opens Safiy",
+      "pass": true
+    },
+    {
+      "name": "panel is right-aligned under pill",
+      "pass": true
+    },
+    {
+      "name": "manual navigation closes the project",
+      "pass": true
+    },
+    {
+      "name": "default portfolio has no AI pill or panel",
+      "pass": true
+    }
+  ]
+}
