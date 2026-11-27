@@ -14,7 +14,6 @@ const state = {
   locale: localStorage.getItem(STORE.locale) || 'en',
   messages: [],
   meta: null,
-  mode: 'text',
   size: 'standard',
   busy: false,
   thinking: false,
@@ -138,25 +137,11 @@ function panelMarkup() {
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>
     </div>
     <div class="ainour-body" id="ainourBody" hidden>
-      <div class="ainour-live" id="ainourLive" hidden>
-        <div class="ainour-voice-stage">
-          <div class="ainour-voice-bars" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-          <b class="ainour-live-state" id="ainourLiveState">idle</b>
-          <span class="ainour-live-hint" id="ainourLiveHint">Start a voice conversation; sessions are limited to about two minutes and the transcript stays in the chat.</span>
-        </div>
-        <div class="ainour-live-actions">
-          <button class="ainour-start" type="button" data-ainour="start-voice">Start microphone</button>
-          <button class="ainour-stop" type="button" data-ainour="stop-voice" hidden>Stop voice</button>
-        </div>
-      </div>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
       <div class="ainour-thinking" id="ainourThinking" role="status" aria-live="polite" hidden>Thinking<span class="ainour-thinking-dots" aria-hidden="true">…</span></div>
       <form class="ainour-compose" id="ainourForm">
         <div class="ainour-compose-bar">
           <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
-          <button class="ainour-compose-btn" type="button" data-ainour="voice" aria-label="Start voice" title="Voice">
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.1" y="3.1" width="5.8" height="9.2" rx="2.9"/><path d="M4.8 9.6a5.2 5.2 0 0 0 10.4 0M10 15v2.2M7.8 17.2h4.4"/></svg>
-          </button>
           <button class="ainour-compose-btn ainour-send" id="ainourSend" type="submit" aria-label="Send message" title="Send">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10h13M11 4.5l5.5 5.5-5.5 5.5"/></svg>
           </button>
@@ -183,7 +168,6 @@ function mount() {
   const panel = document.createElement('section');
   panel.className = 'ainour-panel';
   panel.id = 'ainourPanel';
-  panel.dataset.mode = 'text';
   panel.dataset.size = 'standard';
   panel.dataset.state = 'idle';
   panel.setAttribute('role', 'dialog');
@@ -206,11 +190,6 @@ function mount() {
     gateInput: panel.querySelector('#ainourKey'),
     gateError: panel.querySelector('#ainourGateError'),
     body: panel.querySelector('#ainourBody'),
-    live: panel.querySelector('#ainourLive'),
-    liveState: panel.querySelector('#ainourLiveState'),
-    liveHint: panel.querySelector('#ainourLiveHint'),
-    liveStart: panel.querySelector('[data-ainour="start-voice"]'),
-    liveStop: panel.querySelector('[data-ainour="stop-voice"]'),
     thread: panel.querySelector('#ainourThread'),
     thinking: panel.querySelector('#ainourThinking'),
     form: panel.querySelector('#ainourForm'),
@@ -224,9 +203,9 @@ function mount() {
   pill.addEventListener('click', (event) => {
     const action = event.target.closest('[data-ainour]')?.dataset.ainour;
     if (action === 'mode-text') {
-      openPanel('text');
+      openPanel();
     } else if (action === 'mode-voice') {
-      if (voice.active) openPanel('voice');
+      if (voiceIsActive()) stopVoice();
       else startVoice();
     }
   });
@@ -236,10 +215,6 @@ function mount() {
     if (action === 'close') closePanel();
     else if (action === 'minimize') setSize(state.size === 'collapsed' ? 'standard' : 'collapsed');
     else if (action === 'expand') setSize(state.size === 'expanded' ? 'standard' : 'expanded');
-    else if (action === 'voice' || action === 'start-voice') {
-      if (voice.active) openPanel('voice');
-      else startVoice();
-    } else if (action === 'stop-voice') stopVoice('Voice stopped.');
     else if (action === 'locale') toggleLocale();
     else if (action === 'reset') resetSession();
   });
@@ -283,7 +258,6 @@ function mount() {
   initDrag();
 
   setLocaleButton();
-  setMode('text');
   setSize('standard');
   updateContext();
   updatePill();
@@ -304,25 +278,25 @@ function mount() {
 
   if (DEV) {
     window.AINourPrototype = {
-      open: (mode = state.mode) => openPanel(mode),
+      open: () => openPanel(),
       close: closePanel,
       expand: () => setSize('expanded'),
       compact: () => setSize('standard'),
       minimize: () => setSize('collapsed'),
       collapse: () => setSize('collapsed'),
-      voiceView: () => openPanel('voice'),
+      voiceView: () => openPanel(),
       startVoice,
       stopVoice,
-      setVoiceState: (value, hint) => setLiveState(value, hint),
+      setVoiceState: (value) => setState(value),
       thinking: (active) => showThinking(Boolean(active)),
       demoVoice: (userText, assistantText) => {
-        openPanel('voice');
+        openPanel();
         voice.active = true;
         voice.userText = userText || '';
         voice.assistantText = assistantText || '';
         appendVoiceTranscript('user', voice.userText);
         appendVoiceTranscript('assistant', voice.assistantText);
-        setLiveState('speaking', 'Speaking…');
+        setState('speaking');
       },
       state
     };
@@ -391,6 +365,10 @@ function initDrag() {
   handle.addEventListener('pointercancel', end);
 }
 
+function voiceIsActive() {
+  return voice.active || ['connecting', 'listening', 'processing', 'speaking'].includes(state.voice);
+}
+
 function positionPill() {
   if (!els.pill) return;
   if (window.innerWidth <= 760) {
@@ -417,11 +395,13 @@ function updatePill() {
   els.pill.dataset.live = voice.active ? 'true' : 'false';
   els.pill.dataset.unread = state.unread ? 'true' : 'false';
   els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
-  const voiceLabel = ['connecting', 'listening', 'processing', 'speaking'].includes(state.voice) || voice.active;
-  els.pillLabel.textContent = voiceLabel ? 'Listening' : 'Ask Nour AI';
-  els.pillText.setAttribute('aria-label', voiceLabel ? 'Listening — open text chat' : 'Ask Nour AI — open text chat');
-  els.pillText.classList.toggle('is-active', !els.panel.hidden && state.mode === 'text');
-  els.pillVoice.classList.toggle('is-active', voice.active || state.mode === 'voice');
+  const voiceLabel = ['connecting', 'listening', 'speaking'].includes(state.voice) || voice.active;
+  const label = state.voice === 'error' ? 'Mic error' : voiceLabel ? 'Listening' : 'Ask Nour AI';
+  els.pillLabel.textContent = label;
+  els.pillText.setAttribute('aria-label', `${label} — open text chat`);
+  els.pillText.classList.toggle('is-active', !els.panel.hidden);
+  els.pillVoice.classList.toggle('is-active', voiceIsActive());
+  els.pillVoice.setAttribute('aria-label', voiceIsActive() ? 'Stop voice with AI Nour' : 'Start voice with AI Nour');
   requestAnimationFrame(positionPill);
 }
 
@@ -438,18 +418,17 @@ function showBody() {
   els.body.hidden = false;
 }
 
-async function openPanel(mode = state.mode) {
+async function openPanel() {
   state.unread = false;
   if (els.panel.hidden) {
     els.panel.hidden = false;
     applySavedPosition();
   }
-  setMode(mode);
   setSize(state.size);
   updatePill();
   if (!state.ready && state.key) await init();
   if (!state.key) showGate();
-  if (state.ready && mode === 'text') setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
+  if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
   updateContext();
   clampPanel();
 }
@@ -460,14 +439,6 @@ function closePanel() {
   state.unread = false;
   updatePill();
   els.pillText.focus({ preventScroll: true });
-}
-
-function setMode(mode) {
-  state.mode = mode;
-  els.panel.dataset.mode = mode;
-  els.live.hidden = mode !== 'voice';
-  if (mode === 'voice') renderLive();
-  updatePill();
 }
 
 function setSize(size) {
@@ -494,32 +465,6 @@ function setState(value) {
   state.voice = value;
   els.panel.dataset.state = value;
   updatePill();
-}
-
-function setLiveState(value, hint) {
-  setState(value);
-  if (!els.live) return;
-  els.live.dataset.state = value;
-  const labels = {
-    idle: 'idle',
-    connecting: 'connecting',
-    listening: 'listening',
-    processing: 'processing',
-    speaking: 'speaking',
-    error: 'error'
-  };
-  els.liveState.textContent = labels[value] || value;
-  if (hint) els.liveHint.textContent = hint;
-  els.liveStart.hidden = voice.active || value === 'connecting';
-  els.liveStop.hidden = !voice.active && value !== 'connecting';
-  renderLive();
-}
-
-function renderLive() {
-  if (!els.live) return;
-  els.live.hidden = state.mode !== 'voice';
-  if (els.live.hidden) return;
-  els.live.dataset.state = state.voice;
 }
 
 function showThinking(active) {
@@ -602,13 +547,10 @@ function renderThread() {
     }
     const item = document.createElement('div');
     item.className = `ainour-msg ${message.role}${message.streaming ? ' streaming' : ''}`;
-    const label = document.createElement('span');
-    label.className = 'ainour-msg-label';
-    label.textContent = message.role === 'user' ? 'You' : 'AI Nour';
     const text = document.createElement('span');
     text.className = 'ainour-msg-text';
     text.textContent = message.content || '…';
-    item.append(label, text);
+    item.append(text);
     if (message.actions?.length) {
       const actions = document.createElement('div');
       actions.className = 'ainour-actions';
@@ -672,7 +614,6 @@ async function init() {
     await loadSession();
     state.ready = true;
     setState('idle');
-    setLiveState('idle', 'Start a voice conversation; sessions are limited to about two minutes and the transcript stays in the chat.');
     updateContext();
   } catch (error) {
     if (String(error.message).includes('unauthorized')) return;
@@ -772,7 +713,7 @@ function setLocaleButton() {
 }
 
 async function resetSession() {
-  if (voice.active) await stopVoice('Voice stopped.');
+  if (voice.active) await stopVoice();
   localStorage.removeItem(STORE.session);
   state.sessionId = null;
   state.messages = [];
@@ -898,12 +839,11 @@ async function persistVoiceTurn() {
     });
     voice.lastTotals = usageTotals(voice.usage);
   } catch {
-    addMessage('system', 'Voice turn could not be saved; the transcript is still shown locally.');
+    console.warn('AI Nour voice turn could not be saved');
   }
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
-  renderLive();
 }
 
 async function handleLiveTool(toolCall) {
@@ -932,16 +872,16 @@ async function handleLiveTool(toolCall) {
 }
 
 async function startVoice() {
-  if (voice.active) {
-    openPanel('voice');
+  if (voiceIsActive()) {
+    openPanel();
     return;
   }
   if (!state.ready) {
-    await openPanel('voice');
+    await openPanel();
     if (!state.ready) return;
   }
-  openPanel('voice');
-  setLiveState('connecting', 'Requesting microphone and a one-use Live token (about two minutes)…');
+  openPanel();
+  setState('connecting');
   voice.turnId = randomId(12);
   voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0 };
   voice.usage = null;
@@ -969,15 +909,15 @@ async function startVoice() {
       model: token.model,
       config: token.config,
       callbacks: {
-        onopen: () => setLiveState('listening', 'Listening. Speak naturally; interrupt whenever you want.'),
+        onopen: () => setState('listening'),
         onmessage: async (message) => {
-          if (message.setupComplete) setLiveState('listening', 'Listening. Speak naturally; interrupt whenever you want.');
+          if (message.setupComplete) setState('listening');
           const activity = message.voiceActivity?.voiceActivityType || message.voiceActivity?.type;
-          if (activity === 'START_OF_SPEECH') setLiveState('listening');
-          else if (activity === 'END_OF_SPEECH') setLiveState('processing', 'Thinking…');
+          if (activity === 'START_OF_SPEECH') setState('listening');
+          else if (activity === 'END_OF_SPEECH') setState('processing');
           if (message.serverContent?.interrupted) {
             stopPlayback();
-            setLiveState('listening', 'Listening.');
+            setState('listening');
           }
           if (message.serverContent?.inputTranscription?.text) {
             voice.userText += message.serverContent.inputTranscription.text;
@@ -990,20 +930,20 @@ async function startVoice() {
           for (const part of message.serverContent?.modelTurn?.parts || []) {
             if (part.inlineData?.data) {
               playAudio(part.inlineData.data);
-              setLiveState('speaking', 'Speaking…');
+              setState('speaking');
             }
           }
           if (message.serverContent?.turnComplete) {
-            setLiveState('listening', 'Listening.');
+            setState('listening');
             await persistVoiceTurn();
             voice.turnId = randomId(12);
           }
           if (message.usageMetadata) voice.usage = message.usageMetadata;
           if (message.toolCall) await handleLiveTool(message.toolCall);
         },
-        onerror: () => setLiveState('error', 'The Live connection failed. Try again.'),
+        onerror: () => { stopVoice(); setState('error'); setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 3000); },
         onclose: () => {
-          if (voice.active) stopVoice('Live session ended. Start again when ready.');
+          if (voice.active) stopVoice();
         }
       }
     });
@@ -1019,14 +959,15 @@ async function startVoice() {
     silent.gain.value = 0;
     voice.processor.connect(silent);
     silent.connect(voice.inputContext.destination);
-    setLiveState('listening', 'Listening. Speak naturally; interrupt whenever you want.');
+    setState('listening');
   } catch (error) {
-    await stopVoice('');
-    setLiveState('error', 'Could not start voice. Check microphone permission and the local Worker.');
+    await stopVoice();
+    setState('error');
+    setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 3000);
   }
 }
 
-async function stopVoice(message = '') {
+async function stopVoice() {
   voice.active = false;
   if (voice.processor) { voice.processor.disconnect(); voice.processor = null; }
   if (voice.mic) { for (const track of voice.mic.getTracks()) track.stop(); voice.mic = null; }
@@ -1037,8 +978,7 @@ async function stopVoice(message = '') {
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
-  setLiveState('idle', 'Voice is off. Use Start microphone to talk again.');
-  if (message) addMessage('system', message);
+  setState('idle');
 }
 
 function waitForNour() {

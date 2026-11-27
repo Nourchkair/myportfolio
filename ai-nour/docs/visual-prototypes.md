@@ -30,7 +30,7 @@ Use `127.0.0.1:8791` for the private admin; `localhost:8791` can hit a stale IPv
 | 2 | **Standard text panel** | `screenshots/phase3-state-2-text.png` | 390px transparent glass, thread legibility, Viewing/EN/New row, inline composer. |
 | 3 | **Collapsed chat** | `screenshots/phase3-state-3-collapsed.png` | Only the latest AI reply plus the single-line composer; the panel no longer covers most of the portfolio. |
 | 4 | **Expanded panel** | `screenshots/phase3-state-4-expanded.png` | 760px workspace; wider thread without taking over the viewport. |
-| 5 | **Voice mode** | `screenshots/phase3-state-5-voice.png` | Pill changes to “Listening”; text transcript stays in the chat thread; Stop voice is explicit; no orb. |
+| 5 | **Voice transcript** | `screenshots/phase3-state-5-voice.png` | Pill changes to “Listening” and is the only voice control; the chat is transcript-only, with no orb, mic, bars, or start/stop controls. |
 | 6 | **Mobile bottom sheet** | `screenshots/phase3-state-6-mobile.png` | Full-width sheet at 390×844, safe-area awareness, pill remains reachable, composer usable. |
 
 ### Thinking sub-state
@@ -46,10 +46,10 @@ The label is a state indicator, not a separate message, and respects reduced mot
 - Pill: **163.4×42** at (1020, 27) on 1440×900, **10.4px right of the menu bar**, vertically centred; the menu bar is 579.1×60 at (430.4, 18).
 - Menu bar no longer contains “Nour OS”; the brand slot is the home mark only.
 - Standard text panel: **390×680** at (1039.8, 152) after content; **390×599.1** empty.
-- Collapsed chat: **390×231.4** at (1039.8, 152); only the latest assistant reply (358×55.4) and the 44px composer bar.
-- Expanded panel: **760×648.9** at (672, 152).
-- Voice panel: **430×680** at (1002, 152) in the feedback pass.
-- Composer: bar **364×44**; mic **32×32**; send **32×32**, 5px right of mic and 6px inside the bar’s right edge.
+- Collapsed chat: **390×217** at (1040, 152); only the latest assistant reply and the 44px composer bar.
+- Expanded panel: **760×702** at (672, 152).
+- Voice transcript state: the chat panel at **760×740**; the pill is the only voice control.
+- Composer: bar **364×44**; a single **32×32** Send button inset 6px from the bar’s right edge. No mic in the chat bar.
 - EN **32.6×28**, New **38.9×28**, aligned with the Viewing row; New’s right edge is flush with the composer bar.
 - Mobile sheet: **390×497** at (0, 347) at 390×844; pill **149×40** at (229, 70).
 
@@ -57,7 +57,7 @@ The label is a state indicator, not a separate message, and respects reduced mot
 
 1. AI Nour never blocks portfolio navigation.
 2. Manual navigation takes priority; the panel does not re-open over a manual route change.
-3. Closing the panel hides the UI only. It never ends a text or voice session; only Stop voice or New ends voice.
+3. Closing the panel hides the UI only. It never ends a text or voice session; only the pill mic or New ends voice.
 4. Voice states are visible in the panel and the pill; the pill changes from “Ask Nour AI” to “Listening”.
 5. Text is always available as a fallback.
 6. The pill and panel use the “AI Nour” identity; the old representation disclosure text was removed at Nour’s request.
@@ -70,9 +70,9 @@ Use `docs/real-device-testing.md`. Minimum for this review:
 
 - [ ] Open all six states on desktop Chrome.
 - [ ] Repeat the six states on desktop Safari.
-- [ ] Open the text sheet on iOS Safari at 390×844.
+- [ ] Open the text sheet on iOS Safari at 390×844; confirm the chat bar is text-only.
 - [ ] Drag the panel, collapse, expand, close, and reopen; confirm position and thread persistence.
-- [ ] Start a real voice session, close the panel while speaking, confirm the session continues, reopen Voice.
+- [ ] Start a real voice session from the pill, close the panel while speaking, confirm the session continues, reopen the chat; stop it from the pill.
 - [ ] Test interruption by talking over the assistant.
 - [ ] Test French pronunciation.
 - [ ] Confirm the two-minute Live limit is understandable and recovery works.

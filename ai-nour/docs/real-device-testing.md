@@ -45,10 +45,10 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 - [ ] Closing the panel with X does not end the text or voice session.
 - [ ] Voice button asks for microphone permission only after the click.
 - [ ] Listening, processing, speaking and idle states are visible in the panel and pill.
-- [ ] Voice user and AI transcripts appear inside the shared chat thread.
+- [ ] Voice user and AI transcripts appear inside the shared chat thread, with no message labels and no in-panel mic/orb/voice controls.
 - [ ] Speaking can be interrupted by talking over it; audio stops promptly.
-- [ ] Speaking can interrupt the assistant, and Stop voice ends the session; text still works.
-- [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening Voice returns to the live state.
+- [ ] The pill mic toggles voice; the chat panel stays transcript-only; text still works.
+- [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening the chat shows the continuing transcript, and the pill stops voice.
 - [ ] The two-minute Live session limit is understandable, and a new session can be started without losing the transcript.
 - [ ] Reload restores the conversation from D1.
 - [ ] No console errors or failed network requests.

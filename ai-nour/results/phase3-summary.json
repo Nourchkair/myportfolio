@@ -4,14 +4,38 @@
   "phase": 3,
   "status": "launch candidate prepared; visual and human-device approval pending",
   "tests": {
-    "unit": { "passed": 45, "total": 45 },
-    "api": { "passed": 23, "total": 23 },
-    "crm": { "passed": 14, "total": 14 },
-    "lifecycle": { "passed": 28, "total": 28 },
-    "adminAuth": { "passed": 15, "total": 15 },
-    "liveBudget": { "passed": 3, "total": 3 },
-    "security": { "passed": 8, "total": 8 },
-    "portfolio": { "passed": 261, "total": 261 }
+    "unit": {
+      "passed": 45,
+      "total": 45
+    },
+    "api": {
+      "passed": 23,
+      "total": 23
+    },
+    "crm": {
+      "passed": 14,
+      "total": 14
+    },
+    "lifecycle": {
+      "passed": 28,
+      "total": 28
+    },
+    "adminAuth": {
+      "passed": 15,
+      "total": 15
+    },
+    "liveBudget": {
+      "passed": 3,
+      "total": 3
+    },
+    "security": {
+      "passed": 8,
+      "total": 8
+    },
+    "portfolio": {
+      "passed": 261,
+      "total": 261
+    }
   },
   "retrieval": {
     "chunks": 107,
@@ -37,6 +61,10 @@
   "ui": {
     "states": 6,
     "thinkingState": true,
+    "thinkingBubble": false,
+    "messageLabels": 0,
+    "inPanelVoiceControls": 0,
+    "yellowOrbs": 0,
     "consoleErrors": 0,
     "realMicrophoneStarted": false
   },
