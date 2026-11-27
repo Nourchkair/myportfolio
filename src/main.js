@@ -3,7 +3,8 @@ import './app/immersive.js?v=47';
 const aiNourParams = new URLSearchParams(location.search);
 const aiNourMode = aiNourParams.get('ainour');
 const aiNourLocal = ['localhost', '127.0.0.1'].includes(location.hostname);
-const aiNourEnabled = aiNourMode === 'beta'
+const aiNourEnabled = !aiNourLocal
+  || aiNourMode === 'beta'
   || aiNourMode === '1'
   || (aiNourLocal && aiNourMode === 'dev');
 

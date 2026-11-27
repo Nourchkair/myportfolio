@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T18:48:44.166Z",
+  "generatedAt": "2026-11-27T18:49:42.910Z",
   "url": "https://nourchkair.com/?ainour=beta",
-  "passed": 10,
-  "failed": 1,
+  "passed": 11,
+  "failed": 0,
   "total": 11,
   "checks": [
     {
@@ -45,7 +45,7 @@
         "belowGreeting": true,
         "insideIntro": true,
         "english": true,
-        "cardsTopmost": false,
+        "cardsTopmost": true,
         "noteVisible": true,
         "depthLayerHidden": true,
         "welcomeAboveOverlays": true,
@@ -55,7 +55,7 @@
     },
     {
       "name": "production cards are unobstructed panels below the greeting, not pills",
-      "pass": false,
+      "pass": true,
       "detail": [
         {
           "text": "\u2192\nExplore independently\nBrowse the portfolio at your own pace.",
@@ -98,7 +98,7 @@
       }
     },
     {
-      "name": "Nupa card opens the short French v1.2 consent gate",
+      "name": "Nupa card opens the short French v1.3 consent gate",
       "pass": true,
       "detail": {
         "locale": "FR",
@@ -197,7 +197,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T18:48:43.737Z"
+          "acceptedAt": "2026-11-27T18:49:42.513Z"
         },
         "gateHidden": true,
         "keyStored": false,
