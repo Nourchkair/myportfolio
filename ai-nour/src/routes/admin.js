@@ -1,5 +1,5 @@
 import { json, readJson } from '../http/json.js';
-import { requireAdmin } from '../auth/secure.js';
+import { requireAdmin, sha256Hex } from '../auth/secure.js';
 import { BOOLEAN_FLAGS, readFlags, setBooleanFlag, setPersona } from '../controls/flags.js';
 import { getCorpusMeta, listChunks, search } from '../knowledge/retrieval.js';
 import { badRequest, forbidden } from '../http/errors.js';
@@ -32,6 +32,10 @@ export function registerAdminRoutes(router, services) {
         knowledgeFolder: Boolean(config.google.knowledgeFolderId),
         backupFolder: Boolean(config.google.backupFolderId),
         allowSyntheticWrites: config.google.allowSyntheticWrites
+      },
+      security: {
+        betaAccessRequired: config.betaAccessRequired,
+        adminEnabled: config.adminEnabled
       },
       email: {
         provider: config.email.provider,
@@ -189,6 +193,42 @@ export function registerAdminRoutes(router, services) {
     if (!removed) throw badRequest('Knowledge override not found');
     await db.audit({ actor: 'admin-token', action: 'knowledge.override.delete', detail: { chunkId: params.id }, now: Date.now() });
     return json({ overrides: await db.listKnowledgeOverrides() });
+  });
+
+  router.get('/api/admin/beta-testers', async ({ request }) => {
+    requireAdmin(request, config);
+    return json({
+      betaAccessRequired: config.betaAccessRequired,
+      testers: await db.listBetaTesters(200)
+    });
+  });
+
+  router.post('/api/admin/beta-testers', async ({ request }) => {
+    requireAdmin(request, config);
+    const body = await readJson(request);
+    const label = String(body.label || '').replace(/\s+/g, ' ').trim().slice(0, 80);
+    if (!label) throw badRequest('A label is required');
+    const raw = `ainour_beta_${[...crypto.getRandomValues(new Uint8Array(32))].map((byte) => byte.toString(16).padStart(2, '0')).join('')}`;
+    const id = crypto.randomUUID();
+    const now = Date.now();
+    const tester = await db.createBetaTester({
+      id,
+      label,
+      keyPrefix: `${raw.slice(0, 18)}…`,
+      keyHash: await sha256Hex(raw),
+      now
+    });
+    await db.audit({ actor: 'admin-token', action: 'beta.tester.create', detail: { id, label }, now });
+    return json({ tester, key: raw }, 201);
+  });
+
+  router.post('/api/admin/beta-testers/:id/revoke', async ({ request, params }) => {
+    requireAdmin(request, config);
+    const now = Date.now();
+    const revoked = await db.revokeBetaTester(params.id, now);
+    if (!revoked) throw badRequest('Beta tester not found or already revoked');
+    await db.audit({ actor: 'admin-token', action: 'beta.tester.revoke', detail: { id: params.id }, now });
+    return json({ tester: await db.getBetaTester(params.id) });
   });
 
   router.post('/api/admin/crm/sync', async ({ request }) => {

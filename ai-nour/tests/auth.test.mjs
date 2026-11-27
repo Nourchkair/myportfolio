@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { timingSafeEqual, requireAdmin, requirePrototypeKey, ownerTokenFrom } from '../src/auth/secure.js';
+import { timingSafeEqual, requireAdmin, requirePrototypeKey, ownerTokenFrom, sha256Hex } from '../src/auth/secure.js';
 import {
   buildAuthUrl as buildAdminAuthUrl,
   buildSessionCookie as buildAdminCookie,
@@ -20,14 +20,30 @@ test('timingSafeEqual compares strings without early exit', () => {
   assert.equal(timingSafeEqual('', ''), true);
 });
 
-test('prototype and admin auth are enforced server-side', () => {
-  const config = { prototypeAccessKey: 'prototype-key', adminToken: 'admin-key', adminEnabled: true };
+test('prototype and admin auth are enforced server-side', async () => {
+  const config = { prototypeAccessKey: 'prototype-key', adminToken: 'admin-key', adminEnabled: true, betaAccessRequired: false };
   const okay = new Request('http://local/api', { headers: { 'x-prototype-key': 'prototype-key', authorization: 'Bearer admin-key' } });
-  assert.doesNotThrow(() => requirePrototypeKey(okay, config));
+  await assert.doesNotReject(() => requirePrototypeKey(okay, config));
   assert.doesNotThrow(() => requireAdmin(okay, config));
   const bad = new Request('http://local/api', { headers: { 'x-prototype-key': 'nope', authorization: 'Bearer nope' } });
-  assert.throws(() => requirePrototypeKey(bad, config), /prototype access key/);
+  await assert.rejects(() => requirePrototypeKey(bad, config), /prototype access key/);
   assert.throws(() => requireAdmin(bad, config), /Admin authentication/);
+});
+
+test('private-beta keys are hashed, server-validated and revocable', async () => {
+  const key = `ainour_beta_${'a'.repeat(64)}`;
+  const hash = await sha256Hex(key);
+  let active = true;
+  const db = {
+    findActiveBetaTesterByHash: async (candidate) => (active && candidate === hash ? { id: 'tester-1', label: 'Synthetic tester' } : null)
+  };
+  const config = { prototypeAccessKey: '', adminToken: 'admin-key', adminEnabled: true, betaAccessRequired: true };
+  const request = new Request('http://local/api', { headers: { 'x-prototype-key': key } });
+  const tester = await requirePrototypeKey(request, config, db);
+  assert.equal(tester.id, 'tester-1');
+  active = false;
+  await assert.rejects(() => requirePrototypeKey(request, config, db), /private-beta access key/);
+  await assert.rejects(() => requirePrototypeKey(new Request('http://local/api'), config, db), /private-beta access key/);
 });
 
 test('owner token must be present and reasonably sized', () => {

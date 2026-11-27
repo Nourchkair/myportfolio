@@ -29,11 +29,19 @@ export async function requireOwnerHash(request) {
   return sha256Hex(token);
 }
 
-export function requirePrototypeKey(request, config) {
+export async function requirePrototypeKey(request, config, db) {
   const supplied = request.headers.get('x-prototype-key') || '';
+  if (!supplied) throw unauthorized('A valid private-beta access key is required');
+  if (config.betaAccessRequired) {
+    if (!db) throw unauthorized('Private-beta authentication is unavailable');
+    const tester = await db.findActiveBetaTesterByHash(await sha256Hex(supplied), Date.now());
+    if (!tester) throw unauthorized('A valid private-beta access key is required');
+    return tester;
+  }
   if (!timingSafeEqual(supplied, config.prototypeAccessKey)) {
     throw unauthorized('A valid prototype access key is required');
   }
+  return null;
 }
 
 export function requireAdmin(request, config) {

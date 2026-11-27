@@ -17,10 +17,11 @@ import {
 const here = path.dirname(fileURLToPath(import.meta.url));
 const adminDir = path.resolve(here, '../admin');
 const port = Number(process.env.ADMIN_PORT || 8791);
-const workerUrl = new URL(process.env.PHASE1_WORKER_URL || 'http://127.0.0.1:8789');
 
 function loadEnv() {
-  const envPath = path.resolve(here, '../.dev.vars');
+  const envPath = process.env.ADMIN_ENV_FILE
+    ? path.resolve(process.cwd(), process.env.ADMIN_ENV_FILE)
+    : path.resolve(here, '../.dev.vars');
   const text = fs.readFileSync(envPath, 'utf8');
   return Object.fromEntries(text.split(/\r?\n/).filter((line) => line && !line.startsWith('#')).map((line) => {
     const index = line.indexOf('=');
@@ -29,6 +30,7 @@ function loadEnv() {
 }
 
 const env = loadEnv();
+const workerUrl = new URL(process.env.PHASE1_WORKER_URL || env.PHASE1_WORKER_URL || 'http://127.0.0.1:8789');
 const adminToken = env.ADMIN_TOKEN;
 if (!adminToken) throw new Error('ADMIN_TOKEN is required');
 const googleAuth = env.ADMIN_GOOGLE_AUTH === 'true';

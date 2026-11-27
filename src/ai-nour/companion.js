@@ -2,8 +2,9 @@ import { PROJECT_BY_ID } from '../data/projects.js';
 import { PROFESSIONAL_CHAPTERS } from '../data/journey.js';
 
 const params = new URLSearchParams(location.search);
-const DEV = params.get('ainour') === 'dev';
-const API_BASE = (params.get('ainour-api') || (['localhost', '127.0.0.1'].includes(location.hostname) ? 'http://127.0.0.1:8789' : '')).replace(/\/+$/, '');
+const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+const DEV = params.get('ainour') === 'dev' && LOCAL;
+const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale', pos: 'ainour:panelpos' };
 
@@ -76,7 +77,7 @@ async function api(path, options = {}) {
   if (response.status === 401) {
     state.key = '';
     sessionStorage.removeItem(STORE.key);
-    showGate('The access key was not accepted. Enter the prototype key again.');
+    showGate('The private-beta key was not accepted, expired, or was revoked.');
     throw new Error('unauthorized');
   }
   if (!response.ok) throw new Error(body?.error?.message || `HTTP ${response.status}`);
@@ -129,9 +130,9 @@ function panelMarkup() {
       </div>
     </div>
     <div class="ainour-gate" id="ainourGate">
-      <p>Enter the local prototype access key to talk with AI Nour. The key stays in this tab; the permanent Gemini key never reaches the browser.</p>
+      <p>Enter your private-beta access key to talk with AI Nour. The key is validated by AI Nour and stays in this tab; the permanent Gemini key never reaches the browser.</p>
       <form id="ainourGateForm">
-        <input id="ainourKey" type="password" autocomplete="off" placeholder="Prototype access key" aria-label="Prototype access key" required>
+        <input id="ainourKey" type="password" autocomplete="off" placeholder="Private-beta access key" aria-label="Private-beta access key" required>
         <button type="submit">Open</button>
       </form>
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>

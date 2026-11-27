@@ -9,7 +9,7 @@ export function registerCrmRoutes(router, services) {
   const crm = services.crm || createCrmService({ db, config, google, email });
 
   async function guard(request) {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     const flags = await requireAssistant(db);
     const clientHash = await sha256Hex(services.clientKey(request));

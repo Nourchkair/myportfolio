@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T01:05:52.357Z",
+  "generatedAt": "2026-11-27T03:57:35.953Z",
   "mode": "mock-providers/local-d1/no-google-writes",
   "passed": 14,
   "failed": 0,
@@ -53,8 +53,8 @@
       "pass": true,
       "detail": {
         "statuses": [
-          409,
-          202
+          202,
+          409
         ]
       }
     },

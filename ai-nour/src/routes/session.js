@@ -13,7 +13,7 @@ export function registerSessionRoutes(router, services) {
   const { db, config, textProvider, liveProvider, cost } = services;
 
   router.get('/api/meta', async ({ request }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const flags = await readFlags(db);
     return json({
       version: config.version,
@@ -30,7 +30,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.post('/api/session', async ({ request }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
     const body = await readJson(request);
@@ -46,7 +46,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.get('/api/session/:id', async ({ request, params }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
     const session = await getOwnedSession({ db, sessionId: params.id, ownerHash, now: Date.now() });
@@ -63,7 +63,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.post('/api/chat', async ({ request, requestId }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     const flags = await requireText(db);
     const body = await readJson(request);
@@ -85,7 +85,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.post('/api/live/token', async ({ request }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     const flags = await requireLive(db);
     const body = await readJson(request);
@@ -105,7 +105,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.post('/api/live/turn', async ({ request, requestId }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
     const body = await readJson(request);
@@ -122,7 +122,7 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.post('/api/tools/execute', async ({ request }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
     const body = await readJson(request);
@@ -142,14 +142,14 @@ export function registerSessionRoutes(router, services) {
   });
 
   router.get('/api/knowledge/search', async ({ request, url }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     const query = url.searchParams.get('q') || '';
     if (!query.trim()) throw badRequest('q is required');
     return json({ query, results: services.retrieval.search(query, { limit: 5 }) });
   });
 
   router.get('/api/knowledge/chunks', async ({ request }) => {
-    requirePrototypeKey(request, config);
+    await requirePrototypeKey(request, config, db);
     return json({ chunks: listChunks() });
   });
 }

@@ -15,6 +15,7 @@
     <nav>
       <button data-tab="overview" class="active">Overview</button>
       <button data-tab="controls">Controls</button>
+      <button data-tab="beta">Private beta</button>
       <button data-tab="persona">Personality</button>
       <button data-tab="cost">Usage &amp; cost</button>
       <button data-tab="sessions">Sessions</button>
@@ -61,6 +62,26 @@
       </div>
       <button id="save-limits">Save limits</button>
       <p id="limits-result" class="muted"></p>
+    </section>
+
+    <section id="tab-beta" class="panel hidden">
+      <h2>Private beta access</h2>
+      <p class="muted">Each tester gets a unique, server-validated key. Only a hash is stored; revoking a key takes effect immediately.</p>
+      <div id="beta-status" class="cards"></div>
+      <div class="row">
+        <input id="beta-label" placeholder="Tester name or label">
+        <button id="create-beta">Create beta key</button>
+      </div>
+      <p id="beta-result" class="muted"></p>
+      <div id="beta-key-wrap" class="block" hidden>
+        <p class="muted">Copy this key now. It is shown once and cannot be recovered.</p>
+        <div class="row">
+          <input id="beta-key" readonly>
+          <button id="copy-beta-key" class="secondary">Copy</button>
+        </div>
+      </div>
+      <h3>Beta testers</h3>
+      <div id="beta-testers" class="table-wrap"></div>
     </section>
 
     <section id="tab-persona" class="panel hidden">

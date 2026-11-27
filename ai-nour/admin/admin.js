@@ -348,6 +348,38 @@ async function loadAudit() {
   );
 }
 
+async function loadBeta() {
+  const data = await api('/api/admin/beta-testers');
+  $('#beta-status').innerHTML = cards([
+    { label: 'Server validation', value: data.betaAccessRequired ? 'required' : 'local key', sub: 'private-beta credentials' },
+    { label: 'Active testers', value: String((data.testers || []).filter((item) => item.status === 'active').length), sub: `of ${data.testers?.length || 0} total` }
+  ]);
+  $('#beta-testers').innerHTML = table(
+    ['Created', 'Label', 'Key prefix', 'Status', 'Last used', ''],
+    (data.testers || []).map((item) => [
+      time(item.created_at), esc(item.label), `<code>${esc(item.key_prefix)}</code>`, esc(item.status),
+      item.last_used_at ? time(item.last_used_at) : '—',
+      item.status === 'active' ? `<button class="danger" data-revoke-beta="${esc(item.id)}">Revoke</button>` : ''
+    ])
+  );
+  $$('#beta-testers button[data-revoke-beta]').forEach((button) => button.addEventListener('click', async () => {
+    if (!window.confirm(`Revoke beta key for this tester?`)) return;
+    await api(`/api/admin/beta-testers/${encodeURIComponent(button.dataset.revokeBeta)}/revoke`, { method: 'POST', body: '{}' });
+    await loadBeta();
+  }));
+}
+
+async function createBeta() {
+  const label = $('#beta-label').value.trim();
+  if (!label) return showError('Enter a tester label');
+  const result = await api('/api/admin/beta-testers', { method: 'POST', body: JSON.stringify({ label }) });
+  $('#beta-key').value = result.key;
+  $('#beta-key-wrap').hidden = false;
+  $('#beta-result').textContent = `Created ${result.tester.label}. Copy the key now.`;
+  $('#beta-label').value = '';
+  await loadBeta();
+}
+
 async function loadTab(tab) {
   showError('');
   state.active = tab;
@@ -364,6 +396,8 @@ async function loadTab(tab) {
       if (!state.flags) state.flags = (await api('/api/admin/flags')).flags;
       state.limits = await api('/api/admin/limits');
       renderControls();
+    } else if (tab === 'beta') {
+      await loadBeta();
     } else if (tab === 'persona') {
       if (!state.flags) state.flags = (await api('/api/admin/flags')).flags;
       renderPersona();
@@ -388,6 +422,16 @@ async function loadTab(tab) {
 $$('nav button').forEach((button) => button.addEventListener('click', () => loadTab(button.dataset.tab)));
 $('#refresh').addEventListener('click', () => loadTab(state.active));
 $('#save-flags').addEventListener('click', () => saveFlags().catch((error) => showError(error.message)));
+$('#create-beta').addEventListener('click', () => createBeta().catch((error) => showError(error.message)));
+$('#copy-beta-key').addEventListener('click', async () => {
+  try {
+    await navigator.clipboard.writeText($('#beta-key').value);
+    $('#beta-result').textContent = 'Beta key copied.';
+  } catch {
+    $('#beta-key').select();
+    $('#beta-result').textContent = 'Select and copy the key manually.';
+  }
+});
 $('#save-limits').addEventListener('click', () => saveLimits().catch((error) => showError(error.message)));
 $('#save-persona').addEventListener('click', () => savePersona().catch((error) => showError(error.message)));
 $('#knowledge-search').addEventListener('click', () => searchKnowledge().catch((error) => showError(error.message)));

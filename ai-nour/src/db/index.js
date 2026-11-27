@@ -226,6 +226,47 @@ export function createDb(d1) {
     return (result.meta?.changes || 0) > 0;
   }
 
+  async function createBetaTester({ id, label, keyPrefix, keyHash, now }) {
+    await d1.prepare(
+      "INSERT INTO beta_testers(id,label,key_prefix,key_hash,status,created_at) VALUES(?,?,?,?,'active',?)"
+    ).bind(id, label, keyPrefix, keyHash, now).run();
+    return getBetaTester(id);
+  }
+
+  async function getBetaTester(id) {
+    return d1.prepare(
+      'SELECT id,label,key_prefix,status,created_at,last_used_at,revoked_at FROM beta_testers WHERE id=?'
+    ).bind(id).first();
+  }
+
+  async function listBetaTesters(limit = 200) {
+    const result = await d1.prepare(
+      'SELECT id,label,key_prefix,status,created_at,last_used_at,revoked_at FROM beta_testers ORDER BY created_at DESC LIMIT ?'
+    ).bind(limit).all();
+    return result.results || [];
+  }
+
+  async function findActiveBetaTesterByHash(keyHash, now) {
+    const row = await d1.prepare(
+      "SELECT id,label,key_prefix,status,created_at,last_used_at FROM beta_testers WHERE key_hash=? AND status='active'"
+    ).bind(keyHash).first();
+    if (!row) return null;
+    if (!row.last_used_at || row.last_used_at < now - 300_000) {
+      await d1.prepare(
+        "UPDATE beta_testers SET last_used_at=? WHERE id=? AND status='active'"
+      ).bind(now, row.id).run();
+      row.last_used_at = now;
+    }
+    return row;
+  }
+
+  async function revokeBetaTester(id, now) {
+    const result = await d1.prepare(
+      "UPDATE beta_testers SET status='revoked', revoked_at=? WHERE id=? AND status='active'"
+    ).bind(now, id).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
   async function createContact({ id, ownerHash, fullName, email = null, phone = null, organization = null, role = null, locale = 'en', timezone = null, source = 'portfolio', consentStatus = 'none', now }) {
     await d1.prepare(
       'INSERT INTO contacts(id,owner_hash,full_name,email,phone,organization,role,locale,timezone,source,consent_status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)'
@@ -567,6 +608,11 @@ export function createDb(d1) {
     listKnowledgeOverrides,
     upsertKnowledgeOverride,
     deleteKnowledgeOverride,
+    createBetaTester,
+    getBetaTester,
+    listBetaTesters,
+    findActiveBetaTesterByHash,
+    revokeBetaTester,
     cleanup
   };
 }
