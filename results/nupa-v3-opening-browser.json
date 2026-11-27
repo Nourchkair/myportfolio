@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-11-27T08:19:11.984Z",
+  "passed": 9,
+  "failed": 0,
+  "total": 9,
+  "checks": [
+    {
+      "name": "plain portfolio defaults to independent exploration",
+      "pass": true,
+      "detail": {
+        "aiHidden": true,
+        "independentVisible": true,
+        "panel": false
+      }
+    },
+    {
+      "name": "independent choice enters without an AI panel",
+      "pass": true,
+      "detail": {
+        "introDone": true,
+        "ready": true,
+        "aiPanel": false
+      }
+    },
+    {
+      "name": "AI choice uses the existing consent gate",
+      "pass": true,
+      "detail": {
+        "introDone": true,
+        "panelHidden": false,
+        "consentVisible": true,
+        "gateHidden": true,
+        "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.",
+        "choice": "EXPLORE WITH NUPA\n\u2726",
+        "pill": "Nupa",
+        "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION.",
+        "links": [
+          "/terms/",
+          "/privacy/"
+        ]
+      }
+    },
+    {
+      "name": "opening choice and companion use Nupa branding",
+      "pass": true,
+      "detail": {
+        "choice": "EXPLORE WITH NUPA\n\u2726",
+        "pill": "Nupa",
+        "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION."
+      }
+    },
+    {
+      "name": "consent explains Nupa identity and the live guide",
+      "pass": true,
+      "detail": {
+        "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to th"
+      }
+    },
+    {
+      "name": "consent carries legal links",
+      "pass": true,
+      "detail": [
+        "/terms/",
+        "/privacy/"
+      ]
+    },
+    {
+      "name": "AI choice starts a text introduction after authorization",
+      "pass": true,
+      "detail": {
+        "assistantMessages": [
+          "Hey, I'm Nupa, your interactive guide to Nour's portfolio. I can show you around, walk you through his projects, answer questions or simply have a conversation. Where should we start?"
+        ],
+        "bodyVisible": true,
+        "consentHidden": true,
+        "gateHidden": true
+      }
+    },
+    {
+      "name": "French companion UI uses Nupa branding",
+      "pass": true,
+      "detail": {
+        "locale": "FR",
+        "tagline": "VOTRE COMPAGNON DE PORTFOLIO INTELLIGENT.",
+        "placeholder": "Posez une question sur Nour, ou dites \u00ab ouvre Safiy \u00bb\u2026",
+        "inputLabel": "Message \u00e0 Nupa",
+        "reset": "NOUVEAU",
+        "openingChoice": "Explorer avec Nupa \u2726",
+        "disclaimer": "Nupa peut se tromper. Ne communiquez pas de renseignements personnels ou sensibles. Confidentialit\u00e9 \u00b7 Conditions"
+      }
+    },
+    {
+      "name": "opening experience has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

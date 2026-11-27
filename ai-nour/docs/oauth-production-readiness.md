@@ -23,14 +23,14 @@ Status: **production Worker deployed with the existing development OAuth credent
   - `http://localhost:8787/oauth/google/callback` (local operational helper)
 - Operational refresh token is stored server-side in `.dev.vars`; it never reaches the browser.
 - Admin login uses a separate OAuth flow with basic `openid`, `email`, `profile` scopes and a signed HttpOnly session cookie.
-- Final bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/` (version 1.1, effective 27 November 2026). The portfolio and AI Nour are both covered. AI Nour eligibility is 18+.
+- Bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.1 is currently served; version 1.2 (Nupa identity, effective 27 November 2026) is prepared locally and requires deployment approval. The portfolio and Nupa are both covered. Nupa eligibility is 18+.
 
 ## 2. Separate the two authorizations
 
 | Authorization | Purpose | OAuth client | Scopes | Token storage | User consent |
 | --- | --- | --- | --- | --- | --- |
-| **Operational Google data** | Read/write the approved CRM Sheet, Calendar availability/events, app-created Drive files/backups | `AI Nour Operations` (production web client) | `spreadsheets`, `calendar.events`, `calendar.readonly`, `drive.file` | Refresh token in Worker secret store | Nour authorizes once; no visitor Google login |
-| **Administrator authentication** | Prove the administrator is Nour before opening the private dashboard | `AI Nour Admin` (production web client) | `openid`, `email`, `profile` | Short-lived Google access token; signed admin session cookie | Nour signs in; email allowlist; 8-hour session |
+| **Operational Google data** | Read/write the approved CRM Sheet, Calendar availability/events, app-created Drive files/backups | `AI Nour Operations` (production web client; internal OAuth client name retained) | `spreadsheets`, `calendar.events`, `calendar.readonly`, `drive.file` | Refresh token in Worker secret store | Nour authorizes once; no visitor Google login |
+| **Administrator authentication** | Prove the administrator is Nour before opening the private dashboard | `AI Nour Admin` (production web client; internal OAuth client name retained) | `openid`, `email`, `profile` | Short-lived Google access token; signed admin session cookie | Nour signs in; email allowlist; 8-hour session |
 
 Do not use the operational client for admin login, and do not give the admin client Sheets/Calendar/Drive scopes. Separate clients allow independent revocation and keep the public login surface minimal.
 
@@ -56,7 +56,7 @@ Use a **separate production project** from the development project, consistent w
    - Google Identity / OpenID Connect (for admin login)
 3. Do not enable Gmail API for the production path unless the fallback is separately approved.
 4. Configure the OAuth brand:
-   - App name: `AI Nour`
+   - App name: target `Nupa`; the current console still shows `AI Nour` until the OAuth brand is updated and re-verified. Do not rename the OAuth client IDs.
    - User support email: Nour’s support address
    - Developer contact: Nour’s address
    - Homepage: `https://nourchkair.com`
@@ -138,7 +138,7 @@ Current facts, checked 26 November 2026:
 - Google’s Workspace AI Tools Addendum states that AI agents/harnesses must use Google MCP for Workspace access from **1 February 2027**.
 - Google’s Gmail MCP server supports drafts, search/read, and labels; it does not expose an autonomous send tool.
 
-Implication for AI Nour:
+Implication for Nupa:
 
 - The current private beta uses direct Workspace REST APIs for Sheets, Calendar, and Drive. That is acceptable for the private-beta window before **1 February 2027**.
 - A production launch that continues after that date needs either:
@@ -154,7 +154,7 @@ Approved and published on 27 November 2026:
 - `https://nourchkair.com/privacy/`
 - `https://nourchkair.com/terms/`
 
-Version 1.1, English and French, effective 27 November 2026. The policies cover the portfolio and AI Nour. AI Nour is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
+Version 1.1 is currently published, English and French, effective 27 November 2026. Version 1.2 updates the assistant identity to Nupa without changing data practices, retention, eligibility or third-party processing. The policies cover the portfolio and Nupa. Nupa is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
 
 Operational facts reflected in the policies:
 
@@ -167,7 +167,7 @@ Operational facts reflected in the policies:
 ## 7b. Current Google Console state (verified read-only, 27 November 2026)
 
 - Project: `ai-nour`.
-- App name: `AI Nour`.
+- App name: `AI Nour` in the current console; target visitor-facing brand is `Nupa`. The OAuth app name is an external Google configuration, not a code identifier; changing it requires a console edit and re-verification.
 - Homepage: `https://nourchkair.com`.
 - Authorized domain: `nourchkair.com`.
 - Privacy policy URL: `https://nourchkair.com/privacy/` — set 27 November 2026.

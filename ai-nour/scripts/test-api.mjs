@@ -119,7 +119,7 @@ async function main() {
     check('synthetic writes disabled by default', synthetic.status === 403, { status: synthetic.status });
 
     const page = await fetch(`${base}/`);
-    check('prototype UI served', page.status === 200 && (await page.text()).includes('AI Nour'), { status: page.status });
+    check('prototype UI served', page.status === 200 && (await page.text()).includes('Nupa'), { status: page.status });
 
     const liveStatuses = [];
     for (let i = 0; i < 13; i++) {

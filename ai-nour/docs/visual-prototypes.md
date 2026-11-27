@@ -1,5 +1,7 @@
 # AI Nour — Phase 4 visual acceptance package
 
+> Historical record: this phase was produced under the former working name **AI Nour**. The visitor-facing assistant is now **Nupa**; internal paths, browser keys, API routes and other technical identifiers remain unchanged.
+
 Status: **integrated development candidate; final visual approval pending Nour’s personal review.** Direction A remains the proposed direction. No production CSS or final visual tokens have been changed while approval is pending.
 
 ## Review URL

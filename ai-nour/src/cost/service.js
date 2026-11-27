@@ -59,7 +59,7 @@ export function createCostService({ db, config }) {
   async function assertBudget(now = Date.now()) {
     const state = await budget(now);
     if (!state.allowed) {
-      throw new AppError(402, 'BUDGET_EXCEEDED', 'The AI Nour evaluation budget has been reached', {
+      throw new AppError(402, 'BUDGET_EXCEEDED', 'The Nupa evaluation budget has been reached', {
         dailyUsdMicros: state.dailyUsdMicros,
         dailyCapUsdMicros: state.dailyCapUsdMicros,
         cumulativeUsdMicros: state.cumulativeUsdMicros,

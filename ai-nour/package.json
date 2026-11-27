@@ -3,7 +3,7 @@
   "version": "0.4.0",
   "private": true,
   "type": "module",
-  "description": "AI Nour Phase 3 launch candidate: Cloudflare Worker, Gemini text/Live, Google integrations, CRM/email pipeline, and private admin",
+  "description": "Nupa (formerly AI Nour) private beta: Cloudflare Worker, Gemini text/Live, Google integrations, CRM/email pipeline, and private admin",
   "scripts": {
     "build:knowledge": "node scripts/build-knowledge.mjs",
     "build:ui": "node scripts/build-ui.mjs",

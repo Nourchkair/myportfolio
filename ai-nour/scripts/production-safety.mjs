@@ -16,7 +16,7 @@ const base = process.env.PRODUCTION_API_URL || 'https://api.nourchkair.com';
 const owner = `production-safety-${crypto.randomUUID()}`;
 const results = [];
 const check = (name, pass, detail = {}) => results.push({ name, pass: Boolean(pass), detail });
-const consent = { age18: true, termsVersion: '2026-11-27-v1.1', privacyVersion: '2026-11-27-v1.1', acceptedAt: Date.now() };
+const consent = { age18: true, termsVersion: '2026-11-27-v1.2', privacyVersion: '2026-11-27-v1.2', acceptedAt: Date.now() };
 let restored = false;
 
 async function request(pathname, { method = 'GET', beta = false, adminAuth = false, body } = {}) {

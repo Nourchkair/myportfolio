@@ -122,7 +122,7 @@ export function createApp(env) {
       const response = await env.ASSETS.fetch(request);
       return withRequestId(response, requestId);
     }
-    return withRequestId(new Response('AI Nour prototype API', { status: 200, headers: { 'content-type': 'text/plain' } }), requestId);
+    return withRequestId(new Response('Nupa portfolio assistant API', { status: 200, headers: { 'content-type': 'text/plain' } }), requestId);
   }
 
   async function scheduled(event, ctx) {

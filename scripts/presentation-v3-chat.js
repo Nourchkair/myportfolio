@@ -2,7 +2,7 @@ const p = await openTab('http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127
 await p.setViewportSize({ width: 1440, height: 900 });
 await p.waitForSelector('#ainourPill', { timeout: 30000 });
 await p.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.1', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');
@@ -66,6 +66,20 @@ await p.locator('[data-ai-pres="end"]').click();
 await p.waitForTimeout(300);
 const explicitlyEnded = await p.evaluate(() => ({ barHidden: document.querySelector('.ai-pres-bar').hidden, presentation: window.NourOS.getPresentationState().presentation, highlights: document.querySelectorAll('.ai-highlight').length }));
 
+await send('Who are you? Are you Nour?');
+await p.waitForTimeout(700);
+const identityEn = await p.evaluate(() => ({
+  text: [...document.querySelectorAll('.ainour-msg.assistant')].at(-1)?.innerText || '',
+  locale: document.querySelector('#ainourLocale')?.innerText
+}));
+await p.evaluate(() => document.querySelector('[data-ainour="locale"]').click());
+await send('Es-tu Nour ?');
+await p.waitForTimeout(700);
+const identityFr = await p.evaluate(() => ({
+  text: [...document.querySelectorAll('.ainour-msg.assistant')].at(-1)?.innerText || '',
+  locale: document.querySelector('#ainourLocale')?.innerText
+}));
+
 const consoleErrors = (await p.console.logs()).filter((entry) => entry.type === 'error');
 console.log(JSON.stringify({
   generatedAt: new Date().toISOString(),
@@ -74,5 +88,9 @@ console.log(JSON.stringify({
   manualNavigation,
   textStep: { before: beforeTextStep, ...textStep },
   explicitlyEnded,
+  identity: {
+    en: { ...identityEn, ok: /^No, I'm Nupa/.test(identityEn.text) && /not him/.test(identityEn.text) },
+    fr: { ...identityFr, ok: /^Non, je suis Nupa/.test(identityFr.text) && /pas lui/.test(identityFr.text) }
+  },
   consoleErrors: consoleErrors.map((entry) => entry.text || entry.message || String(entry))
 }, null, 2));

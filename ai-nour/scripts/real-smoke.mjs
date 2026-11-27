@@ -82,7 +82,7 @@ if (liveToken.token) {
           const input = message.serverContent?.inputTranscription?.text;
           const output = message.serverContent?.outputTranscription?.text;
           if (input) { transcript += `\nYou: ${input}`; events.push('input-transcript'); }
-          if (output) { transcript += `\nAI Nour: ${output}`; events.push('output-transcript'); }
+          if (output) { transcript += `\nNupa: ${output}`; events.push('output-transcript'); }
           for (const part of message.serverContent?.modelTurn?.parts || []) if (part.inlineData?.data) audioBytes += Buffer.from(part.inlineData.data, 'base64').length;
           if (message.serverContent?.turnComplete) events.push('turnComplete');
           if (message.usageMetadata) usageMetadata = message.usageMetadata;
@@ -122,7 +122,7 @@ if (liveToken.token) {
         turnId: `real-live-${Date.now()}`,
         locale: 'en',
         userText: 'Open the Safiy project.',
-        assistantText: transcript.replace(/^AI Nour:\s*/gm, '').trim(),
+        assistantText: transcript.replace(/^Nupa:\s*/gm, '').trim(),
         reservationId: liveToken.reservationId,
         usage
       })

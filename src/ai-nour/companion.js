@@ -7,7 +7,7 @@ const DEV = params.get('ainour') === 'dev' && LOCAL;
 const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
-const CONSENT_VERSION = '2026-11-27-v1.1';
+const CONSENT_VERSION = '2026-11-27-v1.2';
 const CONSENT_STORE = 'ainour:consent';
 const MIC_CONSENT_STORE = 'ainour:mic-consent';
 
@@ -40,6 +40,7 @@ const state = {
   micConsentResolver: null,
   voiceError: ''
 };
+document.documentElement.dataset.ainourLocale = state.locale;
 
 const voice = {
   active: false,
@@ -112,7 +113,9 @@ async function api(path, options = {}) {
   if (response.status === 401) {
     state.key = '';
     sessionStorage.removeItem(STORE.key);
-    showGate('The private-beta key was not accepted, expired, or was revoked.');
+    showGate(state.locale === 'fr'
+      ? 'La clé de bêta privée n’a pas été acceptée, a expiré ou a été révoquée.'
+      : 'The private-beta key was not accepted, expired, or was revoked.');
     throw new Error('unauthorized');
   }
   if (!response.ok) {
@@ -158,13 +161,13 @@ function mountCss() {
 
 function pillMarkup() {
   return `
-    <button class="ainour-pill-main" type="button" data-ainour="mode-text" aria-label="Ask Nour AI — open text chat">
+    <button class="ainour-pill-main" type="button" data-ainour="mode-text" aria-label="Nupa — open text chat">
       <svg class="ainour-pill-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2h12v8.2H8.8L5.4 16v-2.6H4z"/><path d="M7 8h6M7 10.6h4"/></svg>
       <span class="ainour-orb" id="ainourOrb" aria-hidden="true"></span>
-      <span id="ainourPillLabel">Ask Nour AI</span>
+      <span id="ainourPillLabel">Nupa</span>
     </button>
     <span class="ainour-pill-sep" aria-hidden="true"></span>
-    <button class="ainour-pill-mic" type="button" data-ainour="mode-voice" aria-label="Start voice with AI Nour" title="Voice">
+    <button class="ainour-pill-mic" type="button" data-ainour="mode-voice" aria-label="Start voice with Nupa" title="Voice">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.1" y="3.1" width="5.8" height="9.2" rx="2.9"/><path d="M4.8 9.6a5.2 5.2 0 0 0 10.4 0M10 15v2.2M7.8 17.2h4.4"/></svg>
     </button>
   `;
@@ -173,7 +176,7 @@ function pillMarkup() {
 function panelMarkup() {
   return `
     <header class="ainour-head" data-drag-handle title="Drag to move">
-      <div class="ainour-id"><b>AI Nour</b></div>
+      <div class="ainour-id"><b>Nupa</b><small id="ainourTagline">Your intelligent portfolio companion.</small></div>
       <div class="ainour-head-actions">
         <button class="ainour-icon" type="button" data-ainour="minimize" aria-label="Collapse chat" title="Collapse chat">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="M3 8h10"/></svg>
@@ -181,7 +184,7 @@ function panelMarkup() {
         <button class="ainour-icon" type="button" data-ainour="expand" aria-label="Expand panel" title="Expand">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2H2v4M10 14h4v-4M14 6V2h-4M2 10v4h4"/></svg>
         </button>
-        <button class="ainour-icon" type="button" data-ainour="close" aria-label="Close AI Nour panel" title="Close panel (voice keeps running)">
+        <button class="ainour-icon" type="button" data-ainour="close" aria-label="Close Nupa panel" title="Close panel (voice keeps running)">
           <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" aria-hidden="true"><path d="m4 4 8 8M12 4l-8 8"/></svg>
         </button>
       </div>
@@ -190,19 +193,19 @@ function panelMarkup() {
       <span class="ainour-context-label" id="ainourContextLabel">Viewing <b>portfolio</b></span>
       <div class="ainour-context-actions">
         <button type="button" data-ainour="locale" id="ainourLocale">EN</button>
-        <button type="button" data-ainour="reset">New</button>
+        <button type="button" data-ainour="reset" id="ainourReset">New</button>
       </div>
     </div>
     <div class="ainour-gate" id="ainourGate">
-      <p>Enter your private-beta access key to talk with AI Nour. The key is validated by AI Nour and stays in this tab; the permanent Gemini key never reaches the browser.</p>
+      <p id="ainourGateCopy">Enter your private-beta access key to talk with Nupa. The key is validated by Nupa and stays in this tab; the permanent Gemini key never reaches the browser.</p>
       <form id="ainourGateForm">
         <input id="ainourKey" type="password" autocomplete="off" placeholder="Private-beta access key" aria-label="Private-beta access key" required>
-        <button type="submit">Open</button>
+        <button type="submit" id="ainourKeySubmit">Open</button>
       </form>
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>
     </div>
     <div class="ainour-gate ainour-consent" id="ainourConsent" hidden>
-      <p id="ainourConsentIntro">AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
+      <p id="ainourConsentIntro">Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
       <label class="ainour-check"><input id="ainourAgree" type="checkbox"> <span id="ainourAgreeLabel">I am 18 or older and agree to the Terms of Use and Privacy Policy.</span></label>
       <p class="ainour-legal-links"><a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> · <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a></p>
       <button id="ainourConsentBtn" type="button">Continue</button>
@@ -211,7 +214,7 @@ function panelMarkup() {
     <div class="ainour-body" id="ainourBody" hidden>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
       <div class="ainour-mic-consent" id="ainourMicConsent" hidden>
-        <p id="ainourMicCopy">Voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.</p>
+        <p id="ainourMicCopy">Nupa’s voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.</p>
         <div class="ainour-mic-actions">
           <button id="ainourMicAllow" type="button">Allow microphone</button>
           <button id="ainourMicCancel" type="button" class="ainour-secondary">Cancel</button>
@@ -221,13 +224,13 @@ function panelMarkup() {
       <p class="ainour-voice-error" id="ainourVoiceError" role="status" aria-live="polite" hidden></p>
       <form class="ainour-compose" id="ainourForm">
         <div class="ainour-compose-bar">
-          <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
+          <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message Nupa"></textarea>
           <button class="ainour-compose-btn ainour-send" id="ainourSend" type="submit" aria-label="Send message" title="Send">
             <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 10h13M11 4.5l5.5 5.5-5.5 5.5"/></svg>
           </button>
         </div>
       </form>
-      <p class="ainour-disclaimer" id="ainourDisclaimer">AI Nour can make mistakes. Do not share sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a></p>
+      <p class="ainour-disclaimer" id="ainourDisclaimer">Nupa can make mistakes. Do not share sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a></p>
     </div>
   `;
 }
@@ -242,7 +245,7 @@ function mount() {
   pill.id = 'ainourPill';
   pill.dataset.state = 'idle';
   pill.setAttribute('role', 'group');
-  pill.setAttribute('aria-label', 'AI Nour');
+  pill.setAttribute('aria-label', 'Nupa');
   pill.innerHTML = pillMarkup();
   document.body.appendChild(pill);
 
@@ -257,7 +260,7 @@ function mount() {
   panel.dataset.state = 'idle';
   panel.setAttribute('role', 'dialog');
   panel.setAttribute('aria-modal', 'false');
-  panel.setAttribute('aria-label', 'AI Nour companion');
+  panel.setAttribute('aria-label', 'Nupa companion');
   panel.hidden = true;
   panel.innerHTML = panelMarkup();
   document.body.appendChild(panel);
@@ -268,11 +271,15 @@ function mount() {
     pillVoice: pill.querySelector('[data-ainour="mode-voice"]'),
     pillLabel: pill.querySelector('#ainourPillLabel'),
     panel,
+    tagline: panel.querySelector('#ainourTagline'),
     context: panel.querySelector('#ainourContext'),
     contextLabel: panel.querySelector('#ainourContextLabel'),
+    reset: panel.querySelector('#ainourReset'),
     gate: panel.querySelector('#ainourGate'),
+    gateCopy: panel.querySelector('#ainourGateCopy'),
     gateForm: panel.querySelector('#ainourGateForm'),
     gateInput: panel.querySelector('#ainourKey'),
+    gateSubmit: panel.querySelector('#ainourKeySubmit'),
     gateError: panel.querySelector('#ainourGateError'),
     consent: panel.querySelector('#ainourConsent'),
     consentIntro: panel.querySelector('#ainourConsentIntro'),
@@ -385,7 +392,7 @@ function mount() {
   initDrag();
 
   localStorage.removeItem('ainour:panelpos');
-  setLocaleButton();
+  applyLocale();
   setSize('standard');
   updateContext();
   updatePill();
@@ -590,13 +597,14 @@ function updatePill() {
   els.pill.dataset.live = voice.active ? 'true' : 'false';
   els.pill.dataset.unread = state.unread ? 'true' : 'false';
   els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
+  const fr = state.locale === 'fr';
   const voiceLabel = ['connecting', 'listening', 'speaking'].includes(state.voice) || voice.active;
-  const label = state.voice === 'error' ? 'Voice unavailable' : voiceLabel ? 'Listening' : 'Ask Nour AI';
+  const label = state.voice === 'error' ? (fr ? 'Voix indisponible' : 'Voice unavailable') : voiceLabel ? (fr ? 'Écoute' : 'Listening') : 'Nupa';
   els.pillLabel.textContent = label;
-  els.pillText.setAttribute('aria-label', `${label} — open text chat`);
+  els.pillText.setAttribute('aria-label', `${label} — ${fr ? 'ouvrir le clavardage' : 'open text chat'}`);
   els.pillText.classList.toggle('is-active', !els.panel.hidden);
   els.pillVoice.classList.toggle('is-active', voiceIsActive());
-  els.pillVoice.setAttribute('aria-label', voiceIsActive() ? 'Stop voice with AI Nour' : 'Start voice with AI Nour');
+  els.pillVoice.setAttribute('aria-label', fr ? (voiceIsActive() ? 'Arrêter la voix avec Nupa' : 'Démarrer la voix avec Nupa') : (voiceIsActive() ? 'Stop voice with Nupa' : 'Start voice with Nupa'));
   requestAnimationFrame(positionPill);
 }
 
@@ -604,8 +612,9 @@ function updateLegalCopy() {
   const fr = state.locale === 'fr';
   if (els.consentIntro) {
     els.consentIntro.textContent = fr
-      ? 'AI Nour est un guide de portfolio interactif, vivant et personnalisé pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Vous pouvez commencer par le texte et passer à la voix plus tard; l’autorisation du microphone est demandée séparément. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
-      : 'AI Nour is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
+      ? 'Nupa est un guide de portfolio indépendant, propulsé par l’IA et exploité par Nour Chkair. Ce n’est pas Nour et ce n’est pas une représentation par IA de lui. Nupa est un guide interactif, vivant et personnalisé pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Vous pouvez commencer par le texte et passer à la voix plus tard; l’autorisation du microphone est demandée séparément. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
+      : 'Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
+
   }
   if (els.agreeLabel) els.agreeLabel.textContent = fr
     ? 'J’ai 18 ans ou plus et j’accepte les Conditions d’utilisation et la Politique de confidentialité.'
@@ -613,15 +622,15 @@ function updateLegalCopy() {
   if (els.consentBtn) els.consentBtn.textContent = fr ? 'Continuer' : 'Continue';
   if (els.micCopy) {
     els.micCopy.textContent = fr
-      ? 'La voix utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours dans ce service. Ne communiquez pas de renseignements personnels ou sensibles.'
-      : 'Voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.';
+      ? 'La voix de Nupa utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours dans ce service. Ne communiquez pas de renseignements personnels ou sensibles.'
+      : 'Nupa’s voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.';
   }
   if (els.micAllow) els.micAllow.textContent = fr ? 'Autoriser le microphone' : 'Allow microphone';
   if (els.micCancel) els.micCancel.textContent = fr ? 'Annuler' : 'Cancel';
   if (els.disclaimer) {
     els.disclaimer.innerHTML = fr
-      ? 'AI Nour peut se tromper. Ne communiquez pas de renseignements personnels ou sensibles. <a href="/privacy/" target="_blank" rel="noopener">Confidentialité</a> · <a href="/terms/" target="_blank" rel="noopener">Conditions</a>'
-      : 'AI Nour can make mistakes. Do not share personal or sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a>';
+      ? 'Nupa peut se tromper. Ne communiquez pas de renseignements personnels ou sensibles. <a href="/privacy/" target="_blank" rel="noopener">Confidentialité</a> · <a href="/terms/" target="_blank" rel="noopener">Conditions</a>'
+      : 'Nupa can make mistakes. Do not share personal or sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a>';
   }
 }
 
@@ -746,8 +755,8 @@ function voiceErrorMessage(error) {
   }
   if (code === 'NOT_FOUND') {
     return fr
-      ? 'Votre session AI Nour a expiré. Rouvrez l’assistant et réessayez.'
-      : 'Your AI Nour session expired. Reopen the assistant and try again.';
+      ? 'Votre session Nupa a expiré. Rouvrez l’assistant et réessayez.'
+      : 'Your Nupa session expired. Reopen the assistant and try again.';
   }
   if (!navigator.mediaDevices?.getUserMedia) {
     return fr
@@ -894,8 +903,9 @@ function setState(value) {
 function updateContext() {
   if (!els.context) return;
   const status = window.NourOS?.getStatus?.();
+  const viewing = state.locale === 'fr' ? 'Vous consultez' : 'Viewing';
   if (!status) {
-    els.contextLabel.innerHTML = 'Viewing <b>portfolio</b>';
+    els.contextLabel.innerHTML = `${viewing} <b>portfolio</b>`;
     return;
   }
   const project = status.context?.project;
@@ -906,11 +916,11 @@ function updateContext() {
     label = `${title} · ${project.view || 'overview'}${project.nodeId ? ` · ${project.nodeId}` : ''}`;
   } else if (about?.open) {
     const chapter = about.chapterId ? CHAPTER_BY_ID[about.chapterId] : null;
-    label = chapter ? `Journey · ${chapter.label}` : 'About Nour';
+    label = chapter ? `${state.locale === 'fr' ? 'Parcours' : 'Journey'} · ${chapter.label}` : (state.locale === 'fr' ? 'À propos de Nour' : 'About Nour');
   } else if (status.context?.contact?.open) {
     label = 'Contact';
   }
-  els.contextLabel.innerHTML = `Viewing <b>${escapeHtml(label)}</b>`;
+  els.contextLabel.innerHTML = `${viewing} <b>${escapeHtml(label)}</b>`;
 }
 
 function escapeHtml(value) {
@@ -1014,9 +1024,10 @@ function renderThread({ forceScroll = false } = {}) {
   if (!visibleMessages.length) {
     const hint = document.createElement('div');
     hint.className = 'ainour-msg system';
+    const fr = state.locale === 'fr';
     hint.textContent = collapsed
-      ? 'Ask Nour AI anything.'
-      : 'Ask about Nour’s work, thinking, or this section. AI Nour can also open a project when you ask.';
+      ? (fr ? 'Demandez n’importe quoi à Nupa.' : 'Ask Nupa anything.')
+      : (fr ? 'Posez une question sur le travail de Nour, sa réflexion ou cette section. Nupa peut aussi ouvrir un projet sur demande.' : 'Ask about Nour’s work, thinking, or this section. Nupa can also open a project when you ask.');
     els.thread.appendChild(hint);
     return;
   }
@@ -1054,24 +1065,25 @@ function renderThread({ forceScroll = false } = {}) {
 }
 
 function actionLabel(action) {
+  const fr = state.locale === 'fr';
   if (!action) return 'Navigation';
-  if (action.type === 'openProject') return `Opened ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
-  if (action.type === 'showProjectCard') return `Focused ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
-  if (action.type === 'openProjectFlow') return `Opened ${PROJECT_BY_ID[action.projectId]?.title || action.projectId} flow`;
-  if (action.type === 'openJourneyChapter') return `Opened ${CHAPTER_BY_ID[action.chapterId]?.label || action.chapterId}`;
-  if (action.type === 'openContact') return 'Opened contact';
-  if (action.type === 'navigate') return `Opened ${action.section}`;
-  if (action.type === 'presentationStart') return 'Started presentation';
-  if (action.type === 'presentationStep') return 'Next step';
-  if (action.type === 'presentationPause') return 'Paused';
-  if (action.type === 'presentationResume') return 'Resumed';
-  if (action.type === 'presentationEnd') return 'Ended presentation';
-  if (action.type === 'highlightElement') return 'Highlighted';
-  if (action.type === 'spotlightElement') return 'Spotlight';
-  if (action.type === 'compareElements') return 'Compared';
-  if (action.type === 'traceWorkflow' || action.type === 'traceConnection') return 'Traced workflow';
-  if (action.type === 'zoomToElement') return 'Zoomed';
-  if (action.type === 'clearVisualEffects') return 'Cleared visuals';
+  if (action.type === 'openProject') return `${fr ? 'Ouverture de' : 'Opened'} ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
+  if (action.type === 'showProjectCard') return `${fr ? 'Focus sur' : 'Focused'} ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
+  if (action.type === 'openProjectFlow') return `${fr ? 'Ouverture du flux' : 'Opened'} ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}${fr ? '' : ' flow'}`;
+  if (action.type === 'openJourneyChapter') return `${fr ? 'Ouverture de' : 'Opened'} ${CHAPTER_BY_ID[action.chapterId]?.label || action.chapterId}`;
+  if (action.type === 'openContact') return fr ? 'Ouverture du contact' : 'Opened contact';
+  if (action.type === 'navigate') return `${fr ? 'Ouverture de' : 'Opened'} ${action.section}`;
+  if (action.type === 'presentationStart') return fr ? 'Présentation commencée' : 'Started presentation';
+  if (action.type === 'presentationStep') return fr ? 'Étape suivante' : 'Next step';
+  if (action.type === 'presentationPause') return fr ? 'En pause' : 'Paused';
+  if (action.type === 'presentationResume') return fr ? 'Reprise' : 'Resumed';
+  if (action.type === 'presentationEnd') return fr ? 'Présentation terminée' : 'Ended presentation';
+  if (action.type === 'highlightElement') return fr ? 'Élément mis en évidence' : 'Highlighted';
+  if (action.type === 'spotlightElement') return fr ? 'Mise en lumière' : 'Spotlight';
+  if (action.type === 'compareElements') return fr ? 'Comparaison' : 'Compared';
+  if (action.type === 'traceWorkflow' || action.type === 'traceConnection') return fr ? 'Flux tracé' : 'Traced workflow';
+  if (action.type === 'zoomToElement') return fr ? 'Zoom' : 'Zoomed';
+  if (action.type === 'clearVisualEffects') return fr ? 'Effets visuels effacés' : 'Cleared visuals';
   return action.route || action.type;
 }
 
@@ -1145,8 +1157,8 @@ function startExploreIntroIfNeeded() {
 
 async function startExploreIntro() {
   const prompt = state.locale === 'fr'
-    ? "Présente-toi brièvement comme AI Nour. Explique que cette exploration est une présentation interactive, vivante et personnalisée, que je peux t'interrompre, poser des questions, naviguer seul ou quitter à tout moment. Demande-moi ce que je souhaite explorer en premier. Ne commence pas encore une présentation complète et ne demande pas de confirmation pour chaque étape."
-    : "Introduce yourself briefly as AI Nour. Explain that this is a live, interactive, personalized presentation, that I can interrupt, ask questions, navigate independently, or leave at any time. Ask what I want to explore first. Do not start a full presentation yet, and do not ask for permission before every step.";
+    ? "Présente-toi brièvement comme Nupa, un guide de portfolio indépendant propulsé par l’IA. Explique que cette exploration est une présentation interactive, vivante et personnalisée, et que je peux t’interrompre, poser des questions, demander plus de détails, naviguer seul, sauter des sections, mettre en pause ou reprendre, ou terminer l’expérience à tout moment. Demande-moi ce que je souhaite explorer en premier. Ne commence pas encore une présentation complète et ne demande pas de confirmation pour chaque étape."
+    : "Introduce yourself briefly as Nupa, an independent AI portfolio guide. Explain that this is a live, interactive, personalized presentation and that I can interrupt, ask questions, request more detail, navigate independently, skip sections, pause or resume, or end the experience at any time. Ask what I want to explore first. Do not start a full presentation yet, and do not ask for permission before every step.";
   await sendMessage(null, { message: prompt, showUser: false, pausePresentation: false });
 }
 
@@ -1196,7 +1208,7 @@ async function sendMessage(event, options = {}) {
       setState('idle');
       return;
     }
-    addMessage('system', 'Could not answer. Please try again.');
+    addMessage('system', state.locale === 'fr' ? 'Impossible de répondre. Réessayez.' : 'Could not answer. Please try again.');
     setState('error');
     setTimeout(() => setState('idle'), 1800);
   } finally {
@@ -1420,13 +1432,68 @@ async function movePresentationStep(direction) {
 function toggleLocale() {
   state.locale = state.locale === 'fr' ? 'en' : 'fr';
   localStorage.setItem(STORE.locale, state.locale);
+  applyLocale();
+  updateContext();
+  updatePill();
+}
+
+function applyLocale() {
+  const fr = state.locale === 'fr';
   setLocaleButton();
   updateLegalCopy();
-  if (!els.body.hidden) {
-    els.input.placeholder = state.locale === 'fr'
+  updateStaticCopy();
+  if (els.input) {
+    els.input.placeholder = fr
       ? 'Posez une question sur Nour, ou dites « ouvre Safiy »…'
       : 'Ask about Nour\'s work, or say “open Safiy”…';
   }
+  document.documentElement.dataset.ainourLocale = state.locale;
+  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: state.locale } }));
+}
+
+function updateStaticCopy() {
+  const fr = state.locale === 'fr';
+  els.pillText?.setAttribute('aria-label', fr ? 'Nupa — ouvrir le clavardage' : 'Nupa — open text chat');
+  els.pillVoice?.setAttribute('title', fr ? 'Voix' : 'Voice');
+  els.pill?.setAttribute('aria-label', fr ? 'Assistant Nupa' : 'Nupa');
+  els.panel?.setAttribute('aria-label', fr ? 'Assistant Nupa' : 'Nupa companion');
+  els.panel?.querySelector('[data-drag-handle]')?.setAttribute('title', fr ? 'Déplacer' : 'Drag to move');
+  if (els.tagline) els.tagline.textContent = fr ? 'Votre compagnon de portfolio intelligent.' : 'Your intelligent portfolio companion.';
+  const minimize = els.panel?.querySelector('[data-ainour="minimize"]');
+  const expand = els.panel?.querySelector('[data-ainour="expand"]');
+  const close = els.panel?.querySelector('[data-ainour="close"]');
+  if (minimize) {
+    minimize.setAttribute('aria-label', fr ? 'Réduire le clavardage' : 'Collapse chat');
+    minimize.setAttribute('title', fr ? 'Réduire le clavardage' : 'Collapse chat');
+  }
+  if (expand) {
+    expand.setAttribute('aria-label', fr ? 'Agrandir le panneau' : 'Expand panel');
+    expand.setAttribute('title', fr ? 'Agrandir' : 'Expand');
+  }
+  if (close) {
+    close.setAttribute('aria-label', fr ? 'Fermer le panneau Nupa' : 'Close Nupa panel');
+    close.setAttribute('title', fr ? 'Fermer le panneau (la voix continue)' : 'Close panel (voice keeps running)');
+  }
+  if (els.reset) els.reset.textContent = fr ? 'Nouveau' : 'New';
+  const independentChoice = document.querySelector('#introChoices [data-explore="independent"]');
+  const aiChoice = document.querySelector('#introChoices [data-explore="ai"]');
+  const choiceNote = document.querySelector('.intro-choice-note');
+  if (independentChoice) independentChoice.innerHTML = fr ? 'Explorer en autonomie <span aria-hidden="true">→</span>' : 'Explore independently <span aria-hidden="true">→</span>';
+  if (aiChoice) aiChoice.innerHTML = fr ? 'Explorer avec Nupa <span aria-hidden="true">✦</span>' : 'Explore with Nupa <span aria-hidden="true">✦</span>';
+  if (choiceNote) choiceNote.textContent = fr ? 'La navigation reste toujours disponible. Nupa est optionnel.' : 'Browsing is always available. Nupa is optional.';
+  if (els.gateCopy) els.gateCopy.textContent = fr
+    ? 'Entrez votre clé d’accès à la bêta privée pour parler avec Nupa. La clé est validée par Nupa et reste dans cet onglet; la clé Gemini permanente ne parvient jamais au navigateur.'
+    : 'Enter your private-beta access key to talk with Nupa. The key is validated by Nupa and stays in this tab; the permanent Gemini key never reaches the browser.';
+  if (els.gateInput) {
+    els.gateInput.placeholder = fr ? 'Clé d’accès à la bêta privée' : 'Private-beta access key';
+    els.gateInput.setAttribute('aria-label', fr ? 'Clé d’accès à la bêta privée' : 'Private-beta access key');
+  }
+  if (els.gateSubmit) els.gateSubmit.textContent = fr ? 'Ouvrir' : 'Open';
+  if (els.input) els.input.setAttribute('aria-label', fr ? 'Message à Nupa' : 'Message Nupa');
+  els.send?.setAttribute('aria-label', fr ? 'Envoyer le message' : 'Send message');
+  els.send?.setAttribute('title', fr ? 'Envoyer' : 'Send');
+  els.panel?.querySelectorAll('.ainour-legal-links a[href="/terms/"]').forEach((link) => { link.textContent = fr ? 'Conditions d’utilisation' : 'Terms of Use'; });
+  els.panel?.querySelectorAll('.ainour-legal-links a[href="/privacy/"]').forEach((link) => { link.textContent = fr ? 'Politique de confidentialité' : 'Privacy Policy'; });
 }
 
 function setLocaleButton() {
@@ -1561,7 +1628,7 @@ async function persistVoiceTurn() {
     });
     voice.lastTotals = usageTotals(voice.usage);
   } catch {
-    console.warn('AI Nour voice turn could not be saved');
+    console.warn('Nupa voice turn could not be saved');
   }
   finalizeVoiceDrafts();
   voice.userText = '';

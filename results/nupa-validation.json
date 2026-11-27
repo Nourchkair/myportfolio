@@ -1,0 +1,116 @@
+{
+  "generatedAt": "2026-11-27T08:26:00Z",
+  "release": "Nupa identity update + V3 interactive presentation",
+  "status": "validated locally; not pushed or deployed",
+  "validation": {
+    "portfolioBuild": true,
+    "portfolioValidation": {
+      "passed": 261,
+      "failed": 0
+    },
+    "legalValidator": {
+      "passed": 63,
+      "failed": 0
+    },
+    "unitTests": {
+      "passed": 72,
+      "failed": 0,
+      "identityRegressions": 5
+    },
+    "apiTests": {
+      "passed": 23,
+      "failed": 0
+    },
+    "crmTests": {
+      "passed": 14,
+      "failed": 0
+    },
+    "consentTests": {
+      "passed": 12,
+      "failed": 0
+    },
+    "lifecycleTests": {
+      "passed": 28,
+      "failed": 0
+    },
+    "adminAuthTests": {
+      "passed": 16,
+      "failed": 0
+    },
+    "liveBudgetTests": {
+      "passed": 9,
+      "failed": 0
+    },
+    "openingBrowser": {
+      "passed": 9,
+      "failed": 0,
+      "evidence": "results/nupa-v3-opening-browser.json"
+    },
+    "presentationBrowser": {
+      "passed": 22,
+      "failed": 0,
+      "evidence": "results/nupa-v3-presentation-browser.json"
+    },
+    "textIdentityEnFr": {
+      "passed": 2,
+      "failed": 0,
+      "evidence": "results/nupa-v3-chat.json"
+    },
+    "secretScan": {
+      "patterns": 7,
+      "hits": 0
+    },
+    "freshD1Migration": {
+      "ok": true,
+      "personaSeedCleared": true
+    }
+  },
+  "personaMigration": {
+    "selfTest": true,
+    "productionDryRun": true,
+    "productionBeforeLength": 3606,
+    "productionAfterLength": 4020,
+    "afterHasLegacyName": false,
+    "afterHasLegacyRepresentation": false,
+    "applied": false,
+    "note": "Production D1 still contains the former AI Nour persona override. Apply only after deployment approval and after preserving the prior value for rollback.",
+    "personalityIndependencePreserved": true,
+    "duplicateIdentityParagraphs": 1
+  },
+  "identity": {
+    "displayName": "Nupa",
+    "acronym": "Nour's Unique Portfolio Assistant",
+    "tagline": "Your intelligent portfolio companion.",
+    "independent": true,
+    "speaksAboutNour": "third person",
+    "speaksAboutSelf": "first person",
+    "impersonatesNour": false
+  },
+  "legal": {
+    "privacyVersion": "1.2",
+    "termsVersion": "1.2",
+    "effectiveDate": "2026-11-27",
+    "consentVersion": "2026-11-27-v1.2",
+    "productionVersion": "1.1",
+    "published": false
+  },
+  "preserved": [
+    "ai-nour/ directory",
+    "ainour:* browser keys",
+    "/api/* routes",
+    "Worker and D1 names",
+    "environment variable and secret names",
+    "ainour_beta_ key prefix",
+    "OAuth client IDs and configuration",
+    "Google Drive folder names",
+    "Iapetus voice",
+    "spending caps and restricted private beta"
+  ],
+  "notRun": [
+    "Production Nupa deployment",
+    "Production persona migration --apply",
+    "Real-device voice, Bluetooth and iOS testing",
+    "Real Gemini identity/voice conversation under the Nupa production persona",
+    "Google OAuth consent-screen brand rename"
+  ]
+}

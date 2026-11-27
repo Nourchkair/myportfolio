@@ -433,7 +433,7 @@ async function startVoice() {
           const outputText = message.serverContent?.outputTranscription?.text;
           if (outputText) {
             state.liveAssistantText += outputText;
-            appendLive('AI Nour', outputText);
+            appendLive('Nupa', outputText);
           }
           for (const part of message.serverContent?.modelTurn?.parts || []) {
             if (part.inlineData?.data) {

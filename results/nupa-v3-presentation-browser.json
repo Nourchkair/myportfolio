@@ -1,0 +1,870 @@
+{
+  "generatedAt": "2026-11-27T08:15:35.908Z",
+  "passed": 22,
+  "failed": 0,
+  "total": 22,
+  "checks": [
+    {
+      "name": "visible target registry exposes approved home targets",
+      "pass": true,
+      "detail": {
+        "initialTargets": [
+          "section:home",
+          "section:projects",
+          "main-card:journey",
+          "main-card:profile",
+          "main-card:projects"
+        ]
+      }
+    },
+    {
+      "name": "presentation bar starts",
+      "pass": true,
+      "detail": {
+        "start": {
+          "ok": true,
+          "result": {
+            "ok": true
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/home",
+              "name": "home",
+              "section": "home"
+            },
+            "section": "home",
+            "home": {
+              "deck": "main",
+              "activeCard": "profile",
+              "index": 1
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": false,
+              "id": null,
+              "view": "overview",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        }
+      }
+    },
+    {
+      "name": "presentation controls and cursor use Nupa branding",
+      "pass": true,
+      "detail": {
+        "barName": "NUPA",
+        "region": "Nupa presentation controls",
+        "cursor": "Nupa"
+      }
+    },
+    {
+      "name": "presentation controls localize to French",
+      "pass": true,
+      "detail": {
+        "region": "Commandes de pr\u00e9sentation de Nupa",
+        "end": "Terminer",
+        "resume": "Reprendre",
+        "next": "\u00c9tape suivante"
+      }
+    },
+    {
+      "name": "project card and tags use stable semantic ids",
+      "pass": true,
+      "detail": {
+        "deck": [
+          "section:home",
+          "section:projects",
+          "project-card:acquisition",
+          "project-card:acquisition:tag:sales-strategy",
+          "project-card:acquisition:tag:ai-automation",
+          "project-card:acquisition:tag:revenue-growth",
+          "project-card:h2ops",
+          "project-card:communications"
+        ]
+      }
+    },
+    {
+      "name": "multiple simultaneous highlights and cursor",
+      "pass": true,
+      "detail": {
+        "multi": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetIds": [
+              "project-card:acquisition",
+              "project-card:acquisition:tag:sales-strategy"
+            ]
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects",
+              "name": "projects",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": false,
+              "id": null,
+              "view": "overview",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "multiState": {
+          "highlights": 2,
+          "cursor": true
+        }
+      }
+    },
+    {
+      "name": "spotlight isolates a target",
+      "pass": true,
+      "detail": {
+        "spotlight": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "project-card:acquisition"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects",
+              "name": "projects",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": false,
+              "id": null,
+              "view": "overview",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "spotlightState": {
+          "spotlight": true,
+          "cursor": true
+        }
+      }
+    },
+    {
+      "name": "paragraph targets use stable semantic ids and resolve",
+      "pass": true,
+      "detail": {
+        "stableText": {
+          "target": {
+            "id": "project-text:acquisition:what:an-ai-assisted-customer-acquisition-syst-vp84o9",
+            "kind": "project-text",
+            "label": "what \u00b7 An AI-assisted customer acquisition system that combines mar",
+            "description": "An AI-assisted customer acquisition system that combines market research, prospect intelligence, personalized demonstrations, intelligent outreach and automated follow-ups to help businesses identify and engage potential",
+            "actions": [
+              "highlight",
+              "spotlight",
+              "point",
+              "scroll"
+            ],
+            "relationships": [
+              "project-overview:acquisition:what"
+            ],
+            "knowledgeRef": "project:acquisition",
+            "visible": false
+          },
+          "result": {
+            "ok": true,
+            "result": {
+              "ok": true,
+              "targetIds": [
+                "project-text:acquisition:what:an-ai-assisted-customer-acquisition-syst-vp84o9"
+              ]
+            },
+            "state": {
+              "apiVersion": "1.0.0",
+              "ready": true,
+              "route": {
+                "path": "/projects/acquisition",
+                "name": "project",
+                "section": "projects"
+              },
+              "section": "projects",
+              "home": {
+                "deck": "projects",
+                "activeCard": "project",
+                "index": 0
+              },
+              "about": {
+                "open": false,
+                "view": "intro",
+                "chapterId": null,
+                "closing": false
+              },
+              "project": {
+                "open": true,
+                "id": "acquisition",
+                "view": "overview",
+                "nodeId": null,
+                "closing": false
+              },
+              "contact": {
+                "open": false
+              },
+              "environment": {
+                "index": 0,
+                "name": "Alpine Dawn"
+              },
+              "motion": {
+                "reduced": false
+              },
+              "transition": {
+                "active": false,
+                "type": null
+              },
+              "notFound": false
+            }
+          },
+          "highlighted": 1
+        }
+      }
+    },
+    {
+      "name": "flow target registry exposes nodes and connections",
+      "pass": true,
+      "detail": {
+        "count": 19
+      }
+    },
+    {
+      "name": "hover reveals existing workflow tooltip",
+      "pass": true,
+      "detail": {
+        "hover": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "flow-node:acquisition:demo"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "demo",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "hoverState": {
+          "tip": true,
+          "hover": 1
+        }
+      }
+    },
+    {
+      "name": "collapse clears existing tooltip state",
+      "pass": true,
+      "detail": {
+        "collapse": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "flow-node:acquisition:demo"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        }
+      }
+    },
+    {
+      "name": "workflow connection trace animates real path",
+      "pass": true,
+      "detail": {
+        "trace": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "projectId": "acquisition",
+            "from": "demo",
+            "to": "outreach"
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "traceState": {
+          "highlighted": 3,
+          "traced": 1,
+          "pulse": 1
+        }
+      }
+    },
+    {
+      "name": "compare highlights two targets and draws connector",
+      "pass": true,
+      "detail": {
+        "compare": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetIds": [
+              "flow-node:acquisition:demo",
+              "flow-node:acquisition:outreach"
+            ]
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "compareState": {
+          "highlighted": 2,
+          "connector": 1,
+          "tooltip": "Demo vs outreach"
+        }
+      }
+    },
+    {
+      "name": "workflow zoom works",
+      "pass": true,
+      "detail": {
+        "zoom": {
+          "ok": true,
+          "result": {
+            "ok": true,
+            "targetId": "flow-node:acquisition:demo",
+            "scale": 1.4
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "zoomState": {
+          "transform": "scale(1.4)",
+          "zoomed": true
+        }
+      }
+    },
+    {
+      "name": "workflow zoom resets",
+      "pass": true,
+      "detail": {
+        "reset": {
+          "ok": true,
+          "result": {
+            "ok": true
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/demo",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": null,
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        }
+      }
+    },
+    {
+      "name": "sequential highlighting advances and leaves the final target",
+      "pass": true,
+      "detail": {
+        "sequence": {
+          "result": {
+            "ok": true,
+            "result": {
+              "ok": true,
+              "targetIds": [
+                "flow-node:acquisition:demo",
+                "flow-node:acquisition:outreach",
+                "flow-node:acquisition:nurture"
+              ]
+            },
+            "state": {
+              "apiVersion": "1.0.0",
+              "ready": true,
+              "route": {
+                "path": "/projects/acquisition/flow/nurture",
+                "name": "flow",
+                "section": "projects"
+              },
+              "section": "projects",
+              "home": {
+                "deck": "projects",
+                "activeCard": "project",
+                "index": 0
+              },
+              "about": {
+                "open": false,
+                "view": "intro",
+                "chapterId": null,
+                "closing": false
+              },
+              "project": {
+                "open": true,
+                "id": "acquisition",
+                "view": "flow",
+                "nodeId": "nurture",
+                "closing": false
+              },
+              "contact": {
+                "open": false
+              },
+              "environment": {
+                "index": 0,
+                "name": "Alpine Dawn"
+              },
+              "motion": {
+                "reduced": false
+              },
+              "transition": {
+                "active": false,
+                "type": null
+              },
+              "notFound": false
+            }
+          },
+          "early": 1,
+          "final": [
+            "nurture"
+          ]
+        }
+      }
+    },
+    {
+      "name": "cancellation stops stale sequencing without wiping current context",
+      "pass": true,
+      "detail": {
+        "cancel": {
+          "result": {
+            "ok": false,
+            "error": "PRESENTATION_ACTION_FAILED",
+            "result": {
+              "ok": false,
+              "cancelled": true
+            }
+          },
+          "highlights": 1
+        }
+      }
+    },
+    {
+      "name": "invalid frontend target is rejected",
+      "pass": true,
+      "detail": {
+        "invalid": {
+          "ok": false,
+          "error": "TARGET_NOT_RENDERED",
+          "result": {
+            "ok": false,
+            "error": "TARGET_NOT_RENDERED"
+          }
+        }
+      }
+    },
+    {
+      "name": "clear effects preserves the presentation bar",
+      "pass": true,
+      "detail": {
+        "clear": {
+          "ok": true,
+          "result": {
+            "ok": true
+          },
+          "state": {
+            "apiVersion": "1.0.0",
+            "ready": true,
+            "route": {
+              "path": "/projects/acquisition/flow/nurture",
+              "name": "flow",
+              "section": "projects"
+            },
+            "section": "projects",
+            "home": {
+              "deck": "projects",
+              "activeCard": "project",
+              "index": 0
+            },
+            "about": {
+              "open": false,
+              "view": "intro",
+              "chapterId": null,
+              "closing": false
+            },
+            "project": {
+              "open": true,
+              "id": "acquisition",
+              "view": "flow",
+              "nodeId": "nurture",
+              "closing": false
+            },
+            "contact": {
+              "open": false
+            },
+            "environment": {
+              "index": 0,
+              "name": "Alpine Dawn"
+            },
+            "motion": {
+              "reduced": false
+            },
+            "transition": {
+              "active": false,
+              "type": null
+            },
+            "notFound": false
+          }
+        },
+        "cleared": {
+          "highlights": 0,
+          "cursorHidden": true,
+          "spotlightHidden": true,
+          "barVisible": true
+        }
+      }
+    },
+    {
+      "name": "pause, resume and end controls update presentation state",
+      "pass": true,
+      "detail": {
+        "paused": true,
+        "resumed": true,
+        "ended": true
+      }
+    },
+    {
+      "name": "reduced motion disables presentation animation",
+      "pass": true,
+      "detail": {
+        "reduced": {
+          "reduced": true,
+          "transition": "0s",
+          "animation": "none"
+        }
+      }
+    },
+    {
+      "name": "mobile presentation bar fits the viewport",
+      "pass": true,
+      "detail": {
+        "mobile": {
+          "width": 291,
+          "left": 49,
+          "right": 341,
+          "viewport": 390,
+          "overflow": false,
+          "css": true
+        }
+      }
+    }
+  ]
+}

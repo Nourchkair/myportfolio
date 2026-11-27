@@ -4,12 +4,38 @@ const p = await openTab('http://127.0.0.1:8771/?ainour=dev&v=' + Date.now());
 await p.setViewportSize({ width: 1440, height: 900 });
 await p.waitForFunction(() => Boolean(window.NourOS), { timeout: 30000 });
 await p.waitForTimeout(2800);
+await p.evaluate(() => {
+  localStorage.setItem('ainour:locale', 'en');
+  document.documentElement.dataset.ainourLocale = 'en';
+  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: 'en' } }));
+});
 
 const initialTargets = await p.evaluate(() => window.NourOS.getPresentationTargets({ visibleOnly: true }).targets.map((target) => target.id));
 check('visible target registry exposes approved home targets', initialTargets.includes('main-card:projects') && initialTargets.includes('section:home'), { initialTargets });
 
 const start = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationStart', projectId: 'acquisition', stepIndex: 1, totalSteps: 9, label: 'Customer Acquisition' }));
 check('presentation bar starts', start.ok === true && await p.evaluate(() => !document.querySelector('.ai-pres-bar').hidden), { start });
+const presentationBranding = await p.evaluate(() => ({
+  barName: document.querySelector('.ai-pres-copy b')?.innerText.trim(),
+  region: document.querySelector('.ai-pres-bar')?.getAttribute('aria-label'),
+  cursor: document.querySelector('.ai-pres-cursor-label')?.innerText.trim()
+}));
+check('presentation controls and cursor use Nupa branding', /^nupa$/i.test(presentationBranding.barName) && /Nupa/.test(presentationBranding.region) && presentationBranding.cursor === 'Nupa', presentationBranding);
+await p.evaluate(() => {
+  document.documentElement.dataset.ainourLocale = 'fr';
+  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: 'fr' } }));
+});
+const frenchControls = await p.evaluate(() => ({
+  region: document.querySelector('.ai-pres-bar')?.getAttribute('aria-label'),
+  end: document.querySelector('[data-ai-pres="end"]')?.innerText.trim(),
+  resume: document.querySelector('[data-ai-pres="resume"]')?.innerText.trim(),
+  next: document.querySelector('[data-ai-pres="next"]')?.getAttribute('aria-label')
+}));
+check('presentation controls localize to French', /présentation de Nupa/.test(frenchControls.region) && frenchControls.end === 'Terminer' && frenchControls.resume === 'Reprendre' && frenchControls.next === 'Étape suivante', frenchControls);
+await p.evaluate(() => {
+  document.documentElement.dataset.ainourLocale = 'en';
+  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: 'en' } }));
+});
 
 const deck = await p.evaluate(async () => {
   await window.NourOS.showProjectCard('acquisition');

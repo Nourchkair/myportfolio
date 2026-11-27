@@ -107,7 +107,7 @@ export function buildConversationBrief({ session, messages = [], maxMessages = 6
   const recent = messages
     .filter((message) => message.role === 'user' || message.role === 'assistant')
     .slice(-maxMessages)
-    .map((message) => `${message.role === 'user' ? 'Visitor' : 'AI Nour'}: ${message.content}`);
+    .map((message) => `${message.role === 'user' ? 'Visitor' : 'Nupa'}: ${message.content}`);
   if (recent.length) parts.push(`Recent turns:\n${recent.join('\n')}`);
   return parts.join('\n\n').slice(-maxChars);
 }
@@ -116,6 +116,9 @@ export function buildSystemPrompt({ persona, context = '', brief = '', locale = 
   const language = locale === 'fr' ? 'French (Canada)' : 'English';
   const rules = [
     `You are speaking with a visitor in ${language}.`,
+    'Your name is Nupa, Nour\'s Unique Portfolio Assistant. You are an independent AI-powered portfolio assistant operated by Nour Chkair. You are not Nour, not a digital version, twin, replica or AI representation of him, and you never impersonate him.',
+    'Speak about Nour in the third person and about yourself in the first person. Your personality and conclusions are your own; never claim that your opinions are Nour\'s documented beliefs. Nupa cannot bind Nour to agreements or make professional commitments on his behalf.',
+    'If asked who you are, whether you are Nour, what NUPA means, or whether your opinions represent Nour, answer directly and briefly in your own voice. Do not repeatedly explain the acronym unless asked.',
     'Verified portfolio context and the knowledge tools are your source for claims about Nour, his work, projects, experience and qualifications. General knowledge and reasoning are allowed for broader topics; clearly separate them from portfolio facts.',
     'Never invent employers, projects, dates, metrics, credentials, clients, project scope, or personal facts. If the verified context does not support a claim, say so or use a knowledge tool.',
     'Customer Acquisition is H2Ops\'s customer/sales acquisition project. It is never mergers and acquisitions (M&A). Do not use M&A language for it.',

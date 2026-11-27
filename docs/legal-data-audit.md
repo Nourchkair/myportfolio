@@ -1,10 +1,10 @@
-# AI Nour — legal data audit
+# Nupa (formerly AI Nour) — legal data audit
 
-**Date:** 27 November 2026  
-**Scope:** `nourchkair.com`, AI Nour production Worker, D1, local admin, Google integrations, optional Resend  
+**Date:** 27 November 2026
+**Scope:** `nourchkair.com`, Nupa production Worker (formerly AI Nour), D1, local admin, Google integrations, optional Resend
 **Purpose:** verify every material statement in the Privacy Policy and Terms of Use against actual code and configuration before publication.
 
-**Approval:** Nour approved the release on 27 November 2026 with amendments: AI Nour eligibility is 18+, eligibility is combined with Terms/Privacy acceptance, Live sessions are 5 minutes, and voice errors distinguish budget, microphone, network, provider, session and disabled states. The portfolio remains available to everyone.
+**Approval:** Nour approved the earlier release on 27 November 2026 under the former AI Nour name: eligibility is 18+, eligibility is combined with Terms/Privacy acceptance, Live sessions are 5 minutes, and voice errors distinguish budget, microphone, network, provider, session and disabled states. The portfolio remains available to everyone. The Nupa identity update preserves those provisions at version 1.2.
 
 This is an engineering/privacy audit, not a legal opinion. Canadian counsel should review the final texts, and French counsel should review the French version, before public launch.
 
@@ -18,7 +18,7 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 | Session ID / locale / consent version | Browser and D1 | `localStorage`; D1 `sessions` | Conversation continuity, language, consent record | Rolling 7 days after last activity; current consent version with session | Session cleanup; manual deletion |
 | Text messages and replies | Visitor / Gemini | D1 `session_messages` | Conversation, recovery, quality | Deleted with expired session; explicit message delete added | Session cleanup; manual deletion |
 | Voice transcripts | Gemini Live | D1 `session_messages` as conversation text | Transcript/continuity | Same as session | Same as session |
-| Voice audio | Microphone | **Not stored by AI Nour**; streamed to Gemini | Real-time voice | Google's terms | Google account/API terms |
+| Voice audio | Microphone | **Not stored by Nupa**; streamed to Gemini | Real-time voice | Google's terms | Google account/API terms |
 | Conversation summaries | Gemini | D1 `sessions.summary` | Recovery | Same as session | Session cleanup |
 | Visitor profile | Inferred from conversation | D1 `sessions.state_json` | Tailoring | Same as session | Session cleanup |
 | Page context / navigation actions | Browser | D1 message metadata and live request context | Page-aware answers | Same as session | Session cleanup |
@@ -57,7 +57,7 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 
 | Consent | Implementation | Status |
 | --- | --- | --- |
-| 18+ eligibility and Terms/Privacy before AI use | One in-assistant acceptance checkbox; `CONSENT_VERSION=2026-11-27-v1.1`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
+| 18+ eligibility and Terms/Privacy before AI use | One in-assistant acceptance checkbox; `CONSENT_VERSION=2026-11-27-v1.2`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
 | Server-side consent | When `BETA_ACCESS_REQUIRED=true`, `/api/session`, new `/api/chat` sessions and new Live sessions require a valid `age18`/terms/privacy consent object; test returned `CONSENT_REQUIRED` without it and `201` with it | Verified with temporary beta-gated Worker (12/12) |
 | Existing sessions | `GET /api/session/:id`, chat, Live token/turn and tools reject stale or missing consent with `CONSENT_REQUIRED`; `POST /api/session/:id/consent` records the current version and timestamp without extending the session expiry | Verified with temporary beta-gated Worker |
 | Microphone consent | Inline assistant consent strip before `getUserMedia`; consent stored in `sessionStorage` for the tab; no microphone request occurs if cancelled | Verified in browser (cancel, budget, permission and missing-device paths) |
@@ -102,7 +102,7 @@ Google's Gemini API Additional Terms of Service effective **23 March 2026** were
 
 Current implementation:
 
-- AI Nour discloses that it is AI, not Nour.
+- Nupa discloses that it is an independent AI-powered portfolio assistant, not Nour, and never impersonates him. Nupa speaks about Nour in the third person and about itself in the first person; its own opinions are not presented as Nour's documented beliefs.
 - The AI is instructed not to provide legal, financial, medical or other professional advice, not to make high-impact decisions, and not to invent Nour's experience or beliefs.
 - Users are told not to submit personal, sensitive, financial, health, confidential or third-party information.
 - The Terms include the exact 18+ eligibility clause and combine eligibility with Terms/Privacy acceptance. No date of birth or identity document is collected; no separate age-verification pop-up is used.
@@ -117,8 +117,8 @@ Current implementation:
 - Portfolio footer legal links: `/privacy` and `/terms`; verified in the local browser.
 - Contact panel: legal links visible when the Contact panel opens.
 - Reading view: legal links in the contact section and footer.
-- AI Nour: one combined 18+/Terms/Privacy acceptance, separate per-tab microphone consent, input disclaimer, consent-gate links, and microphone-consent links; verified in the local browser and temporary server.
-- No legal pop-up or consent modal appears when the portfolio opens; the assistant gate appears only after the visitor opens AI Nour.
+- Nupa: one combined 18+/Terms/Privacy acceptance, separate per-tab microphone consent, input disclaimer, consent-gate links, and microphone-consent links; verified in the local browser and temporary server.
+- No legal pop-up or consent modal appears when the portfolio opens; the assistant gate appears only after the visitor opens Nupa.
 - No console errors in the consent/microphone checks.
 - Local `/privacy` and `/terms` resolve through directory redirects to `/privacy/` and `/terms/` (200). Cloudflare Pages may apply its own directory redirect; the final page is publicly readable. After deployment, verify the exact OAuth-console URLs and follow redirects.
 - The daily-budget path shows the local reset time, the cumulative path explains the private-beta allowance, and microphone permission/missing-device paths are distinct. The budget path makes **zero** microphone calls. No “Mic error” label remains.
@@ -130,7 +130,7 @@ Current implementation:
 | Portfolio usable without AI/account | Verified | Default portfolio mounts no AI; reading view assistant-free. |
 | No advertising/analytics/tracking | Verified | No analytics/ad code found; only local preferences, AI session storage, admin cookie. |
 | No sale of personal information | Verified | No sale path, no ad/CRM resale. |
-| Age 18+ for AI Nour | Verified in Terms, one-checkbox UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.1` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
+| Age 18+ for Nupa | Verified in Terms, one-checkbox UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.2` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
 | Microphone consent before processing | Verified | Inline assistant strip; browser permission follows separately. |
 | Contact/appointment consent | Verified | API consent scopes + appointment guard; public inquiry/booking UI is currently restricted/disabled. |
 | Conversation retention 7 days | Verified | Rolling expiry + cleanup; cleanup depends on cron running. |
@@ -153,21 +153,21 @@ Current implementation:
 4. **Cost/audit retention:** `cost_events`, `live_tokens`, `admin_audit`, and `action_ledger` are not auto-expired. The policy says they may be retained longer for accounting/security. Consider documented maximum periods.
 5. **Google processing:** The policy cannot guarantee Google's retention or model-improvement behaviour. Do not add a "never used for training" claim about Google. If a paid Gemini tier with stronger data-processing terms is adopted, update the policy.
 6. **Microphone consent record:** Consent is stored in browser `sessionStorage`; it is not written to the server as a separate audit record. The policy only says the interface asks for microphone consent. If a server-side consent record is required, add one.
-7. **Age/consent enforcement:** New and existing production sessions are enforced when `BETA_ACCESS_REQUIRED=true`. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.1`.
+7. **Age/consent enforcement:** New and existing production sessions are enforced when `BETA_ACCESS_REQUIRED=true`. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.2`.
 8. **Data residency:** D1 is ENAM; Google/Cloudflare may process globally. The policy discloses this and does not promise Canadian-only processing.
 9. **CRM Sheet deletion:** Removing a D1 row does not automatically remove the Sheet row. The operator must delete the mirror row. Document this in the deletion runbook.
 10. **OAuth token:** The current Testing refresh token expires in about 6.5 days. This is operational, not a privacy statement, but it must be resolved for a durable beta.
 11. **French review:** The French text should be reviewed by a native/legal reviewer for terminology and enforceability.
 12. **Billing status:** The production Gemini project is confirmed Free tier with no active Cloud Billing account. The paid-service DPA does not apply. Keep public AI disabled; do not submit personal/confidential information. Activating paid billing requires explicit approval, a payment method, and a prepaid balance (minimum $5 at the time of review).
 13. **EEA/UK:** Google requires Paid Services for API clients available in the EEA, Switzerland, or the UK. The private beta is restricted and public AI access is disabled; do not enable public access in those regions on unpaid quota.
-14. **Publication:** `/privacy/` and `/terms/` are published (version 1.1). Both returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and AI Nour links use the trailing-slash URLs.
+14. **Publication:** Version 1.1 of `/privacy/` and `/terms/` was published and returned 200 with English and French sections; the portfolio footer, Contact panel, reading view and Nupa links use the trailing-slash URLs. Version 1.2 (Nupa identity) is prepared locally but remains unpublished until deployment approval; production still serves version 1.1.
 
 ## 9. Approval record
 
 Approved by Nour on **27 November 2026** with these amendments:
 
 - [x] Controller identity and privacy contact (`nourchkair@gmail.com`, Ottawa, Ontario, Canada).
-- [x] AI Nour eligibility set to **18+**, with the exact professional-use clause; portfolio remains open to everyone.
+- [x] AI Nour (now Nupa) eligibility set to **18+**, with the exact professional-use clause; portfolio remains open to everyone.
 - [x] One combined eligibility/Terms/Privacy acceptance; no separate age checkbox, date of birth, identity document or age pop-up.
 - [x] Retention table, including no active automated backup.
 - [x] Deletion request process and manual CRM/Sheet/Calendar deletion procedure.
@@ -180,3 +180,17 @@ Approved by Nour on **27 November 2026** with these amendments:
 - [ ] Add the published URLs to the Google OAuth Console and complete verification/publishing; this remains the next manual action.
 - [x] Confirm current AI Studio billing tier: Free tier, no active Cloud Billing.
 - [ ] Decide whether to activate paid Gemini billing; do not enable public AI before that decision.
+
+
+## 10. Nupa identity update (version 1.2)
+
+**Status:** implemented and validated locally; not deployed. Production remains on version 1.1 and the former AI Nour persona until approval.
+
+- The assistant is now **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour, not a digital version, twin, replica or AI representation of him, and it never impersonates him.
+- Nupa speaks about Nour in the third person and about itself in the first person. Its own opinions and conclusions are expressly distinguished from Nour's documented beliefs.
+- The Privacy Policy and Terms of Use are prepared at version **1.2**, effective **27 November 2026**, in English and French; they are not published until deployment approval. The consent version is **`2026-11-27-v1.2`**, so existing sessions must re-accept before text, voice or tools.
+- No data practice, retention period, eligibility rule, third-party processor, spending cap or security control changed for the rename. The existing 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state and restricted private beta remain.
+- The stored production persona override requires migration because changing source defaults alone does not update D1. `ai-nour/scripts/migrate-persona-nupa.mjs` performs a non-destructive identity replacement, preserves unrelated custom text, and supports `--self-test` and dry-run before `--apply`.
+- The Google Drive folder names, OAuth client identifiers, Worker/D1 names, API routes, environment variables, secrets, beta-key prefix and browser storage keys are intentionally unchanged to avoid destructive migration.
+
+**Pending:** deployment approval, publication of version 1.2, application of the production persona migration, and production verification.

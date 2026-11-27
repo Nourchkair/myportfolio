@@ -1,4 +1,6 @@
-# AI Nour — Phase 4 architecture
+# Nupa (formerly AI Nour) — Phase 4 architecture
+
+> The visitor-facing assistant is Nupa, an independent AI-powered portfolio guide. Internal directory, route, binding and storage identifiers retain their historical names to avoid a destructive migration.
 
 ## Principles
 
@@ -38,9 +40,9 @@ src/
   routes/                  health, session, CRM, email webhook, admin
 public/                    prototype UI
 admin/                     private admin UI
-scripts/                   builds, admin server, lifecycle/security/model tests
+scripts/                   builds, admin server, lifecycle/security/model tests, Nupa persona migration
 tests/                     unit and retrieval suites
-migrations/                0001–0004 D1 schema
+migrations/                0001–0006 D1 schema and data updates
 ```
 
 ## Text flow
@@ -106,7 +108,7 @@ migrations/                0001–0004 D1 schema
 | `ops_events`, `admin_audit` | operational and administrative audit |
 | `knowledge_overrides` | draft/published admin overrides; published entries are appended to text retrieval |
 
-Migrations: `0001_init.sql`, `0002_phase2.sql`, `0003_crm_idempotency.sql`, `0004_phase3.sql`.
+Migrations: `0001_init.sql`, `0002_phase2.sql`, `0003_crm_idempotency.sql`, `0004_phase3.sql`, `0005_beta_access.sql`, `0006_nupa_persona.sql`.
 
 ## Admin security
 

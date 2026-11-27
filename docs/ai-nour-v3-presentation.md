@@ -1,4 +1,6 @@
-# AI Nour V3 — Interactive Presentation Intelligence
+# Nupa V3 — Interactive Presentation Intelligence (formerly AI Nour)
+
+> Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths, browser keys and API routes remain unchanged.
 
 Status: **implemented and validated locally. Not deployed to production.** Production deployment requires explicit approval after the acceptance pass.
 
@@ -6,7 +8,7 @@ Status: **implemented and validated locally. Not deployed to production.** Produ
 
 | Layer | Responsibility |
 | --- | --- |
-| `src/app/presentation.js` | Target registry, highlight/spotlight system, virtual AI cursor, tooltips, workflow tracing, compare/zoom, presentation bar, cancellation and layout synchronisation. |
+| `src/app/presentation.js` | Target registry, highlight/spotlight system, virtual Nupa cursor, tooltips, workflow tracing, compare/zoom, presentation bar, cancellation and layout synchronisation. |
 | `src/app/commands.js` | Extends the existing `window.NourOS` command API with presentation targets, visual actions, readiness waits and cancellation. |
 | `src/app/immersive.js` | Bridges presentation actions to the real portfolio navigation and existing interaction logic (project flow, journey tabs, project cards). |
 | `ai-nour/src/tools/registry.js` | Allowlisted presentation tools, target validation, action construction and navigation/readiness metadata. |
@@ -20,13 +22,13 @@ Status: **implemented and validated locally. Not deployed to production.** Produ
 The opening greeting now offers two optional paths without blocking entry:
 
 - **Explore independently** — immediately completes the intro and leaves the portfolio in its normal state.
-- **Explore with AI Nour** — available only when the private-beta companion is loaded; it completes the intro, opens the assistant and uses the existing consent/key gate.
+- **Explore with Nupa** — available only when the private-beta companion is loaded; it completes the intro, opens the assistant and uses the existing consent/key gate.
 
-If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. Choosing AI Nour explains the live/personalized nature, offers text first with voice as an optional switch, asks about interests, and starts with a natural AI introduction. The existing age/Terms/Privacy acceptance and separate microphone consent are reused without another screen.
+If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. Choosing Nupa explains the live/personalized nature, offers text first with voice as an optional switch, asks about interests, and starts with a natural AI introduction. The existing age/Terms/Privacy acceptance and separate microphone consent are reused without another screen.
 
 ## 2. Interaction modes
 
-AI Nour selects the mode from intent, without asking the visitor to configure one:
+Nupa selects the mode from intent, without asking the visitor to configure one:
 
 - **Conversation** — answers without visual manipulation; still receives the current section/project/flow/chapter.
 - **Contextual assistance** — one or more focused highlights, spotlight, hover, expand, point or compare actions, followed by natural conversation.
@@ -58,7 +60,7 @@ Paragraph, capability, contribution-block, and journey-text ids use semantic slu
 - Single and multiple highlights; `outline`, `glow` and `emphasis` treatments.
 - Sequential highlighting with a cancellable step timer.
 - Spotlight with surrounding dimming and a target outline.
-- Virtual cursor labelled “AI Nour”, with a ring/dot, smooth movement, target following and no pointer interception. The visitor’s actual cursor is never moved or replaced.
+- Virtual cursor labelled “Nupa”, with a ring/dot, smooth movement, target following and no pointer interception. The visitor’s actual cursor is never moved or replaced.
 - Existing interaction states are reused: workflow tooltips (`showFlowTip`), project opening, flow opening, journey chapter selection, project-card selection and project deck selection.
 - Workflow tracing uses the real SVG connection paths: highlighted nodes, highlighted connection, directional dash animation and a moving pulse dot.
 - Compare highlights two targets and draws a viewport connector.
@@ -70,7 +72,7 @@ Paragraph, capability, contribution-block, and journey-text ids use semantic slu
 
 A single compact glass bar appears only while presenting:
 
-- “AI Nour” live indicator, project/step label and `current / total` progress.
+- “Nupa” live indicator, project/step label and `current / total` progress.
 - Previous, pause, resume, next and end.
 - The visitor can always end visual assistance; controls are keyboard-focusable and the bar is a labelled region, not a focus trap.
 - On mobile the bar is constrained to the viewport and placed above the home indicator.
@@ -91,7 +93,7 @@ The implementation is **step-level**, not word-level.
 ## 7. Interruptions and adaptation
 
 - A monotonic action epoch cancels stale visual sequences and prevents outdated tool responses from overriding newer visitor actions.
-- Manual route changes cancel pending visual actions, clear effects and **pause** the presentation. The bar remains available, the current location is sent to AI Nour, and it can adapt or resume. Only an explicit stop/end terminates the session.
+- Manual route changes cancel pending visual actions, clear effects and **pause** the presentation. The bar remains available, the current location is sent to Nupa, and it can adapt or resume. Only an explicit stop/end terminates the session.
 - Live interruption pauses the presentation, stops queued audio playback and cancels pending visual sequencing while preserving the current context.
 - Text previous/next requests a contextual explanation from the model, not merely a highlight movement; the same presentation state carries across text and voice, including voice-session expiry.
 - Sending a text message during a presentation pauses it before the question is processed.
@@ -100,19 +102,23 @@ The implementation is **step-level**, not word-level.
 
 ## 8. Validation
 
+Consolidated evidence: `results/nupa-validation.json`.
+
 Local regression:
 
-- Unit tests: **67/67**
+- Unit tests: **72/72** (including 5 Nupa identity regressions)
 - API tests: **23/23**
 - CRM tests: **14/14**
+- Consent tests: **12/12**
+- Lifecycle tests: **28/28**
 - Admin auth: **16/16**
 - Live budget/duration: **9/9**
 - Portfolio validation: **261**
-- Legal validator: **46/46**
+- Legal validator: **63/63**
 
-Opening experience (`results/v3-opening-browser.json`): **7/7** — independent default, beta-only AI path, consent reuse, text-first copy, legal links and AI introduction.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **9/9** — independent default, beta-only Nupa path, consent reuse, independent-assistant disclosure, Nupa branding, text-first copy, legal links, Nupa introduction and French UI labels.
 
-Browser presentation run (`results/v3-presentation-browser.json`): **20/20**
+Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 
 - Approved target registry on home, project deck and flow.
 - Multiple simultaneous highlights.
@@ -129,17 +135,21 @@ Browser presentation run (`results/v3-presentation-browser.json`): **20/20**
 - Reduced-motion behavior.
 - Mobile bar at 390px viewport: 291px wide, no overflow.
 - Stable semantic paragraph/tag ids resolve and highlight.
+- Nupa bar/cursor branding.
+- French presentation-control labels (`Terminer`, `Reprendre`, `Étape suivante`).
 
-AI orchestration run (`results/v3-presentation-chat.json`):
+Nupa AI orchestration run (`results/nupa-v3-chat.json`):
 
 - Text message → `highlightElement` → highlighted project card + cursor + action chip.
 - Text message → `presentProject` → bar, project and flow open at the verified demo step with `5 / 9` progress.
 - Manual `navigateTo('home')` → pending effects cleared, presentation paused, bar retained.
 - Text **Next** → contextual assistant explanation added and progress advanced.
 - Explicit **End** → presentation terminated, bar hidden and effects cleared.
+- Identity in text: “Who are you? Are you Nour?” → “No, I’m Nupa…” with no claim to be Nour.
+- Identity in French: “Es-tu Nour ?” → “Non, je suis Nupa…” with no claim to be Nour.
 - No browser console errors.
 
-Real Gemini opening introduction (`results/v3-opening-real-model.json`) produced a natural live/personalized greeting and asked what to explore first.
+Earlier V3 evidence (`results/v3-opening-real-model.json`), captured before the Nupa identity update, produced a natural live/personalized greeting and asked what to explore first. The current source prompt and system rules introduce Nupa; a new real-model production check is part of the post-deployment validation.
 
 Visual evidence:
 
@@ -168,7 +178,7 @@ A real Gemini text call also selected `highlightElement` for “Highlight the Cu
 
 ## 11. Manual acceptance scenarios
 
-1. On opening, choose Explore independently and confirm browsing continues normally; then try Explore with AI Nour and the existing consent/key flow.
+1. On opening, choose Explore independently and confirm browsing continues normally; then try Explore with Nupa and the existing consent/key flow.
 2. Ask “Guide me through what I’m looking at” from the home view.
 3. Ask “How does this flow actually work?” while on a project flow.
 4. Ask “Show me what Nour contributed to this project.”

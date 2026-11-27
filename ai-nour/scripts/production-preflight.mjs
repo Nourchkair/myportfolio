@@ -42,7 +42,7 @@ check('valid beta key is accepted', validMeta.status === 200 && Array.isArray(va
 const session = await request('/api/session', {
   method: 'POST',
   headers: { 'x-prototype-key': validation.key, 'x-owner-token': owner },
-  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.1', privacyVersion: '2026-11-27-v1.1', acceptedAt: Date.now() } }
+  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.2', privacyVersion: '2026-11-27-v1.2', acceptedAt: Date.now() } }
 });
 check('authorized beta session is created', session.status === 201 && Boolean(session.body.session?.id), { status: session.status });
 const sessionId = session.body.session?.id;

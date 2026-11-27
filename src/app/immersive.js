@@ -5,7 +5,7 @@ import { SCENES } from '../data/environments.js';
 import { parseRoute, normalizePath } from './routes.js';
 import { createStore, initialState } from './store.js';
 import { installCommandApi } from './commands.js';
-import { createPresentationController } from './presentation.js?v=11';
+import { createPresentationController } from './presentation.js?v=12';
 
 
 /* Project data now lives in the approved PROJECTS registry in os-app2.js. */

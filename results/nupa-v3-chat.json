@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-11-27T08:16:23.394Z",
+  "highlighted": {
+    "highlights": 1,
+    "cursor": true,
+    "route": "/projects",
+    "chips": [
+      "Highlighted"
+    ]
+  },
+  "presented": {
+    "bar": true,
+    "title": "Customer Acquisition",
+    "progress": "5 / 9",
+    "projectOpen": true,
+    "flow": true,
+    "presentation": {
+      "active": true,
+      "paused": false,
+      "projectId": "acquisition",
+      "nodeId": "demo",
+      "stepIndex": 5,
+      "totalSteps": 9,
+      "label": "Customer Acquisition"
+    }
+  },
+  "manualNavigation": {
+    "barHidden": false,
+    "paused": true,
+    "presentation": {
+      "active": true,
+      "paused": true,
+      "projectId": "acquisition",
+      "nodeId": null,
+      "stepIndex": 0,
+      "totalSteps": 9,
+      "label": "Customer Acquisition"
+    },
+    "highlights": 0,
+    "cursorHidden": true
+  },
+  "textStep": {
+    "before": 2,
+    "assistantMessages": 3,
+    "barVisible": true,
+    "paused": false,
+    "node": "target",
+    "progress": "1 / 9"
+  },
+  "explicitlyEnded": {
+    "barHidden": true,
+    "presentation": {
+      "active": false,
+      "paused": false,
+      "projectId": null,
+      "nodeId": null,
+      "stepIndex": 0,
+      "totalSteps": 0,
+      "label": ""
+    },
+    "highlights": 0
+  },
+  "identity": {
+    "en": {
+      "text": "No, I'm Nupa. I'm an AI assistant designed to help you explore and understand Nour's work. I know his portfolio well, but I'm not him.",
+      "locale": "EN",
+      "ok": true
+    },
+    "fr": {
+      "text": "Non, je suis Nupa. Je suis un assistant IA con\u00e7u pour vous aider \u00e0 explorer et comprendre le travail de Nour. Je connais bien son portfolio, mais je ne suis pas lui.",
+      "locale": "FR",
+      "ok": true
+    }
+  },
+  "consoleErrors": []
+}

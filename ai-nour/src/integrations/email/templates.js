@@ -28,7 +28,7 @@ function layout({ heading, intro, rows = [], body = [], footer = [] }) {
   const footerHtml = footer.length
     ? `<div style="margin-top:24px;padding-top:16px;border-top:1px solid #26343d;color:#7d8a91;font-size:12px;line-height:1.6">${footer.map((line) => `<p style="margin:0 0 4px">${escapeHtml(line)}</p>`).join('')}</div>`
     : '';
-  return `<!doctype html><html><body style="margin:0;background:#080d11;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif"><div style="max-width:600px;margin:0 auto;padding:28px 20px 40px"><div style="border:1px solid #26343d;background:#0d151b;border-radius:18px;padding:26px 24px"><p style="margin:0 0 6px;color:#ffd2a1;font-size:11px;letter-spacing:.16em;text-transform:uppercase">AI Nour</p><h1 style="margin:0 0 14px;color:#ffffff;font-size:24px;line-height:1.25;letter-spacing:-.02em">${escapeHtml(heading)}</h1><p style="margin:0 0 12px;color:#c8d1d5;font-size:15px;line-height:1.65">${escapeHtml(intro)}</p>${bodyHtml}${rowHtml}${footerHtml}</div><p style="margin:16px 0 0;color:#66737a;font-size:11px;text-align:center">AI Nour is an AI representation of Nour Chkair, not the person.</p></div></body></html>`;
+  return `<!doctype html><html><body style="margin:0;background:#080d11;font-family:ui-sans-serif,system-ui,-apple-system,'Segoe UI',sans-serif"><div style="max-width:600px;margin:0 auto;padding:28px 20px 40px"><div style="border:1px solid #26343d;background:#0d151b;border-radius:18px;padding:26px 24px"><p style="margin:0 0 6px;color:#ffd2a1;font-size:11px;letter-spacing:.16em;text-transform:uppercase">Nupa</p><h1 style="margin:0 0 14px;color:#ffffff;font-size:24px;line-height:1.25;letter-spacing:-.02em">${escapeHtml(heading)}</h1><p style="margin:0 0 12px;color:#c8d1d5;font-size:15px;line-height:1.65">${escapeHtml(intro)}</p>${bodyHtml}${rowHtml}${footerHtml}</div><p style="margin:16px 0 0;color:#66737a;font-size:11px;text-align:center">Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.</p></div></body></html>`;
 }
 
 function plain(lines) {
@@ -39,23 +39,23 @@ export function inquiryAcknowledgement({ contact, inquiry }) {
   const name = cleanLine(contact.full_name, 120);
   const summary = cleanLine(inquiry.summary, 1200);
   return {
-    subject: 'AI Nour — inquiry received',
+    subject: 'Nupa — inquiry received',
     text: plain([
       `Hello ${name},`,
       '',
-      'Thank you for contacting Nour through AI Nour. Your inquiry has been recorded for review.',
+      'Thank you for contacting Nour through Nupa. Your inquiry has been recorded for review.',
       '',
       `Summary: ${summary}`,
       '',
-      'This is an automated acknowledgement. AI Nour is an AI representation of Nour Chkair, not the person. A reply will come from Nour or a human assistant.',
+      'This is an automated acknowledgement. Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him. A reply will come from Nour or a human assistant.',
       '',
       SITE_URL
     ]),
     html: layout({
       heading: 'Inquiry received',
-      intro: `Hello ${name}, thank you for contacting Nour through AI Nour. Your inquiry has been recorded for review.`,
+      intro: `Hello ${name}, thank you for contacting Nour through Nupa. Your inquiry has been recorded for review.`,
       rows: [['Summary', summary]],
-      footer: ['This is an automated acknowledgement.', 'AI Nour is an AI representation of Nour Chkair, not the person.']
+      footer: ['This is an automated acknowledgement.', 'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.']
     })
   };
 }
@@ -63,9 +63,9 @@ export function inquiryAcknowledgement({ contact, inquiry }) {
 export function internalInquiry({ contact, inquiry }) {
   const name = cleanLine(contact.full_name, 120);
   return {
-    subject: `AI Nour — new ${cleanLine(inquiry.inquiry_type, 40)} inquiry`,
+    subject: `Nupa — new ${cleanLine(inquiry.inquiry_type, 40)} inquiry`,
     text: plain([
-      'New inquiry recorded by AI Nour.',
+      'New inquiry recorded by Nupa.',
       '',
       `Name: ${name}`,
       `Email: ${contact.email || 'not provided'}`,
@@ -79,7 +79,7 @@ export function internalInquiry({ contact, inquiry }) {
     ]),
     html: layout({
       heading: 'New inquiry',
-      intro: 'AI Nour recorded a new inquiry for review.',
+      intro: 'Nupa recorded a new inquiry for review.',
       rows: [
         ['Name', name],
         ['Email', contact.email || 'not provided'],
@@ -99,22 +99,22 @@ export function appointmentConfirmation({ contact, booking }) {
   const start = when(booking.startUtc, booking.timezone);
   const meet = booking.meetLink || '';
   return {
-    subject: 'AI Nour — appointment confirmed',
+    subject: 'Nupa — appointment confirmed',
     text: plain([
       `Hello ${name},`,
       '',
-      `Your AI Nour appointment is confirmed for ${start} (${booking.timezone || 'America/Toronto'}).`,
+      `Your appointment with Nour is confirmed (arranged through Nupa) for ${start} (${booking.timezone || 'America/Toronto'}).`,
       meet ? `Google Meet: ${meet}` : 'A Google Meet link will follow.',
       '',
       'If you need to reschedule or cancel, reply to this message.',
       '',
-      'AI Nour is an AI representation of Nour Chkair, not the person.'
+      'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.'
     ]),
     html: layout({
       heading: 'Appointment confirmed',
-      intro: `Hello ${name}, your AI Nour appointment is confirmed.`,
+      intro: `Hello ${name}, your appointment with Nour is confirmed (arranged through Nupa).`,
       rows: [['When', `${start} (${booking.timezone || 'America/Toronto'})`], ...(meet ? [['Google Meet', meet]] : [])],
-      footer: ['If you need to reschedule or cancel, reply to this message.', 'AI Nour is an AI representation of Nour Chkair, not the person.']
+      footer: ['If you need to reschedule or cancel, reply to this message.', 'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.']
     })
   };
 }
@@ -124,20 +124,20 @@ export function appointmentRescheduled({ contact, booking }) {
   const start = when(booking.startUtc, booking.timezone);
   const meet = booking.meetLink || '';
   return {
-    subject: 'AI Nour — appointment rescheduled',
+    subject: 'Nupa — appointment rescheduled',
     text: plain([
       `Hello ${name},`,
       '',
-      `Your AI Nour appointment has been moved to ${start} (${booking.timezone || 'America/Toronto'}).`,
+      `Your appointment with Nour has been moved (arranged through Nupa) to ${start} (${booking.timezone || 'America/Toronto'}).`,
       meet ? `Google Meet: ${meet}` : 'A Google Meet link will follow.',
       '',
-      'AI Nour is an AI representation of Nour Chkair, not the person.'
+      'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.'
     ]),
     html: layout({
       heading: 'Appointment rescheduled',
       intro: `Hello ${name}, your appointment has been moved.`,
       rows: [['New time', `${start} (${booking.timezone || 'America/Toronto'})`], ...(meet ? [['Google Meet', meet]] : [])],
-      footer: ['AI Nour is an AI representation of Nour Chkair, not the person.']
+      footer: ['Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.']
     })
   };
 }
@@ -145,19 +145,19 @@ export function appointmentRescheduled({ contact, booking }) {
 export function appointmentCancelled({ contact, booking }) {
   const name = cleanLine(contact.full_name, 120);
   return {
-    subject: 'AI Nour — appointment cancelled',
+    subject: 'Nupa — appointment cancelled',
     text: plain([
       `Hello ${name},`,
       '',
-      'Your AI Nour appointment has been cancelled.',
+      'Your appointment with Nour has been cancelled (arranged through Nupa).',
       'Reply if you would like to rebook.',
       '',
-      'AI Nour is an AI representation of Nour Chkair, not the person.'
+      'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.'
     ]),
     html: layout({
       heading: 'Appointment cancelled',
-      intro: `Hello ${name}, your AI Nour appointment has been cancelled. Reply if you would like to rebook.`,
-      footer: ['AI Nour is an AI representation of Nour Chkair, not the person.']
+      intro: `Hello ${name}, your appointment with Nour has been cancelled (arranged through Nupa). Reply if you would like to rebook.`,
+      footer: ['Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.']
     })
   };
 }
@@ -167,22 +167,22 @@ export function appointmentReminder({ contact, booking, leadHours }) {
   const start = when(booking.startUtc, booking.timezone);
   const meet = booking.meetLink || '';
   return {
-    subject: `AI Nour — appointment reminder (${leadHours} hours)`,
+    subject: `Nupa — appointment reminder (${leadHours} hours)`,
     text: plain([
       `Hello ${name},`,
       '',
-      `A reminder that your AI Nour appointment is coming up in about ${leadHours} hour${leadHours === 1 ? '' : 's'}: ${start} (${booking.timezone || 'America/Toronto'}).`,
+      `A reminder that your appointment with Nour, arranged through Nupa, is coming up in about ${leadHours} hour${leadHours === 1 ? '' : 's'}: ${start} (${booking.timezone || 'America/Toronto'}).`,
       meet ? `Google Meet: ${meet}` : '',
       '',
       'If you need to reschedule or cancel, reply to this message.',
       '',
-      'AI Nour is an AI representation of Nour Chkair, not the person.'
+      'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.'
     ]),
     html: layout({
       heading: `Appointment in ${leadHours} hour${leadHours === 1 ? '' : 's'}`,
-      intro: `Hello ${name}, your AI Nour appointment is coming up.`,
+      intro: `Hello ${name}, your appointment with Nour, arranged through Nupa, is coming up.`,
       rows: [['When', `${start} (${booking.timezone || 'America/Toronto'})`], ...(meet ? [['Google Meet', meet]] : [])],
-      footer: ['If you need to reschedule or cancel, reply to this message.', 'AI Nour is an AI representation of Nour Chkair, not the person.']
+      footer: ['If you need to reschedule or cancel, reply to this message.', 'Nupa is an independent AI portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not speak for him.']
     })
   };
 }
@@ -191,7 +191,7 @@ export function internalAppointment({ contact, booking, event }) {
   const name = cleanLine(contact.full_name, 120);
   const start = when(booking.startUtc, booking.timezone);
   return {
-    subject: `AI Nour — appointment ${event}`,
+    subject: `Nupa — appointment ${event}`,
     text: plain([
       `Appointment ${event}.`,
       '',
@@ -203,7 +203,7 @@ export function internalAppointment({ contact, booking, event }) {
     ]),
     html: layout({
       heading: `Appointment ${event}`,
-      intro: 'An appointment changed in AI Nour.',
+      intro: 'An appointment changed in Nupa.',
       rows: [
         ['Name', name],
         ['Email', contact.email || 'not provided'],

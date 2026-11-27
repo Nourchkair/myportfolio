@@ -1,6 +1,6 @@
-# AI Nour — production private beta
+# Nupa (formerly AI Nour) — production private beta
 
-AI Nour is deployed in restricted private-beta mode: a Cloudflare Worker at `api.nourchkair.com`, an isolated production D1 database, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, bilingual retrieval, a feature-flagged portfolio companion, and a local private admin dashboard.
+Nupa is deployed in restricted private-beta mode: a Cloudflare Worker at `api.nourchkair.com`, an isolated production D1 database, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, bilingual retrieval, a feature-flagged portfolio companion, and a local private admin dashboard.
 
 The public portfolio is live at `https://nourchkair.com`. The AI companion mounts only through the private-beta entry, and every API request requires an individually revocable beta key. Unrestricted public access remains disabled.
 
@@ -146,7 +146,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
 - Production beta keys are SHA-256 hashed in D1; the full key is shown once at creation and can be revoked immediately.
-- The public portfolio does not mount AI Nour; the beta entry and server-side key check are both required.
+- The public portfolio does not mount Nupa; the beta entry and server-side key check are both required.
 - Live tokens are one-use, use a configurable provider-enforced expiry (default 300 seconds; 600-second maximum), use the **Iapetus** voice, carry a duration-scaled prepaid reservation (default $0.125 at 300s; $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
@@ -166,11 +166,23 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/live-spend-analysis.md` — Live exposure, abandoned connections, proxy comparison.
 - `docs/architecture.md` — module map and data flows.
 - `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
-- `../docs/ai-nour-v2-conversational.md` — V2 personality, grounding, visitor intelligence, presentations and quality results.
-- `../docs/ai-nour-v3-presentation.md` — V3 target registry, highlights, cursor, workflow tracing, presentation orchestration, tests and limitations.
-- `../privacy/index.html` and `../terms/index.html` — published bilingual legal pages (version 1.1, 18+ for AI Nour).
+- `../docs/ai-nour-v2-conversational.md` — Nupa V2 personality, grounding, visitor intelligence, presentations and quality results.
+- `../docs/ai-nour-v3-presentation.md` — Nupa V3 target registry, highlights, cursor, workflow tracing, presentation orchestration, tests and limitations.
+- `../privacy/index.html` and `../terms/index.html` — bilingual legal pages (version 1.2, 18+ for Nupa); version 1.1 remains production until deployment approval.
 - `../docs/legal-data-audit.md` — data, retention, deletion, admin, third-party and Gemini claim audit.
 - `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
+
+## Stored persona migration
+
+Source defaults now define Nupa, but the production D1 `persona_instruction` override still holds the former AI Nour identity. The migration is deliberately separate from the Worker deploy:
+
+```bash
+node scripts/migrate-persona-nupa.mjs --self-test  # migration logic only
+node scripts/migrate-persona-nupa.mjs              # dry run against production
+node scripts/migrate-persona-nupa.mjs --apply      # only after explicit approval
+```
+
+The script replaces only the legacy identity paragraph and related identity phrases, preserves unrelated custom instructions, and is safe to re-run. Technical identifiers such as the `ai-nour/` directory, `ainour:*` browser keys, `/api/*` routes, Worker/D1 names, environment variables, OAuth clients, Drive folders and the beta-key prefix are intentionally unchanged.
 
 ## Known limitations
 

@@ -26,7 +26,7 @@ test('conversation brief includes summary and recent turns', () => {
   });
   assert.match(brief, /Safiy/);
   assert.match(brief, /Visitor: Tell me about Safiy/);
-  assert.match(brief, /AI Nour: Safiy captures/);
+  assert.match(brief, /Nupa: Safiy captures/);
 });
 
 test('system prompt carries persona, context, brief and injection rules', () => {

@@ -1,4 +1,4 @@
-# AI Nour — real-device test plan
+# Nupa (formerly AI Nour) — real-device test plan
 
 This plan is for the isolated Phase 3 launch candidate. It does not require production deployment. Use the local Worker and portfolio; the only public exposure should be a temporary HTTPS tunnel if iOS microphone access is required.
 
@@ -33,7 +33,7 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 
 ## 2. Desktop Chrome checklist
 
-- [ ] The “Ask Nour AI” pill is visible on every page, immediately to the right of the menu bar.
+- [ ] The Nupa pill is visible on every page, immediately to the right of the menu bar.
 - [ ] The six visual states are reachable: closed pill, standard text, collapsed chat, expanded, voice, and mobile.
 - [ ] The panel can be dragged and keeps its position after close/reopen; it never leaves the viewport.
 - [ ] Text opens the transparent panel without shifting the portfolio; Voice opens the voice view.
@@ -45,7 +45,7 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 - [ ] Closing the panel with X does not end the text or voice session.
 - [ ] Voice button asks for microphone permission only after the click.
 - [ ] Listening, processing, speaking and idle states are visible in the panel and pill.
-- [ ] Voice user and AI transcripts appear inside the shared chat thread, with no message labels and no in-panel mic/orb/voice controls.
+- [ ] Voice visitor and Nupa transcripts appear inside the shared chat thread, with no message labels and no in-panel mic/orb/voice controls.
 - [ ] Speaking can be interrupted by talking over it; audio stops promptly.
 - [ ] The pill mic toggles voice; the chat panel stays transcript-only; text still works.
 - [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening the chat shows the continuing transcript, and the pill stops voice.
@@ -75,7 +75,7 @@ iOS requires HTTPS for microphone access. Use a temporary HTTPS tunnel for the p
 4. Enter the prototype access key.
 5. Test:
    - [ ] Page loads without layout breakage at 390×844 and 430×932.
-   - [ ] The Ask Nour AI pill is reachable with one hand and the mic starts voice mode.
+   - [ ] The Nupa pill is reachable with one hand and the mic starts voice mode.
    - [ ] Bottom sheet opens, scrolls, and respects safe-area insets.
    - [ ] Microphone permission prompt appears; denial produces a clear error.
    - [ ] Voice playback routes to the speaker; Bluetooth headset switch works.

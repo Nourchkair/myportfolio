@@ -274,8 +274,8 @@ export function createCrmService({ db, config, google, email }) {
 
     try {
       const event = await google.calendar.createEvent({
-        summary: `AI Nour — ${contact.full_name}`,
-        description: 'Appointment requested through AI Nour. AI Nour is an AI representation, not Nour Chkair.',
+        summary: `Nupa — ${contact.full_name}`,
+        description: 'Appointment requested through Nupa. Nupa is an independent AI portfolio assistant, not Nour Chkair.',
         start: new Date(startUtc).toISOString(),
         end: new Date(endUtc).toISOString(),
         timeZone: timezone,
@@ -473,8 +473,8 @@ export function createCrmService({ db, config, google, email }) {
     const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
     try {
       const event = await google.calendar.createEvent({
-        summary: `AI Nour — ${contact?.full_name || 'Appointment'}`,
-        description: 'Appointment requested through AI Nour. AI Nour is an AI representation, not Nour Chkair.',
+        summary: `Nupa — ${contact?.full_name || 'Appointment'}`,
+        description: 'Appointment requested through Nupa. Nupa is an independent AI portfolio assistant, not Nour Chkair.',
         start: new Date(booking.start_utc).toISOString(),
         end: new Date(booking.end_utc).toISOString(),
         timeZone: booking.timezone || 'America/Toronto',

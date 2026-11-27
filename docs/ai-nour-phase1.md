@@ -1,5 +1,7 @@
 # AI Nour — Phase 1 Foundation and Prototype Report
 
+> Historical record: this phase was produced under the former working name **AI Nour**. The visitor-facing assistant is now **Nupa**; internal paths, browser keys, API routes and other technical identifiers remain unchanged.
+
 **Date:** 26 November 2026  
 **Branch:** `phase1/ai-nour-prototype`  
 **Worktree:** `ai-nour-phase1/` (isolated from the main session)  

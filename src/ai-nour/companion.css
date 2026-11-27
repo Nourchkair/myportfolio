@@ -1,4 +1,4 @@
-/* AI Nour companion — scoped to the optional integration layer. */
+/* Nupa companion — scoped to the optional integration layer. Technical class names intentionally keep the ainour prefix. */
 
 /* ---------- top-right mode pill ---------- */
 .ainour-pill {
@@ -167,8 +167,9 @@ body[data-mode="index"] .ainour-pill {
   touch-action: none;
 }
 .ainour-panel.is-dragging .ainour-head { cursor: grabbing; }
-.ainour-id { display: flex; align-items: center; gap: 0; min-width: 0; }
+.ainour-id { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; }
 .ainour-id b { display: block; font-size: 13px; letter-spacing: .015em; color: #fff; }
+.ainour-id small { display: block; color: rgba(255,255,255,.38); font: 8px/1.25 ui-monospace, monospace; letter-spacing: .06em; text-transform: uppercase; }
 .ainour-head-actions { display: flex; gap: 4px; flex: none; }
 .ainour-icon {
   width: 27px;

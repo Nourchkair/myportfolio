@@ -10,8 +10,29 @@ const CONTROL_TARGETS = {
   'presentation-prev': 'Previous presentation step',
   'presentation-next': 'Next presentation step',
   'presentation-end': 'End presentation',
-  assistant: 'AI Nour assistant'
+  assistant: 'Nupa assistant'
 };
+const CHROME_LABELS = {
+  en: {
+    region: 'Nupa presentation controls',
+    pause: 'Pause',
+    resume: 'Resume',
+    end: 'End',
+    prev: 'Previous presentation step',
+    next: 'Next presentation step'
+  },
+  fr: {
+    region: 'Commandes de présentation de Nupa',
+    pause: 'Pause',
+    resume: 'Reprendre',
+    end: 'Terminer',
+    prev: 'Étape précédente',
+    next: 'Étape suivante'
+  }
+};
+function chromeLabels() {
+  return CHROME_LABELS[document.documentElement.dataset.ainourLocale === 'fr' ? 'fr' : 'en'];
+}
 
 let app = null;
 let dom = null;
@@ -671,7 +692,7 @@ function showTooltip(id, text = '') {
   const element = resolveElement(effectiveId(id));
   if (!element || !targetIsVisible(element)) return;
   tooltipId = id;
-  dom.tooltip.textContent = text || tooltipText(getTarget(id)) || 'AI Nour';
+  dom.tooltip.textContent = text || tooltipText(getTarget(id)) || 'Nupa';
   dom.tooltip.hidden = false;
   positionTooltip(element);
 }
@@ -784,9 +805,9 @@ function setCursorPosition(element) {
   const y = clamp(rect.top + Math.min(18, rect.height / 2), 16, innerHeight - 16);
   dom.cursor.hidden = false;
   dom.cursor.style.transform = `translate3d(${Math.round(x)}px, ${Math.round(y)}px, 0)`;
-  dom.cursor.dataset.label = cursorLabel || 'AI Nour';
+  dom.cursor.dataset.label = cursorLabel || 'Nupa';
   const label = dom.cursor.querySelector('.ai-pres-cursor-label');
-  if (label) label.textContent = cursorLabel || 'AI Nour';
+  if (label) label.textContent = cursorLabel || 'Nupa';
 }
 
 function drawCompareConnector() {
@@ -917,11 +938,11 @@ function updateBar() {
   dom.bar.hidden = !presentation.active;
   dom.bar.classList.toggle('is-paused', presentation.paused);
   if (!presentation.active) return;
-  const label = presentation.label || (presentation.projectId ? projectById(presentation.projectId)?.title : 'AI Nour');
+  const label = presentation.label || (presentation.projectId ? projectById(presentation.projectId)?.title : 'Nupa');
   const progress = presentation.totalSteps
     ? `${Math.max(0, presentation.stepIndex)} / ${presentation.totalSteps}`
     : '';
-  dom.bar.querySelector('.ai-pres-title').textContent = label || 'AI Nour';
+  dom.bar.querySelector('.ai-pres-title').textContent = label || 'Nupa';
   dom.bar.querySelector('.ai-pres-progress').textContent = progress;
   const pause = dom.bar.querySelector('[data-ai-pres="pause"]');
   const resume = dom.bar.querySelector('[data-ai-pres="resume"]');
@@ -1025,6 +1046,22 @@ function sync() {
   }
 }
 
+function applyChromeLocale() {
+  if (!dom) return;
+  const labels = chromeLabels();
+  dom.bar.setAttribute('aria-label', labels.region);
+  const pause = dom.bar.querySelector('[data-ai-pres="pause"]');
+  const resume = dom.bar.querySelector('[data-ai-pres="resume"]');
+  const end = dom.bar.querySelector('[data-ai-pres="end"]');
+  const prev = dom.bar.querySelector('[data-ai-pres="prev"]');
+  const next = dom.bar.querySelector('[data-ai-pres="next"]');
+  if (pause) { pause.textContent = labels.pause; pause.setAttribute('aria-label', labels.pause); }
+  if (resume) { resume.textContent = labels.resume; resume.setAttribute('aria-label', labels.resume); }
+  if (end) { end.textContent = labels.end; end.setAttribute('aria-label', labels.end); }
+  if (prev) prev.setAttribute('aria-label', labels.prev);
+  if (next) next.setAttribute('aria-label', labels.next);
+}
+
 function ensureDom() {
   if (dom) return dom;
   const layer = document.createElement('div');
@@ -1032,11 +1069,11 @@ function ensureDom() {
   layer.innerHTML = `
     <div class="ai-pres-spotlight" aria-hidden="true" hidden></div>
     <svg class="ai-pres-connectors" aria-hidden="true"></svg>
-    <div class="ai-pres-cursor" aria-hidden="true" hidden><span class="ai-pres-cursor-ring"></span><span class="ai-pres-cursor-dot"></span><span class="ai-pres-cursor-label">AI Nour</span></div>
+    <div class="ai-pres-cursor" aria-hidden="true" hidden><span class="ai-pres-cursor-ring"></span><span class="ai-pres-cursor-dot"></span><span class="ai-pres-cursor-label">Nupa</span></div>
     <div class="ai-pres-tooltip" role="status" aria-live="polite" hidden></div>
-    <div class="ai-pres-bar" role="region" aria-label="AI Nour presentation controls" hidden>
+    <div class="ai-pres-bar" role="region" aria-label="Nupa presentation controls" hidden>
       <span class="ai-pres-live" aria-hidden="true"></span>
-      <span class="ai-pres-copy"><b>AI Nour</b><span class="ai-pres-title"></span></span>
+      <span class="ai-pres-copy"><b>Nupa</b><span class="ai-pres-title"></span></span>
       <span class="ai-pres-progress"></span>
       <span class="ai-pres-controls">
         <button type="button" data-ai-pres="prev" aria-label="Previous presentation step">‹</button>
@@ -1061,6 +1098,8 @@ function ensureDom() {
     tooltip: layer.querySelector('.ai-pres-tooltip'),
     bar: layer.querySelector('.ai-pres-bar')
   };
+  applyChromeLocale();
+  document.addEventListener('ainour:locale', applyChromeLocale);
   const refresh = () => scheduleSync();
   addEventListener('scroll', refresh, { capture: true, passive: true });
   addEventListener('resize', refresh, { passive: true });

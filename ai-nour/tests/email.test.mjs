@@ -9,7 +9,7 @@ function config(overrides = {}) {
       provider: 'resend',
       sendEnabled: false,
       resendApiKey: 're_test',
-      resendFrom: 'AI Nour <appointments@mail.example.test>',
+      resendFrom: 'Nupa <appointments@mail.example.test>',
       internalTo: 'admin@example.test',
       webhookSecret: '',
       maxAttempts: 3,
@@ -27,7 +27,9 @@ test('email templates escape visitor content and include the AI disclosure', () 
   assert.match(template.subject, /inquiry received/);
   assert.equal(template.html.includes('<script>'), false);
   assert.match(template.html, /&lt;script&gt;/);
-  assert.match(template.text, /not the person/);
+  assert.match(template.text, /Nupa is an independent AI portfolio assistant operated by Nour Chkair/);
+  assert.match(template.text, /does not speak for him/);
+  assert.doesNotMatch(template.text, /AI Nour|AI representation/);
 });
 
 test('appointment template includes the unique Meet link when present', () => {

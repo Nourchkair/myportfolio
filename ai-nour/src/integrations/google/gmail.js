@@ -63,7 +63,7 @@ export function createGmailAdapter({ auth }) {
   async function draftRoundTripTest() {
     const draft = await createDraft({
       to: 'synthetic@example.invalid',
-      subject: 'AI Nour Phase 1 synthetic draft — delete me',
+      subject: 'Nupa synthetic draft — delete me',
       text: 'Synthetic Phase 1 draft. No send.'
     });
     try {

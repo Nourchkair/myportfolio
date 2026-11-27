@@ -1,4 +1,6 @@
-# AI Nour V2 — conversational intelligence upgrade
+# Nupa V2 — conversational intelligence upgrade (formerly AI Nour)
+
+> Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths and technical identifiers remain unchanged.
 
 Status: **deployed to the production private beta and validated.** Public access remains disabled.
 
@@ -19,7 +21,7 @@ The restrictive one-to-two-sentence persona was replaced with a 3.6k-character c
 - Point-of-view, respectful disagreement and counterarguments.
 - Specificity over corporate filler; banned-phrase guidance includes "unique combination", "commercial acumen" and "driving business growth".
 - Visitor interest, appropriate follow-up questions, and no mechanical question at the end of every reply.
-- Clear AI identity without repeating disclosure.
+- Clear Nupa identity without repeating disclosure.
 - Separate general knowledge/opinion from verified portfolio facts and Nour's beliefs.
 - Plain-text chat formatting; Markdown emphasis is stripped server-side.
 

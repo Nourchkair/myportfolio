@@ -1,6 +1,6 @@
-# AI Nour production private beta
+# Nupa (formerly AI Nour) production private beta
 
-Status: **production backend deployed and restricted to individually revocable beta keys. Legal pages are published with the 27 November 2026 release. Public/unrestricted AI access remains disabled.**
+Status: **production backend is deployed under the former AI Nour identity with legal version 1.1. The Nupa identity update, V3 presentation layer and legal version 1.2 are implemented and validated locally but are not deployed. Public/unrestricted AI access remains disabled.**
 
 ## 1. Live endpoints
 
@@ -51,7 +51,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 ## 3b. Conversational V2
 
 - Live voice: **Iapetus** (production Worker updated and verified in `/api/meta`).
-- Persona: production `persona_instruction` updated to the V2 character/grounding prompt.
+- Persona: source defaults now define Nupa. Production `persona_instruction` still contains the former AI Nour override and must be migrated separately with `scripts/migrate-persona-nupa.mjs` after deployment approval.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
 - Presentation controls: start, step, pause, resume and end; manual navigation cancels the presentation.
@@ -61,13 +61,21 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 ## 3c. Legal pages, consent and voice policy
 
-- Bilingual Privacy Policy and Terms of Use are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/` (version 1.1, effective 27 November 2026).
-- AI Nour requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
+- Production serves bilingual Privacy Policy and Terms of Use version 1.1 at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Version 1.2 (Nupa identity) is prepared locally and is published only with deployment approval.
+- Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
-- Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.1` before reading, chat, Live voice or tools.
+- Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.2` before reading, chat, Live voice or tools.
 - Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The $1 daily and $7 cumulative caps are unchanged. Iapetus is the voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
+
+## 3d. Nupa identity release (pending approval)
+
+- Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
+- Legal version **1.2** and consent **`2026-11-27-v1.2`** require existing sessions to re-accept. Production remains on version 1.1 and `2026-11-27-v1.1` until deployment.
+- The V3 presentation layer, Nupa branding and identity regression tests are validated locally. Do not push or deploy before explicit approval.
+- Deploy the Worker and static site, then run `node scripts/migrate-persona-nupa.mjs` as a dry run. Apply with `--apply` only after confirming the diff and preserving the prior persona for rollback.
+- Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
 ## 4. Administration
 
@@ -137,7 +145,7 @@ This was tested in production, including recovery.
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended.
+- Safe notes: rolling back the Worker to pre-V2 does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Before applying the Nupa persona migration, capture the current value from `GET /api/admin/persona`; restoring that text is the persona rollback.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
 ```bash
@@ -153,6 +161,13 @@ For the static site, redeploy the prior commit with `npm run deploy` from the re
 # Worker
 cd ai-nour
 npx wrangler deploy --config wrangler.production.toml
+
+# D1 (additive; 0006 clears only the untouched legacy persona seed)
+npx wrangler d1 migrations apply ai-nour-production --remote --config wrangler.production.toml
+
+# Stored persona override (dry run, then --apply after confirming the diff)
+node scripts/migrate-persona-nupa.mjs
+node scripts/migrate-persona-nupa.mjs --apply
 
 # Static portfolio
 cd ..
@@ -171,17 +186,22 @@ npm run deploy
 | Production D1 → Google Sheet | 11/11 | `results/production-crm-sheet-sync.json` |
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
-| Legal validator | 46/46 | `npm run validate:legal` |
+| Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
+| Nupa legal validator (v1.2 local) | 63/63 | `npm run validate:legal` |
+| Nupa opening browser | 9/9 | `results/nupa-v3-opening-browser.json` |
+| Nupa presentation browser | 22/22 | `results/nupa-v3-presentation-browser.json` |
+| Nupa identity in text, EN/FR | 2/2 | `results/nupa-v3-chat.json` |
+| Consolidated local Nupa evidence | all pass | `results/nupa-validation.json` |
 | Consent integration | 12/12 | `results/consent-tests.json` |
 | Live budget at 5 minutes | 9/9 | `results/live-budget-tests.json` |
-| Secret scan | 437 files, 0 hits | `results/secret-scan.txt` |
+| Secret scan (current tree) | 7 credential patterns, 0 hits | `results/nupa-validation.json` |
 
-Live browser check: `?ainour=beta` pill, gate, grounded reply, zero console errors; plain `https://nourchkair.com` showed no AI pill or panel.
+Earlier production live browser check: `?ainour=beta` pill, gate, grounded reply, zero console errors; plain `https://nourchkair.com` showed no AI pill or panel. The Nupa rows above are local mock-provider validation; a production Nupa browser/model check follows deployment.
 
 ## 12. Remaining manual action
 
 **Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires. The published legal URLs are now set in the OAuth branding page: `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Next manual action: remove unused `gmail.send`, `gmail.compose`, and `documents.readonly` scopes from Data Access before publishing/verification.
 
-A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine AI Nour administration does not require Cloudflare access.
+A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine Nupa administration does not require Cloudflare access.
 
 **Do not enable unrestricted public access until Nour completes product acceptance and explicitly approves the public launch. The Gemini project is on the free tier; do not submit personal/confidential information and do not enable public AI until the paid-tier/DPA decision is approved.**

@@ -74,7 +74,7 @@ try {
         if (message.setupComplete) events.push('setup');
         if (message.serverContent?.inputTranscription?.text) transcript += `\nYou: ${message.serverContent.inputTranscription.text}`;
         if (message.serverContent?.outputTranscription?.text) {
-          transcript += `\nAI Nour: ${message.serverContent.outputTranscription.text}`;
+          transcript += `\nNupa: ${message.serverContent.outputTranscription.text}`;
           responseDuringContextUpdate = responseDuringContextUpdate || !events.includes('user-question-sent');
         }
         for (const part of message.serverContent?.modelTurn?.parts || []) {
@@ -147,7 +147,7 @@ try {
       turnId: `v2-live-context-${Date.now()}`,
       locale: 'en',
       userText: 'What is this step, and how does it connect to the next one?',
-      assistantText: transcript.replace(/^AI Nour:\s*/gm, '').trim() || 'No transcript captured.',
+      assistantText: transcript.replace(/^Nupa:\s*/gm, '').trim() || 'No transcript captured.',
       reservationId: token.reservationId,
       usage: {
         textInput: promptDetails.text || 0,

@@ -28,8 +28,10 @@ Sources: Resend pricing and domain documentation, checked 26 November 2026.
 
 ## Proposed sending identity
 
+The visible sender name is **Nupa**; the address, subdomain and Resend API-key name (`ai-nour-production`) are internal identifiers and remain unchanged. Resend is currently disabled.
+
 ```text
-From:      AI Nour <appointments@mail.nourchkair.com>
+From:      Nupa <appointments@mail.nourchkair.com>
 Reply-To:  nourchkair@gmail.com (optional; set only if replies should leave the sending subdomain)
 Domain:    mail.nourchkair.com
 Return-Path: send.mail.nourchkair.com (Resend default; configurable only when the domain is added)
@@ -90,7 +92,7 @@ Non-secret variables:
 ```text
 EMAIL_PROVIDER=resend
 EMAIL_SEND_ENABLED=true
-RESEND_FROM=AI Nour <appointments@mail.nourchkair.com>
+RESEND_FROM=Nupa <appointments@mail.nourchkair.com>
 EMAIL_INTERNAL_TO=nourchkair@gmail.com
 EMAIL_MAX_ATTEMPTS=5
 EMAIL_RETRY_BASE_SECONDS=60

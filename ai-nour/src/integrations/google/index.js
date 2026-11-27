@@ -73,7 +73,7 @@ export function createGoogleServices(config, fetchImpl = fetch) {
       start.setUTCHours(15, 0, 0, 0);
       const end = new Date(start.getTime() + 15 * 60_000);
       const event = await calendar.createEvent({
-        summary: 'AI Nour Phase 1 synthetic — delete me',
+        summary: 'Nupa synthetic — delete me',
         description: 'Synthetic Phase 1 test. No attendees.',
         start: start.toISOString(),
         end: end.toISOString(),

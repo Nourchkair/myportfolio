@@ -1,5 +1,7 @@
 # AI Nour — Phase 0A harnesses
 
+> Historical record: this phase was produced under the former working name **AI Nour**. The visitor-facing assistant is now **Nupa**; internal paths, browser keys, API routes and other technical identifiers remain unchanged.
+
 Reproducible validation tools for the AI Nour feasibility phase. Everything here is development-only: no production deployment, no real email sends, no attendees, no billing activation.
 
 ## Safety invariants
