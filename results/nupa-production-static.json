@@ -33,14 +33,17 @@
     "privacy": {
       "status": 200,
       "version": "1.2",
-      "sha256": "3add16f213ccc50780e618e7cbef85a959d998c250e88d0bfcdf0c71e154d4ba"
+      "english": true,
+      "french": true
     },
     "terms": {
       "status": 200,
       "version": "1.2",
-      "sha256": "66305b947cec5ba9c6f3dcd95a6793e7f8720948390d48ebcda9069a1bc1075d"
+      "english": true,
+      "french": true
     },
     "unauthMeta": 401,
-    "unauthAdmin": 401
+    "unauthAdmin": 401,
+    "note": "Response hashes are intentionally omitted because Cloudflare email obfuscation randomizes protected email markup on each request."
   }
 }

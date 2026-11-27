@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T08:39:06.082Z",
+  "generatedAt": "2026-11-27T08:41:00Z",
   "status": "Nupa V3 private beta deployed",
   "sourceCommit": "afe2c43",
   "worker": {
@@ -16,8 +16,10 @@
   "legal": {
     "privacyVersion": "1.2",
     "termsVersion": "1.2",
-    "privacySha256": "9b70f2b9e803603815df03a447192d9e25f27e2080b6f3b52d97484a1c5f0b97",
-    "termsSha256": "029178b11623f42a8811ebfd227a98e7fc2ec873cc70b6f506b37f15a849c0b5"
+    "published": true,
+    "english": true,
+    "french": true,
+    "note": "Cloudflare email obfuscation makes full-page hashes non-deterministic; content/version checks are used instead."
   },
   "consentVersion": "2026-11-27-v1.2",
   "persona": {
@@ -82,6 +84,13 @@
       "liveBudget": 9,
       "legal": 63,
       "portfolio": 261
+    },
+    "finalState": {
+      "evidence": "results/nupa-production-final-state.json",
+      "health": 200,
+      "personaLength": 3986,
+      "legalVersion": "1.2",
+      "dailyRemainingUsdMicros": 57340
     }
   },
   "notRun": [

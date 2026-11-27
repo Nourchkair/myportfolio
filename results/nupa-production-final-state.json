@@ -1,0 +1,81 @@
+{
+  "generatedAt": "2026-11-27T08:40:53.305Z",
+  "health": {
+    "status": 200,
+    "ok": true,
+    "service": "ai-nour-production",
+    "version": "phase4-0.4.0",
+    "d1": true,
+    "error": null,
+    "textProvider": "gemini",
+    "liveProvider": "gemini",
+    "time": "2026-11-27T08:40:52.940Z"
+  },
+  "worker": {
+    "version": "bffabd0f-d1ca-4663-a897-b42ea9e7b08c",
+    "environment": "production"
+  },
+  "pages": {
+    "deploymentId": "93ce9423-261b-480c-98dd-a1aad6925234",
+    "source": "afe2c43"
+  },
+  "flags": {
+    "assistant_enabled": true,
+    "text_enabled": true,
+    "live_enabled": true,
+    "prototype_enabled": true,
+    "google_writes_enabled": false
+  },
+  "models": {
+    "text": "gemini-flash-lite-latest",
+    "live": "gemini-3.8-live",
+    "voice": "Iapetus"
+  },
+  "limits": {
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "liveSessionSeconds": 300,
+    "maxLiveSessionSeconds": 600
+  },
+  "budget": {
+    "dailyUsdMicros": 942660,
+    "cumulativeUsdMicros": 1839523,
+    "dailySpentUsdMicros": 942660,
+    "cumulativeSpentUsdMicros": 1839523,
+    "heldLiveReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 57340,
+    "cumulativeRemainingUsdMicros": 5160477,
+    "allowed": true
+  },
+  "persona": {
+    "length": 3986,
+    "sha256": "3754d125495465a74c8ab2bd71ce2867c440b19acf4390d54ccc84e85aa16f0f",
+    "legacyName": false,
+    "identityParagraphs": 1,
+    "personalityIndependence": true
+  },
+  "legal": {
+    "privacyVersion": "1.2",
+    "termsVersion": "1.2",
+    "privacyNupa": 35,
+    "termsNupa": 51,
+    "aiNour": false,
+    "english": true,
+    "french": true
+  },
+  "betaKey": {
+    "status": 200,
+    "tester": {
+      "id": "c12b3c7b-fd1b-41b4-a71f-f25fe6f8da7e",
+      "purpose": "primary-acceptance",
+      "prefix": "ainour_beta_bb9628…"
+    }
+  },
+  "unauth": {
+    "meta": 401,
+    "admin": 401
+  },
+  "publicAccess": true
+}
