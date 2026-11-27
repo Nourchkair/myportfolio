@@ -1,7 +1,7 @@
 const p = await openTab('http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8805&v=' + Date.now());
 await p.setViewportSize({ width: 1440, height: 900 });
 await p.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.3', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');

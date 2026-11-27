@@ -126,13 +126,13 @@ const accepted = await beta.evaluate(() => ({
   gateVisible: !document.querySelector('#ainourGate').hidden,
   consentHidden: document.querySelector('#ainourConsent').hidden
 }));
-check('Continue alone records age, Terms and Privacy acceptance', accepted.consent.version === '2026-11-27-v1.2' && accepted.consent.age18 === true && accepted.consent.terms === true && accepted.consent.privacy === true && accepted.gateVisible === true && accepted.consentHidden === true, accepted);
+check('Continue alone records age, Terms and Privacy acceptance', accepted.consent.version === '2026-11-27-v1.3' && accepted.consent.age18 === true && accepted.consent.terms === true && accepted.consent.privacy === true && accepted.gateVisible === true && accepted.consentHidden === true, accepted);
 
 const indie = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent(api)}&v=${Date.now()}`);
 await indie.setViewportSize({ width: 1440, height: 900 });
 await indie.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 30000 });
 await indie.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.3', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');
@@ -155,7 +155,7 @@ const ready = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent
 await ready.setViewportSize({ width: 1440, height: 900 });
 await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 30000 });
 await ready.evaluate((key) => {
-  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.3', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
   localStorage.setItem('ainour:locale', 'en');
   localStorage.removeItem('ainour:session');

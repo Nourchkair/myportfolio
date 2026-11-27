@@ -33,24 +33,24 @@ const health = await request('/api/health');
 check('production health endpoint', health.status === 200 && health.body.ok === true && health.body.d1 === true, { status: health.status, service: health.body.service, version: health.body.version, d1: health.body.d1 });
 
 const noKey = await request('/api/meta');
-check('missing beta key is rejected', noKey.status === 401, { status: noKey.status });
+check('public meta is reachable without a key', noKey.status === 200 && Array.isArray(noKey.body.tools), { status: noKey.status });
 const badKey = await request('/api/meta', { headers: { 'x-prototype-key': `ainour_beta_${'0'.repeat(64)}` } });
-check('invalid beta key is rejected', badKey.status === 401, { status: badKey.status });
+check('an arbitrary key is ignored in public mode', badKey.status === 200 && Array.isArray(badKey.body.tools), { status: badKey.status });
 const validMeta = await request('/api/meta', { headers: { 'x-prototype-key': validation.key } });
-check('valid beta key is accepted', validMeta.status === 200 && Array.isArray(validMeta.body.tools), { status: validMeta.status, version: validMeta.body.version, flags: validMeta.body.flags });
+check('public meta exposes the tool surface', validMeta.status === 200 && Array.isArray(validMeta.body.tools), { status: validMeta.status, version: validMeta.body.version, flags: validMeta.body.flags });
 
 const session = await request('/api/session', {
   method: 'POST',
-  headers: { 'x-prototype-key': validation.key, 'x-owner-token': owner },
-  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.2', privacyVersion: '2026-11-27-v1.2', acceptedAt: Date.now() } }
+  headers: { 'x-owner-token': owner },
+  body: { locale: 'en', consent: { age18: true, termsVersion: '2026-11-27-v1.3', privacyVersion: '2026-11-27-v1.3', acceptedAt: Date.now() } }
 });
-check('authorized beta session is created', session.status === 201 && Boolean(session.body.session?.id), { status: session.status });
+check('public session is created without a key', session.status === 201 && Boolean(session.body.session?.id), { status: session.status });
 const sessionId = session.body.session?.id;
 
 const adminStatus = await request('/api/admin/status', { headers: { authorization: `Bearer ${admin.ADMIN_TOKEN}` } });
 check('production admin bearer works', adminStatus.status === 200 && adminStatus.body.ok === true, { status: adminStatus.status, environment: adminStatus.body.environment, version: adminStatus.body.version });
-check('production beta access is required', adminStatus.body.security?.betaAccessRequired === true, { security: adminStatus.body.security });
-check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 1_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
+check('production public access is enabled', adminStatus.body.security?.publicAccess === true && adminStatus.body.security?.betaAccessRequired === false, { security: adminStatus.body.security });
+check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 3_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
 check('Google integrations are configured', adminStatus.body.google?.configured === true && adminStatus.body.google?.spreadsheet === true && adminStatus.body.google?.calendar === true, { google: adminStatus.body.google });
 check('external writes remain disabled', adminStatus.body.flags?.google_writes_enabled === false, { google_writes_enabled: adminStatus.body.flags?.google_writes_enabled });
 check('Resend remains disabled', adminStatus.body.email?.sendEnabled === false, { email: adminStatus.body.email });
@@ -78,7 +78,7 @@ const evilCors = await request('/api/session', {
 check('production CORS rejects other origins', evilCors.status === 204 && !evilCors.headers.get('access-control-allow-origin'), { status: evilCors.status, allowOrigin: evilCors.headers.get('access-control-allow-origin') });
 
 const testers = await request('/api/admin/beta-testers', { headers: { authorization: `Bearer ${admin.ADMIN_TOKEN}` } });
-check('beta tester inventory is admin-only', testers.status === 200 && testers.body.betaAccessRequired === true && (testers.body.testers || []).some((item) => item.id === validation.id && item.status === 'active'), { status: testers.status, active: testers.body.testers?.filter((item) => item.status === 'active').length });
+check('legacy beta tester inventory is admin-only', testers.status === 200 && testers.body.betaAccessRequired === false && testers.body.publicAccess === true, { status: testers.status, security: { betaAccessRequired: testers.body.betaAccessRequired, publicAccess: testers.body.publicAccess } });
 
 const output = {
   generatedAt: new Date().toISOString(),

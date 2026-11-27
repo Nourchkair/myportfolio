@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production private beta
 
-Status: **Nupa V3 is deployed to the production private beta. Legal version 1.2 is published, consent `2026-11-27-v1.2` is enforced, the production persona is Nupa, and the daily testing cap is $3.00. Public/unrestricted AI access remains disabled.**
+Status: **Nupa V3 is deployed to the production private beta. Legal version 1.2 is published, consent `2026-11-27-v1.3` is enforced, the production persona is Nupa, and the daily testing cap is $3.00. Public/unrestricted AI access remains disabled.**
 
 ## 1. Live endpoints
 
@@ -64,7 +64,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - Production serves bilingual Privacy Policy and Terms of Use version 1.2 at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
-- Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.2` before reading, chat, Live voice or tools.
+- Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.3` before reading, chat, Live voice or tools.
 - Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The $1 daily and $7 cumulative caps are unchanged. Iapetus is the voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
@@ -72,7 +72,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 ## 3d. Nupa identity release (deployed)
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
-- Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
+- Legal version **1.2** and consent **`2026-11-27-v1.3`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
 - Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `646d8b2c-e735-4c0f-ad0f-9e6c494a4773` (source `bcfa0e0`) are live.
 - The daily spending cap was raised to **$3.00** for production acceptance testing; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.

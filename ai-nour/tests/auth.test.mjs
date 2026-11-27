@@ -30,6 +30,12 @@ test('prototype and admin auth are enforced server-side', async () => {
   assert.throws(() => requireAdmin(bad, config), /Admin authentication/);
 });
 
+test('public access requires no key while admin auth remains enforced', async () => {
+  const config = { prototypeAccessKey: '', adminToken: 'admin-key', adminEnabled: true, betaAccessRequired: false, publicAccess: true };
+  await assert.doesNotReject(() => requirePrototypeKey(new Request('http://local/api'), config));
+  await assert.rejects(() => requirePrototypeKey(new Request('http://local/api', { headers: { 'x-prototype-key': 'anything' } }), { ...config, publicAccess: false }), /prototype access key/);
+});
+
 test('private-beta keys are hashed, server-validated and revocable', async () => {
   const key = `ainour_beta_${'a'.repeat(64)}`;
   const hash = await sha256Hex(key);

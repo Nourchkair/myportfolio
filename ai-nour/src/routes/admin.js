@@ -35,6 +35,7 @@ export function registerAdminRoutes(router, services) {
       },
       security: {
         betaAccessRequired: config.betaAccessRequired,
+        publicAccess: config.publicAccess,
         adminEnabled: config.adminEnabled
       },
       email: {

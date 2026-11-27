@@ -4,10 +4,11 @@ import { PROFESSIONAL_CHAPTERS } from '../data/journey.js';
 const params = new URLSearchParams(location.search);
 const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
 const DEV = params.get('ainour') === 'dev' && LOCAL;
+const PUBLIC_ACCESS = !LOCAL;
 const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
-const CONSENT_VERSION = '2026-11-27-v1.2';
+const CONSENT_VERSION = '2026-11-27-v1.3';
 const CONSENT_STORE = 'ainour:consent';
 const MIC_CONSENT_STORE = 'ainour:mic-consent';
 
@@ -421,7 +422,7 @@ function mount() {
       attributeFilter: ['class', 'data-mode']
     });
   }
-  if (state.key) init();
+  if (PUBLIC_ACCESS || state.key) init();
   else showGate();
 
   if (DEV) {
@@ -891,7 +892,7 @@ async function openPanel() {
     setSize(state.size);
   }
   updatePill();
-  if (!state.key) showGate();
+  if (!PUBLIC_ACCESS && !state.key) showGate();
   else if (!state.ready) await init();
   if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
   updateContext();
@@ -1160,7 +1161,7 @@ async function loadSession() {
 
 async function init() {
   if (!state.consent) return showConsent();
-  if (!state.key) return showGate();
+  if (!PUBLIC_ACCESS && !state.key) return showGate();
   try {
     state.meta = await api('/api/meta');
     const loaded = await loadSession();

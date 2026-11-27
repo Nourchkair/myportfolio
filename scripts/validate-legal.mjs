@@ -33,6 +33,7 @@ check('privacy: French independent assistant identity', /assistant de portfolio 
 check('privacy: own opinions are not Nour beliefs', /Nupa's own opinions and conclusions are not Nour's documented beliefs/i.test(privacy));
 check('privacy: French own opinions are not Nour beliefs', /Les opinions et conclusions de Nupa lui appartiennent/i.test(privacy));
 check('privacy: no AI representation language', !/AI representation|digital twin|digital version|AI replica/i.test(privacy) && !/représentation par IA|jumeau numérique|réplique/i.test(privacy));
+check('privacy: public access without beta key', /available to visitors aged 18 and older/i.test(privacy) && /does not require an account or access key/i.test(privacy) && !/beta key|private-beta|restricted private beta|clé de bêta|bêta privée restreinte/i.test(privacy));
 check('privacy: Gemini terms and tiers', /23 March 2026/i.test(privacy) && /unpaid Gemini API quota/i.test(privacy) && /paid Gemini API quota/i.test(privacy));
 check('privacy: EEA paid requirement', /EEA, Switzerland, or the UK/i.test(privacy));
 check('privacy: current free-tier disclosure', /production Gemini project is on the free tier/i.test(privacy));
@@ -49,15 +50,16 @@ check('terms: no authority to bind Nour', /no authority to bind Nour/i.test(term
 check('terms: own opinions are not Nour beliefs', /Nupa's own opinions and conclusions are not Nour's documented beliefs/i.test(terms));
 check('terms: French own opinions are not Nour beliefs', /Les opinions et conclusions de Nupa lui appartiennent/i.test(terms));
 check('terms: no AI representation language', !/AI representation|digital twin|digital version|AI replica/i.test(terms) && !/représentation par IA|jumeau numérique|réplique/i.test(terms));
+check('terms: public access without beta key', /available to visitors aged 18 and older/i.test(terms) && /No account or access key is required/i.test(terms) && !/beta key|private-beta|restricted private beta|clé de bêta|bêta privée restreinte/i.test(terms));
 check('terms: high-impact restriction', /high-impact/i.test(terms));
-check('legal version 1.2', /Version 1\.2 · Effective 27 November 2026/.test(privacy) && /Version 1\.2 · Effective 27 November 2026/.test(terms));
+check('legal version 1.3', /Version 1\.3 · Effective 27 November 2026/.test(privacy) && /Version 1\.3 · Effective 27 November 2026/.test(terms));
 check('legal current branding', !/AI Nour|AI-Nour/.test(privacy + terms) && /Nupa/.test(privacy) && /Nupa/.test(terms));
 check('legal footer', index.includes('class="legal-foot"') && index.includes('href="/privacy/"') && index.includes('href="/terms/"'));
 check('contact legal links', index.includes('class="contact-legal"'));
 check('reading legal links', readPage.includes('href="/privacy/"') && readPage.includes('href="/terms/"'));
 check('assistant consent gate', companion.includes("consent.id = 'ainourConsent'") && /By clicking Continue, you confirm you are 18 or older/.test(companion) && /agree to the/.test(companion));
 check('assistant no separate acceptance checkbox', !companion.includes('id="ainourAgree"') && !companion.includes('id="ainourAge"') && !companion.includes('age16'));
-check('assistant current consent version', companion.includes("2026-11-27-v1.2"));
+check('assistant current consent version', companion.includes("2026-11-27-v1.3"));
 check('assistant no mic-error label', !companion.includes('Mic error'));
 check('assistant microphone consent', companion.includes('id="ainourMicConsent"') && companion.includes('Allow microphone'));
 check('assistant disclaimer', companion.includes('id="ainourDisclaimer"') && companion.includes('can make mistakes'));

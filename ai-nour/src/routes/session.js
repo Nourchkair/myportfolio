@@ -38,7 +38,7 @@ export function registerSessionRoutes(router, services) {
     const body = await readJson(request);
     const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
     const consent = normalizeConsent(body.consent);
-    if (config.betaAccessRequired && !consent) {
+    if ((config.betaAccessRequired || config.publicAccess) && !consent) {
       throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
     }
     const session = await createSessionForOwner({

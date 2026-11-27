@@ -39,6 +39,7 @@ export function loadConfig(env = {}) {
     version: 'phase4-0.4.0',
     prototypeAccessKey: env.PROTOTYPE_ACCESS_KEY || '',
     betaAccessRequired: bool(env, 'BETA_ACCESS_REQUIRED', false),
+    publicAccess: bool(env, 'PUBLIC_ACCESS', false),
     adminToken: env.ADMIN_TOKEN || '',
     adminEnabled: bool(env, 'ADMIN_ENABLED', DEFAULTS.adminEnabled),
     crmWritesEnabled: bool(env, 'ENABLE_CRM_WRITES', false),
@@ -106,7 +107,7 @@ export function loadConfig(env = {}) {
   };
 
   const missing = [];
-  if (!config.prototypeAccessKey && !config.betaAccessRequired) missing.push('PROTOTYPE_ACCESS_KEY');
+  if (!config.prototypeAccessKey && !config.betaAccessRequired && !config.publicAccess) missing.push('PROTOTYPE_ACCESS_KEY');
   if (config.adminEnabled && !config.adminToken) missing.push('ADMIN_TOKEN');
   if (config.textProvider === 'gemini' && !config.gemini.apiKey) missing.push('GEMINI_API_KEY');
   if (config.liveProvider === 'gemini' && !config.gemini.apiKey) missing.push('GEMINI_API_KEY');

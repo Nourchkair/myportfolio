@@ -57,7 +57,7 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 
 | Consent | Implementation | Status |
 | --- | --- | --- |
-| 18+ eligibility and Terms/Privacy before AI use | One Continue button confirms 18+ and Terms/Privacy acceptance; `CONSENT_VERSION=2026-11-27-v1.2`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
+| 18+ eligibility and Terms/Privacy before AI use | One Continue button confirms 18+ and Terms/Privacy acceptance; `CONSENT_VERSION=2026-11-27-v1.3`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
 | Server-side consent | When `BETA_ACCESS_REQUIRED=true`, `/api/session`, new `/api/chat` sessions and new Live sessions require a valid `age18`/terms/privacy consent object; test returned `CONSENT_REQUIRED` without it and `201` with it | Verified with temporary beta-gated Worker (12/12) |
 | Existing sessions | `GET /api/session/:id`, chat, Live token/turn and tools reject stale or missing consent with `CONSENT_REQUIRED`; `POST /api/session/:id/consent` records the current version and timestamp without extending the session expiry | Verified with temporary beta-gated Worker |
 | Microphone consent | Inline assistant consent strip before `getUserMedia`; consent stored in `sessionStorage` for the tab; no microphone request occurs if cancelled | Verified in browser (cancel, budget, permission and missing-device paths) |
@@ -130,7 +130,7 @@ Current implementation:
 | Portfolio usable without AI/account | Verified | Default portfolio mounts no AI; reading view assistant-free. |
 | No advertising/analytics/tracking | Verified | No analytics/ad code found; only local preferences, AI session storage, admin cookie. |
 | No sale of personal information | Verified | No sale path, no ad/CRM resale. |
-| Age 18+ for Nupa | Verified in Terms, one-button acceptance UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.2` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
+| Age 18+ for Nupa | Verified in Terms, one-button acceptance UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.3` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
 | Microphone consent before processing | Verified | Inline assistant strip; browser permission follows separately. |
 | Contact/appointment consent | Verified | API consent scopes + appointment guard; public inquiry/booking UI is currently restricted/disabled. |
 | Conversation retention 7 days | Verified | Rolling expiry + cleanup; cleanup depends on cron running. |
@@ -153,7 +153,7 @@ Current implementation:
 4. **Cost/audit retention:** `cost_events`, `live_tokens`, `admin_audit`, and `action_ledger` are not auto-expired. The policy says they may be retained longer for accounting/security. Consider documented maximum periods.
 5. **Google processing:** The policy cannot guarantee Google's retention or model-improvement behaviour. Do not add a "never used for training" claim about Google. If a paid Gemini tier with stronger data-processing terms is adopted, update the policy.
 6. **Microphone consent record:** Consent is stored in browser `sessionStorage`; it is not written to the server as a separate audit record. The policy only says the interface asks for microphone consent. If a server-side consent record is required, add one.
-7. **Age/consent enforcement:** New and existing production sessions are enforced when `BETA_ACCESS_REQUIRED=true`. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.2`.
+7. **Age/consent enforcement:** New and existing production sessions are enforced when `BETA_ACCESS_REQUIRED=true`. Existing local consent and session consent from version `2026-11-27` are rejected until the visitor accepts `2026-11-27-v1.3`.
 8. **Data residency:** D1 is ENAM; Google/Cloudflare may process globally. The policy discloses this and does not promise Canadian-only processing.
 9. **CRM Sheet deletion:** Removing a D1 row does not automatically remove the Sheet row. The operator must delete the mirror row. Document this in the deletion runbook.
 10. **OAuth token:** The current Testing refresh token expires in about 6.5 days. This is operational, not a privacy statement, but it must be resolved for a durable beta.
@@ -184,11 +184,11 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 10. Nupa identity update (version 1.2)
 
-**Status:** deployed to the production private beta on 27 November 2026. Legal version 1.2 is published, consent version `2026-11-27-v1.2` is enforced, and the production persona is Nupa.
+**Status:** deployed to the production private beta on 27 November 2026. Legal version 1.2 is published, consent version `2026-11-27-v1.3` is enforced, and the production persona is Nupa.
 
 - The assistant is now **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour, not a digital version, twin, replica or AI representation of him, and it never impersonates him.
 - Nupa speaks about Nour in the third person and about itself in the first person. Its own opinions and conclusions are expressly distinguished from Nour's documented beliefs.
-- The Privacy Policy and Terms of Use are published at version **1.2**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.2`**, so existing sessions must re-accept before text, voice or tools.
+- The Privacy Policy and Terms of Use are published at version **1.2**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.3`**, so existing sessions must re-accept before text, voice or tools.
 - No data practice, retention period, eligibility rule, third-party processor, spending cap or security control changed for the rename. The existing 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state and restricted private beta remain.
 - The stored production persona override requires migration because changing source defaults alone does not update D1. `ai-nour/scripts/migrate-persona-nupa.mjs` performs a non-destructive identity replacement, preserves unrelated custom text, and supports `--self-test` and dry-run before `--apply`.
 - The Google Drive folder names, OAuth client identifiers, Worker/D1 names, API routes, environment variables, secrets, beta-key prefix and browser storage keys are intentionally unchanged to avoid destructive migration.

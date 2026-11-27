@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T18:34:55.836Z",
+  "generatedAt": "2026-11-27T18:45:56.761Z",
   "passed": 20,
   "failed": 0,
   "total": 20,
@@ -167,11 +167,11 @@
       "pass": true,
       "detail": {
         "consent": {
-          "version": "2026-11-27-v1.2",
+          "version": "2026-11-27-v1.3",
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T18:34:48.519Z"
+          "acceptedAt": "2026-11-27T18:45:50.758Z"
         },
         "gateVisible": true,
         "consentHidden": true

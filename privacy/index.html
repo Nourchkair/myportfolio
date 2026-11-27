@@ -23,7 +23,7 @@
 </head>
 <body>
 <main>
-  <div class="top"><a class="brand" href="/">Nour Chkair / Nupa</a><span class="meta">Version 1.2 · Effective 27 November 2026</span></div>
+  <div class="top"><a class="brand" href="/">Nour Chkair / Nupa</a><span class="meta">Version 1.3 · Effective 27 November 2026</span></div>
   <nav class="lang" aria-label="Language"><a href="#english">English</a><a href="#francais" lang="fr">Français</a></nav>
 
   <section id="english" lang="en">
@@ -31,7 +31,7 @@
     <p class="meta">Nour Chkair · Ottawa, Ontario, Canada · Privacy contact: <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a></p>
 
     <div class="card">
-      <p><strong>In plain language.</strong> This policy covers both the portfolio and Nupa. You can browse the portfolio without using Nupa, without an account, and without advertising or analytics tracking. Nupa is an independent AI-powered portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not impersonate him. Text and voice are processed by Google Gemini. Do not share personal, sensitive, financial, health, confidential, or third-party information. Nupa is currently a restricted private beta; access requires an individually revocable beta key.</p>
+      <p><strong>In plain language.</strong> This policy covers both the portfolio and Nupa. You can browse the portfolio without using Nupa, without an account, and without advertising or analytics tracking. Nupa is an independent AI-powered portfolio assistant operated by Nour Chkair. Nupa is not Nour Chkair and does not impersonate him. Text and voice are processed by Google Gemini. Do not share personal, sensitive, financial, health, confidential, or third-party information. Nupa is available to visitors aged 18 and older; no account is required.</p>
     </div>
 
     <h2>1. Who is responsible</h2>
@@ -41,20 +41,20 @@
     <h3>Portfolio browsing</h3>
     <p>The portfolio works without an account. It stores a local visual environment preference in your browser. The static site does not use advertising cookies, cross-site tracking, or a third-party analytics product. Cloudflare, as the hosting and security provider, may process standard technical data such as IP address, user agent, requested URL, and security events under its terms.</p>
 
-    <h3>Private-beta access</h3>
-    <p>Nupa requires a beta key. We store a SHA-256 hash and short prefix of the key, a label, status, creation time, last-use time, and revocation time in Cloudflare D1. We do not store the full beta key server-side. Your browser keeps the key in <code>sessionStorage</code>; a random owner token and session identifier are kept in <code>localStorage</code> and hashed server-side where used for ownership checks.</p>
+    <h3>Access and session ownership</h3>
+    <p>Nupa does not require an account or access key. Your browser keeps a random owner token and session identifier in <code>localStorage</code>; they are hashed server-side where used for ownership checks. Rate limits and spending caps protect the service.</p>
 
     <h3>Conversations and AI processing</h3>
     <p>When you use Nupa, we process the text you enter, voice transcripts, assistant replies, conversation summaries, language, the portfolio section/project/flow/chapter you are viewing, navigation actions, inferred visitor context (such as whether you appear to be a recruiter, business owner, or technical visitor, and your stated interests), model/token usage, estimated cost, error data, timestamps, and the accepted eligibility/terms/privacy consent version and timestamp. We do not store microphone audio files; Live audio is streamed to Google Gemini for real-time processing, and transcripts may be stored as part of the conversation.</p>
 
     <h3>Inquiries, consent, and appointments</h3>
-    <p>When an inquiry or appointment workflow is enabled and you choose to use it, we may collect your name, email, optional phone number, organization, role, language, timezone, inquiry summary, requested service, optional budget/timeline, consent choices and evidence, requested appointment time, booking status, Calendar event identifier, and Google Meet link. These features are currently restricted; external CRM/Calendar writes are disabled in the private beta unless explicitly enabled.</p>
+    <p>When an inquiry or appointment workflow is enabled and you choose to use it, we may collect your name, email, optional phone number, organization, role, language, timezone, inquiry summary, requested service, optional budget/timeline, consent choices and evidence, requested appointment time, booking status, Calendar event identifier, and Google Meet link. External CRM/Calendar writes are disabled unless explicitly enabled.</p>
 
     <h3>Email delivery</h3>
-    <p>Resend is currently disabled. If transactional email is enabled, we would process the recipient address, message type, subject and body needed for delivery/retry, provider message identifier, delivery status, attempts, and bounce/complaint events. We do not use email for marketing in this beta.</p>
+    <p>Resend is currently disabled. If transactional email is enabled, we would process the recipient address, message type, subject and body needed for delivery/retry, provider message identifier, delivery status, attempts, and bounce/complaint events. We do not use email for marketing.</p>
 
     <h3>Administration and security</h3>
-    <p>The private administrator signs in with Google OAuth. We process the allowlisted Google account email/name, a signed admin session cookie, and audit records for administrative actions. The administrator can access conversations, CRM records, email job content and metadata, cost data, and audit/operational logs for support, quality, security, and operation of the beta.</p>
+    <p>The private administrator signs in with Google OAuth. We process the allowlisted Google account email/name, a signed admin session cookie, and audit records for administrative actions. The administrator can access conversations, CRM records, email job content and metadata, cost data, and audit/operational logs for support, quality, security, and operation of the service.</p>
 
     <h3>Cost and operational records</h3>
     <p>We keep pseudonymous request identifiers, model names, token counts, estimated costs, rate-limit counters, Live token reservations, and error/operational events to enforce spending caps, prevent abuse, diagnose failures, and keep the service reliable.</p>
@@ -65,7 +65,7 @@
     <h2>3. AI processing and Google Gemini</h2>
     <p>Nupa uses Google Gemini for text and real-time voice processing. Your prompts, responses, and Live audio/transcripts are sent to Google for processing. The browser receives only a short-lived Live token; the permanent Gemini API key stays server-side. Google processes this data under its Gemini API Additional Terms of Service (effective 23 March 2026), the Google APIs Terms of Service, the Generative AI Prohibited Use Policy, and Google's privacy terms.</p>
     <p>Google's terms distinguish unpaid and paid services. On unpaid Gemini API quota, Google uses prompts and responses to provide, improve, and develop its products and machine-learning technologies, and human reviewers may read, annotate, or process them; Google's terms prohibit submitting personal, sensitive, confidential, or third-party information to unpaid services. On paid Gemini API quota linked to an active Cloud Billing account, Google processes prompts and responses under its Data Processing Addendum and states that it does not use them to improve its products, but logs them for a limited period to detect prohibited use and for legal or regulatory disclosures. The current production Gemini project is on the free tier without an active Cloud Billing account, so the unpaid-service terms apply. Do not submit personal, sensitive, financial, health, confidential, or third-party information.</p>
-    <p>Google's terms require users of the Gemini API and API clients to be 18 or older, prohibit API clients directed towards or likely to be accessed by under-18 users, and require Paid Services when an API client is made available to users in the EEA, Switzerland, or the UK. Nupa is restricted to approved private-beta testers, and public AI access remains disabled. We do not control Google's independent retention, security, or model-improvement practices and cannot promise that Google will never use data to improve its services. If the project moves to paid quota, this policy will be updated before public access.</p>
+    <p>Google's terms require users of the Gemini API and API clients to be 18 or older, prohibit API clients directed towards or likely to be accessed by under-18 users, and require Paid Services when an API client is made available to users in the EEA, Switzerland, or the UK. Nupa is available to visitors aged 18 and older; rate limits and spending caps apply. We do not control Google's independent retention, security, or model-improvement practices and cannot promise that Google will never use data to improve its services. If the project moves to paid quota, this policy will be updated before any expanded access.</p>
     <p>We do not sell your information, use it for advertising, or use it to train our own generalized AI models. Nupa's own opinions and conclusions are not Nour's documented beliefs. AI outputs may be inaccurate, incomplete, or unexpected; they are not legal, financial, medical, or other professional advice.</p>
 
     <h2>4. Legal bases</h2>
@@ -79,7 +79,6 @@
       <tr><td><code>ainour:session</code></td><td>localStorage</td><td>Conversation session identifier</td><td>Until cleared or session expires</td></tr>
       <tr><td><code>ainour:locale</code></td><td>localStorage</td><td>English/French preference</td><td>Until cleared</td></tr>
       <tr><td><code>ainour:consent</code></td><td>localStorage</td><td>Eligibility/terms/privacy consent version and timestamp</td><td>Until cleared or policy version changes</td></tr>
-      <tr><td><code>ainour:key</code></td><td>sessionStorage</td><td>Private-beta access key</td><td>Tab session</td></tr>
       <tr><td><code>ainour:mic-consent</code></td><td>sessionStorage</td><td>Microphone consent for this tab</td><td>Tab session</td></tr>
       <tr><td><code>ainour_admin</code></td><td>HttpOnly cookie</td><td>Administrator session only</td><td>Up to 8 hours</td></tr>
     </table>
@@ -89,7 +88,6 @@
     <ul>
       <li><strong>Conversation sessions, messages, summaries, and visitor context:</strong> 7 days after the last activity by default; expired sessions are cleaned up on a scheduled run. You may request earlier deletion.</li>
       <li><strong>Voice audio:</strong> not stored as audio files by us; Google's processing is governed by its terms.</li>
-      <li><strong>Beta tester records:</strong> while beta access is active and for security/audit purposes; revoked keys stop working immediately. Deletion can be requested.</li>
       <li><strong>Contacts, inquiries, consent records, appointments, and the CRM Sheet:</strong> as long as needed to handle the inquiry/appointment and for legitimate business or legal purposes. They can be deleted on request unless retention is required by law or necessary for a dispute.</li>
       <li><strong>Email jobs:</strong> non-queued email content and delivery metadata are deleted after 30 days; queued/sending jobs remain until processed. Webhook events are deleted after 30 days. Resend is currently disabled.</li>
       <li><strong>Operational/error logs:</strong> up to 30 days.</li>
@@ -98,11 +96,11 @@
     </ul>
 
     <h2>7. Deletion, access, and your rights</h2>
-    <p>Email <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a> to request access, correction, deletion, a copy, restriction, or to withdraw consent. We may need to verify your identity and ownership of the relevant beta/session identifiers. We will respond within the time required by applicable law. Deletion may include D1 conversation/CRM records, CRM Sheet rows, queued email jobs, and Calendar events where applicable. Some records may be retained where required for legal, security, cost-accounting, or dispute purposes, and we will explain the limitation.</p>
-    <p>You can clear browser storage at any time to remove local tokens and preferences. You can revoke Google account access from your Google Account permissions page. You can ask for a beta key to be revoked immediately. If you are in Canada, you may contact the Office of the Privacy Commissioner of Canada; if you are in the EU/UK, you may contact your local supervisory authority.</p>
+    <p>Email <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a> to request access, correction, deletion, a copy, restriction, or to withdraw consent. We may need to verify your identity and ownership of the relevant session identifiers. We will respond within the time required by applicable law. Deletion may include D1 conversation/CRM records, CRM Sheet rows, queued email jobs, and Calendar events where applicable. Some records may be retained where required for legal, security, cost-accounting, or dispute purposes, and we will explain the limitation.</p>
+    <p>You can clear browser storage at any time to remove local tokens and preferences. You can revoke Google account access from your Google Account permissions page. If you are in Canada, you may contact the Office of the Privacy Commissioner of Canada; if you are in the EU/UK, you may contact your local supervisory authority.</p>
 
     <h2>8. Security and administrator access</h2>
-    <p>We use HTTPS, server-side secrets, hashed beta and owner credentials, short-lived Live tokens, a signed HttpOnly administrator session, Google OAuth with an allowlisted administrator email, a local-only admin surface bound to 127.0.0.1, rate limits, spending caps, tool allowlists, and audit/operational logs. The permanent Gemini, Google, and administrator credentials are not sent to the browser. No method of transmission or storage is completely secure; avoid sharing personal, sensitive, confidential, or third-party information.</p>
+    <p>We use HTTPS, server-side secrets, hashed owner credentials, short-lived Live tokens, a signed HttpOnly administrator session, Google OAuth with an allowlisted administrator email, a local-only admin surface bound to 127.0.0.1, rate limits, spending caps, tool allowlists, and audit/operational logs. The permanent Gemini, Google, and administrator credentials are not sent to the browser. No method of transmission or storage is completely secure; avoid sharing personal, sensitive, confidential, or third-party information.</p>
     <p>The administrator is Nour Chkair. Cloudflare, Google, and (if enabled) Resend personnel may process data under their own terms as service providers. We do not sell personal information or provide administrator access to advertisers.</p>
 
     <h2>9. International processing</h2>
@@ -118,7 +116,7 @@
     <p>Nupa's use and transfer to any other app of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a>, including the Limited Use requirements. Google Workspace data (CRM Sheet, Calendar, and app-created Drive files) is used only to provide the features described in this policy, for security, support, and legal compliance. We do not sell Google user data, use it for advertising, or use it to train generalized AI models. Gmail send is not part of the production path; Gmail drafts are an optional human-review fallback and are not currently enabled.</p>
 
     <h2>13. Changes</h2>
-    <p>We may update this policy as the beta changes. The version and effective date will be posted at the top of this page. Material changes will be presented before they take effect where required. Continued use after the effective date means the updated policy applies.</p>
+    <p>We may update this policy as the service changes. The version and effective date will be posted at the top of this page. Material changes will be presented before they take effect where required. Continued use after the effective date means the updated policy applies.</p>
 
     <h2>14. Contact</h2>
     <p>Privacy questions and requests: <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a>. Controller: Nour Chkair, Ottawa, Ontario, Canada.</p>
@@ -131,7 +129,7 @@
     <p class="meta">Nour Chkair · Ottawa (Ontario), Canada · Contact confidentialité : <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a></p>
 
     <div class="card">
-      <p><strong>En bref.</strong> La présente politique couvre le portfolio et Nupa. Vous pouvez consulter le portfolio sans utiliser Nupa, sans compte et sans publicité ni suivi analytique. Nupa est un assistant de portfolio indépendant, propulsé par l’IA et exploité par Nour Chkair. Nupa n’est pas Nour Chkair et ne se fait pas passer pour lui. Le texte et la voix sont traités par Google Gemini. Ne communiquez pas de renseignements personnels, sensibles, financiers, médicaux, confidentiels ou appartenant à des tiers. Nupa est actuellement en bêta privée restreinte; l'accès exige une clé individuelle révocable.</p>
+      <p><strong>En bref.</strong> La présente politique couvre le portfolio et Nupa. Vous pouvez consulter le portfolio sans utiliser Nupa, sans compte et sans publicité ni suivi analytique. Nupa est un assistant de portfolio indépendant, propulsé par l’IA et exploité par Nour Chkair. Nupa n’est pas Nour Chkair et ne se fait pas passer pour lui. Le texte et la voix sont traités par Google Gemini. Ne communiquez pas de renseignements personnels, sensibles, financiers, médicaux, confidentiels ou appartenant à des tiers. Nupa est accessible aux personnes de 18 ans ou plus; aucun compte n'est requis.</p>
     </div>
 
     <h2>1. Responsable</h2>
@@ -141,20 +139,20 @@
     <h3>Navigation dans le portfolio</h3>
     <p>Le portfolio fonctionne sans compte. Il conserve dans votre navigateur une préférence d'environnement visuel. Le site statique n'utilise ni témoins publicitaires, ni suivi inter-sites, ni produit d'analyse tiers. Cloudflare, comme fournisseur d'hébergement et de sécurité, peut traiter des données techniques standard (adresse IP, agent utilisateur, URL demandée, événements de sécurité) selon ses conditions.</p>
 
-    <h3>Accès à la bêta privée</h3>
-    <p>Nupa exige une clé de bêta. Nous conservons un hachage SHA-256 et un court préfixe de la clé, un libellé, l'état, la date de création, la dernière utilisation et la date de révocation dans Cloudflare D1. Nous ne conservons pas la clé complète sur le serveur. Votre navigateur garde la clé dans <code>sessionStorage</code>; un jeton de propriétaire aléatoire et un identifiant de session sont conservés dans <code>localStorage</code> et hachés côté serveur lorsqu'ils servent à vérifier la propriété.</p>
+    <h3>Accès et propriété de la session</h3>
+    <p>Nupa ne nécessite ni compte ni clé d'accès. Votre navigateur conserve un jeton de propriétaire aléatoire et un identifiant de session dans <code>localStorage</code>; ils sont hachés côté serveur lorsqu'ils servent à vérifier la propriété. Des limites de débit et des plafonds de dépenses protègent le service.</p>
 
     <h3>Conversations et traitement par IA</h3>
     <p>Lorsque vous utilisez Nupa, nous traitons le texte saisi, les transcriptions vocales, les réponses de l'assistant, les résumés, la langue, la section/projet/étape/chapitre consulté, les actions de navigation, le contexte inféré du visiteur (par exemple recruteur, propriétaire d'entreprise ou visiteur technique, ainsi que vos intérêts déclarés), l'utilisation de jetons, le coût estimé, les erreurs, les horodatages ainsi que la version et l'horodatage du consentement admissibilité/conditions/confidentialité accepté. Nous ne conservons pas de fichiers audio du microphone; l'audio Live est transmis à Google Gemini pour un traitement en temps réel, et les transcriptions peuvent être conservées avec la conversation.</p>
 
     <h3>Demandes, consentement et rendez-vous</h3>
-    <p>Lorsqu'un formulaire de demande ou de rendez-vous est activé et que vous choisissez de l'utiliser, nous pouvons recueillir votre nom, courriel, numéro de téléphone facultatif, organisation, rôle, langue, fuseau horaire, résumé de la demande, service demandé, budget/échéancier facultatifs, choix et preuves de consentement, heure demandée, état de la réservation, identifiant d'événement Calendar et lien Google Meet. Ces fonctions sont actuellement restreintes; les écritures externes CRM/Calendar sont désactivées dans la bêta privée sauf activation explicite.</p>
+    <p>Lorsqu'un formulaire de demande ou de rendez-vous est activé et que vous choisissez de l'utiliser, nous pouvons recueillir votre nom, courriel, numéro de téléphone facultatif, organisation, rôle, langue, fuseau horaire, résumé de la demande, service demandé, budget/échéancier facultatifs, choix et preuves de consentement, heure demandée, état de la réservation, identifiant d'événement Calendar et lien Google Meet. Les écritures externes CRM/Calendar sont désactivées sauf activation explicite.</p>
 
     <h3>Courriel transactionnel</h3>
-    <p>Resend est actuellement désactivé. Si le courriel transactionnel est activé, nous traiterions l'adresse du destinataire, le type de message, l'objet et le corps nécessaires à l'envoi et aux nouvelles tentatives, l'identifiant du fournisseur, l'état de livraison, les tentatives et les événements de rebond/plainte. Nous n'utilisons pas le courriel à des fins de marketing dans cette bêta.</p>
+    <p>Resend est actuellement désactivé. Si le courriel transactionnel est activé, nous traiterions l'adresse du destinataire, le type de message, l'objet et le corps nécessaires à l'envoi et aux nouvelles tentatives, l'identifiant du fournisseur, l'état de livraison, les tentatives et les événements de rebond/plainte. Nous n'utilisons pas le courriel à des fins de marketing.</p>
 
     <h3>Administration et sécurité</h3>
-    <p>L'administrateur privé se connecte avec Google OAuth. Nous traitons le courriel/nom du compte Google autorisé, un témoin de session administrateur signé et des registres d'audit des actions administratives. L'administrateur peut consulter les conversations, les dossiers CRM, le contenu et les métadonnées des courriels, les coûts et les journaux d'audit/exploitation pour le soutien, la qualité, la sécurité et l'exploitation de la bêta.</p>
+    <p>L'administrateur privé se connecte avec Google OAuth. Nous traitons le courriel/nom du compte Google autorisé, un témoin de session administrateur signé et des registres d'audit des actions administratives. L'administrateur peut consulter les conversations, les dossiers CRM, le contenu et les métadonnées des courriels, les coûts et les journaux d'audit/exploitation pour le soutien, la qualité, la sécurité et l'exploitation du service.</p>
 
     <h3>Coûts et exploitation</h3>
     <p>Nous conservons des identifiants de requête pseudonymes, les noms de modèles, le nombre de jetons, les coûts estimés, les compteurs de limitation de débit, les réservations de jetons Live et les événements d'erreur/exploitation afin d'appliquer les plafonds de dépenses, de prévenir les abus, de diagnostiquer les pannes et d'assurer la fiabilité.</p>
@@ -165,7 +163,7 @@
     <h2>3. Traitement par IA et Google Gemini</h2>
     <p>Nupa utilise Google Gemini pour le texte et la voix en temps réel. Vos requêtes, réponses et l'audio/transcriptions Live sont transmis à Google pour traitement. Le navigateur ne reçoit qu'un jeton Live de courte durée; la clé permanente de l'API Gemini reste sur le serveur. Google traite ces données selon les Conditions additionnelles d'utilisation de l'API Gemini (en vigueur le 23 mars 2026), les Conditions d'utilisation des API Google, la politique d'utilisation interdite de l'IA générative et les conditions de confidentialité de Google.</p>
     <p>Les conditions de Google distinguent les services non payants et payants. Avec le quota non payant de l'API Gemini, Google utilise les requêtes et les réponses pour fournir, améliorer et développer ses produits et technologies d'apprentissage automatique, et des réviseurs humains peuvent les lire, les annoter ou les traiter; les conditions de Google interdisent de soumettre des renseignements personnels, sensibles, confidentiels ou appartenant à des tiers aux services non payants. Avec le quota payant de l'API Gemini lié à un compte Cloud Billing actif, Google traite les requêtes et réponses selon son Addendum sur le traitement des données et déclare ne pas les utiliser pour améliorer ses produits, mais les journalise pendant une période limitée pour détecter les usages interdits et pour les divulgations légales ou réglementaires. Le projet Gemini de production actuel utilise le palier gratuit, sans compte Cloud Billing actif; les conditions des services non payants s'appliquent donc. Ne communiquez pas de renseignements personnels, sensibles, financiers, médicaux, confidentiels ou appartenant à des tiers.</p>
-    <p>Les conditions de Google exigent que les utilisateurs de l'API Gemini et des clients API aient 18 ans ou plus, interdisent les clients API destinés aux moins de 18 ans ou susceptibles d'être consultés par eux, et exigent les services payants lorsqu'un client API est offert dans l'EEE, en Suisse ou au Royaume-Uni. Nupa est réservé aux testeurs approuvés de la bêta privée, et l'accès public à l'IA demeure désactivé. Nous ne contrôlons pas la conservation, la sécurité ou les pratiques d'amélioration des modèles de Google et ne pouvons pas promettre que Google n'utilisera jamais les données pour améliorer ses services. Si le projet passe au quota payant, la présente politique sera mise à jour avant l'accès public.</p>
+    <p>Les conditions de Google exigent que les utilisateurs de l'API Gemini et des clients API aient 18 ans ou plus, interdisent les clients API destinés aux moins de 18 ans ou susceptibles d'être consultés par eux, et exigent les services payants lorsqu'un client API est offert dans l'EEE, en Suisse ou au Royaume-Uni. Nupa est accessible aux personnes de 18 ans ou plus; des limites de débit et des plafonds de dépenses s'appliquent. Nous ne contrôlons pas la conservation, la sécurité ou les pratiques d'amélioration des modèles de Google et ne pouvons pas promettre que Google n'utilisera jamais les données pour améliorer ses services. Si le projet passe au quota payant, la présente politique sera mise à jour avant toute expansion de l'accès.</p>
     <p>Nous ne vendons pas vos renseignements, ne les utilisons pas pour la publicité et ne les utilisons pas pour entraîner nos propres modèles d'IA généralisés. Les opinions et conclusions de Nupa lui appartiennent et ne représentent pas nécessairement les convictions documentées de Nour. Les réponses peuvent être inexactes, incomplètes ou inattendues; elles ne constituent pas des conseils juridiques, financiers, médicaux ou professionnels.</p>
 
     <h2>4. Bases juridiques</h2>
@@ -179,7 +177,6 @@
       <tr><td><code>ainour:session</code></td><td>localStorage</td><td>Identifiant de session de conversation</td><td>Jusqu'à effacement ou expiration</td></tr>
       <tr><td><code>ainour:locale</code></td><td>localStorage</td><td>Préférence français/anglais</td><td>Jusqu'à effacement</td></tr>
       <tr><td><code>ainour:consent</code></td><td>localStorage</td><td>Version et date du consentement admissibilité/conditions/confidentialité</td><td>Jusqu'à effacement ou changement de version</td></tr>
-      <tr><td><code>ainour:key</code></td><td>sessionStorage</td><td>Clé d'accès à la bêta privée</td><td>Session de l'onglet</td></tr>
       <tr><td><code>ainour:mic-consent</code></td><td>sessionStorage</td><td>Consentement au microphone pour cet onglet</td><td>Session de l'onglet</td></tr>
       <tr><td><code>ainour_admin</code></td><td>Témoin HttpOnly</td><td>Session administrateur seulement</td><td>Jusqu'à 8 heures</td></tr>
     </table>
@@ -189,7 +186,6 @@
     <ul>
       <li><strong>Sessions, messages, résumés et contexte visiteur :</strong> 7 jours après la dernière activité par défaut; les sessions expirées sont nettoyées lors d'une exécution planifiée. Une suppression plus rapide peut être demandée.</li>
       <li><strong>Audio vocal :</strong> aucun fichier audio n'est conservé par nous; le traitement par Google est régi par ses conditions.</li>
-      <li><strong>Dossiers de testeurs bêta :</strong> pendant l'accès bêta et à des fins de sécurité/audit; une clé révoquée cesse immédiatement de fonctionner. La suppression peut être demandée.</li>
       <li><strong>Contacts, demandes, consentements, rendez-vous et feuille CRM :</strong> aussi longtemps que nécessaire pour traiter la demande/le rendez-vous et pour des fins commerciales ou légitimes ou légales. Ils peuvent être supprimés sur demande, sauf obligation légale ou nécessité pour un litige.</li>
       <li><strong>Courriels :</strong> le contenu et les métadonnées des courriels non en attente sont supprimés après 30 jours; les envois en attente restent jusqu'à traitement. Les événements webhook sont supprimés après 30 jours. Resend est actuellement désactivé.</li>
       <li><strong>Journaux d'exploitation/erreurs :</strong> jusqu'à 30 jours.</li>
@@ -198,11 +194,11 @@
     </ul>
 
     <h2>7. Suppression, accès et vos droits</h2>
-    <p>Écrivez à <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a> pour demander l'accès, la correction, la suppression, une copie, une restriction ou le retrait de votre consentement. Nous pouvons devoir vérifier votre identité et la propriété des identifiants de bêta/session pertinents. Nous répondrons dans le délai exigé par la loi applicable. La suppression peut inclure les dossiers D1 de conversation/CRM, les lignes de la feuille CRM, les courriels en attente et les événements Calendar le cas échéant. Certains registres peuvent être conservés pour des raisons juridiques, de sécurité, de comptabilité des coûts ou de litige; nous expliquerons la limite.</p>
-    <p>Vous pouvez effacer le stockage du navigateur en tout temps pour supprimer les jetons et préférences locales. Vous pouvez révoquer l'accès Google depuis la page des autorisations de votre compte Google. Vous pouvez demander la révocation immédiate d'une clé bêta. Au Canada, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada; dans l'UE/Royaume-Uni, avec votre autorité de contrôle locale.</p>
+    <p>Écrivez à <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a> pour demander l'accès, la correction, la suppression, une copie, une restriction ou le retrait de votre consentement. Nous pouvons devoir vérifier votre identité et la propriété des identifiants de session pertinents. Nous répondrons dans le délai exigé par la loi applicable. La suppression peut inclure les dossiers D1 de conversation/CRM, les lignes de la feuille CRM, les courriels en attente et les événements Calendar le cas échéant. Certains registres peuvent être conservés pour des raisons juridiques, de sécurité, de comptabilité des coûts ou de litige; nous expliquerons la limite.</p>
+    <p>Vous pouvez effacer le stockage du navigateur en tout temps pour supprimer les jetons et préférences locales. Vous pouvez révoquer l'accès Google depuis la page des autorisations de votre compte Google. Au Canada, vous pouvez communiquer avec le Commissariat à la protection de la vie privée du Canada; dans l'UE/Royaume-Uni, avec votre autorité de contrôle locale.</p>
 
     <h2>8. Sécurité et accès administrateur</h2>
-    <p>Nous utilisons HTTPS, des secrets côté serveur, des identifiants bêta/propriétaire hachés, des jetons Live de courte durée, une session administrateur HttpOnly signée, Google OAuth avec un courriel administrateur autorisé, une interface d'administration locale liée à 127.0.0.1, des limites de débit, des plafonds de dépenses, des listes d'outils autorisés et des journaux d'audit/exploitation. Les identifiants permanents Gemini, Google et administrateur ne sont pas transmis au navigateur. Aucune méthode de transmission ou de stockage n'est totalement sécurisée; évitez les renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.</p>
+    <p>Nous utilisons HTTPS, des secrets côté serveur, des identifiants de propriétaire hachés, des jetons Live de courte durée, une session administrateur HttpOnly signée, Google OAuth avec un courriel administrateur autorisé, une interface d'administration locale liée à 127.0.0.1, des limites de débit, des plafonds de dépenses, des listes d'outils autorisés et des journaux d'audit/exploitation. Les identifiants permanents Gemini, Google et administrateur ne sont pas transmis au navigateur. Aucune méthode de transmission ou de stockage n'est totalement sécurisée; évitez les renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.</p>
     <p>L'administrateur est Nour Chkair. Le personnel de Cloudflare, Google et (le cas échéant) Resend peut traiter des données selon ses propres conditions à titre de fournisseur. Nous ne vendons pas de renseignements personnels et ne donnons pas d'accès administrateur aux annonceurs.</p>
 
     <h2>9. Traitement international</h2>
@@ -218,7 +214,7 @@
     <p>L'utilisation et le transfert par Nupa, vers toute autre application, de renseignements reçus des API Google respectent la <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Politique des données utilisateur des services API de Google</a>, y compris les exigences d'utilisation limitée. Les données Google Workspace (feuille CRM, Calendar et fichiers Drive créés par l'application) servent uniquement aux fonctions décrites dans cette politique, à la sécurité, au soutien et à la conformité légale. Nous ne vendons pas les données utilisateur Google, ne les utilisons pas pour la publicité et ne les utilisons pas pour entraîner des modèles d'IA généralisés. L'envoi Gmail ne fait pas partie du parcours de production; les brouillons Gmail sont une solution de repli humaine facultative et ne sont pas activés actuellement.</p>
 
     <h2>13. Modifications</h2>
-    <p>Nous pouvons mettre à jour cette politique avec l'évolution de la bêta. La version et la date d'entrée en vigueur seront affichées en haut de la page. Les changements importants seront présentés avant leur entrée en vigueur lorsque la loi l'exige. L'utilisation continue après la date d'entrée en vigueur signifie que la politique mise à jour s'applique.</p>
+    <p>Nous pouvons mettre à jour cette politique avec l'évolution du service. La version et la date d'entrée en vigueur seront affichées en haut de la page. Les changements importants seront présentés avant leur entrée en vigueur lorsque la loi l'exige. L'utilisation continue après la date d'entrée en vigueur signifie que la politique mise à jour s'applique.</p>
 
     <h2>14. Contact</h2>
     <p>Questions et demandes : <a href="mailto:nourchkair@gmail.com">nourchkair@gmail.com</a>. Responsable : Nour Chkair, Ottawa (Ontario), Canada.</p>

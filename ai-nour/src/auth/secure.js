@@ -30,6 +30,7 @@ export async function requireOwnerHash(request) {
 }
 
 export async function requirePrototypeKey(request, config, db) {
+  if (config.publicAccess) return null;
   const supplied = request.headers.get('x-prototype-key') || '';
   if (!supplied) throw unauthorized('A valid private-beta access key is required');
   if (config.betaAccessRequired) {
