@@ -4,7 +4,7 @@ const DEFAULTS = {
   liveProvider: 'gemini',
   textModel: 'gemini-flash-lite-latest',
   liveModel: 'gemini-3.8-live',
-  liveVoice: 'Schedar',
+  liveVoice: 'Iapetus',
   dailyCapUsdMicros: 1_000_000,
   cumulativeCapUsdMicros: 7_000_000,
   textInputPerMillion: 0.10,

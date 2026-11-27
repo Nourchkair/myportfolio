@@ -25,7 +25,7 @@ Status: **5-minute sessions are the current private-beta default (27 November 20
 - The reservation at 300 seconds is **$0.125**; the 600-second maximum remains **$0.25**.
 - Emergency shutdown blocked new sessions and restored cleanly (10/10).
 - Production budget after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative, **$0.790668 USD** daily, no held reservations.
-- Production voice: **Schedar**.
+- Production voice: **Iapetus**.
 
 ## Provider-side vs application-side duration
 

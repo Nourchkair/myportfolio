@@ -58,7 +58,7 @@ migrations/                0001–0004 D1 schema
 
 1. `POST /api/live/token` checks flags, rate limit, the global daily token count, and held-reservation budget.
 2. Creates a held reservation (default `$0.125` for a 300-second session; the 600-second maximum remains configurable) for 15 minutes.
-3. Mints a one-use Gemini token with a configurable `expireTime` (default **300 seconds**), 60-second new-session window, **Schedar** voice, shared portfolio grounding, transcripts, and navigation/knowledge/presentation tools.
+3. Mints a one-use Gemini token with a configurable `expireTime` (default **300 seconds**), 60-second new-session window, **Iapetus** voice, shared portfolio grounding, transcripts, and navigation/knowledge/presentation tools.
 4. The browser connects directly to Gemini; no permanent key is exposed.
 5. Tool calls go to `/api/tools/execute`; transcripts/usage go to `/api/live/turn`.
 6. The server charges `max(actual, reservation)` when usage is reported and reconciles the hold.

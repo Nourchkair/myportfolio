@@ -4,8 +4,8 @@ Status: **deployed to the production private beta and validated.** Public access
 
 ## 1. Voice
 
-- Default Live voice is **Schedar**, configured in `src/config.js`, `wrangler.toml`, and `wrangler.production.toml`.
-- Verified with a real Gemini 3.8 Live session: Schedar produced audio, transcripts, tool calls and a completed turn.
+- Default Live voice is **Iapetus** (changed from Schedar on 27 November 2026), configured in `src/config.js`, `wrangler.toml`, and `wrangler.production.toml`.
+- Schedar was verified in the original V2 session. The current private-beta default is Iapetus; the same Live path and token configuration are used.
 - No Voice Studio or extra voice interface was added.
 - Live prompting now asks for natural rhythm, varied sentence lengths, expressive emphasis, brief pauses and a conversational rather than narrated delivery.
 - Pronunciation guidance is included for Nour Chkair, Safiy, H2Ops, B.R.A.I.N., H2Ops Brain and MPN Capital Markets.
@@ -127,7 +127,7 @@ Additional evidence:
 - Production browser: **7/7**, including 34px pill, versioned CSS/JS, gate, tour and manual cancellation (`results/v2-production-browser.json`).
 - Live voice smoke: **12/12** (`results/v2-smoke.json`).
 - Live context/page awareness: **6/6** (`results/v2-live-context.json`).
-- Live budget/tool/Schedar checks: **8/8** (`results/live-budget-tests.json`).
+- Live budget/tool/voice checks: **9/9** (`results/live-budget-tests.json`).
 - Security suite: **8/8** (`results/security-api.json`).
 - Unit: **61/61**.
 - API: **23/23**.
@@ -135,7 +135,7 @@ Additional evidence:
 - Admin: **16/16**.
 - Portfolio validation: **261 checks**.
 - Secret scan: **429 files, 0 hits**.
-- Production voice config: **Schedar**; production persona control updated to 3,606 characters.
+- Production voice config: **Iapetus**; production persona control updated to 3,606 characters.
 - Production beta key inventory: **1 active**, 3 revoked validation keys.
 
 Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative, **$0.790668 USD** daily, no held reservations. External writes and Resend remain off.
@@ -143,7 +143,7 @@ Production cost after V2 validation: **$1.687531 USD / ~$2.3994 CAD** cumulative
 ## 11. Constraints preserved
 
 - Gemini 3.8 Live and the existing text model retained.
-- Schedar default voice.
+- Iapetus default voice.
 - Existing portfolio UI and admin dashboard preserved.
 - No Voice Studio.
 - $0 fixed monthly infrastructure.

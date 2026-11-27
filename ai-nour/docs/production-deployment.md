@@ -50,7 +50,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 ## 3b. Conversational V2
 
-- Live voice: **Schedar** (production Worker and control updated).
+- Live voice: **Iapetus** (production Worker and control updated).
 - Persona: production `persona_instruction` updated to the V2 character/grounding prompt.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
@@ -65,7 +65,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - AI Nour requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.1` before reading, chat, Live voice or tools.
-- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The $1 daily and $7 cumulative caps are unchanged. Schedar remains the voice. Admin can restore up to 600 seconds.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The $1 daily and $7 cumulative caps are unchanged. Iapetus is the voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 

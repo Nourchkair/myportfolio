@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T06:15:29.043Z",
+  "generatedAt": "2026-11-27T06:39:34.197Z",
   "mode": "mock-live/no-usage-reported",
   "passed": 9,
   "failed": 0,
@@ -18,14 +18,14 @@
       "pass": true,
       "detail": {
         "sessionSeconds": 300,
-        "expiresAt": "2026-11-27T06:25:29.023Z"
+        "expiresAt": "2026-11-27T06:49:34.176Z"
       }
     },
     {
-      "name": "Live config uses Schedar",
+      "name": "Live config uses Iapetus",
       "pass": true,
       "detail": {
-        "voice": "Schedar"
+        "voice": "Iapetus"
       }
     },
     {
