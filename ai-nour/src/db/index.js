@@ -237,6 +237,11 @@ export function createDb(d1) {
     return d1.prepare('SELECT * FROM contacts WHERE id=?').bind(id).first();
   }
 
+  async function listContacts(limit = 5000) {
+    const result = await d1.prepare('SELECT * FROM contacts ORDER BY created_at DESC LIMIT ?').bind(limit).all();
+    return result.results || [];
+  }
+
   async function findContactByEmail(ownerHash, email) {
     if (!email) return null;
     return d1.prepare('SELECT * FROM contacts WHERE owner_hash=? AND lower(email)=lower(?) ORDER BY created_at DESC LIMIT 1').bind(ownerHash, email).first();
@@ -250,6 +255,11 @@ export function createDb(d1) {
 
   async function listConsents(contactId) {
     const result = await d1.prepare('SELECT * FROM consents WHERE contact_id=? ORDER BY captured_at DESC').bind(contactId).all();
+    return result.results || [];
+  }
+
+  async function listAllConsents(limit = 5000) {
+    const result = await d1.prepare('SELECT * FROM consents ORDER BY captured_at DESC LIMIT ?').bind(limit).all();
     return result.results || [];
   }
 
@@ -513,9 +523,11 @@ export function createDb(d1) {
     claimAction,
     createContact,
     getContact,
+    listContacts,
     findContactByEmail,
     createConsent,
     listConsents,
+    listAllConsents,
     createInquiry,
     getInquiry,
     findInquiryByClientRequest,

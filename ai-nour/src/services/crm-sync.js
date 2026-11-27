@@ -34,6 +34,10 @@ export const CRM_TABS = {
     'email_id', 'contact_id', 'inquiry_id', 'appointment_id', 'kind', 'recipient_email',
     'status', 'provider', 'provider_message_id', 'dedupe_key', 'attempts', 'next_attempt_at',
     'last_event_at', 'created_at', 'updated_at'
+  ],
+  'Follow-ups': [
+    'followup_id', 'inquiry_id', 'contact_id', 'due_at', 'channel', 'purpose', 'status',
+    'completed_at', 'created_at', 'updated_at'
   ]
 };
 
@@ -46,10 +50,11 @@ function iso(value) {
 
 const FIELD_SOURCES = {
   Contacts: { contact_id: 'id' },
-  Inquiries: { inquiry_id: 'id', received_at: 'created_at' },
-  Consent: { consent_id: 'id' },
+  Inquiries: { inquiry_id: 'id', received_at: 'created_at', channel: 'source' },
+  Consent: { consent_id: 'id', created_at: 'captured_at', updated_at: 'captured_at' },
   Appointments: { appointment_id: 'id' },
-  'Email Log': { email_id: 'id', recipient_email: 'to_email' }
+  'Email Log': { email_id: 'id', recipient_email: 'to_email' },
+  'Follow-ups': { followup_id: 'id' }
 };
 
 function valueFor(tab, field, row) {

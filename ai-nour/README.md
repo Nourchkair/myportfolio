@@ -49,11 +49,14 @@ npm run retrieval        # bilingual retrieval benchmark
 npm run test:real        # real Gemini text + Live smoke test (costs a few cents)
 npm run test:fr          # French text + Live smoke test
 npm run test:recovery    # text → new Live session → shared context recovery
-npm run test:crm:google  # authorized synthetic Google Calendar appointment
+npm run test:crm:google  # authorized synthetic Google Calendar appointment and consenting attendee
+npm run apply:crm-schema # idempotent live Sheet header apply
+npm run test:crm:sheet-live  # live Sheet write/read round-trip with cleanup
+npm run test:crm:sheet-sync  # live D1 → Sheet sync with cleanup
 npm run google:synthetic # authorized synthetic Google write test
 ```
 
-The lifecycle test uses mock email delivery plus a real synthetic no-attendee Google Calendar event with a unique Meet link; it cancels the event. No real email is sent. Real-model scripts require the Worker at `http://127.0.0.1:8789` and credentials from `.dev.vars`.
+The lifecycle test uses mock email delivery plus a real synthetic Google Calendar event with a unique Meet link and one consenting `@example.invalid` attendee; it cancels the event. No real email is sent. Real-model scripts require the Worker at `http://127.0.0.1:8789` and credentials from `.dev.vars`.
 
 ## Required local keys
 
@@ -91,7 +94,7 @@ public/ prototype UI ──► Worker /api
                            ├─ sessions: D1 messages, summary, recovery
                            ├─ retrieval: 107 structured chunks, bilingual aliases
                            ├─ text: Gemini Flash-Lite
-                           ├─ Live: one-use token, 120s lifetime, prepaid reservation
+                           ├─ Live: one-use token, configurable 600s lifetime, prepaid reservation
                            ├─ tools: allowlisted NourOS navigation
                            ├─ Google: Sheets, Calendar, Drive, Gmail drafts
                            ├─ CRM: contacts, consent, inquiries, bookings, idempotency
@@ -121,6 +124,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 | `POST /api/crm/appointments/:id/reconcile` | prototype + owner | recover calendar failure |
 | `POST /api/webhooks/resend` | Svix signature | delivery/bounce/complaint events |
 | `GET /api/admin/*` | admin bearer | status, flags, cost, CRM, email, audit |
+| `POST /api/admin/crm/sync` | admin bearer | idempotent D1 → Google Sheet sync |
 | `POST /api/admin/email/:id/retry` | admin bearer | requeue failed email |
 | `POST /api/admin/email/reminders` | admin bearer | queue due reminders |
 
@@ -129,11 +133,11 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
 - Live tokens are one-use, use a configurable provider-enforced expiry (default 600 seconds), carry a duration-scaled prepaid reservation (default $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
-- Google writes are off by default and require an admin flag; synthetic tests use no attendees.
+- Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
 - Gmail adapter has no send method; it creates drafts only.
 - Resend is prepared but `EMAIL_SEND_ENABLED=false` by default; local processing is dry-run.
 - No R2, paid auth, paid database, or production deployment is activated.
-- CRM headers remain proposed; no production sheet writes.
+- CRM headers are applied to the live Sheet. D1→Sheet sync is manual and idempotent; automatic per-event sync is not enabled.
 
 ## Documentation
 
@@ -153,6 +157,6 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - OAuth production publishing/verification and production redirect URIs are not submitted.
 - Resend DNS/DKIM/DMARC and a real test send are not configured.
 - Google Workspace MCP migration is a post-1-February-2027 requirement if direct REST agent access is disallowed.
-- CRM Google Sheet headers are not applied.
+- CRM Sheet sync is manual; scheduled per-event sync is not enabled.
 - Cloudflare Access is not introduced; production admin hosting is undecided.
 - D1 remains ENAM/ORD; the historical third-party key remains in Git history without rewriting.

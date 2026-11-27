@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-27T00:33:06.649Z",
-  "mode": "mock-email/real-synthetic-google-calendar/no-attendees",
+  "generatedAt": "2026-11-27T01:06:01.577Z",
+  "mode": "mock-email/real-synthetic-google-calendar/synthetic-consenting-attendee",
   "passed": 28,
   "failed": 0,
   "total": 28,
@@ -76,7 +76,7 @@
           "applied": false,
           "duplicate": true,
           "type": "email.delivered",
-          "emailId": "mock-97802968-26a1-41f1-86ef-854a71c9d52c"
+          "emailId": "mock-f021945e-4bc9-4301-889c-5278d8e6196e"
         }
       }
     },

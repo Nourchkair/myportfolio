@@ -1,0 +1,54 @@
+{
+  "generatedAt": "2026-11-27T00:57:53.894Z",
+  "mode": "real-google-sheets/synthetic-row-cleanup",
+  "tabs": [
+    "Contacts",
+    "Inquiries",
+    "Pipeline",
+    "Appointments",
+    "Follow-ups",
+    "Consent",
+    "Email Log"
+  ],
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "results": [
+    {
+      "tab": "Contacts",
+      "pass": true,
+      "key": "PHASE4-CONTACT-1795741068683",
+      "fields": 11
+    },
+    {
+      "tab": "Inquiries",
+      "pass": true,
+      "key": "PHASE4-INQUIRY-1795741068683",
+      "fields": 15
+    },
+    {
+      "tab": "Consent",
+      "pass": true,
+      "key": "PHASE4-CONSENT-1795741068683",
+      "fields": 10
+    },
+    {
+      "tab": "Appointments",
+      "pass": true,
+      "key": "PHASE4-APPOINTMENT-1795741068683",
+      "fields": 13
+    },
+    {
+      "tab": "Email Log",
+      "pass": true,
+      "key": "PHASE4-EMAIL-1795741068683",
+      "fields": 15
+    },
+    {
+      "tab": "Follow-ups",
+      "pass": true,
+      "key": "PHASE4-FOLLOWUP-1795741068683",
+      "fields": 10
+    }
+  ]
+}

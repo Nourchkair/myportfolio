@@ -16,12 +16,14 @@ export function createCalendarAdapter({ auth, calendarId }) {
     return data.calendars?.[calendarId]?.busy || [];
   }
 
-  async function createEvent({ summary, description, start, end, timeZone = 'America/Toronto', withMeet = true }) {
+  async function createEvent({ summary, description, start, end, timeZone = 'America/Toronto', withMeet = true, attendees = [] }) {
+    const guests = attendees.map((email) => ({ email })).filter((item) => item.email);
     const body = {
       summary,
       description,
       start: { dateTime: start, timeZone },
       end: { dateTime: end, timeZone },
+      ...(guests.length ? { attendees: guests } : {}),
       ...(withMeet ? {
         conferenceData: {
           createRequest: {
@@ -31,7 +33,8 @@ export function createCalendarAdapter({ auth, calendarId }) {
         }
       } : {})
     };
-    const data = await auth.json(`${base}/events?conferenceDataVersion=1&sendUpdates=none`, {
+    const sendUpdates = guests.length ? 'all' : 'none';
+    const data = await auth.json(`${base}/events?conferenceDataVersion=1&sendUpdates=${sendUpdates}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(body)
@@ -45,16 +48,16 @@ export function createCalendarAdapter({ auth, calendarId }) {
     };
   }
 
-  async function reschedule(id, start, end, timeZone = 'America/Toronto') {
-    return auth.json(`${base}/events/${encodeURIComponent(id)}?sendUpdates=none`, {
+  async function reschedule(id, start, end, timeZone = 'America/Toronto', { sendUpdates = 'none' } = {}) {
+    return auth.json(`${base}/events/${encodeURIComponent(id)}?sendUpdates=${sendUpdates}`, {
       method: 'PATCH',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ start: { dateTime: start, timeZone }, end: { dateTime: end, timeZone } })
     });
   }
 
-  async function cancel(id) {
-    const response = await auth.request(`${base}/events/${encodeURIComponent(id)}?sendUpdates=none`, { method: 'DELETE' });
+  async function cancel(id, { sendUpdates = 'none' } = {}) {
+    const response = await auth.request(`${base}/events/${encodeURIComponent(id)}?sendUpdates=${sendUpdates}`, { method: 'DELETE' });
     if (![200, 204, 404, 410].includes(response.status)) {
       throw new Error(`Calendar cancel failed with HTTP ${response.status}`);
     }

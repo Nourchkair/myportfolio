@@ -11,6 +11,7 @@ import { IntegrationError } from './integrations/errors.js';
 import { createGoogleServices } from './integrations/google/index.js';
 import { createEmailService } from './integrations/email/index.js';
 import { createCrmService } from './services/crm.js';
+import { createCrmSheetsService } from './services/crm-sheets.js';
 import { registerHealthRoutes } from './routes/health.js';
 import { registerSessionRoutes } from './routes/session.js';
 import { registerAdminRoutes } from './routes/admin.js';
@@ -53,6 +54,7 @@ export function createApp(env) {
     google,
     email: emailService,
     crm: createCrmService({ db, config, google, email: emailService }),
+    crmSheets: createCrmSheetsService({ db, config, google }),
     clientKey
   };
   const router = createRouter();

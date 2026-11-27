@@ -1,13 +1,13 @@
 {
-  "generatedAt": "2026-11-27T00:40:00.000Z",
+  "generatedAt": "2026-11-27T01:13:53.003Z",
   "branch": "phase2/ai-nour-production",
   "phase": 4,
   "version": "phase4-0.4.0",
-  "status": "private-beta candidate; personal acceptance and external account approvals pending",
+  "status": "private-beta candidate; CRM schema, Sheet sync and Calendar invitations validated; personal acceptance and external account approvals pending",
   "tests": {
     "unit": {
-      "passed": 49,
-      "total": 49
+      "passed": 54,
+      "total": 54
     },
     "api": {
       "passed": 23,
@@ -38,8 +38,24 @@
       "total": 261
     },
     "crmSync": {
+      "passed": 4,
+      "total": 4
+    },
+    "crmSheets": {
       "passed": 3,
       "total": 3
+    },
+    "crmGoogle": {
+      "passed": 10,
+      "total": 10
+    },
+    "crmSheetLive": {
+      "passed": 6,
+      "total": 6
+    },
+    "crmSheetSync": {
+      "passed": 12,
+      "total": 12
     }
   },
   "retrieval": {
@@ -50,11 +66,12 @@
     "mrr": 0.9364
   },
   "cost": {
-    "actualSpentUsdMicros": 361422,
+    "actualSpentUsdMicros": 931422,
     "heldReservationUsdMicros": 0,
-    "committedUsdMicros": 361422,
-    "actualCad": 0.5139,
-    "committedCad": 0.5139,
+    "committedUsdMicros": 931422,
+    "actualCad": 1.3244,
+    "committedCad": 1.3244,
+    "dailySpentUsdMicros": 571089,
     "dailyCapUsdMicros": 1000000,
     "cumulativeCapUsdMicros": 7000000
   },
@@ -74,13 +91,16 @@
     "sendEnabled": false,
     "resendConfigurationRequiredForBeta": false,
     "realEmailsSent": false,
-    "calendarInvitesEnabled": false
+    "calendarInvitesEnabled": true
   },
   "crm": {
     "d1Implemented": true,
-    "googleSheetApplied": false,
+    "googleSheetApplied": true,
     "syncMappingTested": true,
-    "liveSyncTested": false
+    "liveSheetRoundTripTested": true,
+    "d1ToSheetSyncTested": true,
+    "automaticSyncEnabled": false,
+    "manualSyncAdminAction": true
   },
   "ui": {
     "states": 6,
@@ -97,14 +117,14 @@
     "Real-device Chrome/Safari/iOS/Bluetooth/French testing",
     "Resend DNS/API key/webhook/test send",
     "OAuth production publishing/verification and admin host decision",
-    "CRM Sheet approval and live sync round-trip",
-    "Calendar invitation policy",
+    "Sheet sync cadence decision (manual now; scheduled optional)",
     "Google Workspace MCP decision before 1 February 2027",
     "D1 residency ENAM/ORD",
-    "Archived third-party key acknowledgement"
+    "Archived third-party key acknowledgement",
+    "Private-beta access key distribution"
   ],
   "secretScan": {
-    "files": 388,
+    "files": 395,
     "valueHits": 0,
     "patternHits": 0
   }

@@ -23,6 +23,9 @@
     "build:companion-sdk": "node scripts/build-companion-sdk.mjs",
     "test:crm": "node scripts/test-crm.mjs",
     "test:crm:google": "node scripts/test-crm-google.mjs",
+    "test:crm:sheet-live": "node scripts/test-crm-sheet-live.mjs",
+    "test:crm:sheet-sync": "node scripts/test-crm-sheet-sync-live.mjs",
+    "apply:crm-schema": "node scripts/apply-crm-schema.mjs",
     "test:lifecycle": "node scripts/test-lifecycle.mjs",
     "test:admin-auth": "node scripts/test-admin-auth.mjs",
     "test:live-budget": "node scripts/test-live-budget.mjs"

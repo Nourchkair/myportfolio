@@ -1,6 +1,6 @@
 # Proposed CRM schema — Phase 4 approval package
 
-Status: **proposed for approval; not applied to the live Google Sheet.** The local D1 workflow is implemented and validated with synthetic data. No production headers or records have been written.
+Status: **approved and applied to the live Google Sheet on 27 November 2026.** Headers exist for all six tabs; the D1 workflow and live Sheet round-trip were validated with synthetic rows that were then removed.
 
 Design rules:
 
@@ -143,14 +143,14 @@ The following are **not** proposed for private beta because they add data collec
 
 | Sheet tab | Local D1 table | Current state |
 | --- | --- | --- |
-| Contacts | `contacts` | Implemented; synthetic only |
-| Inquiries | `inquiries` | Implemented; synthetic only |
-| Consent | `consents` | Implemented; synthetic only |
-| Appointments | `bookings` | Implemented; synthetic only |
-| Email Log | `email_jobs` + `email_webhook_events` | Implemented; synthetic/dry-run only |
+| Contacts | `contacts` | Implemented; live header applied; round-trip validated |
+| Inquiries | `inquiries` | Implemented; live header applied; round-trip validated |
+| Consent | `consents` | Implemented; live header applied; round-trip validated |
+| Appointments | `bookings` | Implemented; live header applied; round-trip validated |
+| Email Log | `email_jobs` + `email_webhook_events` | Implemented; live header applied; round-trip validated |
 | Follow-ups | None | Optional; not implemented |
 
-Applying the headers to the live Google Sheet requires explicit approval. The application will not write production headers or records until that approval is recorded. The proposed header order is the field order in each table above.
+The approved header order is the field order in each table above. The legacy Pipeline tab remains empty and is not managed by the sync. Follow-ups has a live header but no D1 table yet.
 
 ## D1 ↔ Google Sheets synchronization validation
 
@@ -158,6 +158,14 @@ The field mapping and reconciliation logic is implemented in `src/services/crm-s
 
 - Header order must match the tables above.
 - D1 rows are flattened into stable cell values (ISO timestamps, string-safe fields).
+- Consent `created_at`/`updated_at` are derived from `captured_at`; inquiry `channel` is derived from `source`.
 - The diff detects `missing_in_sheet`, `missing_in_d1`, and changed fields.
 
-This validates the mapping offline. Live synchronization is not claimed until the approved headers are applied to the live Sheet and a controlled synthetic round-trip is approved.
+The manual sync service is `src/services/crm-sheets.js`; the admin action is **CRM → Sync D1 → Google Sheet**. It inserts missing keys, updates changed rows, leaves unchanged rows alone, and skips tabs whose headers do not match.
+
+Live evidence:
+
+- Sheet round-trip: **6/6** tabs (`results/crm-sheet-live.json`).
+- D1 → Sheet sync: **12/12** checks; first run inserted 8 rows, second run inserted 0 / updated 0 / left 8 unchanged; synthetic rows removed (`results/crm-sheet-sync-live.json`).
+
+Automatic per-event sync is not enabled. The manual action is the private-beta path; scheduled sync requires approval.

@@ -5,7 +5,7 @@ import { getCorpusMeta, listChunks, search } from '../knowledge/retrieval.js';
 import { badRequest, forbidden } from '../http/errors.js';
 
 export function registerAdminRoutes(router, services) {
-  const { db, config, cost, google, email, crm } = services;
+  const { db, config, cost, google, email, crm, crmSheets } = services;
 
   router.get('/api/admin/status', async ({ request }) => {
     requireAdmin(request, config);
@@ -189,6 +189,14 @@ export function registerAdminRoutes(router, services) {
     if (!removed) throw badRequest('Knowledge override not found');
     await db.audit({ actor: 'admin-token', action: 'knowledge.override.delete', detail: { chunkId: params.id }, now: Date.now() });
     return json({ overrides: await db.listKnowledgeOverrides() });
+  });
+
+  router.post('/api/admin/crm/sync', async ({ request }) => {
+    requireAdmin(request, config);
+    const now = Date.now();
+    const result = await crmSheets.sync({ now });
+    await db.audit({ actor: 'admin-token', action: 'crm.sheets.sync', detail: { ok: result.ok, totals: result.totals }, now });
+    return json(result);
   });
 
   router.get('/api/admin/bookings', async ({ request }) => {

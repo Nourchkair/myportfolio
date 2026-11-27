@@ -51,6 +51,7 @@ Browser (127.0.0.1:8791)
 | Access revocation | Remove the administrator from the allowlist and/or rotate `PHASE1_ADMIN_SESSION_SECRET`; existing cookies stop verifying. The in-memory epoch also invalidates sessions on “sign out all.” |
 | Knowledge | Published overrides are editable/deletable and are appended to text retrieval immediately; drafts stay out of retrieval. |
 | Limits | The dashboard can lower daily/cumulative spend caps and set Live duration (60–600s) within the deployment maxima. |
+| CRM sync | The dashboard can run an idempotent D1→Google Sheet sync. It refuses tabs whose headers do not match the approved schema and records the result in ops events. |
 | Restart | Stateless signed cookies remain valid across a restart only if the secret and epoch are unchanged. Rotate the secret for a durable emergency revocation. |
 
 ## Browser and transport protections

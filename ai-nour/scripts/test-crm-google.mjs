@@ -85,7 +85,8 @@ try { token = await accessToken(); } catch {}
 if (token && booking?.calendarEventId) {
   const event = await calendarEvent(booking.calendarEventId, token);
   check('calendar event exists', event.status === 200 && event.body.id === booking.calendarEventId, { status: event.status, timeZone: event.body.start?.timeZone });
-  check('event has no attendees', !event.body.attendees || event.body.attendees.length === 0, { attendees: event.body.attendees?.length || 0 });
+  const attendeeEmails = (event.body.attendees || []).map((item) => item.email);
+  check('calendar event invites only the consenting synthetic attendee', attendeeEmails.length === 1 && attendeeEmails[0] === 'synthetic.google@example.invalid', { attendees: attendeeEmails });
 } else {
   check('calendar event verification skipped', false, { token: Boolean(token), eventId: Boolean(booking?.calendarEventId) });
 }
@@ -114,7 +115,7 @@ await api('/api/admin/flags', { method: 'PATCH', admin: true, body: { flags: { g
 
 const output = {
   generatedAt: new Date().toISOString(),
-  mode: 'real-google-calendar/synthetic-no-attendees',
+  mode: 'real-google-calendar/synthetic-consenting-attendee',
   passed: results.filter((item) => item.pass).length,
   failed: results.filter((item) => !item.pass).length,
   total: results.length,

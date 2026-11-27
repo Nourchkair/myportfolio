@@ -57,6 +57,12 @@ export function createCrmService({ db, config, google, email }) {
     return consents.some((item) => item.scope === 'email' && item.status === 'granted');
   }
 
+  async function calendarGuests(contact) {
+    if (!config.google.calendarInvitesEnabled || !contact?.email) return [];
+    if (!(await hasEmailConsent(contact.id))) return [];
+    return [contact.email];
+  }
+
   async function enqueue({ kind, to, template, dedupeKey, inquiryId = null, appointmentId = null, now }) {
     if (!to || !template) return null;
     return email.enqueue({
@@ -264,7 +270,8 @@ export function createCrmService({ db, config, google, email }) {
         start: new Date(startUtc).toISOString(),
         end: new Date(endUtc).toISOString(),
         timeZone: timezone,
-        withMeet: true
+        withMeet: true,
+        attendees: await calendarGuests(contact)
       });
       booking = await db.updateBookingCalendar({
         id: booking.id,
@@ -333,11 +340,13 @@ export function createCrmService({ db, config, google, email }) {
     const overlap = (await db.listOverlappingBookings(startUtc, endUtc)).filter((row) => row.id !== id);
     if (overlap.length) throw conflict('That time is no longer available');
     const timezone = clean(body.timezone, TIMEZONE_MAX) || booking.timezone || 'America/Toronto';
+    const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
+    const guests = await calendarGuests(contact);
     const calendarWrites = Boolean(flags.google_writes_enabled && google?.configured && booking.calendar_event_id);
 
     if (calendarWrites) {
       try {
-        await google.calendar.reschedule(booking.calendar_event_id, new Date(startUtc).toISOString(), new Date(endUtc).toISOString(), timezone);
+        await google.calendar.reschedule(booking.calendar_event_id, new Date(startUtc).toISOString(), new Date(endUtc).toISOString(), timezone, { sendUpdates: guests.length ? 'all' : 'none' });
       } catch (error) {
         await db.logEvent({
           level: 'error',
@@ -370,7 +379,6 @@ export function createCrmService({ db, config, google, email }) {
       }
       throw conflict('That time is no longer available');
     }
-    const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
     const view = bookingView(result.booking);
     await db.cancelEmailJobsForAppointment({
       appointmentId: id,
@@ -402,10 +410,12 @@ export function createCrmService({ db, config, google, email }) {
     const booking = await db.getBookingForOwner(id, ownerHash);
     if (!booking) throw notFound('Appointment not found');
     if (booking.status === 'cancelled') return { duplicate: true, booking: bookingView(booking) };
+    const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
+    const guests = await calendarGuests(contact);
     const calendarWrites = Boolean(flags.google_writes_enabled && google?.configured && booking.calendar_event_id);
     if (calendarWrites) {
       try {
-        await google.calendar.cancel(booking.calendar_event_id);
+        await google.calendar.cancel(booking.calendar_event_id, { sendUpdates: guests.length ? 'all' : 'none' });
       } catch (error) {
         throw new AppError(502, 'CALENDAR_CANCEL_FAILED', 'The calendar event could not be cancelled; the appointment is unchanged', {
           bookingId: id,
@@ -419,7 +429,6 @@ export function createCrmService({ db, config, google, email }) {
       if (updated?.status === 'cancelled') return { duplicate: true, booking: bookingView(updated) };
       throw conflict('The appointment could not be cancelled in its current state');
     }
-    const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
     const view = bookingView(updated);
     await db.cancelEmailJobsForAppointment({
       appointmentId: id,
@@ -460,7 +469,8 @@ export function createCrmService({ db, config, google, email }) {
         start: new Date(booking.start_utc).toISOString(),
         end: new Date(booking.end_utc).toISOString(),
         timeZone: booking.timezone || 'America/Toronto',
-        withMeet: true
+        withMeet: true,
+        attendees: await calendarGuests(contact)
       });
       const updated = await db.updateBookingCalendar({
         id,

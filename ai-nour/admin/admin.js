@@ -256,6 +256,17 @@ async function runSynthetic() {
   }
 }
 
+async function syncCrmSheet() {
+  if (!window.confirm('Export all D1 CRM rows to the approved Google Sheet? Local synthetic test rows will be included.')) return;
+  $('#crm-sync-result').textContent = 'Syncing…';
+  const result = await api('/api/admin/crm/sync', { method: 'POST', body: '{}' });
+  const totals = result.totals || {};
+  $('#crm-sync-result').textContent = result.ok
+    ? `Synced · ${totals.inserted || 0} inserted · ${totals.updated || 0} updated · ${totals.unchanged || 0} unchanged`
+    : `Sync completed with errors · ${(result.tabs || []).filter((item) => item.error).map((item) => item.tab).join(', ')}`;
+  await loadCRM();
+}
+
 async function loadCRM() {
   const [crm, bookings, inquiries, emails] = await Promise.all([
     api('/api/admin/crm'),

@@ -66,7 +66,7 @@ test('Sheets adapter reads metadata and appends a synthetic row', async () => {
   assert.deepEqual(JSON.parse(append.options.body).values[0], ['P1', 'New']);
 });
 
-test('Calendar adapter creates a no-attendee Meet event and cancels it', async () => {
+test('Calendar adapter creates a no-attendee Meet event with no updates and cancels it', async () => {
   const calls = [];
   const auth = {
     json: async (url, options = {}) => {
@@ -85,7 +85,39 @@ test('Calendar adapter creates a no-attendee Meet event and cancels it', async (
   assert.equal(body.attendees, undefined);
   assert.equal(body.conferenceData.createRequest.conferenceSolutionKey.type, 'hangoutsMeet');
   assert.equal(event.meetLink, 'https://meet.google.com/abc');
+  assert.match(createCall.url, /sendUpdates=none/);
   assert.equal(await calendar.cancel('evt-1'), true);
+});
+
+test('Calendar adapter adds consenting attendees and requests all updates', async () => {
+  const calls = [];
+  const auth = {
+    json: async (url, options = {}) => {
+      calls.push({ url, options });
+      if (url.includes('/events?')) return { id: 'evt-2', hangoutLink: 'https://meet.google.com/def', start: {}, end: {} };
+      return {};
+    },
+    request: async (url, options = {}) => {
+      calls.push({ url, options });
+      assert.match(url, /sendUpdates=all/);
+      return { status: 204 };
+    }
+  };
+  const calendar = createCalendarAdapter({ auth, calendarId: 'cal-id' });
+  await calendar.createEvent({
+    summary: 'test',
+    description: 'synthetic',
+    start: '2026-12-01T15:00:00Z',
+    end: '2026-12-01T15:15:00Z',
+    attendees: ['synthetic.visitor@example.invalid', '']
+  });
+  const createCall = calls.find((call) => call.url.includes('/events?'));
+  const body = JSON.parse(createCall.options.body);
+  assert.deepEqual(body.attendees, [{ email: 'synthetic.visitor@example.invalid' }]);
+  assert.match(createCall.url, /sendUpdates=all/);
+  await calendar.reschedule('evt-2', '2026-12-01T16:00:00Z', '2026-12-01T16:15:00Z', 'America/Toronto', { sendUpdates: 'all' });
+  assert.match(calls.at(-1).url, /sendUpdates=all/);
+  assert.equal(await calendar.cancel('evt-2', { sendUpdates: 'all' }), true);
 });
 
 test('Gmail adapter creates drafts and exposes no send method', async () => {

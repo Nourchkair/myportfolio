@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-26T20:09:41.589Z",
-  "mode": "real-google-calendar/synthetic-no-attendees",
+  "generatedAt": "2026-11-27T01:02:58.464Z",
+  "mode": "real-google-calendar/synthetic-consenting-attendee",
   "passed": 10,
   "failed": 0,
   "total": 10,
@@ -37,10 +37,12 @@
       }
     },
     {
-      "name": "event has no attendees",
+      "name": "calendar event invites only the consenting synthetic attendee",
       "pass": true,
       "detail": {
-        "attendees": 0
+        "attendees": [
+          "synthetic.google@example.invalid"
+        ]
       }
     },
     {

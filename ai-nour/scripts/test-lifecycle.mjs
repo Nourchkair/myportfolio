@@ -237,7 +237,7 @@ async function main() {
 
     const output = {
       generatedAt: new Date().toISOString(),
-      mode: 'mock-email/real-synthetic-google-calendar/no-attendees',
+      mode: 'mock-email/real-synthetic-google-calendar/synthetic-consenting-attendee',
       passed: results.filter((item) => item.pass).length,
       failed: results.filter((item) => !item.pass).length,
       total: results.length,

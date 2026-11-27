@@ -70,7 +70,9 @@ export function loadConfig(env = {}) {
       knowledgeFolderId: env.GOOGLE_KNOWLEDGE_FOLDER_ID || '',
       backupFolderId: env.GOOGLE_BACKUP_FOLDER_ID || '',
       backupKey: env.BACKUP_ENCRYPTION_KEY || '',
-      allowSyntheticWrites: bool(env, 'ALLOW_SYNTHETIC_WRITES', false)
+      allowSyntheticWrites: bool(env, 'ALLOW_SYNTHETIC_WRITES', false),
+      calendarInvitesEnabled: bool(env, 'CALENDAR_INVITES_ENABLED', true),
+      crmSheetsSyncEnabled: bool(env, 'CRM_SHEETS_SYNC_ENABLED', true)
     },
     caps: {
       dailyUsdMicros: number(env, 'DAILY_SPEND_CAP_USD_MICROS', DEFAULTS.dailyCapUsdMicros),

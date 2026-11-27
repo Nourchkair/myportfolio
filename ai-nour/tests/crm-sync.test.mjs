@@ -34,6 +34,24 @@ test('CRM rows are flattened to stable sheet values without duplicating contact 
   assert.equal(rows[0].length, CRM_TABS.Appointments.length);
 });
 
+test('CRM mapping fills required inquiry and consent fields from D1 equivalents', () => {
+  const inquiry = toSheetRows('Inquiries', [{
+    id: 'inquiry-1', contact_id: 'contact-1', created_at: 1_800_000_000_000,
+    source: 'portfolio', inquiry_type: 'general', summary: 'Synthetic', status: 'new',
+    consent_id: 'consent-1', updated_at: 1_800_000_000_000
+  }])[0];
+  assert.equal(inquiry[0], 'inquiry-1');
+  assert.equal(inquiry[2], '2027-01-15T08:00:00.000Z');
+  assert.equal(inquiry[3], 'portfolio');
+  const consent = toSheetRows('Consent', [{
+    id: 'consent-1', contact_id: 'contact-1', scope: 'email', status: 'granted',
+    captured_at: 1_800_000_000_000, source: 'portfolio', evidence: 'form-v1'
+  }])[0];
+  assert.equal(consent[0], 'consent-1');
+  assert.equal(consent[8], '2027-01-15T08:00:00.000Z');
+  assert.equal(consent[9], '2027-01-15T08:00:00.000Z');
+});
+
 test('D1/Sheet reconciliation detects missing and changed rows', () => {
   const d1 = [{
     contact_id: 'contact-1',

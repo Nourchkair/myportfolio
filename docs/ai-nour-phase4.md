@@ -2,7 +2,7 @@
 
 **Date:** 26 November 2026  
 **Branch:** `phase2/ai-nour-production`  
-**Status:** latest integrated candidate running locally; private-beta launch remains gated by Nour’s acceptance and the external account decisions below.
+**Status:** latest integrated candidate running locally. CRM schema, live Sheet round-trip, D1→Sheet sync, and consent-gated Calendar invitations are applied and validated. Private-beta launch remains gated by Nour’s personal acceptance and the external account decisions below.
 
 ---
 
@@ -31,12 +31,12 @@ Admin:      http://127.0.0.1:8791
 2. **Real-device acceptance.** Run Chrome, Safari, iOS Safari, microphone, Bluetooth, interruption, recovery, French, and mobile checks. Automated tests cannot substitute.
 3. **Resend.** Approve the DNS records for `mail.nourchkair.com`; add the sending-only API key and webhook signing secret; approve one controlled test send. Private beta can run without these.
 4. **OAuth production.** Approve the production project/clients, production redirect URIs, brand/scope verification, and publishing out of Testing. Approve whether the admin stays local/private or gets a private hostname.
-5. **CRM schema.** Approve the field set in `ai-nour/docs/crm-schema.md` before any Google Sheet headers are applied.
-6. **Calendar invitation policy.** Decide whether Google Calendar invitations/notifications will be enabled for visitor appointments, or whether Resend alone sends confirmations. Default is Resend-only; calendar invitations are disabled.
-7. **Voice policy.** Confirm the default 10-minute session and $0.25 reservation at that duration, or set a different value up to 10 minutes.
-8. **Google Workspace MCP.** Decide the post-1-February-2027 path if direct Workspace REST agent access is disallowed.
-9. **D1 residency.** Accept ENAM/ORD or change providers.
-10. **Archived key.** Acknowledge that the third-party Unsplash Maps key remains in Git history without rewrite; do not use it.
+5. **Sheet update cadence.** Confirm whether the implemented manual **Sync D1 → Google Sheet** action is sufficient for private beta, or approve automatic scheduled sync.
+6. **Voice policy.** Confirm the default 10-minute session and $0.25 reservation at that duration, or set a different value up to 10 minutes.
+7. **Google Workspace MCP.** Decide the post-1-February-2027 path if direct Workspace REST agent access is disallowed.
+8. **D1 residency.** Accept ENAM/ORD or change providers.
+9. **Archived key.** Acknowledge that the third-party Unsplash Maps key remains in Git history without rewrite; do not use it.
+10. **Beta access list.** Confirm the private-beta users and issue the prototype access key outside Git.
 
 ### Prioritized technical order
 
@@ -44,8 +44,8 @@ Admin:      http://127.0.0.1:8791
 2. Real-device microphone/Bluetooth/iOS failures.
 3. Resend DNS/key/test send.
 4. OAuth production publish/verification.
-5. CRM sheet application and live sync validation.
-6. Production admin hostname/private access.
+5. Production admin hostname/private access.
+6. Sheet sync cadence (manual vs scheduled).
 7. MCP migration decision.
 8. D1 residency.
 
@@ -123,7 +123,8 @@ No server-side WebSocket proxy. Provider token expiry already enforces 10 minute
 - `EMAIL_SEND_ENABLED=false` by default. All jobs are recorded and processed as `dry_run`; no Resend key, domain, or webhook is required for private beta.
 - Missing Resend configuration does **not** block testing.
 - Templates, retries, dead-letter, Resend idempotency, webhook signature verification and delivery states are implemented.
-- Calendar invitations are disabled by default; Resend confirmations/reminders are the planned channel. Enabling Google Calendar invitations is a separate decision to avoid duplicate emails.
+- Google Calendar invitations are **enabled** and consent-gated: an attendee is added only when the contact has an active `email` consent. Create, reschedule, and cancel use `sendUpdates=all` only when a consenting attendee is present; otherwise `sendUpdates=none`.
+- While Resend is disabled, Calendar is the only visitor notification channel. If Resend is enabled later, confirm whether both channels should send confirmations or whether one should be suppressed to avoid duplicates.
 
 Exact remaining steps (full detail in `ai-nour/docs/email-recommendation.md`):
 
@@ -139,9 +140,9 @@ No DNS change or real email has occurred.
 
 ---
 
-## 6. CRM schema for approval
+## 6. CRM schema and synchronization
 
-Full field table: `ai-nour/docs/crm-schema.md`. **Not applied to the live Google Sheet.**
+Full field table: `ai-nour/docs/crm-schema.md`. **Approved and applied to the live Google Sheet on 27 November 2026.**
 
 | Tab | Fields (required in bold) | Purpose |
 | --- | --- | --- |
@@ -156,10 +157,14 @@ Deliberately excluded: pipeline/opportunity tab, owner field, free-text notes, e
 
 ### D1 ↔ Google Sheets synchronization
 
-- A field mapping/reconciliation module is prepared in `src/services/crm-sync.js`.
-- Unit tests validate header order, row flattening, and diff detection for missing/changed rows (`tests/crm-sync.test.mjs`).
-- Live sync is **not** claimed: it cannot be validated until the approved headers exist in the live Sheet.
-- After approval, apply headers, run a dry-run diff against synthetic rows, then a controlled live round-trip before enabling beta writes.
+- Headers were applied to **Contacts, Inquiries, Consent, Appointments, Email Log, and Follow-ups**; the legacy Pipeline tab remains empty and unmanaged.
+- Field mapping and reconciliation live in `src/services/crm-sync.js`; unit coverage is in `tests/crm-sync.test.mjs`.
+- Live Sheet round-trip: **6/6** tabs written, read back, matched, and synthetic rows deleted (`results/crm-sheet-live.json`).
+- Manual D1 → Sheet sync: admin **CRM → Sync D1 → Google Sheet** calls `POST /api/admin/crm/sync`. It inserts missing keys, updates changed rows, leaves unchanged rows alone, and refuses tabs with unexpected headers.
+- Live D1 → Sheet validation: **12/12** checks; first run inserted 8 rows, second run inserted 0 / updated 0 / left 8 unchanged; all synthetic rows were then removed (`results/crm-sheet-sync-live.json`).
+- Calendar appointment rows carry the Calendar event id and Meet link; consent rows are exported only as scoped permission metadata.
+- Automatic per-event sync is **not** wired. Manual sync is the private-beta path; confirm whether scheduled sync is required.
+- The sync action exports all D1 rows, including local synthetic test records. Use a clean production D1 before the first beta sync.
 
 ---
 
@@ -189,7 +194,7 @@ Private/admin capabilities:
 - **Personality:** edit the server-side persona.
 - **Integrations:** Google status, Sheets/Calendar/Drive/Gmail health, synthetic test (when enabled).
 - **Conversations:** session list and transcript detail.
-- **CRM:** inquiries, D1 appointments, Google CRM summary.
+- **CRM:** inquiries, D1 appointments, Google CRM summary, and manual **Sync D1 → Google Sheet**.
 - **Appointments:** cancel.
 - **Features:** assistant/text/Live/prototype/Google-writes flags.
 - **Spending/voice:** daily cap, cumulative cap, 10-minute-configurable Live duration.
@@ -247,6 +252,8 @@ Personal acceptance is still required. Check each item during the review.
 - [ ] Availability and booking work with conflict protection.
 - [ ] Calendar confirms with a unique Meet link.
 - [ ] Confirmation/reminder/reschedule/cancel jobs queue.
+- [ ] Consent-gated Calendar invitations arrive for create/reschedule/cancel.
+- [ ] Internal Sheet sync shows the same inquiry, consent, appointment, and email-log records.
 - [ ] Email failures retry and dead-letter correctly.
 
 ### Desktop/mobile usability
@@ -297,6 +304,7 @@ Personal acceptance is still required. Check each item during the review.
 - `/api/health` and admin status.
 - D1 `ops_events` (30 days) and `cost_events`.
 - Email job statuses and webhook events.
+- CRM Sheet sync results (`crm.sheets.sync` ops events).
 - Live reservations/settlement.
 - No paid observability service.
 
@@ -322,10 +330,11 @@ Personal acceptance is still required. Check each item during the review.
 6. D1 migrations applied.
 7. Worker health/status verified.
 8. Spend caps and Live duration verified.
-9. Emergency shutdown tested.
-10. Rollback deployment identified.
-11. Feedback channel ready.
-12. Beta users briefed: AI representation, no sensitive data, two-week review.
+9. CRM → Sheet sync verified and synthetic rows absent.
+10. Emergency shutdown tested.
+11. Rollback deployment identified.
+12. Feedback channel ready.
+13. Beta users briefed: AI representation, no sensitive data, two-week review.
 
 ---
 
@@ -333,15 +342,16 @@ Personal acceptance is still required. Check each item during the review.
 
 | Area | Automated evidence | Personal acceptance |
 | --- | --- | --- |
-| Unit/API/CRM/Lifecycle/Admin/Live | 49/49, 23/23, 14/14, 28/28, 16/16, 4/4 | not a substitute |
+| Unit/API/CRM/Lifecycle/Admin/Live | 54/54, 23/23, 14/14, 28/28, 16/16, 4/4 | not a substitute |
 | Retrieval | 87.27% top-1 / 100% top-3 | still requires judgement |
-| Secret scan | 388 files, 0 value/pattern hits | review only |
+| Secret scan | 395 files, 0 value/pattern hits | review only |
 | Visual states | six states, 0 console errors | **pending** |
 | Microphone/Bluetooth/iOS | not run | **pending** |
 | French pronunciation | text benchmark only | **pending** |
 | Email delivery | mock/dry-run only | **pending after DNS** |
 | OAuth Google round-trip | Phase 2 local verification | production **pending** |
-| CRM Google Sheet | proposed mapping test only | **pending approval** |
+| CRM Google Sheet | headers applied; round-trip 6/6; D1 sync 12/12 | **personal review pending** |
+| Calendar invitations | 10/10 with one `@example.invalid` attendee | **pending real visitor approval** |
 
 No real-device or human-quality check is marked passed.
 
@@ -349,9 +359,9 @@ No real-device or human-quality check is marked passed.
 
 ## 12. Costs and constraints
 
-Latest ledger: **$0.361422 USD actual / ~$0.5139 CAD** cumulative; no held Live reservations at the time of measurement. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No paid service, billing, R2, or production deployment was activated.
+Latest ledger: **$0.931422 USD actual / ~$1.3244 CAD** cumulative; **$0.571089 USD** today; no held Live reservations. Fixed infrastructure remains **$0/month**. The $10 CAD evaluation budget remains intact. No paid service, billing, R2, or production deployment was activated.
 
-Live reservations are charged at the reservation floor when unreported; see `results/` and the admin cost view for the current figures.
+The increase from the last report is the conservative settlement of five synthetic Live-token reservations from earlier local validation (four held $0.08 tokens plus the 600-second $0.25 reservation). Local cron was not running, so expired holds were settled only when the scheduled handler was invoked. No real visitor conversation or provider-side Live session was charged. Live reservations are charged at the reservation floor when unreported; see `results/` and the admin cost view for the current figures.
 
 ---
 
@@ -361,9 +371,9 @@ Live reservations are charged at the reservation floor when unreported; see `res
 2. Real-device acceptance.
 3. Resend DNS/API key/webhook/test send.
 4. OAuth production project/verification/publishing and admin host decision.
-5. CRM Sheet approval and live sync round-trip.
-6. Calendar invitation policy.
-7. Google Workspace MCP decision before 1 February 2027.
-8. D1 residency.
-9. Archived third-party key acknowledgement.
-10. Private-beta access key distribution and user list.
+5. Sheet sync cadence decision (manual now; scheduled optional).
+6. Google Workspace MCP decision before 1 February 2027.
+7. D1 residency.
+8. Archived third-party key acknowledgement.
+9. Private-beta access key distribution and user list.
+10. Nour’s personal acceptance of interface, conversation, personality, voice quality, French, navigation, and mobile.
