@@ -116,7 +116,7 @@ Local regression:
 - Portfolio validation: **261**
 - Legal validator: **64/64**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **17/17** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, simplified Continue-button consent with no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **17/17** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, centered consent modal outside the chat with blurred portfolio background, “Continue and agree” button, no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 

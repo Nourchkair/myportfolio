@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T16:38:54.457Z",
+  "generatedAt": "2026-11-27T16:53:13.768Z",
   "passed": 17,
   "failed": 0,
   "total": 17,
@@ -55,22 +55,24 @@
       ]
     },
     {
-      "name": "AI choice uses the existing consent gate",
+      "name": "AI choice opens a centered consent modal outside the chat",
       "pass": true,
       "detail": {
         "introDone": true,
-        "panelHidden": false,
+        "panelHidden": true,
         "consentVisible": true,
+        "consentModal": true,
+        "blur": "blur(18px) saturate(0.78)",
         "gateHidden": true,
         "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.",
         "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.",
         "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy.",
-        "button": "Continue \u2014 I\u2019m 18+ and agree",
-        "buttonAria": "Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "button": "Continue and agree",
+        "buttonAria": "Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
         "checkboxCount": 0,
         "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
-        "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION.",
+        "tagline": "Your intelligent portfolio companion.",
         "links": [
           "/terms/",
           "/privacy/"
@@ -83,7 +85,7 @@
       "detail": {
         "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
-        "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION."
+        "tagline": "Your intelligent portfolio companion."
       }
     },
     {
@@ -101,11 +103,11 @@
       }
     },
     {
-      "name": "consent button carries the 18+ and Terms/Privacy acceptance",
+      "name": "consent button says Continue and agree while age is confirmed in the acceptance line",
       "pass": true,
       "detail": {
-        "button": "Continue \u2014 I\u2019m 18+ and agree",
-        "buttonAria": "Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "button": "Continue and agree",
+        "buttonAria": "Continue and agree: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
         "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy."
       }
     },
@@ -133,7 +135,7 @@
         "welcome": "Bienvenue \u2014 je suis Nupa, un guide de portfolio ind\u00e9pendant propuls\u00e9 par l\u2019IA, et non Nour. Je peux vous faire d\u00e9couvrir son travail, r\u00e9pondre \u00e0 vos questions et vous guider.",
         "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini, qui peut les utiliser pour am\u00e9liorer ses produits. Les transcriptions sont conserv\u00e9es jusqu\u2019\u00e0 7 jours et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
         "accept": "En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
-        "button": "Continuer \u2014 18 ans et j\u2019accepte"
+        "button": "Continuer et accepter"
       }
     },
     {
@@ -145,7 +147,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T16:38:50.627Z"
+          "acceptedAt": "2026-11-27T16:53:09.512Z"
         },
         "gateVisible": true,
         "consentHidden": true

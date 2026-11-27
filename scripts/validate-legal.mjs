@@ -55,7 +55,7 @@ check('legal current branding', !/AI Nour|AI-Nour/.test(privacy + terms) && /Nup
 check('legal footer', index.includes('class="legal-foot"') && index.includes('href="/privacy/"') && index.includes('href="/terms/"'));
 check('contact legal links', index.includes('class="contact-legal"'));
 check('reading legal links', readPage.includes('href="/privacy/"') && readPage.includes('href="/terms/"'));
-check('assistant consent gate', companion.includes('id="ainourConsent"') && /By clicking Continue, you confirm you are 18 or older/.test(companion) && /agree to the/.test(companion));
+check('assistant consent gate', companion.includes("consent.id = 'ainourConsent'") && /By clicking Continue, you confirm you are 18 or older/.test(companion) && /agree to the/.test(companion));
 check('assistant no separate acceptance checkbox', !companion.includes('id="ainourAgree"') && !companion.includes('id="ainourAge"') && !companion.includes('age16'));
 check('assistant current consent version', companion.includes("2026-11-27-v1.2"));
 check('assistant no mic-error label', !companion.includes('Mic error'));
