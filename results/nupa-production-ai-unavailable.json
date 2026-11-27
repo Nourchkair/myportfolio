@@ -1,0 +1,46 @@
+{
+  "generatedAt": "2026-11-27T20:58:58.075Z",
+  "passed": 4,
+  "failed": 0,
+  "total": 4,
+  "checks": [
+    {
+      "name": "independent portfolio browsing works while AI budget is exhausted",
+      "pass": true,
+      "detail": {
+        "ready": true,
+        "panelHidden": true,
+        "consentHidden": true,
+        "hash": "#/home"
+      }
+    },
+    {
+      "name": "AI unavailability shows a concise message and preserves the portfolio",
+      "pass": true,
+      "detail": {
+        "messages": [
+          "NUPA IS RESTING FOR TODAY. THE PORTFOLIO REMAINS FULLY AVAILABLE; CHAT RETURNS AFTER FRI, NOV 27, 7:00 PM EST YOUR TIME."
+        ],
+        "panelHidden": false,
+        "ready": true,
+        "consent": "2026-11-27-v1.4"
+      }
+    },
+    {
+      "name": "portfolio remains usable after AI unavailability",
+      "pass": true,
+      "detail": {
+        "panelHidden": true,
+        "ready": true,
+        "hash": "#/home"
+      }
+    },
+    {
+      "name": "no console errors in the unavailable-AI flow",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

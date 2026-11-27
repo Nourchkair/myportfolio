@@ -1,33 +1,37 @@
 {
-  "generatedAt": "2026-11-27T18:54:51.096Z",
-  "passed": 5,
+  "generatedAt": "2026-11-27T20:59:21.418Z",
+  "passed": 6,
   "failed": 0,
-  "total": 5,
+  "total": 6,
   "checks": [
     {
-      "name": "Privacy v1.3 published",
+      "name": "Privacy v1.4",
       "pass": true
     },
     {
-      "name": "Terms v1.3 published",
+      "name": "Terms v1.4",
       "pass": true
     },
     {
-      "name": "English and French legal sections",
+      "name": "EN/FR legal sections",
       "pass": true
     },
     {
-      "name": "Public home includes Explore with Nupa",
+      "name": "public home has Explore with Nupa",
       "pass": true
     },
     {
-      "name": "No beta-key UI on public home",
+      "name": "no beta-key UI",
+      "pass": true
+    },
+    {
+      "name": "v1.4 client bundle",
       "pass": true
     }
   ],
   "legal": {
-    "privacyVersion": "1.3",
-    "termsVersion": "1.3",
+    "privacyVersion": "1.4",
+    "termsVersion": "1.4",
     "english": true,
     "french": true
   }

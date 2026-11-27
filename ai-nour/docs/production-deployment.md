@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production deployment
 
-Status: **Nupa V3 is publicly deployed. The paid-tier/public-beta update (legal v1.4, consent `2026-11-27-v1.4`, $1 daily cap, web research removed, simplified onboarding) is implemented and pending approval/deployment. Production currently serves legal v1.3, consent v1.3 and a $3.00 daily cap. External writes, Resend and the private admin remain restricted.**
+Status: **Nupa v1.4 is deployed publicly. Legal v1.4 and consent `2026-11-27-v1.4` are live, no beta key is required, web research is removed, the simplified “Meet Nupa.” onboarding is live, and the approved $1.00 daily / $7.00 cumulative caps are enforced. Worker `78ea8cea-d0b3-4a6e-a523-29d0f386806c`; Pages `b1e253eb-2490-4c14-90f6-b14dfb07fa7f`. External writes, Resend and the private admin remain restricted.**
 
 ## 1. Live endpoints
 
@@ -28,13 +28,13 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `f5e81237-f8e1-41a1-9b7b-151225d05381` (live; legal v1.3, $3 daily cap). New Worker version to be created after approval. |
+| Worker version | `78ea8cea-d0b3-4a6e-a523-29d0f386806c` (v1.4 public beta, $1 daily cap) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `https://848ef7e8.nourchkair.pages.dev` |
+| Latest Pages deployment | `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` / `https://b1e253eb.nourchkair.pages.dev` (source `c7406a7`) |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -60,7 +60,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 
 ## 3c. Legal pages, consent and voice policy
 
-- Production currently serves bilingual legal version 1.3. The pending release publishes version 1.4 with paid Gemini processing, public beta, no beta-key requirement, and no retroactive paid-tier claim for earlier conversations.
+- Production serves bilingual legal version 1.4 with paid Gemini processing, public beta, no beta-key requirement, and no retroactive paid-tier claim for earlier conversations.
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.4` before reading, chat, Live voice or tools. Enforcement applies in public mode, not only when a beta key is required.
@@ -71,10 +71,10 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 ## 3d. Nupa identity release (deployed)
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
-- Live production: legal version **1.3** and consent **`2026-11-27-v1.3`**. Pending release: legal **1.4** and consent **`2026-11-27-v1.4`**; existing sessions must re-accept.
+- Live production: legal version **1.4** and consent **`2026-11-27-v1.4`**; existing sessions must re-accept.
 - Public access is enabled: `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; no beta key is requested.
 - Worker `f5e81237-f8e1-41a1-9b7b-151225d05381` and Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) are live.
-- The live daily spending cap is **$3.00**; the pending release restores **$1.00**. The cumulative cap remains **$7.00**.
+- The live daily spending cap is **$1.00**; the cumulative cap is **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
@@ -124,9 +124,9 @@ Production ledger before the paid-tier verification calls:
 - Today: **$1.445858 USD** (read at report time)
 - Paid text test: **+$0.000717** internal estimate at the rates then configured
 - Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
-- Current internal estimate: **$1.445858 USD today / $2.342721 cumulative**
+- Current internal estimate at deployment validation: **$1.695858 USD today / $2.592721 cumulative**
 - Held reservations: **$0** before the paid Live test
-- Approved daily cap: **$1.00 USD**; live production temporarily **$3.00** until the pending release
+- Daily cap: **$1.00 USD** (live); cumulative cap **$7.00 USD**
 - Cumulative cap: **$7.00 USD**
 - Live default: **300 seconds / $0.125 reservation**; 600-second maximum remains available in admin
 - Fixed monthly infrastructure: **$0**
@@ -135,7 +135,7 @@ Production ledger before the paid-tier verification calls:
 
 These are internal token-based estimates, not confirmed Google invoices. The Gemini API key cannot read the project, billing tier, credit balance or invoices, so those figures remain user-provided. Text requests hold a $0.02 atomic reservation while in flight. Live holds an atomic session reservation; each reported turn is charged at actual token-estimated usage, capped by the reservation remainder, and `/api/live/end` releases the hold. A session that ends with no reported usage is charged the reservation conservatively; an expired unreported reservation is settled to the unreserved remainder. The old Live code charged the full $0.125 reservation instead of reported token usage, so the ledger overstates the two paid Live tests; the token-level estimate for the first test is $0.006611, not $0.125. The ledger is intentionally left intact as a conservative audit record.
 
-**Deployment timing:** the current internal daily estimate ($1.445858) is already above the approved $1.00 daily cap because production has been running under the temporary $3.00 cap. Deploying the $1.00 cap today will pause new AI requests until the next UTC daily reset. Deploy after the UTC reset or accept that short pause.
+**Deployment timing:** the current internal daily estimate ($1.695858) is above the $1.00 daily cap, so AI requests are paused until the next UTC daily reset. This is the accepted temporary pause; the portfolio remains fully available and independent browsing was verified. The cumulative remaining estimate is $4.407279.
 
 **Rate review (27 November 2026):** `gemini-3.8-live` matches Google's published paid rates: $0.75 text input, $3.00 audio input, $12.00 audio output per 1M tokens. The `gemini-flash-lite-latest` alias is not documented on Google's pricing page. Google publishes $0.10/$0.40 for 2.5 Flash-Lite, $0.25/$1.50 for 3.1 Flash-Lite and $0.30/$2.50 for 3.5 Flash-Lite. The application now uses the highest current Flash-Lite rates ($0.30 input/$2.50 output) as a conservative ceiling, so the internal ledger may overstate text cost if the alias resolves to an older generation. Review these rates whenever the alias changes or a pinned model is adopted.
 
@@ -153,13 +153,15 @@ This was tested in production, including recovery.
 ## 9. Rollback
 
 - Current Worker version: `f5e81237-f8e1-41a1-9b7b-151225d05381` (live public access, $3 daily cap)
+- Previous Nupa Worker: `07a45644-d9e4-4157-a9b4-b80439a51c6a` (v1.4 first deploy, same static release)
+- Previous Nupa Worker: `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap)
 - Previous Nupa Worker: `28bcef6b-4260-495e-94bc-4fc7e90d203a` (private-beta mode, $3 daily cap)
 - Previous Nupa Worker: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3, $1 daily cap)
 - Previous production Worker: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Static/legal rollback: Pages deployment `d3dd93bb-2bf5-4c60-a6ff-87792958a27c` (source `868b606`) or redeploy that commit.
+- Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The v1.4 Pages deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
 - Daily cap: the pending release restores `DAILY_SPEND_CAP_USD_MICROS = "1000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 1000000` if a stored $3.00 control exists. Cumulative cap remains $7.00.
@@ -233,10 +235,12 @@ npm run deploy
 | Nupa opening browser (local mock) | 20/20 | `results/nupa-v3-opening-browser.json` |
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
-| Production Nupa static/legal | 5/5 | `results/nupa-production-static.json` |
+| Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |
 | Production public API/no-key access | 7/7 | `results/nupa-production-public-api.json` |
-| Production public preflight | 16/16 | `results/nupa-production-public-preflight.json` |
-| Production opening cards and centered consent modal | 11/11 | `results/nupa-production-intro.json` |
+| Production AI-unavailable portfolio browsing | 4/4 | `results/nupa-production-ai-unavailable.json` |
+| Cloudflare Free edge rate limit | 30x200 then 10x429 | `results/cloudflare-edge-rate-limit.json` |
+| Production public preflight | 17/17 | `results/nupa-production-public-preflight.json` |
+| Production opening cards and consent | 12/12 | `results/nupa-production-intro.json` |
 | Public default entry and no-key conversation | 4/4 | `results/nupa-production-public-default.json` |
 | Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
 | Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |

@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-11-27T20:05:00Z",
-  "status": "implemented, validated locally, not committed or deployed pending approval",
+  "status": "deployed and validated in production",
   "release": {
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
@@ -13,19 +13,21 @@
     "liveModel": "gemini-3.8-live"
   },
   "production": {
-    "worker": "f5e81237-f8e1-41a1-9b7b-151225d05381",
-    "pages": "848ef7e8-13bf-4682-9c72-45abb73f2367",
-    "source": "b1de5b2",
-    "legalVersion": "1.3",
-    "consentVersion": "2026-11-27-v1.3",
-    "dailyCapUsdMicros": 3000000,
-    "note": "Production still serves the pre-v1.4 code until approval.",
+    "worker": "78ea8cea-d0b3-4a6e-a523-29d0f386806c",
+    "pages": "b1e253eb-2490-4c14-90f6-b14dfb07fa7f",
+    "source": "c7406a7",
+    "legalVersion": "1.4",
+    "consentVersion": "2026-11-27-v1.4",
+    "dailyCapUsdMicros": 1000000,
+    "note": "AI paused until UTC daily reset because current internal daily estimate exceeds the $1 cap.",
     "budgetAtReport": {
-      "dailyUsdMicros": 1445858,
-      "cumulativeUsdMicros": 2342721,
-      "dailyCapUsdMicros": 3000000,
+      "dailyUsdMicros": 1695858,
+      "cumulativeUsdMicros": 2592721,
+      "dailyCapUsdMicros": 1000000,
       "cumulativeCapUsdMicros": 7000000,
-      "note": "Internal estimate; current daily estimate is above the approved $1 cap, so deploying the $1 cap today pauses AI until the next UTC reset."
+      "dailyRemainingUsdMicros": 0,
+      "cumulativeRemainingUsdMicros": 4407279,
+      "allowed": false
     }
   },
   "paidTier": {
@@ -112,14 +114,37 @@
       "passed": 4,
       "failed": 0,
       "evidence": "results/live-token-restrictions.json"
+    },
+    "productionPreflight": {
+      "passed": 17,
+      "failed": 0
+    },
+    "productionStatic": {
+      "passed": 6,
+      "failed": 0
+    },
+    "productionPublicApi": {
+      "passed": 7,
+      "failed": 0
+    },
+    "productionIntro": {
+      "passed": 12,
+      "failed": 0
+    },
+    "productionAiUnavailable": {
+      "passed": 4,
+      "failed": 0
+    },
+    "cloudflareEdgeRateLimit": {
+      "passed": 30,
+      "blocked": 10
     }
   },
   "notRun": [
-    "Production deployment of v1.4",
+    "Production text/voice paid regression after deployment (daily cap exhausted until UTC reset)",
     "Real-device microphone, Bluetooth and iOS acceptance",
     "Subjective voice naturalness and presentation-quality scoring",
-    "Independent Google Cloud Billing invoice/credit verification",
-    "Production browser rerun against the v1.4 build"
+    "Independent Google Cloud Billing invoice/credit verification"
   ],
   "edge": {
     "cloudflareFreeRateLimit": {

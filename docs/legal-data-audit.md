@@ -186,13 +186,13 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 10. Nupa identity and public access (version 1.3)
 
-**Status:** deployed publicly on 27 November 2026. Legal version 1.3 was published at that time; version 1.4 is prepared for the next approved deployment. Consent version `2026-11-27-v1.4` is the current enforcement version, public access requires no beta key, and the production persona is Nupa.
+**Status:** v1.4 deployed publicly on 27 November 2026. Legal version 1.4 and consent `2026-11-27-v1.4` are live, public access requires no beta key, and the production persona is Nupa. Worker `78ea8cea-d0b3-4a6e-a523-29d0f386806c`; Pages `b1e253eb-2490-4c14-90f6-b14dfb07fa7f`.
 
 **Public-access approval:** Nour approved removing the beta-key gate and enabling public Nupa access on 27 November 2026.
 
 - The assistant is now **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour, not a digital version, twin, replica or AI representation of him, and it never impersonates him.
 - Nupa speaks about Nour in the third person and about itself in the first person. Its own opinions and conclusions are expressly distinguished from Nour's documented beliefs.
-- The Privacy Policy and Terms of Use are prepared at version **1.4**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.4`**, so existing sessions must re-accept before text, voice or tools.
+- The Privacy Policy and Terms of Use are published at version **1.4**, effective **27 November 2026**, in English and French. The consent version is **`2026-11-27-v1.4`**, so existing sessions must re-accept before text, voice or tools.
 - Public access removes the beta-key requirement while retaining the 18+ requirement, microphone consent, inquiry/appointment consent, Google disclosures, Resend-disabled state, rate limits and spending caps. Version 1.4 adds paid Gemini processing, server-issued ownership, text budget reservations, global/per-visitor limits and concurrent voice caps; it removes web research.
 - The stored production persona override requires migration because changing source defaults alone does not update D1. `ai-nour/scripts/migrate-persona-nupa.mjs` performs a non-destructive identity replacement, preserves unrelated custom text, and supports `--self-test` and dry-run before `--apply`.
 - The Google Drive folder names, OAuth client identifiers, Worker/D1 names, API routes, environment variables, secrets, beta-key prefix and browser storage keys are intentionally unchanged to avoid destructive migration.

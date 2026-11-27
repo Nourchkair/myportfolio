@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-11-27T19:00:55.619Z",
+  "generatedAt": "2026-11-27T20:54:31.332Z",
   "base": "https://api.nourchkair.com",
-  "sessionId": "23ac1095-bc68-4259-bf83-45fe1ee7c668",
-  "passed": 16,
+  "sessionId": "851feff5-cbda-4fe0-ab73-437b0bcedb5f",
+  "passed": 17,
   "failed": 0,
-  "total": 16,
+  "total": 17,
   "results": [
     {
       "name": "production health endpoint",
@@ -44,6 +44,14 @@
       }
     },
     {
+      "name": "public owner credential is server-issued",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "length": 64
+      }
+    },
+    {
       "name": "public session is created without a key",
       "pass": true,
       "detail": {
@@ -75,16 +83,18 @@
       "pass": true,
       "detail": {
         "budget": {
-          "dailyUsdMicros": 1195141,
-          "cumulativeUsdMicros": 2092004,
-          "dailySpentUsdMicros": 1195141,
-          "cumulativeSpentUsdMicros": 2092004,
+          "dailyUsdMicros": 1695858,
+          "cumulativeUsdMicros": 2592721,
+          "dailySpentUsdMicros": 1695858,
+          "cumulativeSpentUsdMicros": 2592721,
           "heldLiveReservationsUsdMicros": 0,
-          "dailyCapUsdMicros": 3000000,
+          "heldSpendReservationsUsdMicros": 0,
+          "heldReservationsUsdMicros": 0,
+          "dailyCapUsdMicros": 1000000,
           "cumulativeCapUsdMicros": 7000000,
-          "dailyRemainingUsdMicros": 1804859,
-          "cumulativeRemainingUsdMicros": 4907996,
-          "allowed": true
+          "dailyRemainingUsdMicros": 0,
+          "cumulativeRemainingUsdMicros": 4407279,
+          "allowed": false
         }
       }
     },
@@ -98,7 +108,9 @@
           "calendar": true,
           "knowledgeFolder": true,
           "backupFolder": true,
-          "allowSyntheticWrites": false
+          "allowSyntheticWrites": false,
+          "oauthMode": "external-testing",
+          "durability": "Google integrations are optional. If authorization expires, CRM/Calendar/Drive/Gmail endpoints fail closed; Nupa chat, voice, portfolio, consent and spending controls do not depend on Google authorization."
         }
       }
     },

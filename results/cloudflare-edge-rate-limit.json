@@ -1,0 +1,14 @@
+{
+  "generatedAt": "2026-11-27T21:00:00Z",
+  "target": "https://api.nourchkair.com/api/meta",
+  "rule": "Nupa API edge rate limit",
+  "limit": "30 requests / 10 seconds / IP",
+  "action": "Block 10 seconds",
+  "attempts": 40,
+  "statusCounts": {
+    "200": 30,
+    "429": 10
+  },
+  "passed": true,
+  "note": "Cloudflare Free edge rate limiting returned 429 after the 30th request in the window; /api/health is excluded."
+}
