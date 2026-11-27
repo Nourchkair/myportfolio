@@ -6,9 +6,11 @@ const SECTIONS=new Set(['home','me','brain','journey','projects','contact','read
 const CHAPTER_IDS=new Set(PROFESSIONAL_CHAPTERS.map(chapter=>chapter.id));
 
 const COMMANDS=Object.freeze([
-  'navigateTo','openProject','openProjectFlow','highlightFlowNode',
+  'navigateTo','showProjectCard','openProject','openProjectFlow','highlightFlowNode',
   'openJourneyChapter','openContact','openReadingView','goBack',
-  'getCurrentState','getStatus','subscribe'
+  'getCurrentState','getStatus','subscribe',
+  'getPresentationTargets','getPresentationTarget','applyPresentationAction',
+  'cancelPresentationActions','waitForPresentationTarget','getPresentationState'
 ]);
 
 function fail(code,message,details){
@@ -34,6 +36,15 @@ export function createCommandApi(adapter,store){
       const result=await fn();
       if(result===false) return fail('INVALID_STATE','The requested action is not available in the current view');
       return {ok:true,state:deepFreeze(clone(store.getState()))};
+    }catch(error){
+      return fail(error?.code||'COMMAND_FAILED',error?.message||`${command} failed`);
+    }
+  };
+  const runPresentation=async(command,fn)=>{
+    try{
+      const result=await fn();
+      if(result?.ok===false) return {ok:false,error:result.error||'PRESENTATION_ACTION_FAILED',result};
+      return {ok:true,result,state:deepFreeze(clone(store.getState()))};
     }catch(error){
       return fail(error?.code||'COMMAND_FAILED',error?.message||`${command} failed`);
     }
@@ -69,6 +80,12 @@ export function createCommandApi(adapter,store){
         return adapter.navigateTo(section);
       });
     },
+    showProjectCard(projectId){
+      return run('showProjectCard',[projectId],()=>{
+        if(typeof projectId!=='string'||!PROJECT_BY_ID[projectId]) throw Object.assign(new Error('Unknown project id'),{code:'UNKNOWN_PROJECT'});
+        return adapter.showProjectCard?.(projectId)??false;
+      });
+    },
     openProject(projectId){
       return run('openProject',[projectId],()=>{
         if(typeof projectId!=='string'||!PROJECT_BY_ID[projectId]) throw Object.assign(new Error('Unknown project id'),{code:'UNKNOWN_PROJECT'});
@@ -97,7 +114,13 @@ export function createCommandApi(adapter,store){
     },
     openContact(){ return run('openContact',[],()=>adapter.openContact()); },
     openReadingView(){ return run('openReadingView',[],()=>adapter.openReadingView()); },
-    goBack(){ return run('goBack',[],()=>adapter.goBack()); }
+    goBack(){ return run('goBack',[],()=>adapter.goBack()); },
+    getPresentationTargets(options={}){ return adapter.getPresentationTargets?.(options)||{targets:[]}; },
+    getPresentationTarget(targetId){ return adapter.getPresentationTarget?.(targetId)||null; },
+    applyPresentationAction(action){ return runPresentation('applyPresentationAction',()=>adapter.applyPresentationAction?.(action)||{ok:false,error:'PRESENTATION_UNAVAILABLE'}); },
+    cancelPresentationActions(){ adapter.cancelPresentationActions?.(); return {ok:true}; },
+    waitForPresentationTarget(targetId){ return adapter.waitForPresentationTarget?.(targetId)??Promise.resolve(false); },
+    getPresentationState(){ return adapter.getPresentationState?.()||null; }
   };
   return Object.freeze(api);
 }

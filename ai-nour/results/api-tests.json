@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T06:15:04.402Z",
+  "generatedAt": "2026-11-27T07:15:33.188Z",
   "mode": "mock-providers/local-d1",
   "passed": 23,
   "failed": 0,
@@ -66,7 +66,8 @@
           {
             "type": "openProject",
             "projectId": "safiy",
-            "route": "/projects/safiy"
+            "route": "/projects/safiy",
+            "waitForTarget": "project:safiy"
           }
         ]
       }

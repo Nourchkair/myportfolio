@@ -32,7 +32,7 @@ const state = {
   ready: false,
   mounted: false,
   voice: 'idle',
-  presentation: { active: false, projectId: null, nodeId: null, paused: false },
+  presentation: { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' },
   consent: readConsent(),
   sessionConsentRequired: false,
   micConsentResolver: null,
@@ -80,7 +80,7 @@ localStorage.setItem(STORE.owner, state.owner);
 function randomId(bytes = 24) {
   return [...crypto.getRandomValues(new Uint8Array(bytes))].map((value) => value.toString(16).padStart(2, '0')).join('');
 }
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+const nextFrame = () => new Promise((resolve) => requestAnimationFrame(() => resolve()));
 
 function resolveApi(path) {
   return `${API_BASE}${path}`;
@@ -149,7 +149,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=5', import.meta.url).href;
+  link.href = new URL('./companion.css?v=7', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -346,6 +346,7 @@ function mount() {
   });
   els.micAllow.addEventListener('click', () => resolveMicConsent(true));
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
+  window.addEventListener('ainour:presentation-control', (event) => handlePresentationControl(event.detail?.action));
   els.form.addEventListener('submit', sendMessage);
   els.input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -926,8 +927,12 @@ function portfolioContext() {
       active: state.presentation.active,
       projectId: state.presentation.projectId,
       nodeId: state.presentation.nodeId,
-      paused: state.presentation.paused
-    }
+      paused: state.presentation.paused,
+      stepIndex: state.presentation.stepIndex,
+      totalSteps: state.presentation.totalSteps,
+      label: state.presentation.label
+    },
+    targets: window.NourOS?.getPresentationTargets?.({ visibleOnly: true, limit: 40 })?.targets || []
   };
 }
 
@@ -948,8 +953,12 @@ function describeCurrentView() {
     `Route: ${status.route?.path || '/'}`,
     `Navigation source: ${Date.now() <= aiNavUntil ? 'assistant' : 'visitor'}`,
     state.presentation.active
-      ? `Presentation: active${state.presentation.projectId ? ` in ${state.presentation.projectId}` : ''}${state.presentation.paused ? ' (paused)' : ''}`
-      : 'Presentation: not active'
+      ? `Presentation: active${state.presentation.projectId ? ` in ${state.presentation.projectId}` : ''}${state.presentation.nodeId ? ` at ${state.presentation.nodeId}` : ''}${state.presentation.paused ? ' (paused)' : ''}${state.presentation.totalSteps ? ` · step ${state.presentation.stepIndex}/${state.presentation.totalSteps}` : ''}`
+      : 'Presentation: not active',
+    (() => {
+      const targets = window.NourOS?.getPresentationTargets?.({ visibleOnly: true, limit: 24 })?.targets || [];
+      return targets.length ? `Visible targets: ${targets.map((target) => `${target.id} (${target.label})`).join('; ')}` : '';
+    })()
   ].filter(Boolean).join('\n');
 }
 
@@ -1039,10 +1048,22 @@ function renderThread({ forceScroll = false } = {}) {
 function actionLabel(action) {
   if (!action) return 'Navigation';
   if (action.type === 'openProject') return `Opened ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
+  if (action.type === 'showProjectCard') return `Focused ${PROJECT_BY_ID[action.projectId]?.title || action.projectId}`;
   if (action.type === 'openProjectFlow') return `Opened ${PROJECT_BY_ID[action.projectId]?.title || action.projectId} flow`;
   if (action.type === 'openJourneyChapter') return `Opened ${CHAPTER_BY_ID[action.chapterId]?.label || action.chapterId}`;
   if (action.type === 'openContact') return 'Opened contact';
   if (action.type === 'navigate') return `Opened ${action.section}`;
+  if (action.type === 'presentationStart') return 'Started presentation';
+  if (action.type === 'presentationStep') return 'Next step';
+  if (action.type === 'presentationPause') return 'Paused';
+  if (action.type === 'presentationResume') return 'Resumed';
+  if (action.type === 'presentationEnd') return 'Ended presentation';
+  if (action.type === 'highlightElement') return 'Highlighted';
+  if (action.type === 'spotlightElement') return 'Spotlight';
+  if (action.type === 'compareElements') return 'Compared';
+  if (action.type === 'traceWorkflow' || action.type === 'traceConnection') return 'Traced workflow';
+  if (action.type === 'zoomToElement') return 'Zoomed';
+  if (action.type === 'clearVisualEffects') return 'Cleared visuals';
   return action.route || action.type;
 }
 
@@ -1105,6 +1126,10 @@ async function sendMessage(event) {
   if (state.busy || !state.ready) return;
   const message = els.input.value.trim();
   if (!message) return;
+  if (state.presentation.active && !state.presentation.paused) {
+    state.presentation = { ...state.presentation, paused: true };
+    window.NourOS?.applyPresentationAction?.({ type: 'presentationPause' });
+  }
   state.busy = true;
   els.send.disabled = true;
   els.input.value = '';
@@ -1124,8 +1149,8 @@ async function sendMessage(event) {
     });
     state.sessionId = data.sessionId;
     localStorage.setItem(STORE.session, state.sessionId);
-    addMessage('assistant', data.reply, data.actions || []);
     await runActions(data.actions || []);
+    addMessage('assistant', data.reply, data.actions || []);
     setState('idle');
     if (els.panel.hidden) {
       state.unread = true;
@@ -1147,6 +1172,13 @@ async function sendMessage(event) {
   }
 }
 
+const VISUAL_ACTIONS = new Set([
+  'navigateToElement', 'highlightElement', 'spotlightElement', 'hoverElement',
+  'expandElement', 'collapseElement', 'pointToElement', 'traceConnection',
+  'traceWorkflow', 'scrollToElement', 'zoomToElement', 'resetZoom',
+  'compareElements', 'clearVisualEffects'
+]);
+
 async function runActions(actions) {
   const list = (actions || []).filter(Boolean);
   if (!list.length) return { ok: true, applied: [] };
@@ -1155,57 +1187,76 @@ async function runActions(actions) {
   let failed = false;
   let cancelled = false;
   const runEpoch = aiActionEpoch;
+  const status = window.NourOS;
+  if (!status) return { ok: false, applied: [], error: 'INTERFACE_UNAVAILABLE' };
+  const waitForTarget = async (targetId) => {
+    if (!targetId || typeof status.waitForPresentationTarget !== 'function') { await nextFrame(); return true; }
+    return status.waitForPresentationTarget(targetId);
+  };
   for (let index = 0; index < list.length; index++) {
     if (runEpoch !== aiActionEpoch) { cancelled = true; break; }
     const action = list[index];
-    const status = window.NourOS;
-    if (!status) { failed = true; break; }
-    if (action.type === 'presentationStart') {
-      state.presentation = { active: true, projectId: action.projectId || null, nodeId: action.startNodeId || null, paused: false };
+    if (action.type === 'presentationStart' || action.type === 'presentationStep') {
+      state.presentation = {
+        active: true,
+        projectId: action.projectId || state.presentation.projectId || null,
+        nodeId: action.nodeId || action.startNodeId || null,
+        paused: false,
+        stepIndex: Number(action.stepIndex) || 0,
+        totalSteps: Number(action.totalSteps) || state.presentation.totalSteps || 0,
+        label: action.label || state.presentation.label || ''
+      };
+      await status.applyPresentationAction?.(action);
+      applied.push(action);
       continue;
     }
-    if (action.type === 'presentationStep') {
-      state.presentation = { ...state.presentation, active: true, projectId: action.projectId || state.presentation.projectId, nodeId: action.nodeId || null, paused: false };
-      continue;
-    }
-    if (action.type === 'presentationPause') { state.presentation.paused = true; continue; }
-    if (action.type === 'presentationResume') { state.presentation.paused = false; continue; }
+    if (action.type === 'presentationPause') { state.presentation = { ...state.presentation, paused: true }; await status.applyPresentationAction?.(action); applied.push(action); continue; }
+    if (action.type === 'presentationResume') { state.presentation = { ...state.presentation, paused: false }; await status.applyPresentationAction?.(action); applied.push(action); continue; }
     if (action.type === 'presentationEnd') {
-      state.presentation = { active: false, projectId: null, nodeId: null, paused: false };
+      state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+      await status.applyPresentationAction?.(action);
+      applied.push(action);
       continue;
     }
-    aiNavUntil = Date.now() + 2500;
-    queueAiRoute(action.route);
+    if (VISUAL_ACTIONS.has(action.type)) {
+      if (action.navigationRoute) queueAiRoute(action.navigationRoute);
+      aiNavUntil = Date.now() + 5000;
+      const result = await status.applyPresentationAction?.(action);
+      if (result?.ok === false || result?.ok === undefined) failed = true;
+      applied.push({ ...action, result });
+      continue;
+    }
+    aiNavUntil = Date.now() + 4000;
+    if (action.route) queueAiRoute(action.route);
     try {
       if (action.type === 'navigate') { await status.navigateTo(action.section); applied.push(action); }
+      else if (action.type === 'showProjectCard') { await status.showProjectCard(action.projectId); applied.push(action); }
       else if (action.type === 'openProject') { await status.openProject(action.projectId); applied.push(action); }
       else if (action.type === 'openProjectFlow') {
-        if (index > 0 && list[index - 1]?.type === 'openProject') {
-          await sleep(900);
-          if (runEpoch !== aiActionEpoch) { cancelled = true; break; }
-        }
         await status.openProjectFlow(action.projectId, action.nodeId || null);
         applied.push(action);
         if (state.presentation.active) state.presentation.nodeId = action.nodeId || null;
       } else if (action.type === 'openJourneyChapter') { await status.openJourneyChapter(action.chapterId); applied.push(action); }
       else if (action.type === 'openContact') { await status.openContact(); applied.push(action); }
+      if (action.waitForTarget && !(await waitForTarget(action.waitForTarget))) failed = true;
     } catch (error) {
       failed = true;
       if (String(error?.code || error?.message || '').includes('BUSY')) {
-        await sleep(900);
+        await nextFrame();
         try {
           if (action.type === 'openProject') { await status.openProject(action.projectId); applied.push(action); failed = false; }
           if (action.type === 'openProjectFlow') { await status.openProjectFlow(action.projectId, action.nodeId || null); applied.push(action); failed = false; }
+          if (action.waitForTarget) await waitForTarget(action.waitForTarget);
         } catch {}
       }
     }
-    if (index < list.length - 1) await sleep(250);
+    if (index < list.length - 1) await nextFrame();
   }
-  aiNavUntil = Date.now() + 2500;
+  aiNavUntil = Date.now() + 3000;
   updateContext();
   sendLiveContextUpdate();
   if (!voice.active) setState('idle');
-  return { ok: !failed && !cancelled, cancelled, applied };
+  return { ok: !failed && !cancelled, cancelled, applied, failed };
 }
 
 function onNourState(status) {
@@ -1216,13 +1267,90 @@ function onNourState(status) {
     expectedAiRoutes = [];
     aiActionEpoch += 1;
     if (state.presentation.active) {
-      state.presentation = { active: false, projectId: null, nodeId: null, paused: false };
+      state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+      window.NourOS?.cancelPresentationActions?.();
+      window.NourOS?.applyPresentationAction?.({ type: 'presentationEnd' });
     }
   }
   updateContext();
   schedulePillPosition();
   if (routeChanged) sendLiveContextUpdate();
   lastRoute = nextRoute;
+}
+
+async function handlePresentationControl(action) {
+  if (!state.presentation.active && action !== 'end') return;
+  const status = window.NourOS;
+  if (!status) return;
+  if (action === 'pause') {
+    state.presentation = { ...state.presentation, paused: true };
+    if (voice.active) stopPlayback();
+    await status.applyPresentationAction?.({ type: 'presentationPause' });
+    return;
+  }
+  if (action === 'resume') {
+    state.presentation = { ...state.presentation, paused: false };
+    await status.applyPresentationAction?.({ type: 'presentationResume' });
+    return;
+  }
+  if (action === 'end') {
+    state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+    aiActionEpoch += 1;
+    await status.applyPresentationAction?.({ type: 'presentationEnd' });
+    status.cancelPresentationActions?.();
+    return;
+  }
+  if (action === 'next' || action === 'prev') await movePresentationStep(action);
+}
+
+async function movePresentationStep(direction) {
+  const project = PROJECT_BY_ID[state.presentation.projectId];
+  if (!project?.flow?.nodes?.length) return;
+  const ids = project.flow.nodes.map((node) => node.id);
+  const current = ids.indexOf(state.presentation.nodeId);
+  const base = current < 0 ? 0 : current + (direction === 'next' ? 1 : -1);
+  const index = Math.max(0, Math.min(ids.length - 1, base));
+  const nodeId = ids[index];
+  const node = project.flow.nodes.find((item) => item.id === nodeId);
+  state.presentation = {
+    ...state.presentation,
+    active: true,
+    paused: false,
+    projectId: project.id,
+    nodeId,
+    stepIndex: index + 1,
+    totalSteps: ids.length,
+    label: node?.title || nodeId
+  };
+  aiNavUntil = Date.now() + 5000;
+  queueAiRoute(`/projects/${project.id}/flow/${nodeId}`);
+  await window.NourOS?.applyPresentationAction?.({
+    type: 'presentationStep',
+    projectId: project.id,
+    nodeId,
+    stepIndex: index + 1,
+    totalSteps: ids.length,
+    label: node?.title || nodeId
+  });
+  await window.NourOS?.openProjectFlow?.(project.id, nodeId);
+  await window.NourOS?.applyPresentationAction?.({
+    type: 'highlightElement',
+    targetIds: [`flow-node:${project.id}:${nodeId}`],
+    style: 'glow',
+    waitForTarget: `flow-node:${project.id}:${nodeId}`
+  });
+  updateContext();
+  sendLiveContextUpdate();
+  if (voice.active && voice.session) {
+    try {
+      voice.session.sendClientContent({
+        turns: `[Presentation control — not a visitor message] The visitor selected ${direction}. Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step. Do not restart the tour.`,
+        turnComplete: true
+      });
+    } catch {}
+  } else {
+    addMessage('system', `Step ${index + 1} of ${ids.length}: ${node?.title || nodeId}`);
+  }
 }
 
 function toggleLocale() {
@@ -1390,16 +1518,18 @@ async function handleLiveTool(toolCall) {
         ? await runActions(result.actions || (result.action ? [result.action] : []))
         : null;
       const routes = (result.actions || (result.action ? [result.action] : [])).filter(Boolean).map((item) => item.route).filter(Boolean);
+      const visualFailure = applied && applied.ok === false;
       responses.push({
         id: call.id,
         name: call.name,
-        response: result.ok
+        response: result.ok && !visualFailure
           ? {
               ...(result.modelResponse || { ok: true }),
               ok: true,
-              ...(routes.length ? { confirmed: applied?.ok === true, routes } : {})
+              ...(routes.length ? { confirmed: applied?.ok === true, routes } : {}),
+              ...(applied?.applied?.length ? { visualApplied: true } : {})
             }
-          : { ok: false, error: result.error?.code }
+          : { ok: false, error: visualFailure ? 'VISUAL_ACTION_FAILED' : result.error?.code }
       });
     } catch {
       responses.push({ id: call.id, name: call.name, response: { ok: false, error: 'TOOL_FAILED' } });
@@ -1464,6 +1594,12 @@ async function startVoice() {
           if (activity === 'START_OF_SPEECH') setState('listening');
           else if (activity === 'END_OF_SPEECH') setState('processing');
           if (message.serverContent?.interrupted) {
+            aiActionEpoch += 1;
+            window.NourOS?.cancelPresentationActions?.();
+            if (state.presentation.active) {
+              state.presentation = { ...state.presentation, paused: true };
+              window.NourOS?.applyPresentationAction?.({ type: 'presentationPause' });
+            }
             stopPlayback();
             setState('listening');
           }

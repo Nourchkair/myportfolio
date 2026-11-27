@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-11-27T07:14:49.759Z",
+  "highlighted": {
+    "highlights": 1,
+    "cursor": true,
+    "route": "/projects",
+    "chips": [
+      "Highlighted"
+    ]
+  },
+  "presented": {
+    "bar": true,
+    "title": "Customer Acquisition",
+    "progress": "5 / 9",
+    "projectOpen": true,
+    "flow": true,
+    "presentation": {
+      "active": true,
+      "paused": false,
+      "projectId": "acquisition",
+      "nodeId": "demo",
+      "stepIndex": 5,
+      "totalSteps": 9,
+      "label": "Customer Acquisition"
+    }
+  },
+  "manualNavigation": {
+    "barHidden": true,
+    "presentation": {
+      "active": false,
+      "paused": false,
+      "projectId": null,
+      "nodeId": null,
+      "stepIndex": 0,
+      "totalSteps": 0,
+      "label": ""
+    },
+    "highlights": 0,
+    "cursorHidden": true
+  },
+  "consoleErrors": []
+}

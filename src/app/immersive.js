@@ -5,6 +5,7 @@ import { SCENES } from '../data/environments.js';
 import { parseRoute, normalizePath } from './routes.js';
 import { createStore, initialState } from './store.js';
 import { installCommandApi } from './commands.js';
+import { createPresentationController } from './presentation.js?v=6';
 
 
 /* Project data now lives in the approved PROJECTS registry in os-app2.js. */
@@ -33,6 +34,7 @@ let currentRoute=null;
 let routeNotFound=false;
 
 const appStore=createStore(initialState);
+let presentationController=null;
 
 const $=id=>document.getElementById(id);
 const pad=n=>String(n).padStart(2,'0');
@@ -2015,6 +2017,7 @@ function buildAppState(){
 function publishState(){
   try{
     appStore.replace(buildAppState());
+    presentationController?.sync();
   }catch(error){
     console.error('NourOS could not publish state',error);
   }
@@ -2245,41 +2248,67 @@ function apiOpenProject(id,{syncRoute=true,noFlight=false}={}){
 function apiNodeRoute(id,nodeId){
   return `/projects/${id}/flow${nodeId?`/${nodeId}`:''}`;
 }
+function apiNavigateTo(section){
+  if(section==='home') goHome();
+  else if(section==='me') goMe({view:'intro'});
+  else if(section==='brain') goMe({view:'brain'});
+  else if(section==='journey') goProfessional();
+  else if(section==='projects') goProjects();
+  else if(section==='contact') goContact({force:true});
+  else if(section==='reading'){ location.href='read.html'; }
+  else return false;
+  return true;
+}
+function apiShowProjectCard(projectId){
+  resetToHomeChrome();
+  openProjectDeck(projectId,{syncRoute:false});
+  syncHash('/projects');
+  publishState();
+  return true;
+}
+function apiOpenProjectFlow(projectId,nodeId){
+  apiOpenProject(projectId,{syncRoute:false,noFlight:true});
+  openProjectFlow({syncRoute:false,focus:false});
+  if(nodeId) showFlowTip(nodeId,{syncRoute:false});
+  syncHash(apiNodeRoute(projectId,nodeId));
+  publishState();
+  return true;
+}
+function apiShowFlowNode(projectId,nodeId){
+  const overlay=$('project');
+  const sameProject=overlay.classList.contains('open')&&currentProjectId===projectId;
+  if(!sameProject) apiOpenProject(projectId,{syncRoute:false,noFlight:true});
+  if(!overlay.classList.contains('project-flow-mode')) openProjectFlow({syncRoute:false,focus:false});
+  showFlowTip(nodeId,{syncRoute:false});
+  syncHash(apiNodeRoute(projectId,nodeId),{replace:true});
+  publishState();
+  return true;
+}
+
+presentationController=createPresentationController({
+  navigateTo:apiNavigateTo,
+  showProjectCard:apiShowProjectCard,
+  openProject(projectId){ apiOpenProject(projectId,{syncRoute:true,noFlight:true}); return true; },
+  openProjectFlow:apiOpenProjectFlow,
+  closeProjectFlow(){ closeProjectFlow({syncRoute:true,focus:false}); return true; },
+  showFlowNode:apiShowFlowNode,
+  clearFlowNode(){ clearFlowActiveNode(); publishState(); return true; },
+  openJourneyChapter(chapterId){ goProfessional(chapterId); return true; },
+  openContact(){ goContact({force:true}); return true; },
+  getState:buildAppState,
+  isReducedMotion:()=>matchMedia('(prefers-reduced-motion: reduce)').matches
+});
+
 const commandApi=installCommandApi({
   isBusy:apiBusy,
-  navigateTo(section){
-    if(section==='home') goHome();
-    else if(section==='me') goMe({view:'intro'});
-    else if(section==='brain') goMe({view:'brain'});
-    else if(section==='journey') goProfessional();
-    else if(section==='projects') goProjects();
-    else if(section==='contact') goContact({force:true});
-    else if(section==='reading'){ location.href='read.html'; }
-    else return false;
-    return true;
-  },
+  navigateTo:apiNavigateTo,
+  showProjectCard:apiShowProjectCard,
   openProject(projectId){
     apiOpenProject(projectId);
     return true;
   },
-  openProjectFlow(projectId,nodeId){
-    apiOpenProject(projectId,{syncRoute:false,noFlight:true});
-    openProjectFlow({syncRoute:false,focus:false});
-    if(nodeId) showFlowTip(nodeId,{syncRoute:false});
-    syncHash(apiNodeRoute(projectId,nodeId));
-    publishState();
-    return true;
-  },
-  highlightFlowNode(projectId,nodeId){
-    const overlay=$('project');
-    const sameProject=overlay.classList.contains('open')&&currentProjectId===projectId;
-    if(!sameProject) apiOpenProject(projectId,{syncRoute:false,noFlight:true});
-    if(!overlay.classList.contains('project-flow-mode')) openProjectFlow({syncRoute:false,focus:false});
-    showFlowTip(nodeId,{syncRoute:false});
-    syncHash(apiNodeRoute(projectId,nodeId),{replace:true});
-    publishState();
-    return true;
-  },
+  openProjectFlow:apiOpenProjectFlow,
+  highlightFlowNode:apiShowFlowNode,
   openJourneyChapter(chapterId){
     goProfessional(chapterId);
     return true;
@@ -2296,7 +2325,13 @@ const commandApi=installCommandApi({
     if(history.length>1) history.back();
     else goHome();
     return true;
-  }
+  },
+  getPresentationTargets(options){ return presentationController?.getTargets(options)||{targets:[]}; },
+  getPresentationTarget(targetId){ return presentationController?.getTarget(targetId)||null; },
+  applyPresentationAction(action){ return presentationController?.applyAction(action)||{ok:false,error:'PRESENTATION_UNAVAILABLE'}; },
+  cancelPresentationActions(){ presentationController?.cancelPending(); },
+  waitForPresentationTarget(targetId){ return presentationController?.waitForTarget(targetId)||Promise.resolve(false); },
+  getPresentationState(){ return presentationController?.getState()||null; }
 },appStore);
 
 

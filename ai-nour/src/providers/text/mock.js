@@ -10,8 +10,64 @@ export function createMockTextProvider({ model = 'mock-text' } = {}) {
     const lastUser = [...contents].reverse().find((message) => message.role === 'user');
     const text = lastUser?.parts?.map((part) => part.text || '').join(' ') || '';
     const french = isFrench(text);
+    const hasFunctionResponse = contents.some((message) => message.parts?.some((part) => part.functionResponse));
     if (text.includes('__FAIL_PROVIDER__')) {
       throw new ProviderError('MOCK_PROVIDER_FAILURE', 'Synthetic provider failure', { status: 503, retryable: false });
+    }
+
+    if (hasFunctionResponse) {
+      return {
+        text: french ? 'La démonstration visuelle est prête. Je vous explique l’étape en cours.' : 'The visual demonstration is ready. I’ll explain the current step.',
+        parts: [{ text: french ? 'La démonstration visuelle est prête. Je vous explique l’étape en cours.' : 'The visual demonstration is ready. I’ll explain the current step.' }],
+        toolCalls: [],
+        usage: { prompt: 40, output: 18, total: 58, promptText: 40, promptAudio: 0, outputAudio: 0 },
+        finishReason: 'STOP',
+        model
+      };
+    }
+
+    if (/highlight|survol|mets en évidence|mettre en évidence/i.test(text) && /acquisition/i.test(text)) {
+      return {
+        text: '',
+        parts: [{ functionCall: { name: 'highlightElement', args: { targetId: 'project-card:acquisition', style: 'glow' } } }],
+        toolCalls: [{ id: null, name: 'highlightElement', args: { targetId: 'project-card:acquisition', style: 'glow' } }],
+        usage: { prompt: 90, output: 14, total: 104, promptText: 90, promptAudio: 0, outputAudio: 0 },
+        finishReason: 'STOP',
+        model
+      };
+    }
+
+    if (/present|présente|walk|parcours|tour|guide/i.test(text) && /acquisition/i.test(text)) {
+      return {
+        text: '',
+        parts: [{ functionCall: { name: 'presentProject', args: { projectId: 'acquisition', includeFlow: true, startNodeId: 'demo' } } }],
+        toolCalls: [{ id: null, name: 'presentProject', args: { projectId: 'acquisition', includeFlow: true, startNodeId: 'demo' } }],
+        usage: { prompt: 100, output: 16, total: 116, promptText: 100, promptAudio: 0, outputAudio: 0 },
+        finishReason: 'STOP',
+        model
+      };
+    }
+
+    if (/trace|tracez|workflow|flux|process/i.test(text) && /acquisition/i.test(text)) {
+      return {
+        text: '',
+        parts: [{ functionCall: { name: 'traceWorkflow', args: { projectId: 'acquisition', mode: 'sequence' } } }],
+        toolCalls: [{ id: null, name: 'traceWorkflow', args: { projectId: 'acquisition', mode: 'sequence' } }],
+        usage: { prompt: 100, output: 14, total: 114, promptText: 100, promptAudio: 0, outputAudio: 0 },
+        finishReason: 'STOP',
+        model
+      };
+    }
+
+    if (/compare|comparer|difference|différence/i.test(text) && /demo/i.test(text) && /outreach|outreach|prospection/i.test(text)) {
+      return {
+        text: '',
+        parts: [{ functionCall: { name: 'compareElements', args: { targetIds: ['flow-node:acquisition:demo', 'flow-node:acquisition:outreach'], label: 'Demo to outreach' } } }],
+        toolCalls: [{ id: null, name: 'compareElements', args: { targetIds: ['flow-node:acquisition:demo', 'flow-node:acquisition:outreach'], label: 'Demo to outreach' } }],
+        usage: { prompt: 100, output: 14, total: 114, promptText: 100, promptAudio: 0, outputAudio: 0 },
+        finishReason: 'STOP',
+        model
+      };
     }
 
     if (/open|ouvre|montre|show/i.test(text) && /safiy/i.test(text) && !/openProject|function/i.test(text)) {

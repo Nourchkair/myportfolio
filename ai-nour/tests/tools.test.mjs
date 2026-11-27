@@ -5,7 +5,7 @@ import { getToolDeclarations, validateToolCall, executeToolCall } from '../src/t
 test('tool declarations are allowlisted and schema-shaped', () => {
   const tools = getToolDeclarations();
   const names = tools.map((tool) => tool.name).sort();
-  for (const required of ['openContact', 'openJourneyChapter', 'openProject', 'openProjectFlow', 'openSection', 'presentProject', 'searchPortfolio', 'getProjectDossier', 'getProjectStep', 'getCurrentView']) {
+  for (const required of ['openContact', 'openJourneyChapter', 'openProject', 'openProjectFlow', 'openSection', 'presentProject', 'searchPortfolio', 'getProjectDossier', 'getProjectStep', 'getCurrentView', 'getVisibleElements', 'getElementDetails', 'highlightElement', 'spotlightElement', 'hoverElement', 'expandElement', 'collapseElement', 'pointToElement', 'traceConnection', 'traceWorkflow', 'navigateToElement', 'scrollToElement', 'zoomToElement', 'resetZoom', 'compareElements', 'clearVisualEffects']) {
     assert.ok(names.includes(required), required);
   }
   assert.ok(!names.includes('sendEmail'));
@@ -16,7 +16,7 @@ test('tool declarations are allowlisted and schema-shaped', () => {
 
 test('valid navigation calls produce actions', () => {
   assert.deepEqual(validateToolCall('openProject', { projectId: 'safiy' }).action, {
-    type: 'openProject', projectId: 'safiy', route: '/projects/safiy'
+    type: 'openProject', projectId: 'safiy', route: '/projects/safiy', waitForTarget: 'project:safiy'
   });
   assert.equal(validateToolCall('openProjectFlow', { projectId: 'acquisition', nodeId: 'demo' }).ok, true);
   assert.equal(validateToolCall('openJourneyChapter', { chapterId: 'education' }).ok, true);
@@ -79,4 +79,73 @@ test('web research is implemented but disabled unless explicitly enabled', async
   assert.equal(enabled.ok, true);
   assert.equal(enabled.modelResponse.researched, true);
   assert.match(enabled.modelResponse.content, /Researched/);
+});
+
+
+test('presentation targets and visual actions are validated', () => {
+  const highlight = validateToolCall('highlightElement', {
+    targetIds: ['flow-node:acquisition:demo', 'project-overview:acquisition:what'],
+    style: 'emphasis',
+    sequence: true,
+    stepMs: 900
+  });
+  assert.equal(highlight.ok, true);
+  assert.equal(highlight.action.type, 'highlightElement');
+  assert.deepEqual(highlight.action.targetIds, ['flow-node:acquisition:demo', 'project-overview:acquisition:what']);
+  assert.equal(highlight.action.style, 'emphasis');
+  assert.equal(highlight.action.sequence, true);
+  assert.equal(highlight.action.stepMs, 900);
+
+  assert.equal(validateToolCall('highlightElement', { targetId: 'body > script' }).ok, false);
+  assert.equal(validateToolCall('highlightElement', { targetId: 'flow-node:acquisition:invented' }).ok, false);
+  assert.equal(validateToolCall('spotlightElement', { targetId: 'project-card:acquisition' }).ok, true);
+  assert.equal(validateToolCall('hoverElement', { targetId: 'journey-tab:education' }).ok, true);
+  assert.equal(validateToolCall('expandElement', { targetId: 'flow-node:acquisition:demo' }).ok, true);
+  assert.equal(validateToolCall('compareElements', { targetIds: ['project:acquisition'] }).ok, false);
+  assert.equal(validateToolCall('compareElements', { targetIds: ['project:acquisition', 'project:safiy'] }).ok, true);
+  assert.equal(validateToolCall('traceConnection', { projectId: 'acquisition', from: 'demo', to: 'outreach' }).ok, true);
+  assert.equal(validateToolCall('traceConnection', { projectId: 'acquisition', from: 'demo', to: 'nope' }).ok, false);
+  assert.equal(validateToolCall('traceWorkflow', { projectId: 'acquisition', mode: 'branch' }).ok, true);
+  assert.equal(validateToolCall('traceWorkflow', { projectId: 'acquisition', nodeIds: ['nope'] }).ok, false);
+  assert.equal(validateToolCall('zoomToElement', { targetId: 'flow-node:acquisition:demo', scale: 1.5 }).ok, true);
+  assert.equal(validateToolCall('resetZoom', {}).ok, true);
+  assert.equal(validateToolCall('clearVisualEffects', {}).ok, true);
+  const navigate = validateToolCall('navigateToElement', { targetId: 'flow-node:acquisition:demo' });
+  assert.equal(navigate.ok, true);
+  assert.equal(navigate.actions[0].type, 'openProjectFlow');
+  assert.equal(navigate.actions[1].type, 'scrollToElement');
+});
+
+test('visible element tools use only the registered portfolio targets', async () => {
+  const portfolioContext = {
+    section: 'projects',
+    targets: [
+      { id: 'project:acquisition', kind: 'project', label: 'Customer Acquisition', description: 'Revenue project', actions: ['highlight', 'point'], relationships: [], knowledgeRef: 'project:acquisition', visible: true },
+      { id: 'flow-node:acquisition:demo', kind: 'flow-node', label: 'AI-powered demonstrations', description: 'Personalized demos', actions: ['highlight', 'trace'], relationships: [], knowledgeRef: 'project:acquisition:flow:demo', visible: false }
+    ]
+  };
+  const visible = await executeToolCall('getVisibleElements', {}, { portfolioContext });
+  assert.equal(visible.ok, true);
+  assert.match(visible.modelResponse.content, /project:acquisition/);
+  assert.doesNotMatch(visible.modelResponse.content, /flow-node:acquisition:demo/);
+  const details = await executeToolCall('getElementDetails', { targetId: 'project:acquisition' }, { portfolioContext });
+  assert.equal(details.ok, true);
+  assert.match(details.modelResponse.content, /Customer Acquisition/);
+  const unknown = await executeToolCall('getElementDetails', { targetId: 'project:invented' }, { portfolioContext });
+  assert.equal(unknown.ok, false);
+  assert.equal(unknown.error.code, 'UNKNOWN_TARGET');
+});
+
+test('presentation steps carry render readiness and progress metadata', () => {
+  const start = validateToolCall('presentProject', { projectId: 'acquisition', includeFlow: true, startNodeId: 'demo' });
+  assert.equal(start.ok, true);
+  assert.equal(start.actions[0].stepIndex, 5);
+  assert.equal(start.actions[0].totalSteps, 9);
+  assert.equal(start.actions[1].waitForTarget, 'project:acquisition');
+  assert.equal(start.actions[2].waitForTarget, 'flow-node:acquisition:demo');
+  const step = validateToolCall('presentProjectStep', { projectId: 'acquisition', nodeId: 'outreach' });
+  assert.equal(step.ok, true);
+  assert.equal(step.actions[0].stepIndex, 6);
+  assert.equal(step.actions[0].totalSteps, 9);
+  assert.equal(step.actions[1].waitForTarget, 'flow-node:acquisition:outreach');
 });

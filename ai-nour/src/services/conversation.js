@@ -177,7 +177,17 @@ export async function handleChat({
   let reply = plainText(response?.text || '');
   const uniqueActions = dedupeActions(actions);
   if (!reply && uniqueActions.length) {
-    reply = locale === 'fr' ? 'Je vous ouvre cela.' : "I'm opening that for you.";
+    const presentation = uniqueActions.find((action) => action.type === 'presentationStart');
+    const visual = uniqueActions.find((action) => action.type === 'highlightElement' || action.type === 'spotlightElement' || action.type === 'compareElements');
+    if (presentation) {
+      reply = locale === 'fr'
+        ? `Commençons par ${presentation.label || 'ce projet'}. Je vais vous en montrer les étapes.`
+        : `Let's start with ${presentation.label || 'this project'}. I'll show you the key steps.`;
+    } else if (visual) {
+      reply = locale === 'fr' ? 'Voici l’élément pertinent.' : 'Here is the relevant part.';
+    } else {
+      reply = locale === 'fr' ? 'Je vous ouvre cela.' : "I'm opening that for you.";
+    }
   }
   if (!reply) {
     reply = locale === 'fr'
