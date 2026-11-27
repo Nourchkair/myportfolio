@@ -51,10 +51,27 @@ const betaWaiting = await beta.evaluate(() => {
     cardCount: cards.length,
     cardTexts: cards.map((card) => card.innerText.trim()),
     cardsBelowGreeting: Boolean(greeting && firstCard && firstCard.top >= greeting.bottom - 2),
-    cardsInsideIntro: Boolean(document.querySelector('#enterScreen #introChoices'))
+    cardsInsideIntro: Boolean(document.querySelector('#enterScreen #introChoices')),
+    cardsTopmost: cards.every((card) => {
+      const r = card.getBoundingClientRect();
+      const top = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return Boolean(top && (top === card || card.contains(top)));
+    }),
+    noteVisible: (() => {
+      const note = document.querySelector('.intro-choice-note');
+      if (!note) return false;
+      const style = getComputedStyle(note);
+      return Number(style.opacity) > 0.9 && note.getBoundingClientRect().height > 0;
+    })(),
+    depthLayerHidden: getComputedStyle(document.querySelector('.intro-fg')).display === 'none',
+    welcomeAboveOverlays: Number(getComputedStyle(document.querySelector('.intro-welcome')).zIndex) > Math.max(
+      Number(getComputedStyle(document.querySelector('.intro-shade')).zIndex),
+      Number(getComputedStyle(document.querySelector('.intro-glow')).zIndex),
+      Number(getComputedStyle(document.querySelector('.intro-grain')).zIndex)
+    )
   };
 });
-check('beta opening waits for a choice and shows two panel cards', betaWaiting.introDone === false && betaWaiting.ready === false && betaWaiting.cardCount === 2 && betaWaiting.cardsBelowGreeting === true && betaWaiting.cardsInsideIntro === true, betaWaiting);
+check('beta opening waits for a choice and shows two unobstructed panel cards', betaWaiting.introDone === false && betaWaiting.ready === false && betaWaiting.cardCount === 2 && betaWaiting.cardsBelowGreeting === true && betaWaiting.cardsInsideIntro === true && betaWaiting.cardsTopmost === true && betaWaiting.noteVisible === true && betaWaiting.depthLayerHidden === true && betaWaiting.welcomeAboveOverlays === true, betaWaiting);
 check('opening cards remain in English', betaWaiting.cardTexts.some((text) => /Explore independently/i.test(text)) && betaWaiting.cardTexts.some((text) => /Explore with Nupa/i.test(text)) && !betaWaiting.cardTexts.some((text) => /Explorer/i.test(text)), betaWaiting.cardTexts);
 await beta.locator('[data-explore="ai"]').click();
 await beta.waitForSelector('#ainourConsent:not([hidden])', { timeout: 15000 });
