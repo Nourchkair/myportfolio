@@ -3,7 +3,10 @@ const check = (name, pass, detail = {}) => checks.push({ name, pass: Boolean(pas
 const p = await openTab('http://127.0.0.1:8771/?ainour=dev&v=' + Date.now());
 await p.setViewportSize({ width: 1440, height: 900 });
 await p.waitForFunction(() => Boolean(window.NourOS), { timeout: 30000 });
-await p.waitForTimeout(2800);
+await p.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 20000 });
+await p.locator('[data-explore="independent"]').click();
+await p.waitForFunction(() => document.body.classList.contains('ready'), { timeout: 20000 });
+await p.waitForTimeout(500);
 await p.evaluate(() => {
   localStorage.setItem('ainour:locale', 'en');
   document.documentElement.dataset.ainourLocale = 'en';

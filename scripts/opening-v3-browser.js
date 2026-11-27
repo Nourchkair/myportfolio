@@ -12,6 +12,13 @@ const plainBefore = await plain.evaluate(() => ({
   panel: Boolean(document.querySelector('#ainourPanel'))
 }));
 check('plain portfolio defaults to independent exploration', plainBefore.aiHidden === true && plainBefore.independentVisible === true && plainBefore.panel === false, plainBefore);
+await plain.waitForTimeout(3200);
+const plainWaiting = await plain.evaluate(() => ({
+  introDone: document.querySelector('#enterScreen')?.classList.contains('done'),
+  ready: document.body.classList.contains('ready'),
+  choiceVisible: Boolean(document.querySelector('#introChoices [data-explore="independent"]')) && !document.querySelector('#introChoices [data-explore="independent"]').hidden
+}));
+check('opening waits for an explicit choice instead of auto-entering', plainWaiting.introDone === false && plainWaiting.ready === false && plainWaiting.choiceVisible === true, plainWaiting);
 await plain.locator('[data-explore="independent"]').click();
 await plain.waitForTimeout(900);
 const plainAfter = await plain.evaluate(() => ({
@@ -33,6 +40,22 @@ await beta.evaluate(() => {
 });
 await beta.reload({ ignoreCache: true });
 await beta.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 20000 });
+await beta.waitForTimeout(3200);
+const betaWaiting = await beta.evaluate(() => {
+  const cards = [...document.querySelectorAll('#introChoices .intro-choice')].filter((card) => !card.hidden);
+  const greeting = document.querySelector('.intro-depth-text > strong')?.getBoundingClientRect();
+  const firstCard = cards[0]?.getBoundingClientRect();
+  return {
+    introDone: document.querySelector('#enterScreen')?.classList.contains('done'),
+    ready: document.body.classList.contains('ready'),
+    cardCount: cards.length,
+    cardTexts: cards.map((card) => card.innerText.trim()),
+    cardsBelowGreeting: Boolean(greeting && firstCard && firstCard.top >= greeting.bottom - 2),
+    cardsInsideIntro: Boolean(document.querySelector('#enterScreen #introChoices'))
+  };
+});
+check('beta opening waits for a choice and shows two panel cards', betaWaiting.introDone === false && betaWaiting.ready === false && betaWaiting.cardCount === 2 && betaWaiting.cardsBelowGreeting === true && betaWaiting.cardsInsideIntro === true, betaWaiting);
+check('opening cards remain in English', betaWaiting.cardTexts.some((text) => /Explore independently/i.test(text)) && betaWaiting.cardTexts.some((text) => /Explore with Nupa/i.test(text)) && !betaWaiting.cardTexts.some((text) => /Explorer/i.test(text)), betaWaiting.cardTexts);
 await beta.locator('[data-explore="ai"]').click();
 await beta.waitForSelector('#ainourConsent:not([hidden])', { timeout: 15000 });
 const consent = await beta.evaluate(() => ({
@@ -53,7 +76,7 @@ check('consent carries legal links', consent.links.includes('/terms/') && consen
 
 const ready = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent(api)}&v=${Date.now()}`);
 await ready.setViewportSize({ width: 1440, height: 900 });
-await ready.waitForSelector('#ainourPill', { timeout: 30000 });
+await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 30000 });
 await ready.evaluate((key) => {
   localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
@@ -84,7 +107,7 @@ const french = await ready.evaluate(() => ({
   openingChoice: document.querySelector('#introChoices [data-explore="ai"]')?.textContent.trim(),
   disclaimer: document.querySelector('#ainourDisclaimer')?.innerText
 }));
-check('French companion UI uses Nupa branding', french.locale === 'FR' && /compagnon de portfolio intelligent/i.test(french.tagline) && /Posez une question sur Nour/.test(french.placeholder) && /Message à Nupa/.test(french.inputLabel) && /^nouveau$/i.test(french.reset) && /explorer avec nupa/i.test(french.openingChoice) && /Nupa peut se tromper/.test(french.disclaimer), french);
+check('French companion UI uses Nupa branding while opening cards stay English', french.locale === 'FR' && /compagnon de portfolio intelligent/i.test(french.tagline) && /Posez une question sur Nour/.test(french.placeholder) && /Message à Nupa/.test(french.inputLabel) && /^nouveau$/i.test(french.reset) && /explore with nupa/i.test(french.openingChoice) && !/explorer avec nupa/i.test(french.openingChoice) && /Nupa peut se tromper/.test(french.disclaimer), french);
 const errors = (await ready.console.logs()).filter((entry) => entry.type === 'error');
 check('opening experience has no console errors', errors.length === 0, { errors: errors.map((entry) => entry.text || entry.message || String(entry)) });
 

@@ -215,25 +215,63 @@
   }
   .intro-depth-text{
     display:flex;flex-direction:column;align-items:center;text-align:center;gap:clamp(6px,1vw,12px);
-    opacity:0;transform:translateY(18px) scale(.985);
-    transition:opacity 1s ease,transform 1s cubic-bezier(.2,.8,.2,1);
     color:rgba(255,255,255,.94);
     text-shadow:0 4px 40px rgba(0,0,0,.6),0 2px 7px rgba(0,0,0,.46)
   }
-  body.intro-greeting .intro-depth-text{opacity:1;transform:none}
-  .intro-choices{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:clamp(16px,2.8vh,28px);pointer-events:auto;opacity:0;transform:translateY(8px);transition:opacity .7s ease .15s,transform .7s cubic-bezier(.2,.8,.2,1) .15s}
+  .intro-depth-kicker,.intro-depth-text>strong{
+    opacity:0;transform:translateY(24px);
+    transition:opacity .9s ease,transform .9s cubic-bezier(.2,.8,.2,1)
+  }
+  body.intro-greeting .intro-depth-kicker,body.intro-greeting .intro-depth-text>strong{opacity:1;transform:none}
+  .intro-choices{
+    display:grid;grid-template-columns:repeat(2,minmax(0,260px));gap:12px;
+    margin-top:clamp(22px,3.2vh,34px);pointer-events:auto;
+    opacity:0;transform:translateY(30px);
+    transition:opacity .8s ease .45s,transform .8s cubic-bezier(.2,.8,.2,1) .45s
+  }
   body.intro-greeting .intro-choices{opacity:1;transform:none}
-  .intro-choice{display:inline-flex;align-items:center;gap:9px;min-height:34px;padding:0 14px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(7,13,17,.36);color:rgba(255,255,255,.82);font:9px/1 ui-monospace,monospace;letter-spacing:.09em;text-transform:uppercase;cursor:pointer;backdrop-filter:blur(10px);transition:background .2s,border-color .2s,color .2s}
-  .intro-choice:hover,.intro-choice:focus-visible{background:rgba(255,255,255,.13);border-color:rgba(255,255,255,.48);color:#fff;outline:none}
-  .intro-choice--primary{background:rgba(255,210,161,.13);border-color:rgba(255,210,161,.38);color:rgba(255,237,214,.96)}
-  .intro-choice--primary:hover,.intro-choice--primary:focus-visible{background:rgba(255,210,161,.22);border-color:rgba(255,210,161,.7)}
-  .intro-choice span{font-size:11px;line-height:1}
-  .intro-choice-note{color:rgba(255,255,255,.38);font:8px/1.4 ui-monospace,monospace;letter-spacing:.07em;text-transform:uppercase;margin-top:8px}
+  .intro-choice{
+    display:flex;align-items:flex-start;gap:12px;min-height:112px;padding:16px 16px 15px;
+    border:1px solid rgba(255,255,255,.18);border-radius:20px;text-align:left;
+    background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(7,13,17,.44));
+    box-shadow:0 18px 44px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.12);
+    color:rgba(255,255,255,.88);font-family:var(--sans);letter-spacing:0;text-transform:none;text-shadow:none;
+    cursor:pointer;backdrop-filter:blur(16px);transition:background .2s,border-color .2s,color .2s,transform .2s,box-shadow .2s
+  }
+  .intro-choice:hover,.intro-choice:focus-visible{
+    background:linear-gradient(145deg,rgba(255,255,255,.13),rgba(7,13,17,.5));
+    border-color:rgba(255,255,255,.42);color:#fff;outline:none;transform:translateY(-2px);
+    box-shadow:0 22px 50px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.18)
+  }
+  .intro-choice--primary{
+    background:linear-gradient(145deg,rgba(255,210,161,.16),rgba(7,13,17,.44));
+    border-color:rgba(255,210,161,.38);color:rgba(255,237,214,.98)
+  }
+  .intro-choice--primary:hover,.intro-choice--primary:focus-visible{
+    background:linear-gradient(145deg,rgba(255,210,161,.24),rgba(7,13,17,.5));
+    border-color:rgba(255,210,161,.7)
+  }
+  .intro-choice-icon{
+    display:grid;place-items:center;width:30px;height:30px;flex:none;border-radius:50%;
+    border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);
+    font:12px/1 ui-monospace,monospace;color:rgba(255,255,255,.8)
+  }
+  .intro-choice--primary .intro-choice-icon{border-color:rgba(255,210,161,.4);background:rgba(255,210,161,.1);color:var(--accent)}
+  .intro-choice-copy{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .intro-choice-copy strong{font-size:15px;line-height:1.2;font-weight:600;letter-spacing:-.01em;color:#fff}
+  .intro-choice-copy span{font-size:10.5px;line-height:1.45;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.55)}
+  .intro-choice-note{
+    opacity:0;transform:translateY(12px);
+    transition:opacity .7s ease .65s,transform .7s cubic-bezier(.2,.8,.2,1) .65s;
+    color:rgba(255,255,255,.42);font:10px/1.5 var(--sans);letter-spacing:.02em;text-transform:none;
+    margin-top:14px;max-width:460px
+  }
+  body.intro-greeting .intro-choice-note{opacity:1;transform:none}
   .intro-depth-kicker{
     font-size:clamp(11px,1.15vw,17px);font-weight:600;letter-spacing:.22em;
     text-transform:uppercase;color:rgba(255,255,255,.72)
   }
-  .intro-depth-text strong{
+  .intro-depth-text>strong{
     font-size:clamp(44px,11.5vw,320px);line-height:.9;font-weight:300;letter-spacing:-.06em;
     color:rgba(255,255,255,.94)
   }
@@ -293,11 +331,13 @@
   body.intro-frozen .scene-parallax{transform:translate3d(calc(var(--px,0)*14px),calc(var(--py,0)*10px),0) scale(1.02)!important}
   @media(max-width:700px){
     .intro-depth-greeting{padding:0 6vw}
-    .intro-depth-text strong{font-size:clamp(46px,13.5vw,84px)}
+    .intro-depth-text>strong{font-size:clamp(46px,13.5vw,84px)}
     .intro-depth-kicker{font-size:11px;letter-spacing:.18em}
-    .intro-choices{gap:6px;margin-top:16px}
-    .intro-choice{min-height:32px;padding:0 11px;font-size:8px}
-    .intro-choice-note{max-width:240px;text-align:center}
+    .intro-choices{grid-template-columns:1fr;width:min(100%,340px);gap:9px;margin-top:18px}
+    .intro-choice{min-height:92px;padding:14px;border-radius:17px;gap:10px}
+    .intro-choice-copy strong{font-size:14px}
+    .intro-choice-copy span{font-size:10px}
+    .intro-choice-note{max-width:300px;text-align:center;margin-top:11px}
     body[data-scene="0"] .intro-depth-greeting{--greeting-shift:5.75vh}
     body[data-scene="1"] .intro-depth-greeting{--greeting-shift:9vh}
     body[data-scene="2"] .intro-depth-greeting{--greeting-shift:1vh;--greeting-x:0vw}

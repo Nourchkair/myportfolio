@@ -1475,12 +1475,6 @@ function updateStaticCopy() {
     close.setAttribute('title', fr ? 'Fermer le panneau (la voix continue)' : 'Close panel (voice keeps running)');
   }
   if (els.reset) els.reset.textContent = fr ? 'Nouveau' : 'New';
-  const independentChoice = document.querySelector('#introChoices [data-explore="independent"]');
-  const aiChoice = document.querySelector('#introChoices [data-explore="ai"]');
-  const choiceNote = document.querySelector('.intro-choice-note');
-  if (independentChoice) independentChoice.innerHTML = fr ? 'Explorer en autonomie <span aria-hidden="true">→</span>' : 'Explore independently <span aria-hidden="true">→</span>';
-  if (aiChoice) aiChoice.innerHTML = fr ? 'Explorer avec Nupa <span aria-hidden="true">✦</span>' : 'Explore with Nupa <span aria-hidden="true">✦</span>';
-  if (choiceNote) choiceNote.textContent = fr ? 'La navigation reste toujours disponible. Nupa est optionnel.' : 'Browsing is always available. Nupa is optional.';
   if (els.gateCopy) els.gateCopy.textContent = fr
     ? 'Entrez votre clé d’accès à la bêta privée pour parler avec Nupa. La clé est validée par Nupa et reste dans cet onglet; la clé Gemini permanente ne parvient jamais au navigateur.'
     : 'Enter your private-beta access key to talk with Nupa. The key is validated by Nupa and stays in this tab; the permanent Gemini key never reaches the browser.';

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T08:19:11.984Z",
-  "passed": 9,
+  "generatedAt": "2026-11-27T16:18:18.598Z",
+  "passed": 12,
   "failed": 0,
-  "total": 9,
+  "total": 12,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -11,6 +11,15 @@
         "aiHidden": true,
         "independentVisible": true,
         "panel": false
+      }
+    },
+    {
+      "name": "opening waits for an explicit choice instead of auto-entering",
+      "pass": true,
+      "detail": {
+        "introDone": false,
+        "ready": false,
+        "choiceVisible": true
       }
     },
     {
@@ -23,6 +32,29 @@
       }
     },
     {
+      "name": "beta opening waits for a choice and shows two panel cards",
+      "pass": true,
+      "detail": {
+        "introDone": false,
+        "ready": false,
+        "cardCount": 2,
+        "cardTexts": [
+          "\u2192\nExplore independently\nBrowse the portfolio at your own pace.",
+          "\u2726\nExplore with Nupa\nAsk questions and get a guided tour."
+        ],
+        "cardsBelowGreeting": true,
+        "cardsInsideIntro": true
+      }
+    },
+    {
+      "name": "opening cards remain in English",
+      "pass": true,
+      "detail": [
+        "\u2192\nExplore independently\nBrowse the portfolio at your own pace.",
+        "\u2726\nExplore with Nupa\nAsk questions and get a guided tour."
+      ]
+    },
+    {
       "name": "AI choice uses the existing consent gate",
       "pass": true,
       "detail": {
@@ -31,7 +63,7 @@
         "consentVisible": true,
         "gateHidden": true,
         "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.",
-        "choice": "EXPLORE WITH NUPA\n\u2726",
+        "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
         "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION.",
         "links": [
@@ -44,7 +76,7 @@
       "name": "opening choice and companion use Nupa branding",
       "pass": true,
       "detail": {
-        "choice": "EXPLORE WITH NUPA\n\u2726",
+        "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
         "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION."
       }
@@ -77,7 +109,7 @@
       }
     },
     {
-      "name": "French companion UI uses Nupa branding",
+      "name": "French companion UI uses Nupa branding while opening cards stay English",
       "pass": true,
       "detail": {
         "locale": "FR",
@@ -85,7 +117,7 @@
         "placeholder": "Posez une question sur Nour, ou dites \u00ab ouvre Safiy \u00bb\u2026",
         "inputLabel": "Message \u00e0 Nupa",
         "reset": "NOUVEAU",
-        "openingChoice": "Explorer avec Nupa \u2726",
+        "openingChoice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
         "disclaimer": "Nupa peut se tromper. Ne communiquez pas de renseignements personnels ou sensibles. Confidentialit\u00e9 \u00b7 Conditions"
       }
     },

@@ -1,6 +1,5 @@
 const p = await openTab('http://127.0.0.1:8771/?ainour=dev&ainour-api=http://127.0.0.1:8805&v=' + Date.now());
 await p.setViewportSize({ width: 1440, height: 900 });
-await p.waitForSelector('#ainourPill', { timeout: 30000 });
 await p.evaluate((key) => {
   localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
   sessionStorage.setItem('ainour:key', key);
@@ -9,8 +8,11 @@ await p.evaluate((key) => {
   localStorage.removeItem('ainour:owner');
 }, '__LOCAL_PROTOTYPE_KEY__');
 await p.reload({ ignoreCache: true });
+await p.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 30000 });
+await p.locator('[data-explore="independent"]').click();
+await p.waitForFunction(() => document.body.classList.contains('ready'), { timeout: 20000 });
 await p.waitForSelector('#ainourPill', { timeout: 30000 });
-await p.waitForTimeout(2800);
+await p.waitForTimeout(500);
 await p.locator('.ainour-pill-main').click();
 await p.waitForSelector('#ainourBody:not([hidden])', { timeout: 30000 });
 await p.waitForTimeout(500);

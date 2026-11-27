@@ -116,7 +116,7 @@ Local regression:
 - Portfolio validation: **261**
 - Legal validator: **63/63**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **9/9** — independent default, beta-only Nupa path, consent reuse, independent-assistant disclosure, Nupa branding, text-first copy, legal links, Nupa introduction and French UI labels.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **12/12** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, consent reuse, independent-assistant disclosure, Nupa branding, text-first copy, legal links, Nupa introduction and French companion UI with English opening cards.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 

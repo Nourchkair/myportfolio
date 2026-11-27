@@ -29,7 +29,6 @@ let mode='home';
 let sceneIndex=0;
 let entered=false;
 let introStarted=false;
-let introFinish=null;
 let suppressClick=false;
 let drag=null;
 let currentRoute=null;
@@ -2027,40 +2026,38 @@ function publishState(){
 
 /* ---------- entry ---------- */
 const WELCOME_DELAY_MS=300;
-const WELCOME_HOLD_MS=2600;
-function enterWorld(){
+function showIntroGreeting(){
   if(entered||introStarted) return;
   introStarted=true;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const screen=$('enterScreen');
-  const finish=()=>{
-    entered=true;
-    document.body.classList.remove('intro-frozen');
-    if(screen) screen.classList.add('done');
-    document.body.classList.add('intro-reveal','ready');
-    syncA11y();
-    announce('Nour OS ready. Use the arrow keys or the card navigation to explore.');
-    const main=$('mainContent');
-    if(main) setTimeout(()=>main.focus({preventScroll:true}),reduced?0:120);
-    if(pendingRoute){
-      const path=pendingRoute;
-      pendingRoute=null;
-      setTimeout(()=>{
-        if(hashPath()===path) applyCurrentPath();
-      },reduced?0:420);
-    }
-    setTimeout(()=>document.body.classList.remove('intro-reveal','intro-greeting'),reduced?0:1500);
-  };
-  introFinish=finish;
-  if(reduced){
-    finish();
-    return;
-  }
-  setTimeout(()=>{
+  const show=()=>{
+    if(entered) return;
     document.body.classList.add('intro-greeting');
     announce('Welcome to Nour’s Portfolio');
-    setTimeout(finish,WELCOME_HOLD_MS);
-  },WELCOME_DELAY_MS);
+  };
+  if(reduced) show();
+  else setTimeout(show,WELCOME_DELAY_MS);
+}
+function finishIntro(){
+  if(entered) return;
+  entered=true;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const screen=$('enterScreen');
+  document.body.classList.remove('intro-frozen');
+  if(screen) screen.classList.add('done');
+  document.body.classList.add('intro-reveal','ready');
+  syncA11y();
+  announce('Nour OS ready. Use the arrow keys or the card navigation to explore.');
+  const main=$('mainContent');
+  if(main) setTimeout(()=>main.focus({preventScroll:true}),reduced?0:120);
+  if(pendingRoute){
+    const path=pendingRoute;
+    pendingRoute=null;
+    setTimeout(()=>{
+      if(hashPath()===path) applyCurrentPath();
+    },reduced?0:420);
+  }
+  setTimeout(()=>document.body.classList.remove('intro-reveal','intro-greeting'),reduced?0:1500);
 }
 
 /* ---------- boot ---------- */
@@ -2115,13 +2112,9 @@ if(initialRoute&&initialRoute.name==='reading'){
       window.__ainourExploreRequested = true;
       window.dispatchEvent(new CustomEvent('ainour:explore'));
     }
-    if (!entered && !introStarted) enterWorld();
-    introFinish?.();
+    finishIntro();
   }, true);
-  const reducedStart=matchMedia('(prefers-reduced-motion: reduce)').matches;
-  setTimeout(()=>{
-    if(!entered) enterWorld();
-  },reducedStart?60:200);
+  showIntroGreeting();
 }
 function warmProjectArt(){
   const urls=[...new Set([...PROJECTS.map(p=>p.cover),...SCENES.map(s=>s.img)])];

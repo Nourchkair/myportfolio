@@ -18,8 +18,8 @@
 
 
 
-  <link rel="stylesheet" href="src/styles/base.css?v=36">
-  <link rel="stylesheet" href="src/styles/app.css?v=36">
+  <link rel="stylesheet" href="src/styles/base.css?v=38">
+  <link rel="stylesheet" href="src/styles/app.css?v=38">
 </head>
 <body data-mode="home">
 <a class="skip-link" href="#mainContent" id="skipLink">Skip to content</a>
@@ -221,10 +221,22 @@
           <span class="intro-depth-kicker">Welcome to</span>
           <strong>Nour’s Portfolio</strong>
           <div class="intro-choices" id="introChoices">
-            <button class="intro-choice intro-choice--primary" type="button" data-explore="independent">Explore independently <span aria-hidden="true">→</span></button>
-            <button class="intro-choice" type="button" data-explore="ai" hidden>Explore with Nupa <span aria-hidden="true">✦</span></button>
+            <button class="intro-choice intro-choice--primary" type="button" data-explore="independent">
+              <span class="intro-choice-icon" aria-hidden="true">→</span>
+              <span class="intro-choice-copy">
+                <strong>Explore independently</strong>
+                <span>Browse the portfolio at your own pace.</span>
+              </span>
+            </button>
+            <button class="intro-choice" type="button" data-explore="ai" hidden>
+              <span class="intro-choice-icon" aria-hidden="true">✦</span>
+              <span class="intro-choice-copy">
+                <strong>Explore with Nupa</strong>
+                <span>Ask questions and get a guided tour.</span>
+              </span>
+            </button>
           </div>
-          <span class="intro-choice-note">Browsing is always available. Nupa is optional.</span>
+          <span class="intro-choice-note">Choose how you want to begin. The portfolio is always available without Nupa.</span>
         </div>
       </div>
     </div>
@@ -243,6 +255,6 @@
     <a href="/terms/">Terms</a>
   </footer>
 
-  <script type="module" src="src/main.js?v=56"></script>
+  <script type="module" src="src/main.js?v=57"></script>
 </body>
 </html>
