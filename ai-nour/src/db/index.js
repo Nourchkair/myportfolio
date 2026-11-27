@@ -89,6 +89,9 @@ export function createDb(d1) {
   }
 
   async function deleteExpiredSessions(now) {
+    await d1.prepare(
+      'DELETE FROM session_messages WHERE session_id IN (SELECT id FROM sessions WHERE expires_at < ?)'
+    ).bind(now).run();
     const result = await d1.prepare('DELETE FROM sessions WHERE expires_at < ?').bind(now).run();
     return result.meta?.changes || 0;
   }

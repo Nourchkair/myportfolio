@@ -34,8 +34,10 @@ function start() {
       'wrangler', 'dev', '--local', '--port', String(port), '--persist-to', persist,
       '--var', 'TEXT_PROVIDER:mock', '--var', 'LIVE_PROVIDER:mock',
       '--var', `PROTOTYPE_ACCESS_KEY:${key}`,
-      '--var', 'LIVE_TOKEN_RESERVATION_USD_MICROS:600000',
-      '--var', 'DAILY_SPEND_CAP_USD_MICROS:1000000',
+      '--var', 'LIVE_SESSION_SECONDS:300',
+      '--var', 'MAX_LIVE_SESSION_SECONDS:600',
+      '--var', 'LIVE_TOKEN_RESERVATION_USD_MICROS:125000',
+      '--var', 'DAILY_SPEND_CAP_USD_MICROS:200000',
       '--var', 'CUMULATIVE_SPEND_CAP_USD_MICROS:7000000'
     ], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
     let log = '';
@@ -60,8 +62,8 @@ async function main() {
     const session = await call('/api/session', { method: 'POST', body: { locale: 'en' } });
     const sessionId = session.body.session?.id;
     const first = await call('/api/live/token', { method: 'POST', body: { sessionId, locale: 'en' } });
-    check('first Live token reserves budget', first.status === 200 && Boolean(first.body.reservationId) && first.body.reservationUsdMicros === 600_000, { status: first.status, reservationUsdMicros: first.body.reservationUsdMicros });
-    check('Live token carries the configured 10-minute session duration', first.status === 200 && first.body.sessionSeconds === 600 && Date.parse(first.body.expiresAt) - Date.now() > 590_000, { sessionSeconds: first.body.sessionSeconds, expiresAt: first.body.expiresAt });
+    check('first Live token reserves the five-minute budget', first.status === 200 && Boolean(first.body.reservationId) && first.body.reservationUsdMicros === 125_000, { status: first.status, reservationUsdMicros: first.body.reservationUsdMicros });
+    check('Live token carries the configured five-minute session duration', first.status === 200 && first.body.sessionSeconds === 300 && Date.parse(first.body.expiresAt) - Date.now() > 290_000, { sessionSeconds: first.body.sessionSeconds, expiresAt: first.body.expiresAt });
     check('Live config uses Schedar', first.status === 200 && first.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName === 'Schedar', { voice: first.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName });
     const declarations = first.body.config?.tools?.[0]?.functionDeclarations?.map((tool) => tool.name) || [];
     check('Live config includes knowledge and presentation tools', ['searchPortfolio', 'getProjectDossier', 'getProjectStep', 'getCurrentView', 'presentProject', 'presentProjectStep'].every((name) => declarations.includes(name)), { declarations });
@@ -69,10 +71,11 @@ async function main() {
     check('Live config omits disabled web research', !declarations.includes('webResearch'), { declarations });
 
     const budgetAfterFirst = await call('/api/admin/cost', { admin: true });
-    check('held Live reservation counts toward budget', budgetAfterFirst.status === 200 && budgetAfterFirst.body.budget.heldLiveReservationsUsdMicros === 600_000, { held: budgetAfterFirst.body.budget?.heldLiveReservationsUsdMicros });
+    check('held Live reservation counts toward budget', budgetAfterFirst.status === 200 && budgetAfterFirst.body.budget.heldLiveReservationsUsdMicros === 125_000, { held: budgetAfterFirst.body.budget?.heldLiveReservationsUsdMicros });
 
     const second = await call('/api/live/token', { method: 'POST', body: { sessionId, locale: 'en' } });
-    check('second Live token blocked before unreported usage can bypass cap', second.status === 402, { status: second.status, error: second.body.error?.code });
+    check('second Live token blocked before unreported usage can bypass cap', second.status === 402 && second.body.error?.code === 'DAILY_BUDGET_EXHAUSTED', { status: second.status, error: second.body.error?.code });
+    check('daily budget error includes the local-reset timestamp', second.body.error?.details?.scope === 'daily' && Number(second.body.error?.details?.resetsAt) > Date.now(), { details: second.body.error?.details });
 
     const output = {
       generatedAt: new Date().toISOString(),

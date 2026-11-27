@@ -7,6 +7,17 @@ const DEV = params.get('ainour') === 'dev' && LOCAL;
 const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
+const CONSENT_VERSION = '2026-11-27-v1.1';
+const CONSENT_STORE = 'ainour:consent';
+const MIC_CONSENT_STORE = 'ainour:mic-consent';
+
+function readConsent() {
+  try {
+    const value = JSON.parse(localStorage.getItem(CONSENT_STORE) || 'null');
+    if (value?.version === CONSENT_VERSION && value.age18 === true && value.terms === true && value.privacy === true) return value;
+  } catch {}
+  return null;
+}
 
 const state = {
   key: sessionStorage.getItem(STORE.key) || '',
@@ -21,7 +32,11 @@ const state = {
   ready: false,
   mounted: false,
   voice: 'idle',
-  presentation: { active: false, projectId: null, nodeId: null, paused: false }
+  presentation: { active: false, projectId: null, nodeId: null, paused: false },
+  consent: readConsent(),
+  sessionConsentRequired: false,
+  micConsentResolver: null,
+  voiceError: ''
 };
 
 const voice = {
@@ -44,7 +59,8 @@ const voice = {
   userDraftId: null,
   assistantDraftId: null,
   turnId: null,
-  reservationId: null
+  reservationId: null,
+  expiryTimer: null
 };
 
 let els = {};
@@ -71,15 +87,23 @@ function resolveApi(path) {
 }
 
 async function api(path, options = {}) {
-  const response = await fetch(resolveApi(path), {
-    ...options,
-    headers: {
-      ...(options.body ? { 'content-type': 'application/json' } : {}),
-      'x-prototype-key': state.key,
-      'x-owner-token': state.owner,
-      ...(options.headers || {})
-    }
-  });
+  let response;
+  try {
+    response = await fetch(resolveApi(path), {
+      ...options,
+      headers: {
+        ...(options.body ? { 'content-type': 'application/json' } : {}),
+        'x-prototype-key': state.key,
+        'x-owner-token': state.owner,
+        ...(options.headers || {})
+      }
+    });
+  } catch (cause) {
+    const error = new Error('network');
+    error.code = 'NETWORK_ERROR';
+    error.cause = cause;
+    throw error;
+  }
   const text = await response.text();
   let body = {};
   try { body = text ? JSON.parse(text) : {}; } catch {}
@@ -89,15 +113,43 @@ async function api(path, options = {}) {
     showGate('The private-beta key was not accepted, expired, or was revoked.');
     throw new Error('unauthorized');
   }
-  if (!response.ok) throw new Error(body?.error?.message || `HTTP ${response.status}`);
+  if (!response.ok) {
+    const error = new Error(body?.error?.message || `HTTP ${response.status}`);
+    error.code = body?.error?.code || null;
+    error.status = response.status;
+    error.details = body?.error?.details || null;
+    throw error;
+  }
   return body;
+}
+
+function consentPayload() {
+  if (!state.consent) return null;
+  return {
+    age18: true,
+    termsVersion: CONSENT_VERSION,
+    privacyVersion: CONSENT_VERSION,
+    acceptedAt: state.consent.acceptedAt
+  };
+}
+
+function saveConsent() {
+  const consent = {
+    version: CONSENT_VERSION,
+    age18: true,
+    terms: true,
+    privacy: true,
+    acceptedAt: new Date().toISOString()
+  };
+  localStorage.setItem(CONSENT_STORE, JSON.stringify(consent));
+  state.consent = consent;
 }
 
 function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=3', import.meta.url).href;
+  link.href = new URL('./companion.css?v=5', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -147,8 +199,24 @@ function panelMarkup() {
       </form>
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>
     </div>
+    <div class="ainour-gate ainour-consent" id="ainourConsent" hidden>
+      <p id="ainourConsentIntro">AI Nour is for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
+      <label class="ainour-check"><input id="ainourAgree" type="checkbox"> <span id="ainourAgreeLabel">I am 18 or older and agree to the Terms of Use and Privacy Policy.</span></label>
+      <p class="ainour-legal-links"><a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> · <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a></p>
+      <button id="ainourConsentBtn" type="button">Continue</button>
+      <p id="ainourConsentError" role="status" aria-live="polite" class="ainour-form-error"></p>
+    </div>
     <div class="ainour-body" id="ainourBody" hidden>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
+      <div class="ainour-mic-consent" id="ainourMicConsent" hidden>
+        <p id="ainourMicCopy">Voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.</p>
+        <div class="ainour-mic-actions">
+          <button id="ainourMicAllow" type="button">Allow microphone</button>
+          <button id="ainourMicCancel" type="button" class="ainour-secondary">Cancel</button>
+        </div>
+        <p class="ainour-legal-links"><a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a></p>
+      </div>
+      <p class="ainour-voice-error" id="ainourVoiceError" role="status" aria-live="polite" hidden></p>
       <form class="ainour-compose" id="ainourForm">
         <div class="ainour-compose-bar">
           <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
@@ -157,6 +225,7 @@ function panelMarkup() {
           </button>
         </div>
       </form>
+      <p class="ainour-disclaimer" id="ainourDisclaimer">AI Nour can make mistakes. Do not share sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a></p>
     </div>
   `;
 }
@@ -199,6 +268,18 @@ function mount() {
     gateForm: panel.querySelector('#ainourGateForm'),
     gateInput: panel.querySelector('#ainourKey'),
     gateError: panel.querySelector('#ainourGateError'),
+    consent: panel.querySelector('#ainourConsent'),
+    consentIntro: panel.querySelector('#ainourConsentIntro'),
+    agree: panel.querySelector('#ainourAgree'),
+    agreeLabel: panel.querySelector('#ainourAgreeLabel'),
+    consentBtn: panel.querySelector('#ainourConsentBtn'),
+    consentError: panel.querySelector('#ainourConsentError'),
+    micConsent: panel.querySelector('#ainourMicConsent'),
+    micCopy: panel.querySelector('#ainourMicCopy'),
+    micAllow: panel.querySelector('#ainourMicAllow'),
+    micCancel: panel.querySelector('#ainourMicCancel'),
+    voiceError: panel.querySelector('#ainourVoiceError'),
+    disclaimer: panel.querySelector('#ainourDisclaimer'),
     body: panel.querySelector('#ainourBody'),
     thread: panel.querySelector('#ainourThread'),
     form: panel.querySelector('#ainourForm'),
@@ -235,6 +316,36 @@ function mount() {
     els.gateError.textContent = '';
     await init();
   });
+  els.consentBtn.addEventListener('click', async () => {
+    if (!els.agree.checked) {
+      els.consentError.textContent = state.locale === 'fr'
+        ? 'Confirmez que vous avez 18 ans ou plus et acceptez les conditions et la politique de confidentialité.'
+        : 'Confirm that you are 18 or older and agree to the Terms and Privacy Policy.';
+      return;
+    }
+    els.consentError.textContent = '';
+    saveConsent();
+    if (state.sessionId && state.sessionConsentRequired) {
+      try {
+        await api(`/api/session/${encodeURIComponent(state.sessionId)}/consent`, {
+          method: 'POST',
+          body: JSON.stringify({ consent: consentPayload() })
+        });
+        state.sessionConsentRequired = false;
+        if (!state.key) showGate();
+        else await init();
+        return;
+      } catch {
+        state.sessionConsentRequired = false;
+        state.sessionId = null;
+        localStorage.removeItem(STORE.session);
+      }
+    }
+    if (!state.key) showGate();
+    else await init();
+  });
+  els.micAllow.addEventListener('click', () => resolveMicConsent(true));
+  els.micCancel.addEventListener('click', () => resolveMicConsent(false));
   els.form.addEventListener('submit', sendMessage);
   els.input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -472,7 +583,7 @@ function updatePill() {
   els.pill.dataset.unread = state.unread ? 'true' : 'false';
   els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
   const voiceLabel = ['connecting', 'listening', 'speaking'].includes(state.voice) || voice.active;
-  const label = state.voice === 'error' ? 'Mic error' : voiceLabel ? 'Listening' : 'Ask Nour AI';
+  const label = state.voice === 'error' ? 'Voice unavailable' : voiceLabel ? 'Listening' : 'Ask Nour AI';
   els.pillLabel.textContent = label;
   els.pillText.setAttribute('aria-label', `${label} — open text chat`);
   els.pillText.classList.toggle('is-active', !els.panel.hidden);
@@ -481,17 +592,181 @@ function updatePill() {
   requestAnimationFrame(positionPill);
 }
 
+function updateLegalCopy() {
+  const fr = state.locale === 'fr';
+  if (els.consentIntro) {
+    els.consentIntro.textContent = fr
+      ? 'AI Nour s’adresse aux visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
+      : 'AI Nour is for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
+  }
+  if (els.agreeLabel) els.agreeLabel.textContent = fr
+    ? 'J’ai 18 ans ou plus et j’accepte les Conditions d’utilisation et la Politique de confidentialité.'
+    : 'I am 18 or older and agree to the Terms of Use and Privacy Policy.';
+  if (els.consentBtn) els.consentBtn.textContent = fr ? 'Continuer' : 'Continue';
+  if (els.micCopy) {
+    els.micCopy.textContent = fr
+      ? 'La voix utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours dans ce service. Ne communiquez pas de renseignements personnels ou sensibles.'
+      : 'Voice uses your microphone and streams audio to Google Gemini for real-time processing. Transcripts are stored for up to 7 days in this service. Do not share personal or sensitive information.';
+  }
+  if (els.micAllow) els.micAllow.textContent = fr ? 'Autoriser le microphone' : 'Allow microphone';
+  if (els.micCancel) els.micCancel.textContent = fr ? 'Annuler' : 'Cancel';
+  if (els.disclaimer) {
+    els.disclaimer.innerHTML = fr
+      ? 'AI Nour peut se tromper. Ne communiquez pas de renseignements personnels ou sensibles. <a href="/privacy/" target="_blank" rel="noopener">Confidentialité</a> · <a href="/terms/" target="_blank" rel="noopener">Conditions</a>'
+      : 'AI Nour can make mistakes. Do not share personal or sensitive information. <a href="/privacy/" target="_blank" rel="noopener">Privacy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms</a>';
+  }
+}
+
 function showGate(message = '') {
   if (!els.gate) return;
+  updateLegalCopy();
   els.gate.hidden = false;
+  els.consent.hidden = true;
   els.body.hidden = true;
   els.gateError.textContent = message;
   if (!els.panel.hidden) setTimeout(() => els.gateInput?.focus({ preventScroll: true }), 40);
 }
 
-function showBody() {
+function showConsent() {
+  if (!els.consent) return;
+  state.ready = false;
+  updateLegalCopy();
   els.gate.hidden = true;
+  els.consent.hidden = false;
+  els.body.hidden = true;
+  els.consentError.textContent = '';
+  if (!els.panel.hidden) setTimeout(() => els.agree?.focus({ preventScroll: true }), 40);
+}
+
+function showBody() {
+  updateLegalCopy();
+  els.gate.hidden = true;
+  els.consent.hidden = true;
   els.body.hidden = false;
+}
+
+function showMicConsent() {
+  if (sessionStorage.getItem(MIC_CONSENT_STORE) === '1') return Promise.resolve(true);
+  if (!els.micConsent) return Promise.resolve(false);
+  updateLegalCopy();
+  return new Promise((resolve) => {
+    state.micConsentResolver = resolve;
+    els.micConsent.hidden = false;
+    els.micAllow?.focus({ preventScroll: true });
+  });
+}
+
+function resolveMicConsent(allowed) {
+  if (!els.micConsent) return;
+  els.micConsent.hidden = true;
+  const resolve = state.micConsentResolver;
+  state.micConsentResolver = null;
+  if (resolve) resolve(Boolean(allowed));
+}
+
+function showVoiceError(message) {
+  state.voiceError = message || '';
+  if (!els.voiceError) return;
+  els.voiceError.textContent = state.voiceError;
+  els.voiceError.hidden = !state.voiceError;
+}
+
+function clearVoiceError() {
+  state.voiceError = '';
+  if (els.voiceError) {
+    els.voiceError.hidden = true;
+    els.voiceError.textContent = '';
+  }
+}
+
+function nextUtcMidnight(now = Date.now()) {
+  const date = new Date(now);
+  return Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate() + 1);
+}
+
+function formatVoiceReset(ms) {
+  const when = new Date(Number(ms) || nextUtcMidnight());
+  try {
+    return new Intl.DateTimeFormat(state.locale === 'fr' ? 'fr-CA' : undefined, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZoneName: 'short'
+    }).format(when);
+  } catch {
+    return when.toLocaleString();
+  }
+}
+
+function voiceErrorMessage(error) {
+  const code = error?.code || '';
+  const name = error?.name || '';
+  const details = error?.details || {};
+  const fr = state.locale === 'fr';
+  const reset = formatVoiceReset(details.resetsAt);
+  if (code === 'DAILY_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope === 'daily')) {
+    return fr
+      ? `La voix est temporairement indisponible : l’allocation de tests vocaux du jour est épuisée. Elle se réinitialise le ${reset} (heure locale).`
+      : `Voice is temporarily unavailable because today's voice testing allowance has been used. It resets ${reset} your time.`;
+  }
+  if (code === 'CUMULATIVE_BUDGET_EXHAUSTED' || (code === 'BUDGET_EXCEEDED' && details.scope === 'cumulative')) {
+    return fr
+      ? 'La voix est temporairement indisponible : l’allocation globale de tests vocaux de la bêta privée a été utilisée. Le clavardage texte reste disponible.'
+      : 'Voice is temporarily unavailable because the overall private-beta voice allowance has been used. Text chat is still available.';
+  }
+  if (code === 'LIVE_SESSION_LIMIT') {
+    return fr
+      ? `La limite quotidienne de sessions vocales est atteinte. Réessayez après le ${reset} (heure locale).`
+      : `The daily voice session limit has been reached. Try again after ${reset} your time.`;
+  }
+  if (code === 'RATE_LIMITED') {
+    return fr
+      ? 'Trop de tentatives vocales. Attendez quelques minutes et réessayez.'
+      : 'Too many voice attempts. Wait a few minutes and try again.';
+  }
+  if (code === 'UNAVAILABLE') {
+    return fr
+      ? 'La voix est temporairement désactivée. Le clavardage texte reste disponible.'
+      : 'Voice is temporarily disabled. Text chat is still available.';
+  }
+  if (code === 'GEMINI_LIVE_TOKEN_ERROR' || code === 'GEMINI_LIVE_TIMEOUT' || code === 'PROVIDER_ERROR' || (error?.status >= 500 && error?.status < 600)) {
+    return fr
+      ? 'La voix est temporairement indisponible en raison d’un problème du fournisseur vocal. Réessayez bientôt.'
+      : 'Voice is temporarily unavailable because of a voice-provider problem. Try again shortly.';
+  }
+  if (code === 'NOT_FOUND') {
+    return fr
+      ? 'Votre session AI Nour a expiré. Rouvrez l’assistant et réessayez.'
+      : 'Your AI Nour session expired. Reopen the assistant and try again.';
+  }
+  if (!navigator.mediaDevices?.getUserMedia) {
+    return fr
+      ? 'Ce navigateur ne prend pas en charge l’accès au microphone.'
+      : 'This browser does not support microphone access.';
+  }
+  if (code === 'NETWORK_ERROR' || error instanceof TypeError) {
+    return fr
+      ? 'La voix n’a pas pu démarrer : la connexion a échoué. Vérifiez votre connexion et réessayez.'
+      : 'Voice could not start because the connection failed. Check your connection and try again.';
+  }
+  if (name === 'NotAllowedError' || name === 'SecurityError') {
+    return fr
+      ? 'L’accès au microphone a été refusé. Autorisez le microphone dans votre navigateur et réessayez.'
+      : 'Microphone access was blocked. Allow microphone access in your browser and try again.';
+  }
+  if (name === 'NotFoundError' || name === 'DevicesNotFoundError' || name === 'OverconstrainedError') {
+    return fr
+      ? 'Aucun microphone utilisable n’a été trouvé. Vérifiez votre microphone et réessayez.'
+      : 'No working microphone was found. Check your microphone and try again.';
+  }
+  if (name === 'NotReadableError' || name === 'TrackStartError' || name === 'AbortError') {
+    return fr
+      ? 'Le microphone est indisponible ou utilisé par une autre application. Vérifiez-le et réessayez.'
+      : 'The microphone is unavailable or in use by another app. Check it and try again.';
+  }
+  return fr ? 'La voix n’a pas pu démarrer. Réessayez.' : 'Voice could not start. Try again.';
 }
 
 function positionPanelFromPill() {
@@ -564,8 +839,9 @@ async function openPanel() {
     setSize(state.size);
   }
   updatePill();
-  if (!state.ready && state.key) await init();
-  if (!state.key) showGate();
+  if (!state.consent) showConsent();
+  else if (!state.key) showGate();
+  else if (!state.ready) await init();
   if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
   updateContext();
   clampPanel();
@@ -573,6 +849,7 @@ async function openPanel() {
 
 function closePanel() {
   // Closing the UI deliberately does NOT stop the voice session or the D1 session.
+  if (state.micConsentResolver) resolveMicConsent(false);
   els.panel.hidden = true;
   state.unread = false;
   updatePill();
@@ -770,8 +1047,9 @@ function actionLabel(action) {
 }
 
 async function createSession() {
-  const data = await api('/api/session', { method: 'POST', body: JSON.stringify({ locale: state.locale }) });
+  const data = await api('/api/session', { method: 'POST', body: JSON.stringify({ locale: state.locale, consent: consentPayload() }) });
   state.sessionId = data.session.id;
+  state.sessionConsentRequired = false;
   localStorage.setItem(STORE.session, state.sessionId);
   state.messages = [];
   renderThread();
@@ -787,23 +1065,32 @@ async function loadSession() {
       actions: message.meta?.actions || []
     }));
     renderThread();
+    state.sessionConsentRequired = false;
+    return true;
   } catch (error) {
+    if (error.code === 'CONSENT_REQUIRED') {
+      state.sessionConsentRequired = true;
+      showConsent();
+      return false;
+    }
     if (String(error.message).includes('not found') || String(error.message).includes('expired')) {
       localStorage.removeItem(STORE.session);
       state.sessionId = null;
       await createSession();
-    } else {
-      throw error;
+      return true;
     }
+    throw error;
   }
 }
 
 async function init() {
+  if (!state.consent) return showConsent();
   if (!state.key) return showGate();
   try {
     state.meta = await api('/api/meta');
+    const loaded = await loadSession();
+    if (loaded === false) return;
     showBody();
-    await loadSession();
     state.ready = true;
     setState('idle');
     updateContext();
@@ -845,7 +1132,13 @@ async function sendMessage(event) {
       updatePill();
     }
   } catch (error) {
-    addMessage('system', `Could not answer: ${error.message || error}`);
+    if (error?.code === 'CONSENT_REQUIRED') {
+      state.sessionConsentRequired = true;
+      showConsent();
+      setState('idle');
+      return;
+    }
+    addMessage('system', 'Could not answer. Please try again.');
     setState('error');
     setTimeout(() => setState('idle'), 1800);
   } finally {
@@ -936,6 +1229,12 @@ function toggleLocale() {
   state.locale = state.locale === 'fr' ? 'en' : 'fr';
   localStorage.setItem(STORE.locale, state.locale);
   setLocaleButton();
+  updateLegalCopy();
+  if (!els.body.hidden) {
+    els.input.placeholder = state.locale === 'fr'
+      ? 'Posez une question sur Nour, ou dites « ouvre Safiy »…'
+      : 'Ask about Nour\'s work, or say “open Safiy”…';
+  }
 }
 
 function setLocaleButton() {
@@ -946,6 +1245,7 @@ async function resetSession() {
   if (voice.active) await stopVoice();
   localStorage.removeItem(STORE.session);
   state.sessionId = null;
+  state.sessionConsentRequired = false;
   state.messages = [];
   state.unread = false;
   renderThread();
@@ -1113,11 +1413,22 @@ async function startVoice() {
     openPanel();
     return;
   }
+  if (!state.consent) {
+    await openPanel();
+    showConsent();
+    return;
+  }
   if (!state.ready) {
     await openPanel();
     if (!state.ready) return;
   }
   openPanel();
+  if (sessionStorage.getItem(MIC_CONSENT_STORE) !== '1') {
+    const allowed = await showMicConsent();
+    if (!allowed) return;
+    sessionStorage.setItem(MIC_CONSENT_STORE, '1');
+  }
+  clearVoiceError();
   setState('connecting');
   voice.turnId = randomId(12);
   voice.lastTotals = { text: 0, audioIn: 0, audioOut: 0 };
@@ -1178,12 +1489,36 @@ async function startVoice() {
           if (message.usageMetadata) voice.usage = message.usageMetadata;
           if (message.toolCall) await handleLiveTool(message.toolCall);
         },
-        onerror: () => { stopVoice(); setState('error'); setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 3000); },
-        onclose: () => {
-          if (voice.active) stopVoice();
+        onerror: async () => {
+          if (!voice.active) return;
+          await stopVoice();
+          setState('error');
+          showVoiceError(voiceErrorMessage({ code: 'PROVIDER_ERROR' }));
+          setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
+        },
+        onclose: async () => {
+          if (!voice.active) return;
+          await stopVoice();
+          setState('error');
+          showVoiceError(state.locale === 'fr'
+            ? 'La session vocale a pris fin. Relancez la voix pour continuer.'
+            : 'The voice session ended. Start voice again to continue.');
+          setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
         }
       }
     });
+    const expiresAt = Date.parse(token.expiresAt);
+    if (Number.isFinite(expiresAt)) {
+      voice.expiryTimer = setTimeout(async () => {
+        if (!voice.active) return;
+        await stopVoice();
+        setState('error');
+        showVoiceError(state.locale === 'fr'
+          ? 'La session vocale a pris fin. Relancez la voix pour continuer.'
+          : 'The voice session ended. Start voice again to continue.');
+        setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
+      }, Math.max(1000, expiresAt - Date.now()));
+    }
     voice.micSource = voice.inputContext.createMediaStreamSource(voice.mic);
     voice.analyser = voice.inputContext.createAnalyser();
     voice.analyser.fftSize = 256;
@@ -1204,13 +1539,20 @@ async function startVoice() {
     setState('listening');
   } catch (error) {
     await stopVoice();
+    if (error?.code === 'CONSENT_REQUIRED') {
+      state.sessionConsentRequired = true;
+      showConsent();
+      return;
+    }
     setState('error');
-    setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 3000);
+    showVoiceError(voiceErrorMessage(error));
+    setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
   }
 }
 
 async function stopVoice() {
   voice.active = false;
+  if (voice.expiryTimer) { clearTimeout(voice.expiryTimer); voice.expiryTimer = null; }
   stopOrbAnimation();
   if (voice.micSource) { try { voice.micSource.disconnect(); } catch {} voice.micSource = null; }
   if (voice.analyser) { try { voice.analyser.disconnect(); } catch {} voice.analyser = null; }

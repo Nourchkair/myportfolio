@@ -1,4 +1,4 @@
-import { badRequest, conflict, paymentRequired, tooMany } from '../http/errors.js';
+import { badRequest, budgetExhausted, conflict, liveSessionLimit, tooMany } from '../http/errors.js';
 import {
   appendTurn,
   buildConversationBrief,
@@ -7,12 +7,14 @@ import {
   detectLocale,
   getOwnedSession,
   historyContents,
+  requireCurrentConsent,
   summarizeIfNeeded
 } from '../sessions/manager.js';
 import { executeToolCalls, getToolDeclarations } from '../tools/registry.js';
 import { normalizePortfolioContext, contextInstruction } from '../knowledge/context.js';
 import { buildGroundingContext, normalizeOverrides } from '../knowledge/grounding.js';
 import { updateVisitorProfile } from '../sessions/visitor.js';
+import { normalizeConsent } from '../privacy/consent.js';
 
 function cleanText(value, max) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
@@ -78,11 +80,20 @@ export async function handleChat({
   });
   if (!rate.allowed) throw tooMany('Too many chat requests. Please wait before trying again.');
 
-  const budgetBefore = await cost.assertBudget(now);
+  let session;
+  let newConsent = null;
+  if (body.sessionId) {
+    session = await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now });
+    requireCurrentConsent(session, config);
+  } else {
+    newConsent = normalizeConsent(body.consent);
+    if (config.betaAccessRequired && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+  }
 
-  const session = body.sessionId
-    ? await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now })
-    : await createSessionForOwner({ db, ownerHash, locale, now, ttlMs: config.limits.sessionTtlMs });
+  const budgetBefore = await cost.assertBudget(now);
+  if (!session) {
+    session = await createSessionForOwner({ db, ownerHash, locale, state: newConsent ? { consent: newConsent } : {}, now, ttlMs: config.limits.sessionTtlMs });
+  }
 
   if (body.clientMessageId) {
     const claimed = await db.claimAction({
@@ -246,10 +257,21 @@ export async function handleLiveToken({
   const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
   const tokensToday = await db.countLiveTokensSince(dayStart);
   if (tokensToday >= config.limits.maxLiveTokensPerDay) {
-    throw tooMany('The daily Live session limit has been reached. Try again after midnight UTC.');
+    throw liveSessionLimit('The daily voice session limit has been reached. Try again after the daily reset.', dayStart + 86_400_000);
   }
 
-  const budgetBeforeToken = await cost.assertBudget(now);
+  const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
+  let session;
+  let newConsent = null;
+  if (body.sessionId) {
+    session = await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now });
+    requireCurrentConsent(session, config);
+  } else {
+    newConsent = normalizeConsent(body.consent);
+    if (config.betaAccessRequired && !newConsent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+  }
+
+  const budgetBeforeToken = await cost.budget(now);
   const storedSeconds = Number(await db.getControl('live_session_seconds'));
   const requestedSeconds = Number.isFinite(storedSeconds) && storedSeconds > 0 ? storedSeconds : config.limits.liveSessionSeconds;
   const sessionSeconds = Math.min(config.limits.maxLiveSessionSeconds, Math.max(60, Math.round(requestedSeconds)));
@@ -257,14 +279,22 @@ export async function handleLiveToken({
     config.limits.liveTokenReservationUsdMicros,
     Math.ceil((sessionSeconds / 60) * config.limits.liveTokenReservationPerMinuteUsdMicros)
   );
-  if (budgetBeforeToken.dailyUsdMicros + reservation > budgetBeforeToken.dailyCapUsdMicros || budgetBeforeToken.cumulativeUsdMicros + reservation > budgetBeforeToken.cumulativeCapUsdMicros) {
-    throw paymentRequired('The remaining evaluation budget cannot cover another Live session');
+  const dailyShort = budgetBeforeToken.dailyUsdMicros + reservation > budgetBeforeToken.dailyCapUsdMicros;
+  const cumulativeShort = budgetBeforeToken.cumulativeUsdMicros + reservation > budgetBeforeToken.cumulativeCapUsdMicros;
+  if (dailyShort || cumulativeShort) {
+    const scope = cumulativeShort ? 'cumulative' : 'daily';
+    throw budgetExhausted({
+      scope,
+      resetsAt: scope === 'daily' ? dayStart + 86_400_000 : null,
+      message: scope === 'daily'
+        ? 'The remaining daily voice allowance cannot cover another Live session'
+        : 'The overall private-beta voice allowance has been used'
+    });
   }
 
-  const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
-  const session = body.sessionId
-    ? await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now })
-    : await createSessionForOwner({ db, ownerHash, locale, now, ttlMs: config.limits.sessionTtlMs });
+  if (!session) {
+    session = await createSessionForOwner({ db, ownerHash, locale, state: newConsent ? { consent: newConsent } : {}, now, ttlMs: config.limits.sessionTtlMs });
+  }
   const messages = await db.listMessages(session.id, 14);
   const portfolioContext = normalizePortfolioContext(body.portfolioContext);
   const brief = buildConversationBrief({ session, messages, maxMessages: 6 });
@@ -350,6 +380,7 @@ export async function handleLiveTurn({
   requestId
 }) {
   const session = await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now });
+  requireCurrentConsent(session, config);
   const userText = String(body.userText || '').replace(/\s+/g, ' ').trim().slice(0, config.limits.maxMessageChars);
   const assistantText = String(body.assistantText || '').replace(/\s+/g, ' ').trim().slice(0, 4000);
   if (!userText && !assistantText) throw badRequest('A live turn needs at least one transcript');

@@ -1,4 +1,5 @@
 import { badRequest, notFound, unauthorized } from '../http/errors.js';
+import { sessionHasCurrentConsent } from '../privacy/consent.js';
 import { visitorPrompt } from './visitor.js';
 
 const FRENCH_WORDS = /\b(bonjour|salut|merci|je|vous|nous|projet|projets|parcours|competence|competences|ou|comment|pourquoi|avec|pour|mes|mon|ma|les|des|une|un|habite|etudie|parle|quelle|quel|sont|est|puis|rendez|francais|travaille|aime)\b/g;
@@ -12,17 +13,23 @@ export function detectLocale(text, requested = 'auto') {
   return words.length + (accented ? 1 : 0) >= 2 ? 'fr' : 'en';
 }
 
-export async function createSessionForOwner({ db, ownerHash, locale = 'auto', now = Date.now(), ttlMs }) {
+export async function createSessionForOwner({ db, ownerHash, locale = 'auto', state = {}, now = Date.now(), ttlMs }) {
   const id = crypto.randomUUID();
   const session = await db.createSession({
     id,
     ownerHash,
     locale,
-    state: { locale },
+    state: { locale, ...state },
     now,
     expiresAt: now + ttlMs
   });
   return session;
+}
+
+export function requireCurrentConsent(session, config) {
+  if (config.betaAccessRequired && !sessionHasCurrentConsent(session)) {
+    throw badRequest('Accept the current Terms of Use and Privacy Policy to continue', 'CONSENT_REQUIRED');
+  }
 }
 
 export async function getOwnedSession({ db, sessionId, ownerHash, now = Date.now() }) {
@@ -122,6 +129,7 @@ export function buildSystemPrompt({ persona, context = '', brief = '', locale = 
     'If the visitor asks you to choose a project or what to look at, make a reasoned choice and present it rather than asking them to choose again.',
     'You may call only the allowlisted portfolio, knowledge and presentation tools. Navigation tools request an interface action; in text, do not claim a page has already opened. In a Live session, the frontend confirms after applying the action.',
     'Never claim to have performed an external write, sent an email, booked a meeting, or changed a calendar until a tool or the interface confirms it.',
+    'Do not make or recommend decisions with legal or similarly significant effects about individuals, including hiring, credit, insurance, housing, medical, legal or safety decisions. Discuss factors generally and require human judgment.',
     'Manual visitor navigation always takes priority. If the visitor changes section, project, flow step or chapter, follow the new context and stop any presentation that is no longer relevant.'
   ];
   if (mode === 'live') {

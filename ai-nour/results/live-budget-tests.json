@@ -1,24 +1,24 @@
 {
-  "generatedAt": "2026-11-27T05:15:48.429Z",
+  "generatedAt": "2026-11-27T06:15:29.043Z",
   "mode": "mock-live/no-usage-reported",
-  "passed": 8,
+  "passed": 9,
   "failed": 0,
-  "total": 8,
+  "total": 9,
   "results": [
     {
-      "name": "first Live token reserves budget",
+      "name": "first Live token reserves the five-minute budget",
       "pass": true,
       "detail": {
         "status": 200,
-        "reservationUsdMicros": 600000
+        "reservationUsdMicros": 125000
       }
     },
     {
-      "name": "Live token carries the configured 10-minute session duration",
+      "name": "Live token carries the configured five-minute session duration",
       "pass": true,
       "detail": {
-        "sessionSeconds": 600,
-        "expiresAt": "2026-11-27T05:25:48.411Z"
+        "sessionSeconds": 300,
+        "expiresAt": "2026-11-27T06:25:29.023Z"
       }
     },
     {
@@ -55,7 +55,7 @@
       "name": "Live instruction includes verified portfolio grounding",
       "pass": true,
       "detail": {
-        "instructionLength": 17399
+        "instructionLength": 17635
       }
     },
     {
@@ -85,7 +85,7 @@
       "name": "held Live reservation counts toward budget",
       "pass": true,
       "detail": {
-        "held": 600000
+        "held": 125000
       }
     },
     {
@@ -93,7 +93,17 @@
       "pass": true,
       "detail": {
         "status": 402,
-        "error": "BUDGET_EXCEEDED"
+        "error": "DAILY_BUDGET_EXHAUSTED"
+      }
+    },
+    {
+      "name": "daily budget error includes the local-reset timestamp",
+      "pass": true,
+      "detail": {
+        "details": {
+          "scope": "daily",
+          "resetsAt": 1795824000000
+        }
       }
     }
   ]

@@ -1,0 +1,100 @@
+{
+  "generatedAt": "2026-11-27T06:15:37.619Z",
+  "passed": 12,
+  "failed": 0,
+  "total": 12,
+  "results": [
+    {
+      "name": "valid beta key reaches the API",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "new session without consent is rejected",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "old 16+ consent is rejected",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "new session with current 18+ consent is created",
+      "pass": true,
+      "detail": {
+        "status": 201,
+        "sessionId": "9340b437-5d90-4c29-8b99-1eb73356caff"
+      }
+    },
+    {
+      "name": "chat works with current consent",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "Live token works with current consent",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "sessionSeconds": 300,
+        "reservationUsdMicros": 125000
+      }
+    },
+    {
+      "name": "existing stale session must acknowledge before reading",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "existing stale session must acknowledge before chat",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "existing stale session must acknowledge before Live voice",
+      "pass": true,
+      "detail": {
+        "status": 400,
+        "error": "CONSENT_REQUIRED"
+      }
+    },
+    {
+      "name": "existing session accepts the current legal version",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "existing session is readable after acknowledgement",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "existing session chat works after acknowledgement",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    }
+  ]
+}

@@ -16,6 +16,7 @@ const base = process.env.PRODUCTION_API_URL || 'https://api.nourchkair.com';
 const owner = `production-safety-${crypto.randomUUID()}`;
 const results = [];
 const check = (name, pass, detail = {}) => results.push({ name, pass: Boolean(pass), detail });
+const consent = { age18: true, termsVersion: '2026-11-27-v1.1', privacyVersion: '2026-11-27-v1.1', acceptedAt: Date.now() };
 let restored = false;
 
 async function request(pathname, { method = 'GET', beta = false, adminAuth = false, body } = {}) {
@@ -44,14 +45,14 @@ try {
 }
 
 check('emergency shutdown restored', restored, { restored });
-const recovered = await request('/api/session', { method: 'POST', beta: true, body: { locale: 'en' } });
+const recovered = await request('/api/session', { method: 'POST', beta: true, body: { locale: 'en', consent } });
 check('sessions recover after restore', recovered.status === 201 && Boolean(recovered.body.session?.id), { status: recovered.status });
 const sessionId = recovered.body.session?.id;
 
 const live = await request('/api/live/token', { method: 'POST', beta: true, body: { sessionId, locale: 'en' } });
 const expiresIn = live.body.expiresAt ? Math.round((Date.parse(live.body.expiresAt) - Date.now()) / 1000) : null;
-check('production Live token uses the 10-minute limit', live.status === 200 && live.body.sessionSeconds === 600 && expiresIn !== null && expiresIn >= 585 && expiresIn <= 600, { status: live.status, sessionSeconds: live.body.sessionSeconds, expiresIn });
-check('production Live reservation is $0.25', live.body.reservationUsdMicros === 250000, { reservationUsdMicros: live.body.reservationUsdMicros });
+check('production Live token uses the five-minute limit', live.status === 200 && live.body.sessionSeconds === 300 && expiresIn !== null && expiresIn >= 285 && expiresIn <= 300, { status: live.status, sessionSeconds: live.body.sessionSeconds, expiresIn });
+check('production Live reservation is $0.125', live.body.reservationUsdMicros === 125000, { reservationUsdMicros: live.body.reservationUsdMicros });
 check('ephemeral token is not exposed in results', Boolean(live.body.token) && !Object.prototype.hasOwnProperty.call(live.body, 'providerToken'), { tokenReturned: Boolean(live.body.token) });
 
 const turn = await request('/api/live/turn', {
@@ -67,7 +68,7 @@ const turn = await request('/api/live/turn', {
     usage: { textInput: 0, audioInput: 0, audioOutput: 0 }
   }
 });
-check('production Live reservation settles', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 250000, { status: turn.status, costUsdMicros: turn.body.costUsdMicros });
+check('production Live reservation settles', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 125000, { status: turn.status, costUsdMicros: turn.body.costUsdMicros });
 check('spending remains within caps', turn.body.budget?.allowed === true && turn.body.budget?.cumulativeUsdMicros <= 7_000_000, { budget: turn.body.budget });
 
 const output = {

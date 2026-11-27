@@ -36,6 +36,10 @@
 
   .panel-kicker{font-size:9.6px}
   .panel-sub{font-size:15.2px;line-height:1.62}
+  .contact-legal{margin:12px 0 0;color:rgba(255,255,255,.42);font:8.5px/1.5 var(--mono, ui-monospace, monospace);letter-spacing:.07em;text-transform:uppercase}
+  .contact-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
+  .contact-legal a:hover{color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.5)}
+  .reading-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
   .contact-note{font-size:9px}
   .contact-panel .cta{height:41px;font-size:10.4px}
 
@@ -419,6 +423,10 @@
   .panel-kicker{color:rgba(255,255,255,.6)}
   .panel h1 em{color:rgba(255,255,255,.82)}
   .panel-sub,.contact-panel .panel-sub{color:rgba(240,246,248,.72)}
+  .contact-legal{margin:12px 0 0;color:rgba(255,255,255,.42);font:8.5px/1.5 var(--mono, ui-monospace, monospace);letter-spacing:.07em;text-transform:uppercase}
+  .contact-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
+  .contact-legal a:hover{color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.5)}
+  .reading-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
   .contact-note{color:rgba(255,255,255,.5)}
 
   .utility-toggle{
@@ -2432,6 +2440,10 @@
   .panel-kicker{font-size:10px;color:rgba(255,225,194,.94)}
   .panel-sub{font-size:16px;line-height:1.62;color:rgba(255,255,255,.84)}
   .contact-panel .panel-sub{font-size:15.4px;color:rgba(255,255,255,.87)}
+  .contact-legal{margin:12px 0 0;color:rgba(255,255,255,.42);font:8.5px/1.5 var(--mono, ui-monospace, monospace);letter-spacing:.07em;text-transform:uppercase}
+  .contact-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
+  .contact-legal a:hover{color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.5)}
+  .reading-legal a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.18)}
   .contact-note{font-size:9.6px;color:rgba(255,255,255,.58)}
   .contact-panel .cta{height:42px;font-size:11px}
 

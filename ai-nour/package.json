@@ -30,7 +30,8 @@
     "apply:crm-schema": "node scripts/apply-crm-schema.mjs",
     "test:lifecycle": "node scripts/test-lifecycle.mjs",
     "test:admin-auth": "node scripts/test-admin-auth.mjs",
-    "test:live-budget": "node scripts/test-live-budget.mjs"
+    "test:live-budget": "node scripts/test-live-budget.mjs",
+    "test:consent": "node scripts/test-consent.mjs"
   },
   "dependencies": {
     "@google/genai": "3.6.1"

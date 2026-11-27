@@ -77,7 +77,7 @@ export function renderReadingContent(){
     <section class="reading-section" id="approach" aria-labelledby="approach-title"><header class="reading-section-head"><span>01</span><h2 id="approach-title">About my approach</h2></header><div class="reading-prose">${paragraphs(ABOUT_ME_WORK)}</div><div class="reading-prose reading-direction-copy">${paragraphs(ABOUT_ME_DIRECTION)}</div></section>
     <section class="reading-section" id="experience" aria-labelledby="experience-title"><header class="reading-section-head"><span>02</span><h2 id="experience-title">My Journey</h2></header><p class="reading-lead">${e(PROFESSIONAL_TAGLINE)}</p><div class="reading-prose">${paragraphs(PROFESSIONAL_INTRO)}</div><nav class="reading-index" aria-label="My Journey chapters">${PROFESSIONAL_CHAPTERS.map(chapter=>`<a href="#chapter-${e(chapter.id)}">${e(chapter.num)} ${e(chapter.label)}</a>`).join('')}</nav><div class="reading-chapters">${journey}</div></section>
     <section class="reading-section" id="projects" aria-labelledby="projects-title"><header class="reading-section-head"><span>03</span><h2 id="projects-title">Projects</h2></header><p class="reading-lead">Five projects across customer acquisition, service operations, AI communication, knowledge systems and workplace intelligence.</p><nav class="reading-index" aria-label="Projects">${PROJECTS.map(project=>`<a href="#project-${e(project.id)}">${e(project.num)} ${e(project.title)}</a>`).join('')}</nav><div class="reading-projects">${projects}</div></section>
-    <section class="reading-section" id="contact" aria-labelledby="contact-title"><header class="reading-section-head"><span>04</span><h2 id="contact-title">Contact</h2></header><p class="reading-lead">${e(SITE.contactIntro)}</p><div class="reading-hero-actions"><a class="reading-cta" href="${SITE.linkedin}" target="_blank" rel="noopener">Message on LinkedIn ↗</a><a class="reading-link" href="${SITE.github}" target="_blank" rel="noopener">GitHub ↗</a></div><p class="reading-note">${e(SITE.contactNote)}</p></section>
+    <section class="reading-section" id="contact" aria-labelledby="contact-title"><header class="reading-section-head"><span>04</span><h2 id="contact-title">Contact</h2></header><p class="reading-lead">${e(SITE.contactIntro)}</p><div class="reading-hero-actions"><a class="reading-cta" href="${SITE.linkedin}" target="_blank" rel="noopener">Message on LinkedIn ↗</a><a class="reading-link" href="${SITE.github}" target="_blank" rel="noopener">GitHub ↗</a></div><p class="reading-note">${e(SITE.contactNote)}</p><p class="reading-note reading-legal"><a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Use</a></p></section>
   </main>`;
 }
 export function renderReadingPage(){
@@ -106,7 +106,7 @@ export function renderReadingPage(){
   <a class="reading-exit" href="index.html#/home">Open immersive portfolio ↗</a>
 </header>
 ${renderReadingContent()}
-<footer class="reading-foot"><span>Nour OS / Reading view</span><a href="index.html#/home">Open immersive portfolio ↗</a></footer>
+<footer class="reading-foot"><span>Nour OS / Reading view</span><span class="reading-legal"><a href="/privacy/">Privacy Policy</a> · <a href="/terms/">Terms of Use</a></span><a href="index.html#/home">Open immersive portfolio ↗</a></footer>
 </body>
 </html>`;
 }

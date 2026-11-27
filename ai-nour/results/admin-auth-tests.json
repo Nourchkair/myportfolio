@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T05:15:39.852Z",
+  "generatedAt": "2026-11-27T06:15:21.122Z",
   "mode": "local-admin/google-session-signing/mock-worker",
   "passed": 16,
   "failed": 0,
@@ -41,7 +41,7 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "liveSessionSeconds": 600
+        "liveSessionSeconds": 300
       }
     },
     {

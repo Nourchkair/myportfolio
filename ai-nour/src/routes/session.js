@@ -1,12 +1,13 @@
 import { json, readJson } from '../http/json.js';
 import { requireOwnerHash, requirePrototypeKey } from '../auth/secure.js';
 import { requireAssistant, requireLive, requireText, readFlags } from '../controls/flags.js';
-import { createSessionForOwner, getOwnedSession, sessionView } from '../sessions/manager.js';
+import { createSessionForOwner, getOwnedSession, requireCurrentConsent, sessionView } from '../sessions/manager.js';
 import { handleChat, handleLiveToken, handleLiveTurn } from '../services/conversation.js';
 import { getCorpusMeta, listChunks } from '../knowledge/retrieval.js';
 import { getToolDeclarations } from '../tools/registry.js';
 import { executeToolCall } from '../tools/registry.js';
 import { normalizePortfolioContext } from '../knowledge/context.js';
+import { normalizeConsent } from '../privacy/consent.js';
 import { badRequest } from '../http/errors.js';
 import { sha256Hex } from '../auth/secure.js';
 
@@ -36,14 +37,40 @@ export function registerSessionRoutes(router, services) {
     await requireAssistant(db);
     const body = await readJson(request);
     const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : 'auto';
+    const consent = normalizeConsent(body.consent);
+    if (config.betaAccessRequired && !consent) {
+      throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+    }
     const session = await createSessionForOwner({
       db,
       ownerHash,
       locale,
+      state: consent ? { consent } : {},
       now: Date.now(),
       ttlMs: config.limits.sessionTtlMs
     });
     return json({ session: sessionView(session, []) }, 201);
+  });
+
+  router.post('/api/session/:id/consent', async ({ request, params }) => {
+    await requirePrototypeKey(request, config, db);
+    const ownerHash = await requireOwnerHash(request);
+    await requireAssistant(db);
+    const body = await readJson(request);
+    const consent = normalizeConsent(body.consent);
+    if (!consent) throw badRequest('Confirm that you are 18 or older and agree to the current Terms and Privacy Policy', 'CONSENT_REQUIRED');
+    const session = await getOwnedSession({ db, sessionId: params.id, ownerHash, now: Date.now() });
+    const now = Date.now();
+    const state = { ...(session.state || {}), consent: { ...consent, recordedAt: now } };
+    await db.updateSession({
+      id: session.id,
+      summary: session.summary,
+      state,
+      turnCount: session.turnCount,
+      now,
+      expiresAt: session.expiresAt
+    });
+    return json({ session: sessionView({ ...session, state }, []) });
   });
 
   router.get('/api/session/:id', async ({ request, params }) => {
@@ -51,6 +78,7 @@ export function registerSessionRoutes(router, services) {
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
     const session = await getOwnedSession({ db, sessionId: params.id, ownerHash, now: Date.now() });
+    requireCurrentConsent(session, config);
     const messages = await db.listMessages(session.id, 100);
     const flags = await readFlags(db);
     return json({
@@ -129,7 +157,8 @@ export function registerSessionRoutes(router, services) {
     const body = await readJson(request);
     if (!body.sessionId) throw badRequest('sessionId is required');
     if (!body.name) throw badRequest('Tool name is required');
-    await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now: Date.now() });
+    const toolSession = await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now: Date.now() });
+    requireCurrentConsent(toolSession, config);
     const toolStarted = Date.now();
     const result = await executeToolCall(body.name, body.args || {}, {
       db,

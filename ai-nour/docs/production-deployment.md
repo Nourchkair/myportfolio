@@ -1,6 +1,6 @@
 # AI Nour production private beta
 
-Status: **production backend deployed and restricted to individually revocable beta keys. Public/unrestricted access remains disabled.**
+Status: **production backend deployed and restricted to individually revocable beta keys. Legal pages are published with the 27 November 2026 release. Public/unrestricted AI access remains disabled.**
 
 ## 1. Live endpoints
 
@@ -59,6 +59,16 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - Web research: implemented with Gemini Google Search grounding, but **disabled** (`WEB_RESEARCH_ENABLED=false`) because the current free key returns 429 for that capability.
 - V2 evidence: `docs/ai-nour-v2-conversational.md` and `results/v2-*`.
 
+## 3c. Legal pages, consent and voice policy
+
+- Bilingual Privacy Policy and Terms of Use are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/` (version 1.1, effective 27 November 2026).
+- AI Nour requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
+- Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
+- Existing sessions created under the prior consent version must acknowledge `2026-11-27-v1.1` before reading, chat, Live voice or tools.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The $1 daily and $7 cumulative caps are unchanged. Schedar remains the voice. Admin can restore up to 600 seconds.
+- Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
+- Data/retention audit: `docs/legal-data-audit.md`.
+
 ## 4. Administration
 
 The production-connected admin is local-only:
@@ -106,7 +116,9 @@ Production ledger at the final V2 check:
 - Held reservations: **$0**
 - Daily cap: **$1.00 USD**
 - Cumulative cap: **$7.00 USD (~$9.95 CAD)**
+- Live default: **300 seconds / $0.125 reservation**; 600-second maximum remains available in admin
 - Fixed monthly infrastructure: **$0**
+- Gemini billing: **Free tier, no active Cloud Billing** (verified 27 November 2026); public AI remains disabled
 
 The production ledger includes prior evaluation carryover. The $10 CAD budget remains intact.
 
@@ -163,7 +175,7 @@ Live browser check: `?ainour=beta` pill, gate, grounded reply, zero console erro
 
 ## 12. Remaining manual action
 
-**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires.
+**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires. The published legal URLs are now `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
 
 A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine AI Nour administration does not require Cloudflare access.
 

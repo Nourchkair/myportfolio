@@ -101,6 +101,7 @@ img{max-width:100%;display:block}
 .reading-foot{width:min(900px,calc(100% - 40px));margin:0 auto;padding:26px 0 40px;border-top:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;font-family:var(--mono);font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.34)}
 .reading-foot a{color:rgba(255,255,255,.62);text-decoration:none}
 .reading-foot a:hover,.reading-foot a:focus-visible{color:var(--accent)}
+.reading-legal{display:inline-flex;gap:6px;flex-wrap:wrap}
 .reading-page :is(a,summary):focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 @media(max-width:760px){
   .reading-head{flex-wrap:wrap;gap:8px 12px;padding:10px 16px}

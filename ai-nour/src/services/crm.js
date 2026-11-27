@@ -52,14 +52,20 @@ export function createCrmService({ db, config, google, email }) {
     if (!config.crmWritesEnabled) throw forbidden('CRM writes are disabled in this prototype');
   }
 
-  async function hasEmailConsent(contactId) {
+  async function hasActiveConsent(contactId, scope, now = Date.now()) {
     const consents = await db.listConsents(contactId);
-    return consents.some((item) => item.scope === 'email' && item.status === 'granted');
+    return consents.some((item) => item.scope === scope
+      && item.status === 'granted'
+      && (!item.expires_at || Number(item.expires_at) > now));
   }
 
-  async function calendarGuests(contact) {
+  async function hasEmailConsent(contactId, now = Date.now()) {
+    return hasActiveConsent(contactId, 'email', now);
+  }
+
+  async function calendarGuests(contact, now = Date.now()) {
     if (!config.google.calendarInvitesEnabled || !contact?.email) return [];
-    if (!(await hasEmailConsent(contact.id))) return [];
+    if (!(await hasEmailConsent(contact.id, now))) return [];
     return [contact.email];
   }
 
@@ -81,7 +87,7 @@ export function createCrmService({ db, config, google, email }) {
 
   async function visitorEmail({ contact, kind, template, dedupeKey, inquiryId = null, appointmentId = null, now }) {
     if (!contact?.email) return null;
-    if (!(await hasEmailConsent(contact.id))) return null;
+    if (!(await hasEmailConsent(contact.id, now))) return null;
     return enqueue({ kind, to: contact.email, template, dedupeKey, inquiryId, appointmentId, now });
   }
 
@@ -213,6 +219,9 @@ export function createCrmService({ db, config, google, email }) {
     if (!inquiry || inquiry.owner_hash !== ownerHash) throw notFound('Inquiry not found');
     const contact = await db.getContact(inquiry.contact_id);
     if (!contact) throw notFound('Contact not found');
+    if (!(await hasActiveConsent(contact.id, 'store', now)) || !(await hasActiveConsent(contact.id, 'contact', now))) {
+      throw forbidden('Consent to store the inquiry and contact the visitor is required before booking');
+    }
     const startUtc = timeMs(body.startUtc);
     const endUtc = timeMs(body.endUtc);
     if (endUtc <= startUtc) throw badRequest('Appointment window is invalid');
@@ -271,7 +280,7 @@ export function createCrmService({ db, config, google, email }) {
         end: new Date(endUtc).toISOString(),
         timeZone: timezone,
         withMeet: true,
-        attendees: await calendarGuests(contact)
+        attendees: await calendarGuests(contact, now)
       });
       booking = await db.updateBookingCalendar({
         id: booking.id,
@@ -341,7 +350,7 @@ export function createCrmService({ db, config, google, email }) {
     if (overlap.length) throw conflict('That time is no longer available');
     const timezone = clean(body.timezone, TIMEZONE_MAX) || booking.timezone || 'America/Toronto';
     const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
-    const guests = await calendarGuests(contact);
+    const guests = await calendarGuests(contact, now);
     const calendarWrites = Boolean(flags.google_writes_enabled && google?.configured && booking.calendar_event_id);
 
     if (calendarWrites) {
@@ -411,7 +420,7 @@ export function createCrmService({ db, config, google, email }) {
     if (!booking) throw notFound('Appointment not found');
     if (booking.status === 'cancelled') return { duplicate: true, booking: bookingView(booking) };
     const contact = (await db.getContact(booking.contact_id)) || { id: null, full_name: 'there', email: null };
-    const guests = await calendarGuests(contact);
+    const guests = await calendarGuests(contact, now);
     const calendarWrites = Boolean(flags.google_writes_enabled && google?.configured && booking.calendar_event_id);
     if (calendarWrites) {
       try {
@@ -470,7 +479,7 @@ export function createCrmService({ db, config, google, email }) {
         end: new Date(booking.end_utc).toISOString(),
         timeZone: booking.timezone || 'America/Toronto',
         withMeet: true,
-        attendees: await calendarGuests(contact)
+        attendees: await calendarGuests(contact, now)
       });
       const updated = await db.updateBookingCalendar({
         id,

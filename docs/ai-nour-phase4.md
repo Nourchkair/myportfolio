@@ -89,15 +89,15 @@ Latest feedback implemented:
 
 - The ephemeral token has `expireTime` (messages can be sent until then) and `newSessionExpireTime` (time to start a session). These are provider-enforced.
 - Gemini Live audio-only sessions have a provider limit around 15 minutes and a WebSocket connection limit around 10 minutes.
-- Phase 4 sets the default token `expireTime` to **600 seconds** and mints it with the Live setup. The browser has no frontend countdown that ends the session.
+- Phase 4 set the default token `expireTime` to 600 seconds. The current private-beta default (27 November 2026) is **300 seconds**, with 600 seconds retained as the admin maximum; the browser now ends the local voice UI at the server-issued expiry.
 - The duration is stored in D1 (`live_session_seconds`) and read when the next token is minted. Admin range: 60–600 seconds.
 - `newSessionExpireTime` remains 60 seconds.
 
 ### Financial enforcement
 
-- Reservation: `max($0.08, ceil(minutes × $0.025))`; at 600 seconds = **$0.25**.
+- Reservation: `max($0.08, ceil(minutes × $0.025))`; at 300 seconds = **$0.125**, at 600 seconds = **$0.25**.
 - Modeled maximum 10-minute session cost: **~$0.2265** (audio input $0.045, output $0.180, text overhead ~$0.0015).
-- Daily cap: **$1.00** (admin-lowerable), so four 10-minute sessions/day at the reservation.
+- Daily cap: **$1.00** (admin-lowerable), so eight 5-minute sessions/day at the reservation.
 - Cumulative cap: **$7.00 USD** (~$9.95 CAD), admin-lowerable.
 - 15-minute hold; unreported holds settle as `live_unreported`.
 - Global 12-token/day cap remains as a secondary ceiling.
@@ -110,7 +110,7 @@ The admin **Controls** tab now manages:
 - Daily spending cap (at or below the approved deployment maximum).
 - Cumulative spending cap (at or below the approved deployment maximum).
 
-Tests: `results/live-budget-tests.json` — **4/4**, including a 600-second token/`expireTime` assertion and the prepaid reservation block.
+Tests: `results/live-budget-tests.json` — **9/9**, including a 300-second token/`expireTime` assertion, the $0.125 reservation and the daily-budget error reset timestamp.
 
 ### Proxy decision
 
@@ -181,7 +181,7 @@ Full details: `ai-nour/docs/oauth-production-readiness.md`.
 - Brand verification then sensitive-scope verification; allow about 10 days; no restricted-scope assessment if Gmail is excluded.
 - Gmail remains out of production; Resend handles transactional email. Gmail drafts remain an optional human-review fallback.
 - Google Workspace MCP: agents must use Google MCP for Workspace access from **1 February 2027**. Direct REST is acceptable for the private-beta window; a post-February-2027 launch needs migration or a documented exception.
-- Privacy/terms are final review copies at `ai-nour/oauth/privacy.html` and `ai-nour/oauth/terms.html`; not published.
+- Final bilingual policies are prepared at `privacy/index.html` and `terms/index.html`; not published pending approval. Public URLs will be `https://nourchkair.com/privacy` and `https://nourchkair.com/terms`.
 
 Manual authorization steps are in the OAuth document: production project, redirects, brand verification, scope justification/demo, publish, reauthorize with offline access, store secrets. No publish or verification has been submitted.
 
@@ -269,7 +269,7 @@ Personal acceptance is still required. Check each item during the review.
 - [ ] No secret in browser or repository.
 - [ ] Consent and data-minimization behavior.
 - [ ] Daily/cumulative caps visible and enforced.
-- [ ] 10-minute Live duration works and is provider-enforced.
+- [x] 5-minute Live duration is the current default; 10-minute maximum remains admin-configurable.
 
 ---
 
@@ -320,7 +320,7 @@ Personal acceptance is still required. Check each item during the review.
 - Revert to the prior commit if a regression is found.
 - Feature-flag off first; rollback code second.
 - D1 migrations are additive; do not rewrite or delete records during rollback.
-- Encrypted Google Drive backups remain the recovery path.
+- Encrypted backup capability exists, but no automated backup schedule is currently active. Enable and test it before relying on restore.
 
 ### Launch checklist
 1. Nour approves visual states.

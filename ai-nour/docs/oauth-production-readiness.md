@@ -1,6 +1,6 @@
 # Production OAuth — Phase 4 approval and configuration package
 
-Status: **production Worker deployed with the existing development OAuth credentials. The current Testing-mode refresh token expires in about 6.5 days; publishing/verification and durable reauthorization are the remaining manual actions.**
+Status: **production Worker deployed with the existing development OAuth credentials. The legal pages are published. The current Testing-mode refresh token expires in about 6.5 days; publishing/verification and durable reauthorization remain the manual actions.**
 
 ## Production status
 
@@ -23,7 +23,7 @@ Status: **production Worker deployed with the existing development OAuth credent
   - `http://localhost:8787/oauth/google/callback` (local operational helper)
 - Operational refresh token is stored server-side in `.dev.vars`; it never reaches the browser.
 - Admin login uses a separate OAuth flow with basic `openid`, `email`, `profile` scopes and a signed HttpOnly session cookie.
-- Privacy and terms review copies are at `ai-nour/oauth/privacy.html` and `ai-nour/oauth/terms.html`.
+- Final bilingual policies are published at `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/` (version 1.1, effective 27 November 2026). The portfolio and AI Nour are both covered. AI Nour eligibility is 18+.
 
 ## 2. Separate the two authorizations
 
@@ -60,8 +60,8 @@ Use a **separate production project** from the development project, consistent w
    - User support email: Nour’s support address
    - Developer contact: Nour’s address
    - Homepage: `https://nourchkair.com`
-   - Privacy policy: `https://nourchkair.com/privacy.html`
-   - Terms of service: `https://nourchkair.com/terms.html`
+   - Privacy policy: `https://nourchkair.com/privacy/`
+   - Terms of service: `https://nourchkair.com/terms/`
    - Authorized domain: `nourchkair.com`
    - Logo: approved portfolio mark, if required
 5. Add the production redirect URIs to the **Operations** client:
@@ -147,29 +147,26 @@ Implication for AI Nour:
 - Resend avoids the Gmail send policy entirely. Do not add Gmail send to the autonomous path.
 - This is a **post-February 2027 launch blocker**, not a blocker for the current private beta.
 
-## 7. Privacy and terms review
+## 7. Published privacy and terms
 
-Review copies:
+Approved and published on 27 November 2026:
 
-- `ai-nour/oauth/privacy.html`
-- `ai-nour/oauth/terms.html`
+- `https://nourchkair.com/privacy/`
+- `https://nourchkair.com/terms/`
 
-They are not published or linked from the portfolio. Before publishing:
+Version 1.1, English and French, effective 27 November 2026. The policies cover the portfolio and AI Nour. AI Nour is 18+; eligibility is combined with one Terms/Privacy acceptance. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone.
 
-- Replace the review banner with the final approval date.
-- Confirm the privacy contact and internal notification address.
-- Confirm retention periods: conversations up to 7 days; inquiries/appointments as needed; email delivery logs 30 days; security/cost logs 30 days; backups per approved schedule.
-- Confirm that Resend is listed as the transactional email processor.
-- Confirm that Google user data is used only for the stated features and not for training or advertising.
-- Confirm the Google API Services User Data Policy / Limited Use statement.
-- Confirm the cancellation, rescheduling, and no-show terms.
-- Approve the public URLs:
-  - `https://nourchkair.com/privacy.html`
-  - `https://nourchkair.com/terms.html`
+Operational facts reflected in the policies:
+
+- Conversations: rolling 7 days; operational/error logs and non-queued email records 30 days; CRM until business need/deletion; cost/audit/idempotency records retained longer; no active automated backup schedule.
+- Resend is disabled.
+- Google API Services User Data Policy / Limited Use statement included.
+- The production Gemini project is on the **Free tier** with no active Cloud Billing. Google's unpaid-service terms apply; do not submit personal, sensitive, confidential or third-party information. Public AI access remains disabled.
+- External CRM/Calendar/email writes remain disabled except for separately approved synthetic tests.
 
 ## 8. Remaining Google Console actions requiring the user
 
-1. Approve creating the production project and clients.
+1. Confirm whether to keep the existing `ai-nour` OAuth project or create a separate production project/client.
 2. Add the production redirect URIs.
 3. Complete/publish brand verification.
 4. Submit sensitive-scope verification with the scope justifications and demo.
@@ -177,4 +174,4 @@ They are not published or linked from the portfolio. Before publishing:
 6. Decide whether the admin remains local/private or gets an approved private hostname.
 7. Approve publishing the app out of Testing.
 
-No publish, verification submission, redirect change, or reauthorization has been performed.
+No publish, verification submission, redirect change, or reauthorization has been performed. **First manual action:** in Google Cloud Console → APIs & Services → OAuth consent screen → Branding, set the Privacy Policy URL to `https://nourchkair.com/privacy/` and the Terms of Service URL to `https://nourchkair.com/terms/`, then save. Do not publish yet.

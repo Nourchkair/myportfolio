@@ -40,6 +40,15 @@ export function paymentRequired(message = 'Budget cap exceeded') {
   return new AppError(402, 'BUDGET_EXCEEDED', message);
 }
 
+export function budgetExhausted({ scope = 'daily', resetsAt = null, message = 'The voice allowance has been used' } = {}) {
+  const code = scope === 'cumulative' ? 'CUMULATIVE_BUDGET_EXHAUSTED' : 'DAILY_BUDGET_EXHAUSTED';
+  return new AppError(402, code, message, resetsAt ? { scope, resetsAt } : { scope });
+}
+
+export function liveSessionLimit(message = 'The daily voice session limit has been reached', resetsAt = null) {
+  return new AppError(429, 'LIVE_SESSION_LIMIT', message, resetsAt ? { resetsAt } : undefined);
+}
+
 export function internal(message = 'Internal error') {
   return new AppError(500, 'INTERNAL', message);
 }

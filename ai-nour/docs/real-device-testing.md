@@ -49,7 +49,7 @@ Enter the real `PROTOTYPE_ACCESS_KEY` from `.dev.vars`. The admin is at `http://
 - [ ] Speaking can be interrupted by talking over it; audio stops promptly.
 - [ ] The pill mic toggles voice; the chat panel stays transcript-only; text still works.
 - [ ] Closing the panel during a live voice turn keeps the microphone and session running; reopening the chat shows the continuing transcript, and the pill stops voice.
-- [ ] The configured Live session limit (default 10 minutes) is understandable, and a new session can be started without losing the transcript.
+- [ ] The configured Live session limit (default 5 minutes, 10-minute maximum) is understandable, and a new session can be started without losing the transcript.
 - [ ] Reload restores the conversation from D1.
 - [ ] No console errors or failed network requests.
 - [ ] Reading view has no assistant UI.
@@ -109,7 +109,7 @@ Record for each device:
 
 ## 7. Known constraints
 
-- Live tokens are one-use and carry a configurable provider-enforced expiry (default 600 seconds / 10 minutes). A new session can be started while the transcript and D1 context remain.
+- Live tokens are one-use and carry a configurable provider-enforced expiry (default 300 seconds / 5 minutes, 600-second maximum). A new session can be started while the transcript and D1 context remain.
 - Each Live token carries a prepaid evaluation reservation; a second token is blocked when the remaining daily/cumulative budget cannot cover it. There is a global 12-token/day cap.
 - Resend is prepared but not enabled. Email jobs are dry runs (or mock deliveries in tests). No real email should be sent during device testing.
 - The real microphone and Bluetooth path are not exercised by the automated mock UI tests; this plan is the required human validation.
@@ -124,4 +124,4 @@ Record for each device:
 - Subjective French pronunciation and latency notes.
 - Whether manual portfolio navigation always took priority over the assistant.
 - Which of the six visual states needs adjustment before final production CSS.
-- Whether the configured 10-minute voice limit is acceptable for private beta.
+- Whether the configured 5-minute voice limit is acceptable for private beta.

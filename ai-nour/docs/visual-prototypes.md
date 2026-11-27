@@ -75,7 +75,7 @@ Use `docs/real-device-testing.md`. Minimum for this review:
 - [ ] Start a real voice session from the pill, close the panel while speaking, confirm the session continues, reopen the chat; stop it from the pill.
 - [ ] Test interruption by talking over the assistant.
 - [ ] Test French pronunciation.
-- [ ] Confirm the configured Live limit (default 10 minutes) is understandable and recovery works.
+- [ ] Confirm the configured Live limit (default 5 minutes, 10-minute maximum) is understandable and recovery works.
 - [ ] Confirm the pill sits immediately to the right of the menu bar and remains reachable.
 
 Human-device results remain **pending** until Nour runs this checklist. Automated mock tests are not a substitute.

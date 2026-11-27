@@ -73,6 +73,8 @@ if(siteUrl){
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>${siteUrl}/</loc></url>
   <url><loc>${siteUrl}/read.html</loc></url>
+  <url><loc>${siteUrl}/privacy</loc></url>
+  <url><loc>${siteUrl}/terms</loc></url>
 </urlset>
 `);
 }
@@ -83,7 +85,7 @@ fs.mkdirSync(dist,{recursive:true});
 const files=['index.html','read.html','spatial2.html','404.html','favicon.svg','robots.txt'];
 if(fs.existsSync(path.join(root,'sitemap.xml'))) files.push('sitemap.xml');
 for(const file of files) fs.copyFileSync(path.join(root,file),path.join(dist,file));
-for(const dir of ['assets','src']){
+for(const dir of ['assets','src','privacy','terms']){
   fs.cpSync(path.join(root,dir),path.join(dist,dir),{recursive:true,filter:src=>{
     const rel=path.relative(root,src).replaceAll(path.sep,'/');
     return !rel.startsWith('archive/')&&!rel.includes('/tests/');
@@ -94,4 +96,5 @@ fs.rmSync(path.join(dist,'src/reading'),{recursive:true,force:true});
 for(const buildOnly of ['src/data/site.js','src/utils/html.js']) fs.rmSync(path.join(dist,buildOnly),{force:true});
 fs.rmSync(path.join(dist,'src/utils'),{recursive:true,force:true});
 fs.writeFileSync(path.join(dist,'.nojekyll'),'');
+fs.writeFileSync(path.join(dist,'_redirects'),'/privacy /privacy/index.html 200\n/privacy/ /privacy/index.html 200\n/terms /terms/index.html 200\n/terms/ /terms/index.html 200\n');
 console.log(JSON.stringify({built:true,projects:PROJECTS.length,chapters:PROFESSIONAL_CHAPTERS.length,dist:true},null,2));

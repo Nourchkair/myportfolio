@@ -147,7 +147,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
 - Production beta keys are SHA-256 hashed in D1; the full key is shown once at creation and can be revoked immediately.
 - The public portfolio does not mount AI Nour; the beta entry and server-side key check are both required.
-- Live tokens are one-use, use a configurable provider-enforced expiry (default 600 seconds), use the **Schedar** voice, carry a duration-scaled prepaid reservation (default $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
+- Live tokens are one-use, use a configurable provider-enforced expiry (default 300 seconds; 600-second maximum), use the **Schedar** voice, carry a duration-scaled prepaid reservation (default $0.125 at 300s; $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
 - Gmail adapter has no send method; it creates drafts only.
@@ -167,6 +167,8 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/architecture.md` — module map and data flows.
 - `docs/production-deployment.md` — production URLs, resources, admin, shutdown, rollback, and validation.
 - `../docs/ai-nour-v2-conversational.md` — V2 personality, grounding, visitor intelligence, presentations and quality results.
+- `../privacy/index.html` and `../terms/index.html` — final bilingual legal pages (prepared, not published until approved).
+- `../docs/legal-data-audit.md` — data, retention, deletion, admin, third-party and Gemini claim audit.
 - `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
 
 ## Known limitations
