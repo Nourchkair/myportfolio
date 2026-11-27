@@ -422,8 +422,10 @@ function mount() {
       attributeFilter: ['class', 'data-mode']
     });
   }
-  if (PUBLIC_ACCESS || state.key) init();
-  else showGate();
+  if (!PUBLIC_ACCESS) {
+    if (state.key) init();
+    else showGate();
+  }
 
   if (DEV) {
     window.AINourPrototype = {
