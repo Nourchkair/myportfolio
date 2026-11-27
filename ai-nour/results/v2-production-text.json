@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-11-27T05:30:01.736Z",
+  "health": {
+    "ok": true,
+    "service": "ai-nour-production",
+    "d1": true
+  },
+  "voice": "Schedar",
+  "results": [
+    {
+      "name": "customer-acquisition",
+      "status": 200,
+      "reply": "Customer Acquisition is H2Ops's sales and customer acquisition project, not mergers and acquisitions (M&A). It has nothing to do with buying companies. \n\nInstead, it is an AI-assisted sales system built to solve a very specific operational headache: how to stop sales teams from wasting time on generic outreach and manual prospecting. The system combines market research, prospect intelligence, personalized demos, and automated follow-ups so businesses can find and engage the right buyers without getting bogged down in repetitive admin work. \n\nNour worked across the commercial logic and the demo/follow-up layer of this project—defining who to target, setting up qualification criteria, and building parts of the demo follow-up engine like inbox sync and booking detection. \n\nSince you are already looking at the project overview, we could look closer at how the process flows from target definition to pipeline visibility, or jump into one of the other projects like Dispatch if you want to see how demand meets supply on the operational side.",
+      "actions": [],
+      "latencyMs": 1633,
+      "costUsdMicros": 611
+    },
+    {
+      "name": "guided-tour",
+      "status": 200,
+      "reply": "Safiy starts with a simple reality: valuable business context is generated in meetings every day, but much of it gets lost the moment the call ends. Traditional tools require manual note-taking or force you to upload sensitive recordings to cloud servers, creating heavy privacy and adoption friction.\n\nThe project is structured around a local-first philosophy—recording and transcription happen locally on your Mac by default. \n\nThe guided process flows through a few core steps:\n\n1. Capture: Recording and transcribing professional conversations securely without leaving your machine.\n2. Connect Knowledge: Bringing documents, reference materials, and past notes together into Knowledge Banks so the assistant has context.\n3. Understand Context and AI Assistance: Using that preserved professional history to provide real-time help and answer questions without forcing you to re-explain background details.\n4. Business Actions: Turning meeting discussions into downstream tasks, calendar entries, or drafts across connected apps like Gmail and Google Docs.\n\nNour worked specifically on the knowledge and release layer of Safiy—building Knowledge Bank imports, refining retrieval indexing, and prepping beta releases.",
+      "actions": [
+        {
+          "type": "presentationStart",
+          "projectId": "safiy",
+          "includeFlow": true,
+          "startNodeId": null
+        },
+        {
+          "type": "openProject",
+          "projectId": "safiy",
+          "route": "/projects/safiy"
+        },
+        {
+          "type": "openProjectFlow",
+          "projectId": "safiy",
+          "nodeId": null,
+          "route": "/projects/safiy/flow"
+        }
+      ],
+      "latencyMs": 2879,
+      "costUsdMicros": 1390
+    },
+    {
+      "name": "recruiter",
+      "status": 200,
+      "reply": "If you need someone who can figure out where a commercial model leaks, structure the fix, and build the system to enforce it, Nour is worth a look. He operates at the intersection of business strategy, sales, and applied AI—meaning he doesn't just write strategy decks; he builds the machinery that executes them. \n\nThe proof points behind that are straightforward:\n\n1. Real-world sales execution: He generated over $400K in individual sales and coached more than 10 associates, which grounds his strategic thinking in actual buyer behavior rather than theory.\n2. Building the systems: Across projects like H2Ops Customer Acquisition and AI Customer Communications, he designed the commercial logic, qualification criteria, and triage rules, then built the underlying AI and workflow automation to run them.\n3. Commercial judgment: His background in economics and political science shows up as an instinct for incentives, trade-offs, and second-order effects—he looks at what a business process actually rewards, not just what it intends to.\n\nHe wants roles where commercial judgment and applied AI aren't treated as separate silos. If that fits what your team needs, we can discuss how his approach lines up with your current pipeline challenges.",
+      "actions": [],
+      "latencyMs": 2221,
+      "costUsdMicros": 672
+    }
+  ],
+  "checks": {
+    "customerAcquisition": true,
+    "guideNavigates": true,
+    "recruiterProof": true,
+    "noCorporateFiller": true,
+    "plainText": true
+  }
+}

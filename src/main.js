@@ -8,7 +8,7 @@ const aiNourEnabled = aiNourMode === 'beta'
   || (aiNourLocal && aiNourMode === 'dev');
 
 if (aiNourEnabled) {
-  import('./ai-nour/companion.js?v=2')
+  import('./ai-nour/companion.js?v=3')
     .then((module) => module.mountCompanion())
     .catch((error) => console.warn('AI Nour companion could not start', error));
 }

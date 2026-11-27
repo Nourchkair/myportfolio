@@ -57,6 +57,7 @@ let liveContextTimer = null;
 let lastLiveContext = '';
 let expectedAiRoutes = [];
 let expectedAiRoutesTimer = null;
+let aiActionEpoch = 0;
 
 localStorage.setItem(STORE.owner, state.owner);
 
@@ -96,7 +97,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css', import.meta.url).href;
+  link.href = new URL('./companion.css?v=3', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -859,7 +860,10 @@ async function runActions(actions) {
   if (!voice.active) setState('processing');
   const applied = [];
   let failed = false;
+  let cancelled = false;
+  const runEpoch = aiActionEpoch;
   for (let index = 0; index < list.length; index++) {
+    if (runEpoch !== aiActionEpoch) { cancelled = true; break; }
     const action = list[index];
     const status = window.NourOS;
     if (!status) { failed = true; break; }
@@ -883,7 +887,10 @@ async function runActions(actions) {
       if (action.type === 'navigate') { await status.navigateTo(action.section); applied.push(action); }
       else if (action.type === 'openProject') { await status.openProject(action.projectId); applied.push(action); }
       else if (action.type === 'openProjectFlow') {
-        if (index > 0 && list[index - 1]?.type === 'openProject') await sleep(900);
+        if (index > 0 && list[index - 1]?.type === 'openProject') {
+          await sleep(900);
+          if (runEpoch !== aiActionEpoch) { cancelled = true; break; }
+        }
         await status.openProjectFlow(action.projectId, action.nodeId || null);
         applied.push(action);
         if (state.presentation.active) state.presentation.nodeId = action.nodeId || null;
@@ -905,7 +912,7 @@ async function runActions(actions) {
   updateContext();
   sendLiveContextUpdate();
   if (!voice.active) setState('idle');
-  return { ok: !failed, applied };
+  return { ok: !failed && !cancelled, cancelled, applied };
 }
 
 function onNourState(status) {
@@ -914,6 +921,7 @@ function onNourState(status) {
   const aiNavigation = routeChanged ? consumeAiRoute(nextRoute) : false;
   if (routeChanged && !aiNavigation) {
     expectedAiRoutes = [];
+    aiActionEpoch += 1;
     if (state.presentation.active) {
       state.presentation = { active: false, projectId: null, nodeId: null, paused: false };
     }
