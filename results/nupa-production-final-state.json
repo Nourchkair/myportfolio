@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T16:04:08.476Z",
+  "generatedAt": "2026-11-27T16:24:00Z",
   "health": {
     "status": 200,
     "ok": true,
@@ -16,8 +16,8 @@
     "environment": "production"
   },
   "pages": {
-    "deploymentId": "93ce9423-261b-480c-98dd-a1aad6925234",
-    "source": "afe2c43"
+    "deploymentId": "ec5f1368-ca75-486a-9d29-5def4b1b6682",
+    "source": "3c842f5"
   },
   "flags": {
     "assistant_enabled": true,
@@ -70,7 +70,7 @@
     "tester": {
       "id": "c12b3c7b-fd1b-41b4-a71f-f25fe6f8da7e",
       "purpose": "primary-acceptance",
-      "prefix": "ainour_beta_bb9628…"
+      "prefix": "ainour_beta_bb9628\u2026"
     }
   },
   "unauth": {

@@ -1,0 +1,121 @@
+{
+  "generatedAt": "2026-11-27T16:21:52.063Z",
+  "url": "https://nourchkair.com/?ainour=beta",
+  "passed": 8,
+  "failed": 0,
+  "total": 8,
+  "checks": [
+    {
+      "name": "production intro waits for an explicit choice",
+      "pass": true,
+      "detail": {
+        "introDone": false,
+        "ready": false
+      }
+    },
+    {
+      "name": "production intro shows two English panel cards inside the intro",
+      "pass": true,
+      "detail": {
+        "introDone": false,
+        "ready": false,
+        "choiceCount": 2,
+        "rects": [
+          {
+            "text": "\u2192\nExplore independently\nBrowse the portfolio at your own pace.",
+            "x": 454,
+            "y": 466,
+            "w": 260,
+            "h": 112,
+            "radius": "20px",
+            "display": "flex",
+            "textTransform": "none"
+          },
+          {
+            "text": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
+            "x": 726,
+            "y": 466,
+            "w": 260,
+            "h": 112,
+            "radius": "20px",
+            "display": "flex",
+            "textTransform": "none"
+          }
+        ],
+        "belowGreeting": true,
+        "insideIntro": true,
+        "english": true,
+        "note": "Choose how you want to begin. The portfolio is always available without Nupa.",
+        "overflow": false
+      }
+    },
+    {
+      "name": "production cards are panels below the greeting, not pills",
+      "pass": true,
+      "detail": [
+        {
+          "text": "\u2192\nExplore independently\nBrowse the portfolio at your own pace.",
+          "x": 454,
+          "y": 466,
+          "w": 260,
+          "h": 112,
+          "radius": "20px",
+          "display": "flex",
+          "textTransform": "none"
+        },
+        {
+          "text": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
+          "x": 726,
+          "y": 466,
+          "w": 260,
+          "h": 112,
+          "radius": "20px",
+          "display": "flex",
+          "textTransform": "none"
+        }
+      ]
+    },
+    {
+      "name": "production intro fits the desktop viewport",
+      "pass": true,
+      "detail": {
+        "overflow": false,
+        "note": "Choose how you want to begin. The portfolio is always available without Nupa."
+      }
+    },
+    {
+      "name": "independent card enters the portfolio without opening Nupa",
+      "pass": true,
+      "detail": {
+        "introDone": true,
+        "ready": true,
+        "pill": true,
+        "panelHidden": true
+      }
+    },
+    {
+      "name": "Nupa card opens the v1.2 consent gate",
+      "pass": true,
+      "detail": {
+        "copy": "Nupa est un guide de portfolio ind\u00e9pendant, propuls\u00e9 par l\u2019IA et exploit\u00e9 par Nour Chkair. Ce n\u2019est pas Nour et ce n\u2019est pas une repr\u00e9sentation par IA de lui. Nupa est un guide interactif, vivant et personnalis\u00e9 pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions ",
+        "locale": "FR"
+      }
+    },
+    {
+      "name": "opening cards stay English with French companion locale",
+      "pass": true,
+      "detail": {
+        "copy": "Nupa est un guide de portfolio ind\u00e9pendant, propuls\u00e9 par l\u2019IA et exploit\u00e9 par Nour Chkair. Ce n\u2019est pas Nour et ce n\u2019est pas une repr\u00e9sentation par IA de lui. Nupa est un guide interactif, vivant et personnalis\u00e9 pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9. Vous pouvez commencer par le texte et passer \u00e0 la voix plus tard; l\u2019autorisation du microphone est demand\u00e9e s\u00e9par\u00e9ment. Le service fait appel \u00e0 l\u2019IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant \u00e0 des tiers.",
+        "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
+        "locale": "FR"
+      }
+    },
+    {
+      "name": "production intro has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}
