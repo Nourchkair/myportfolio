@@ -1,6 +1,7 @@
 const state = {
   status: null,
   flags: null,
+  limits: null,
   cost: null,
   active: 'overview'
 };
@@ -95,6 +96,34 @@ function renderControls() {
   if (!flags) return;
   const keys = ['assistant_enabled', 'text_enabled', 'live_enabled', 'prototype_enabled', 'google_writes_enabled'];
   $('#flag-controls').innerHTML = keys.map((key) => `<label><span>${esc(key)}${key === 'google_writes_enabled' ? ' <span class="muted">(leave off in the prototype)</span>' : ''}</span><input type="checkbox" data-flag="${esc(key)}" ${flags[key] ? 'checked' : ''}></label>`).join('');
+  renderLimits();
+}
+
+function renderLimits() {
+  const limits = state.limits;
+  if (!limits) return;
+  $('#limit-daily').value = (Number(limits.dailyCapUsdMicros) / 1_000_000).toFixed(2);
+  $('#limit-cumulative').value = (Number(limits.cumulativeCapUsdMicros) / 1_000_000).toFixed(2);
+  $('#limit-live-session').value = String(limits.liveSessionSeconds);
+  $('#limit-live-session').max = String(limits.maxLiveSessionSeconds);
+  $('#limits-result').textContent = `Approved maxima: daily $${money(limits.maxDailyCapUsdMicros)} · cumulative $${money(limits.maxCumulativeCapUsdMicros)} · Live ${limits.maxLiveSessionSeconds}s`;
+}
+
+async function saveLimits() {
+  const daily = Number($('#limit-daily').value);
+  const cumulative = Number($('#limit-cumulative').value);
+  const liveSessionSeconds = Number($('#limit-live-session').value);
+  const result = await api('/api/admin/limits', {
+    method: 'PATCH',
+    body: JSON.stringify({
+      dailyCapUsdMicros: Math.round(daily * 1_000_000),
+      cumulativeCapUsdMicros: Math.round(cumulative * 1_000_000),
+      liveSessionSeconds
+    })
+  });
+  state.limits = result;
+  renderLimits();
+  $('#limits-result').textContent = `Saved · daily $${money(result.dailyCapUsdMicros)} · cumulative $${money(result.cumulativeCapUsdMicros)} · Live ${result.liveSessionSeconds}s`;
 }
 
 async function saveFlags() {
@@ -156,10 +185,33 @@ async function loadKnowledge() {
     { label: 'Overrides', value: String(data.overrides?.length || 0), sub: 'draft only; not applied to retrieval yet' }
   ]);
   $('#knowledge-overrides').innerHTML = table(
-    ['Chunk', 'Title', 'Status', 'Updated'],
-    (data.overrides || []).map((item) => [`<code>${esc(item.chunk_id)}</code>`, esc(item.title || '—'), esc(item.status), time(item.updated_at)])
+    ['Chunk', 'Title', 'Status', 'Updated', ''],
+    (data.overrides || []).map((item) => [
+      `<code>${esc(item.chunk_id)}</code>`, esc(item.title || '—'), esc(item.status), time(item.updated_at),
+      `<button class="danger" data-delete-override="${esc(item.chunk_id)}">Delete</button>`
+    ])
   );
+  $$('#knowledge-overrides button[data-delete-override]').forEach((button) => button.addEventListener('click', async () => {
+    if (!window.confirm(`Delete override ${button.dataset.deleteOverride}?`)) return;
+    await api(`/api/admin/knowledge/overrides/${encodeURIComponent(button.dataset.deleteOverride)}`, { method: 'DELETE' });
+    await loadKnowledge();
+  }));
   window.__knowledgeData = data;
+}
+
+async function saveOverride() {
+  const chunkId = $('#override-id').value.trim();
+  const title = $('#override-title').value.trim();
+  const text = $('#override-text').value.trim();
+  const status = $('#override-status').value;
+  const tags = $('#override-tags').value.split(',').map((tag) => tag.trim()).filter(Boolean);
+  const result = await api('/api/admin/knowledge/overrides', {
+    method: 'POST',
+    body: JSON.stringify({ chunkId, title, text, status, tags })
+  });
+  $('#override-result').textContent = `Saved ${chunkId} as ${status}.`;
+  window.__knowledgeOverrides = result.overrides;
+  await loadKnowledge();
 }
 
 async function searchKnowledge() {
@@ -299,6 +351,7 @@ async function loadTab(tab) {
       renderOverview();
     } else if (tab === 'controls') {
       if (!state.flags) state.flags = (await api('/api/admin/flags')).flags;
+      state.limits = await api('/api/admin/limits');
       renderControls();
     } else if (tab === 'persona') {
       if (!state.flags) state.flags = (await api('/api/admin/flags')).flags;
@@ -324,8 +377,10 @@ async function loadTab(tab) {
 $$('nav button').forEach((button) => button.addEventListener('click', () => loadTab(button.dataset.tab)));
 $('#refresh').addEventListener('click', () => loadTab(state.active));
 $('#save-flags').addEventListener('click', () => saveFlags().catch((error) => showError(error.message)));
+$('#save-limits').addEventListener('click', () => saveLimits().catch((error) => showError(error.message)));
 $('#save-persona').addEventListener('click', () => savePersona().catch((error) => showError(error.message)));
 $('#knowledge-search').addEventListener('click', () => searchKnowledge().catch((error) => showError(error.message)));
+$('#save-override').addEventListener('click', () => saveOverride().catch((error) => showError(error.message)));
 $('#refresh-integrations').addEventListener('click', () => loadIntegrations().catch((error) => showError(error.message)));
 $('#synthetic-test').addEventListener('click', () => runSynthetic());
 $('#process-email').addEventListener('click', () => processEmail());

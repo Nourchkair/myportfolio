@@ -454,9 +454,9 @@ function setSize(size) {
     els.minimize.setAttribute('aria-label', isCollapsed ? 'Expand chat' : 'Collapse chat');
     els.minimize.title = isCollapsed ? 'Expand chat' : 'Collapse chat';
   }
-  renderThread();
+  renderThread({ forceScroll: true });
   requestAnimationFrame(() => {
-    renderThread();
+    renderThread({ forceScroll: true });
     clampPanel();
   });
 }
@@ -521,13 +521,13 @@ function addMessage(role, content, actions = []) {
   renderThread();
 }
 
-function renderThread() {
+function renderThread({ forceScroll = false } = {}) {
   if (!els.thread) return;
+  const previousTop = els.thread.scrollTop;
+  const nearBottom = els.thread.scrollHeight - els.thread.scrollTop - els.thread.clientHeight < 28;
   els.thread.textContent = '';
   const collapsed = state.size === 'collapsed';
-  const visibleMessages = collapsed
-    ? state.messages.filter((message) => message.role === 'assistant').slice(-1)
-    : state.messages;
+  const visibleMessages = state.messages;
   if (!visibleMessages.length) {
     const hint = document.createElement('div');
     hint.className = 'ainour-msg system';
@@ -564,7 +564,10 @@ function renderThread() {
     }
     els.thread.appendChild(item);
   }
-  els.thread.scrollTop = els.thread.scrollHeight;
+  requestAnimationFrame(() => {
+    if (!els.thread) return;
+    els.thread.scrollTop = forceScroll || nearBottom ? els.thread.scrollHeight : previousTop;
+  });
 }
 
 function actionLabel(action) {

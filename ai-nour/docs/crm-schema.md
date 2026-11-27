@@ -1,4 +1,4 @@
-# Proposed CRM schema — Phase 3 approval package
+# Proposed CRM schema — Phase 4 approval package
 
 Status: **proposed for approval; not applied to the live Google Sheet.** The local D1 workflow is implemented and validated with synthetic data. No production headers or records have been written.
 
@@ -151,3 +151,13 @@ The following are **not** proposed for private beta because they add data collec
 | Follow-ups | None | Optional; not implemented |
 
 Applying the headers to the live Google Sheet requires explicit approval. The application will not write production headers or records until that approval is recorded. The proposed header order is the field order in each table above.
+
+## D1 ↔ Google Sheets synchronization validation
+
+The field mapping and reconciliation logic is implemented in `src/services/crm-sync.js` and covered by `tests/crm-sync.test.mjs`:
+
+- Header order must match the tables above.
+- D1 rows are flattened into stable cell values (ISO timestamps, string-safe fields).
+- The diff detects `missing_in_sheet`, `missing_in_d1`, and changed fields.
+
+This validates the mapping offline. Live synchronization is not claimed until the approved headers are applied to the live Sheet and a controlled synthetic round-trip is approved.

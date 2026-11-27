@@ -41,6 +41,9 @@ button:disabled { opacity: .45; cursor: default; }
 .controls { display: flex; flex-direction: column; gap: 10px; margin: 18px 0; }
 .controls label { display: flex; align-items: center; justify-content: space-between; gap: 16px; background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
 .controls input { width: 18px; height: 18px; accent-color: var(--accent); }
+.limit-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 16px 0; }
+.limit-grid label { display: flex; flex-direction: column; gap: 6px; color: var(--muted); font-size: .8rem; }
+.limit-grid input { width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 9px; padding: 10px 11px; font: inherit; }
 textarea, input[type="text"], input:not([type]) { width: 100%; background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 9px; padding: 11px 12px; font: inherit; }
 textarea { resize: vertical; line-height: 1.55; }
 .row { display: flex; gap: 10px; align-items: center; margin: 14px 0; flex-wrap: wrap; }

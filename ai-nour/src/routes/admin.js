@@ -39,6 +39,12 @@ export function registerAdminRoutes(router, services) {
         from: config.email.resendFrom,
         webhookConfigured: Boolean(config.email.webhookSecret),
         internalNotifications: Boolean(config.email.internalTo)
+      },
+      limits: {
+        dailyCapUsdMicros: budget.dailyCapUsdMicros,
+        cumulativeCapUsdMicros: budget.cumulativeCapUsdMicros,
+        liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
+        maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
       }
     });
   });
@@ -59,6 +65,51 @@ export function registerAdminRoutes(router, services) {
     for (const [key, value] of entries) await setBooleanFlag(db, key, value, now);
     await db.audit({ actor: 'admin-token', action: 'flags.update', detail: Object.fromEntries(entries), now });
     return json({ flags: await readFlags(db) });
+  });
+
+  router.get('/api/admin/limits', async ({ request }) => {
+    requireAdmin(request, config);
+    const budget = await cost.budget();
+    return json({
+      dailyCapUsdMicros: budget.dailyCapUsdMicros,
+      cumulativeCapUsdMicros: budget.cumulativeCapUsdMicros,
+      maxDailyCapUsdMicros: config.caps.dailyUsdMicros,
+      maxCumulativeCapUsdMicros: config.caps.cumulativeUsdMicros,
+      liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
+      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
+    });
+  });
+
+  router.patch('/api/admin/limits', async ({ request }) => {
+    requireAdmin(request, config);
+    const body = await readJson(request);
+    const now = Date.now();
+    const updates = {};
+    if (body.dailyCapUsdMicros !== undefined) {
+      const value = Number(body.dailyCapUsdMicros);
+      if (!Number.isFinite(value) || value < 100_000 || value > config.caps.dailyUsdMicros) throw badRequest('Daily cap must be between $0.10 and the approved daily maximum');
+      updates.daily_spend_cap_usd_micros = Math.round(value);
+    }
+    if (body.cumulativeCapUsdMicros !== undefined) {
+      const value = Number(body.cumulativeCapUsdMicros);
+      if (!Number.isFinite(value) || value < 100_000 || value > config.caps.cumulativeUsdMicros) throw badRequest('Cumulative cap must be between $0.10 and the approved cumulative maximum');
+      updates.cumulative_spend_cap_usd_micros = Math.round(value);
+    }
+    if (body.liveSessionSeconds !== undefined) {
+      const value = Number(body.liveSessionSeconds);
+      if (!Number.isFinite(value) || value < 60 || value > config.limits.maxLiveSessionSeconds) throw badRequest('Live session duration must be between 60 and the configured maximum');
+      updates.live_session_seconds = Math.round(value);
+    }
+    if (!Object.keys(updates).length) throw badRequest('Provide a spending cap or Live session duration');
+    for (const [key, value] of Object.entries(updates)) await db.setControl(key, String(value), now);
+    await db.audit({ actor: 'admin-token', action: 'limits.update', detail: updates, now });
+    const budget = await cost.budget();
+    return json({
+      dailyCapUsdMicros: budget.dailyCapUsdMicros,
+      cumulativeCapUsdMicros: budget.cumulativeCapUsdMicros,
+      liveSessionSeconds: Number(await db.getControl('live_session_seconds')) || config.limits.liveSessionSeconds,
+      maxLiveSessionSeconds: config.limits.maxLiveSessionSeconds
+    });
   });
 
   router.get('/api/admin/persona', async ({ request }) => {
@@ -95,12 +146,49 @@ export function registerAdminRoutes(router, services) {
   router.get('/api/admin/knowledge', async ({ request, url }) => {
     requireAdmin(request, config);
     const query = url.searchParams.get('q') || '';
+    const overrides = await db.listKnowledgeOverrides();
+    const published = overrides
+      .filter((item) => item.status === 'published')
+      .map((item) => ({
+        id: item.chunk_id,
+        type: 'override',
+        title: item.title || 'Published knowledge override',
+        text: item.text || '',
+        route: null,
+        tags: (() => { try { return JSON.parse(item.tags_json || '[]'); } catch { return []; } })(),
+        keywords: []
+      }));
     return json({
       corpus: getCorpusMeta(),
       chunks: listChunks(),
-      overrides: await db.listKnowledgeOverrides(),
-      search: query ? search(query, { limit: 8 }) : []
+      overrides,
+      search: query ? search(query, { limit: 8, extraChunks: published }) : []
     });
+  });
+
+  router.post('/api/admin/knowledge/overrides', async ({ request }) => {
+    requireAdmin(request, config);
+    const body = await readJson(request);
+    const chunkId = String(body.chunkId || '').trim();
+    const title = String(body.title || '').trim();
+    const text = String(body.text || '').trim();
+    const status = body.status === 'published' ? 'published' : 'draft';
+    if (!/^[a-z0-9:_-]{3,100}$/i.test(chunkId)) throw badRequest('A valid chunk id is required');
+    if (!title || title.length > 160) throw badRequest('A title of up to 160 characters is required');
+    if (text.length < 20 || text.length > 4000) throw badRequest('Override text must be between 20 and 4000 characters');
+    const tags = Array.isArray(body.tags) ? body.tags.map((tag) => String(tag).slice(0, 60)).slice(0, 12) : [];
+    const now = Date.now();
+    await db.upsertKnowledgeOverride({ chunkId, title, text, tags, status, now });
+    await db.audit({ actor: 'admin-token', action: 'knowledge.override', detail: { chunkId, status }, now });
+    return json({ overrides: await db.listKnowledgeOverrides() });
+  });
+
+  router.delete('/api/admin/knowledge/overrides/:id', async ({ request, params }) => {
+    requireAdmin(request, config);
+    const removed = await db.deleteKnowledgeOverride(params.id);
+    if (!removed) throw badRequest('Knowledge override not found');
+    await db.audit({ actor: 'admin-token', action: 'knowledge.override.delete', detail: { chunkId: params.id }, now: Date.now() });
+    return json({ overrides: await db.listKnowledgeOverrides() });
   });
 
   router.get('/api/admin/bookings', async ({ request }) => {

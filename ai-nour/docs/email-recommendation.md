@@ -1,4 +1,4 @@
-# Automated email — Phase 3 approval and configuration package
+# Automated email — Phase 4 approval and configuration package
 
 Status: **Resend Free approved as the preferred transactional provider, subject to account/domain setup and approval. No DNS records were changed and no real email was sent.**
 
@@ -132,6 +132,10 @@ Visitor email requires an active `email` consent scope. Internal notifications g
 - Google’s Workspace AI Tools Addendum requires Google MCP for AI-agent access from **1 February 2027** and human confirmation for sensitive actions such as sending email. The Gmail MCP server creates drafts; it does not provide an autonomous send tool.
 - Gmail drafts should remain an internal human-review path and should not share the production operational OAuth client.
 - No Gmail scope is required for the Resend production path.
+
+## Private-beta fallback
+
+Private beta does not require Resend credentials. With `EMAIL_SEND_ENABLED=false`, the Worker records every email job and processes it as `dry_run`; no Resend key, domain, or webhook is needed. The admin can inspect the queue, retries, and statuses. Enabling real delivery is a separate approved step.
 
 ## Approval gates
 

@@ -1,4 +1,4 @@
-# AI Nour — Phase 3 architecture
+# AI Nour — Phase 4 architecture
 
 ## Principles
 
@@ -53,14 +53,14 @@ migrations/                0001–0004 D1 schema
 ## Live flow
 
 1. `POST /api/live/token` checks flags, rate limit, the global daily token count, and held-reservation budget.
-2. Creates a held reservation (`$0.08` default) for 15 minutes.
+2. Creates a held reservation (default `$0.25` for a 600-second session) for 15 minutes.
 3. Mints a one-use Gemini token with a **120-second** `expireTime`, 60-second new-session window, voice, system instruction, transcripts, and tools.
 4. The browser connects directly to Gemini; no permanent key is exposed.
 5. Tool calls go to `/api/tools/execute`; transcripts/usage go to `/api/live/turn`.
 6. The server charges `max(actual, reservation)` when usage is reported and reconciles the hold.
 7. If the hold expires unreported, scheduled cleanup records the reservation as `live_unreported` and marks the token expired.
 8. Daily 12-token cap, $1 daily cap, and $7 cumulative cap bound exposure.
-9. A 2-minute session is intentionally short; the D1 transcript allows a new session to continue with context.
+9. Session duration is configurable (default 600 seconds); the D1 transcript allows a new session to continue with context.
 
 ## Email flow
 
@@ -121,7 +121,7 @@ Migrations: `0001_init.sql`, `0002_phase2.sql`, `0003_crm_idempotency.sql`, `000
 - `budget()` includes spent cost events + unexpired held Live reservations.
 - Text and Live token issuance call `assertBudget()`.
 - Live holds settle at the reservation amount if unreported.
-- Defaults: $1/day, $7 cumulative (~$9.95 CAD), $0.08 reservation, 12 Live tokens/day.
+- Defaults: $1/day, $7 cumulative (~$9.95 CAD), 600-second sessions, $0.25 reservation at 600s, 12 Live tokens/day.
 
 ## Phase 3 follow-ups
 

@@ -1,4 +1,4 @@
-# Production OAuth — Phase 3 approval and configuration package
+# Production OAuth — Phase 4 approval and configuration package
 
 Status: **prepared for approval. Do not publish the app, submit verification, change redirect URIs, or reauthorize production Google data until approved.**
 

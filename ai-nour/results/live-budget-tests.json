@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-26T22:13:11.952Z",
+  "generatedAt": "2026-11-27T00:32:25.957Z",
   "mode": "mock-live/no-usage-reported",
-  "passed": 3,
+  "passed": 4,
   "failed": 0,
-  "total": 3,
+  "total": 4,
   "results": [
     {
       "name": "first Live token reserves budget",
@@ -11,6 +11,14 @@
       "detail": {
         "status": 200,
         "reservationUsdMicros": 600000
+      }
+    },
+    {
+      "name": "Live token carries the configured 10-minute session duration",
+      "pass": true,
+      "detail": {
+        "sessionSeconds": 600,
+        "expiresAt": "2026-11-27T00:42:25.867Z"
       }
     },
     {

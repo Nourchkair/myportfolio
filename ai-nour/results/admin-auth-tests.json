@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-26T22:14:13.154Z",
+  "generatedAt": "2026-11-27T00:38:23.694Z",
   "mode": "local-admin/google-session-signing/mock-worker",
-  "passed": 15,
+  "passed": 16,
   "failed": 0,
-  "total": 15,
+  "total": 16,
   "results": [
     {
       "name": "admin API rejects a missing session",
@@ -33,7 +33,15 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "version": "phase3-0.3.0"
+        "version": "phase4-0.4.0"
+      }
+    },
+    {
+      "name": "admin can read spending and voice limits",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "liveSessionSeconds": 600
       }
     },
     {

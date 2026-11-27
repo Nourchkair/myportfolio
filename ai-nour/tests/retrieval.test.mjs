@@ -29,6 +29,22 @@ test('French and paraphrase queries retrieve expected chunks', () => {
   assert.ok(search('Quelles sont les étapes du parcours client ?', { limit: 3 }).some((result) => result.id.startsWith('acquisition:flow')));
 });
 
+test('published knowledge overrides are searchable alongside the corpus', () => {
+  const results = search('What is the phase four synthetic fact?', {
+    limit: 3,
+    extraChunks: [{
+      id: 'test:phase4-override',
+      type: 'override',
+      title: 'Phase four synthetic fact',
+      text: 'The phase four synthetic fact is used to validate publishable knowledge overrides.',
+      route: null,
+      tags: ['synthetic'],
+      keywords: []
+    }]
+  });
+  assert.equal(results[0]?.id, 'test:phase4-override');
+});
+
 test('retrieval benchmark meets Phase 1 thresholds', () => {
   let top1 = 0;
   let top3 = 0;

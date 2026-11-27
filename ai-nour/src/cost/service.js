@@ -24,27 +24,35 @@ export function liveCostMicros(usage = {}, rates) {
 export function createCostService({ db, config }) {
   async function budget(now = Date.now()) {
     const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
-    const [dailySpent, cumulativeSpent, heldDaily, heldTotal] = await Promise.all([
+    const stored = async (key) => {
+      if (typeof db.getControl !== 'function') return NaN;
+      try { return Number(await db.getControl(key)); } catch { return NaN; }
+    };
+    const [dailySpent, cumulativeSpent, heldDaily, heldTotal, dailyCapStored, cumulativeCapStored] = await Promise.all([
       db.getCostSince(dayStart),
       db.getCostTotal(),
       db.sumHeldLiveTokens({ since: dayStart, now }),
-      db.sumHeldLiveTokens({ since: 0, now })
+      db.sumHeldLiveTokens({ since: 0, now }),
+      stored('daily_spend_cap_usd_micros'),
+      stored('cumulative_spend_cap_usd_micros')
     ]);
+    const dailyCap = Math.min(config.caps.dailyUsdMicros, Number.isFinite(dailyCapStored) && dailyCapStored > 0 ? dailyCapStored : config.caps.dailyUsdMicros);
+    const cumulativeCap = Math.min(config.caps.cumulativeUsdMicros, Number.isFinite(cumulativeCapStored) && cumulativeCapStored > 0 ? cumulativeCapStored : config.caps.cumulativeUsdMicros);
     const daily = dailySpent + heldDaily;
     const cumulative = cumulativeSpent + heldTotal;
-    const dailyRemaining = Math.max(0, config.caps.dailyUsdMicros - daily);
-    const cumulativeRemaining = Math.max(0, config.caps.cumulativeUsdMicros - cumulative);
+    const dailyRemaining = Math.max(0, dailyCap - daily);
+    const cumulativeRemaining = Math.max(0, cumulativeCap - cumulative);
     return {
       dailyUsdMicros: daily,
       cumulativeUsdMicros: cumulative,
       dailySpentUsdMicros: dailySpent,
       cumulativeSpentUsdMicros: cumulativeSpent,
       heldLiveReservationsUsdMicros: heldTotal,
-      dailyCapUsdMicros: config.caps.dailyUsdMicros,
-      cumulativeCapUsdMicros: config.caps.cumulativeUsdMicros,
+      dailyCapUsdMicros: dailyCap,
+      cumulativeCapUsdMicros: cumulativeCap,
       dailyRemainingUsdMicros: dailyRemaining,
       cumulativeRemainingUsdMicros: cumulativeRemaining,
-      allowed: daily < config.caps.dailyUsdMicros && cumulative < config.caps.cumulativeUsdMicros
+      allowed: daily < dailyCap && cumulative < cumulativeCap
     };
   }
 

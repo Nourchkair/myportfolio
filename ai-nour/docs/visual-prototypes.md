@@ -1,4 +1,4 @@
-# AI Nour — Phase 3 visual approval package
+# AI Nour — Phase 4 visual acceptance package
 
 Status: **integrated development candidate; final visual approval pending Nour’s personal review.** Direction A remains the proposed direction. No production CSS or final visual tokens have been changed while approval is pending.
 
@@ -28,7 +28,7 @@ Use `127.0.0.1:8791` for the private admin; `localhost:8791` can hit a stale IPv
 | --- | --- | --- | --- |
 | 1 | **Closed pill** | `screenshots/phase3-state-1-pill.png` | Pill says “Ask Nour AI”, sits immediately right of the menu bar, and has a text/chat icon plus a mic. |
 | 2 | **Standard text panel** | `screenshots/phase3-state-2-text.png` | 390px transparent glass, thread legibility, Viewing/EN/New row, inline composer. |
-| 3 | **Collapsed chat** | `screenshots/phase3-state-3-collapsed.png` | Only the latest AI reply plus the single-line composer; the panel no longer covers most of the portfolio. |
+| 3 | **Collapsed chat** | `screenshots/phase3-state-3-collapsed.png` | Latest AI reply plus the single-line composer; the full transcript remains scrollable (`screenshots/phase4-collapsed-scroll.png`). |
 | 4 | **Expanded panel** | `screenshots/phase3-state-4-expanded.png` | 760px workspace; wider thread without taking over the viewport. |
 | 5 | **Voice transcript** | `screenshots/phase3-state-5-voice.png` | Pill changes to “Listening” and is the only voice control; the chat is transcript-only, with no orb, mic, bars, or start/stop controls. |
 | 6 | **Mobile bottom sheet** | `screenshots/phase3-state-6-mobile.png` | Full-width sheet at 390×844, safe-area awareness, pill remains reachable, composer usable. |
@@ -75,7 +75,7 @@ Use `docs/real-device-testing.md`. Minimum for this review:
 - [ ] Start a real voice session from the pill, close the panel while speaking, confirm the session continues, reopen the chat; stop it from the pill.
 - [ ] Test interruption by talking over the assistant.
 - [ ] Test French pronunciation.
-- [ ] Confirm the two-minute Live limit is understandable and recovery works.
+- [ ] Confirm the configured Live limit (default 10 minutes) is understandable and recovery works.
 - [ ] Confirm the pill sits immediately to the right of the menu bar and remains reachable.
 
 Human-device results remain **pending** until Nour runs this checklist. Automated mock tests are not a substitute.

@@ -5,6 +5,8 @@
 **Scope:** isolated AI Nour worktree; no merge, push, production deploy, DNS change, real email, OAuth publish, or paid service.  
 **Status:** **local launch candidate complete; private-beta launch gated by visual approval, real-device testing, and external account approvals.**
 
+**Phase 4 update:** Live sessions are now configurable to 600 seconds with a $0.25 reservation, and admin spending/voice limits and publishable knowledge overrides are implemented. See `docs/ai-nour-phase4.md`; the 120-second voice section below is the Phase 3 historical record.
+
 ---
 
 ## 1. Executive summary
@@ -278,7 +280,7 @@ Not yet executed by a human. Required:
 - Mobile sheet and software keyboard.
 - Portfolio navigation while the assistant is open.
 
-The two-minute Live limit is now disclosed in the voice hint and should be included in the test.
+The configured Live limit (Phase 4 default: 10 minutes) should be included in the test.
 
 **No human device result is marked passed.**
 

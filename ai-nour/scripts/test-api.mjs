@@ -105,7 +105,7 @@ async function main() {
     check('duplicate Live turn rejected', liveDuplicate.status === 200 && liveDuplicate.body.duplicate === true, { status: liveDuplicate.status, duplicate: liveDuplicate.body.duplicate });
 
     const admin = await call('/api/admin/status', { admin: true });
-    check('admin status', admin.status === 200 && admin.body.version === 'phase3-0.3.0', { status: admin.status });
+    check('admin status', admin.status === 200 && admin.body.version === 'phase4-0.4.0', { status: admin.status });
     const adminNoAuth = await fetch(`${base}/api/admin/status`);
     check('admin auth required', adminNoAuth.status === 401, { status: adminNoAuth.status });
 

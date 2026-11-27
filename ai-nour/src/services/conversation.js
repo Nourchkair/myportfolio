@@ -83,7 +83,18 @@ export async function handleChat({
   const history = await historyContents({ db, sessionId: session.id, maxMessages: config.limits.maxHistoryMessages });
   const previousMessages = await db.listMessages(session.id, 20);
   const brief = buildConversationBrief({ session, messages: previousMessages, maxMessages: 6 });
-  const context = retrieval.buildContext([message, contextQuery(portfolioContext)].filter(Boolean).join(' '), { limit: 4, maxChars: 3200 });
+  const overrides = (await db.listKnowledgeOverrides())
+    .filter((item) => item.status === 'published')
+    .map((item) => ({
+      id: item.chunk_id,
+      type: 'override',
+      title: item.title || 'Published knowledge override',
+      text: item.text || '',
+      route: null,
+      tags: (() => { try { return JSON.parse(item.tags_json || '[]'); } catch { return []; } })(),
+      keywords: []
+    }));
+  const context = retrieval.buildContext([message, contextQuery(portfolioContext)].filter(Boolean).join(' '), { limit: 4, maxChars: 3200, extraChunks: overrides });
   const systemInstruction = buildSystemPrompt({
     persona: flags.persona,
     context: context.text,
@@ -226,8 +237,14 @@ export async function handleLiveToken({
   }
 
   const budgetBeforeToken = await cost.assertBudget(now);
-  const reservation = config.limits.liveTokenReservationUsdMicros;
-  if (budgetBeforeToken.dailyUsdMicros + reservation > config.caps.dailyUsdMicros || budgetBeforeToken.cumulativeUsdMicros + reservation > config.caps.cumulativeUsdMicros) {
+  const storedSeconds = Number(await db.getControl('live_session_seconds'));
+  const requestedSeconds = Number.isFinite(storedSeconds) && storedSeconds > 0 ? storedSeconds : config.limits.liveSessionSeconds;
+  const sessionSeconds = Math.min(config.limits.maxLiveSessionSeconds, Math.max(60, Math.round(requestedSeconds)));
+  const reservation = Math.max(
+    config.limits.liveTokenReservationUsdMicros,
+    Math.ceil((sessionSeconds / 60) * config.limits.liveTokenReservationPerMinuteUsdMicros)
+  );
+  if (budgetBeforeToken.dailyUsdMicros + reservation > budgetBeforeToken.dailyCapUsdMicros || budgetBeforeToken.cumulativeUsdMicros + reservation > budgetBeforeToken.cumulativeCapUsdMicros) {
     throw paymentRequired('The remaining evaluation budget cannot cover another Live session');
   }
 
@@ -265,7 +282,7 @@ export async function handleLiveToken({
       systemInstruction,
       tools,
       voice,
-      expireMs: config.limits.liveTokenTtlSeconds * 1000,
+      expireMs: sessionSeconds * 1000,
       newSessionExpireMs: config.limits.liveTokenNewSessionTtlSeconds * 1000
     });
   } catch (error) {
@@ -288,6 +305,7 @@ export async function handleLiveToken({
     newSessionExpiresAt: token.newSessionExpiresAt,
     reservationId,
     reservationUsdMicros,
+    sessionSeconds,
     config: {
       responseModalities: ['AUDIO'],
       systemInstruction,

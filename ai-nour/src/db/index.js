@@ -221,6 +221,11 @@ export function createDb(d1) {
     `).bind(chunkId, title || null, text || null, JSON.stringify(tags || []), status || 'draft', now).run();
   }
 
+  async function deleteKnowledgeOverride(chunkId) {
+    const result = await d1.prepare('DELETE FROM knowledge_overrides WHERE chunk_id=?').bind(chunkId).run();
+    return (result.meta?.changes || 0) > 0;
+  }
+
   async function createContact({ id, ownerHash, fullName, email = null, phone = null, organization = null, role = null, locale = 'en', timezone = null, source = 'portfolio', consentStatus = 'none', now }) {
     await d1.prepare(
       'INSERT INTO contacts(id,owner_hash,full_name,email,phone,organization,role,locale,timezone,source,consent_status,created_at,updated_at) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?)'
@@ -549,6 +554,7 @@ export function createDb(d1) {
     listAudit,
     listKnowledgeOverrides,
     upsertKnowledgeOverride,
+    deleteKnowledgeOverride,
     cleanup
   };
 }

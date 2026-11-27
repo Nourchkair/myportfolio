@@ -1,6 +1,6 @@
-# AI Nour — Phase 3 launch candidate
+# AI Nour — Phase 4 private-beta candidate
 
-Isolated Phase 3 launch candidate for AI Nour: a Cloudflare Worker, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, D1 conversation/CRM/cost stores, bilingual retrieval, a feature-flagged portfolio companion, a private admin dashboard, and a transactional email pipeline prepared for Resend Free.
+Isolated Phase 4 private-beta candidate for AI Nour: a Cloudflare Worker, Gemini Flash-Lite and Gemini 3.8 Live adapters, Google Workspace integrations, D1 conversation/CRM/cost stores, bilingual retrieval, a feature-flagged portfolio companion, a private admin dashboard, and a transactional email pipeline prepared for Resend Free.
 
 This is **not deployed to production**, is not merged into `main`, and does not activate billing or paid services. The portfolio companion mounts only when explicitly enabled.
 
@@ -127,7 +127,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 ## Safety and cost
 
 - Permanent Gemini key, Google refresh token, admin token, and Resend key stay server-side.
-- Live tokens are one-use, expire after 120 seconds, carry an $0.08 prepaid reservation, and are capped at 12/day. Expired holds are charged as `live_unreported`.
+- Live tokens are one-use, use a configurable provider-enforced expiry (default 600 seconds), carry a duration-scaled prepaid reservation (default $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
 - Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag; synthetic tests use no attendees.
 - Gmail adapter has no send method; it creates drafts only.
@@ -145,6 +145,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - `docs/admin-security.md` — admin authentication, authorization, logout/revocation, tests.
 - `docs/live-spend-analysis.md` — Live exposure, abandoned connections, proxy comparison.
 - `docs/architecture.md` — module map and data flows.
+- `../docs/ai-nour-phase4.md` — private-beta acceptance, launch checklist, and decisions.
 
 ## Known limitations
 

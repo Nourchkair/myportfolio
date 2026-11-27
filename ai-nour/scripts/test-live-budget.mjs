@@ -61,6 +61,7 @@ async function main() {
     const sessionId = session.body.session?.id;
     const first = await call('/api/live/token', { method: 'POST', body: { sessionId, locale: 'en' } });
     check('first Live token reserves budget', first.status === 200 && Boolean(first.body.reservationId) && first.body.reservationUsdMicros === 600_000, { status: first.status, reservationUsdMicros: first.body.reservationUsdMicros });
+    check('Live token carries the configured 10-minute session duration', first.status === 200 && first.body.sessionSeconds === 600 && Date.parse(first.body.expiresAt) - Date.now() > 590_000, { sessionSeconds: first.body.sessionSeconds, expiresAt: first.body.expiresAt });
 
     const budgetAfterFirst = await call('/api/admin/cost', { admin: true });
     check('held Live reservation counts toward budget', budgetAfterFirst.status === 200 && budgetAfterFirst.body.budget.heldLiveReservationsUsdMicros === 600_000, { held: budgetAfterFirst.body.budget?.heldLiveReservationsUsdMicros });

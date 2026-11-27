@@ -136,7 +136,7 @@ Both run the build first, then validate data invariants, route canonicalization,
 
 ## AI Nour
 
-AI Nour is implemented in `ai-nour/` and mounts only with `?ainour=dev` or `?ainour=1`; the default portfolio and reading view remain assistant-free. The Phase 3 launch candidate, approval packages, and validation are documented in `docs/ai-nour-phase3.md`.
+AI Nour is implemented in `ai-nour/` and mounts only with `?ainour=dev` or `?ainour=1`; the default portfolio and reading view remain assistant-free. The Phase 4 private-beta candidate, acceptance checklist, approval packages, and validation are documented in `docs/ai-nour-phase4.md`.
 
 ## Deliberately out of scope for the default portfolio
 

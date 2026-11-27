@@ -226,8 +226,6 @@
   overflow: auto;
 }
 .ainour-panel[data-size="collapsed"] .ainour-context { padding-top: 6px; padding-bottom: 6px; }
-.ainour-panel[data-size="collapsed"] .ainour-msg.user,
-.ainour-panel[data-size="collapsed"] .ainour-msg.system { display: none; }
 .ainour-thread::-webkit-scrollbar { width: 5px; }
 .ainour-thread::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 999px; }
 .ainour-msg { font-size: 12.7px; line-height: 1.62; white-space: pre-wrap; }

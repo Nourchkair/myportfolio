@@ -188,7 +188,7 @@ function levenshtein(a, b) {
   return previous[b.length];
 }
 
-const docs = corpus.chunks.map((chunk) => {
+function prepareDoc(chunk) {
   const titleTokens = tokenize(chunk.title);
   const tagTokens = tokenize((chunk.tags || []).join(' '));
   const keywordTokens = tokenize((chunk.keywords || []).join(' '));
@@ -201,7 +201,9 @@ const docs = corpus.chunks.map((chunk) => {
     bodyTokens,
     allTokens: [...titleTokens, ...tagTokens, ...keywordTokens, ...bodyTokens]
   };
-});
+}
+
+const docs = corpus.chunks.map(prepareDoc);
 
 const df = new Map();
 for (const doc of docs) {
@@ -297,10 +299,13 @@ function score(query, doc) {
   return total;
 }
 
-export function search(query, { limit = 4, types } = {}) {
+export function search(query, { limit = 4, types, extraChunks = [] } = {}) {
   const normalized = normalize(query);
   if (!normalized) return [];
-  return docs
+  const candidates = extraChunks.length
+    ? [...extraChunks.map(prepareDoc), ...docs]
+    : docs;
+  return candidates
     .filter((doc) => !types || types.includes(doc.type))
     .map((doc) => ({
       id: doc.id,
@@ -316,8 +321,8 @@ export function search(query, { limit = 4, types } = {}) {
     .slice(0, limit);
 }
 
-export function buildContext(query, { limit = 4, maxChars = 3200 } = {}) {
-  const results = search(query, { limit });
+export function buildContext(query, { limit = 4, maxChars = 3200, extraChunks = [] } = {}) {
+  const results = search(query, { limit, extraChunks });
   if (!results.length) return { text: '', results: [] };
   const lines = [];
   let used = 0;

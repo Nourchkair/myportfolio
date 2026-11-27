@@ -52,6 +52,15 @@
       <div id="flag-controls" class="controls"></div>
       <button id="save-flags">Save controls</button>
       <p id="flags-result" class="muted"></p>
+      <h2>Spending and voice limits</h2>
+      <p class="muted">Caps are enforced server-side and cannot exceed the approved deployment maxima. Lowering a cap can block further usage immediately.</p>
+      <div class="limit-grid">
+        <label>Daily cap (USD)<input id="limit-daily" type="number" min="0.10" step="0.01"></label>
+        <label>Cumulative cap (USD)<input id="limit-cumulative" type="number" min="0.10" step="0.01"></label>
+        <label>Live session (seconds)<input id="limit-live-session" type="number" min="60" step="30"></label>
+      </div>
+      <button id="save-limits">Save limits</button>
+      <p id="limits-result" class="muted"></p>
     </section>
 
     <section id="tab-persona" class="panel hidden">
@@ -85,6 +94,21 @@
       <div id="knowledge-results" class="table-wrap"></div>
       <h3>Admin overrides</h3>
       <div id="knowledge-overrides" class="table-wrap"></div>
+      <div class="block">
+        <h3>Publish a knowledge override</h3>
+        <p class="muted">Published overrides are appended to retrieval immediately. Keep them factual and public-safe.</p>
+        <div class="limit-grid">
+          <label>Chunk ID<input id="override-id" placeholder="profile:custom-fact"></label>
+          <label>Title<input id="override-title" placeholder="Short title"></label>
+          <label>Status<select id="override-status"><option value="draft">draft</option><option value="published">published</option></select></label>
+        </div>
+        <textarea id="override-text" rows="5" placeholder="Override text (20–4000 characters)"></textarea>
+        <div class="row">
+          <input id="override-tags" placeholder="tags, comma-separated (optional)">
+          <button id="save-override">Save override</button>
+        </div>
+        <p id="override-result" class="muted"></p>
+      </div>
     </section>
 
     <section id="tab-integrations" class="panel hidden">

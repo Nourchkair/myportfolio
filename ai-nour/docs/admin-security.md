@@ -49,6 +49,8 @@ Browser (127.0.0.1:8791)
 | Reauthenticate | Redirect to `/auth/google/start?reauth=1` with `prompt=login`; the new session uses the current epoch. |
 | Expiry | Signed expiry and cookie max-age both enforce the 8-hour limit. |
 | Access revocation | Remove the administrator from the allowlist and/or rotate `PHASE1_ADMIN_SESSION_SECRET`; existing cookies stop verifying. The in-memory epoch also invalidates sessions on “sign out all.” |
+| Knowledge | Published overrides are editable/deletable and are appended to text retrieval immediately; drafts stay out of retrieval. |
+| Limits | The dashboard can lower daily/cumulative spend caps and set Live duration (60–600s) within the deployment maxima. |
 | Restart | Stateless signed cookies remain valid across a restart only if the secret and epoch are unchanged. Rotate the secret for a durable emergency revocation. |
 
 ## Browser and transport protections
@@ -64,7 +66,7 @@ Browser (127.0.0.1:8791)
 
 ## Validation evidence
 
-Automated local test: `results/admin-auth-tests.json` — **15/15 passed**:
+Automated local test: `results/admin-auth-tests.json` — **16/16 passed**:
 
 1. Admin API rejects a missing session.
 2. Unauthenticated page redirects to Google sign-in.
@@ -80,7 +82,8 @@ Automated local test: `results/admin-auth-tests.json` — **15/15 passed**:
 12. Reauthentication starts a fresh Google login prompt.
 13. Sign-out-all rotates the epoch.
 14. Access revocation invalidates existing sessions.
-15. A new session works after revocation.
+15. Admin can read spending and voice limits.
+16. A new session works after revocation.
 
 Test mode: local admin server + mock Worker + a test-only signed session. The real Google OAuth browser round-trip was verified in Phase 2; it is not re-marked as passed here because no new browser login was performed in this run.
 

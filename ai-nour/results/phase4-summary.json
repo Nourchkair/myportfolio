@@ -1,0 +1,111 @@
+{
+  "generatedAt": "2026-11-27T00:40:00.000Z",
+  "branch": "phase2/ai-nour-production",
+  "phase": 4,
+  "version": "phase4-0.4.0",
+  "status": "private-beta candidate; personal acceptance and external account approvals pending",
+  "tests": {
+    "unit": {
+      "passed": 49,
+      "total": 49
+    },
+    "api": {
+      "passed": 23,
+      "total": 23
+    },
+    "crm": {
+      "passed": 14,
+      "total": 14
+    },
+    "lifecycle": {
+      "passed": 28,
+      "total": 28
+    },
+    "adminAuth": {
+      "passed": 16,
+      "total": 16
+    },
+    "liveBudget": {
+      "passed": 4,
+      "total": 4
+    },
+    "security": {
+      "passed": 8,
+      "total": 8
+    },
+    "portfolio": {
+      "passed": 261,
+      "total": 261
+    },
+    "crmSync": {
+      "passed": 3,
+      "total": 3
+    }
+  },
+  "retrieval": {
+    "chunks": 107,
+    "queries": 55,
+    "top1": 0.8727,
+    "top3": 1,
+    "mrr": 0.9364
+  },
+  "cost": {
+    "actualSpentUsdMicros": 361422,
+    "heldReservationUsdMicros": 0,
+    "committedUsdMicros": 361422,
+    "actualCad": 0.5139,
+    "committedCad": 0.5139,
+    "dailyCapUsdMicros": 1000000,
+    "cumulativeCapUsdMicros": 7000000
+  },
+  "live": {
+    "model": "gemini-3.8-live",
+    "sessionSeconds": 600,
+    "maxSessionSeconds": 600,
+    "reservationUsdMicros": 250000,
+    "holdSeconds": 900,
+    "maxTokensPerDay": 12,
+    "providerEnforcedExpiry": true,
+    "frontendTimer": false,
+    "proxyImplemented": false
+  },
+  "email": {
+    "provider": "resend",
+    "sendEnabled": false,
+    "resendConfigurationRequiredForBeta": false,
+    "realEmailsSent": false,
+    "calendarInvitesEnabled": false
+  },
+  "crm": {
+    "d1Implemented": true,
+    "googleSheetApplied": false,
+    "syncMappingTested": true,
+    "liveSyncTested": false
+  },
+  "ui": {
+    "states": 6,
+    "thinkingBubble": false,
+    "messageLabels": 0,
+    "inPanelVoiceControls": 0,
+    "yellowOrbs": 0,
+    "collapsedThreadScrollable": true,
+    "consoleErrors": 0,
+    "realMicrophoneStarted": false
+  },
+  "blockers": [
+    "Visual acceptance",
+    "Real-device Chrome/Safari/iOS/Bluetooth/French testing",
+    "Resend DNS/API key/webhook/test send",
+    "OAuth production publishing/verification and admin host decision",
+    "CRM Sheet approval and live sync round-trip",
+    "Calendar invitation policy",
+    "Google Workspace MCP decision before 1 February 2027",
+    "D1 residency ENAM/ORD",
+    "Archived third-party key acknowledgement"
+  ],
+  "secretScan": {
+    "files": 388,
+    "valueHits": 0,
+    "patternHits": 0
+  }
+}

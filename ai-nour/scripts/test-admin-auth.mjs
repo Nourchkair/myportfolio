@@ -104,6 +104,8 @@ async function main() {
     check('valid signed session is accepted', session.status === 200 && session.body.authenticated === true && session.body.email === adminEmail, { status: session.status, email: session.body.email });
     const status = await request('/api/admin/status', { cookieValue: cookie(token) });
     check('authorized admin proxy reaches the Worker', status.status === 200 && status.body.ok === true, { status: status.status, version: status.body.version });
+    const limits = await request('/api/admin/limits', { cookieValue: cookie(token) });
+    check('admin can read spending and voice limits', limits.status === 200 && limits.body.liveSessionSeconds >= 60 && limits.body.liveSessionSeconds <= limits.body.maxLiveSessionSeconds, { status: limits.status, liveSessionSeconds: limits.body.liveSessionSeconds });
 
     const tampered = await request('/api/admin/status', { cookieValue: cookie(`${token}x`) });
     check('tampered session cookie is rejected', tampered.status === 401, { status: tampered.status });
