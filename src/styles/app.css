@@ -2569,21 +2569,10 @@
 
   /* entry reveal: the first content fade is deliberately slower than interaction motion */
   #mainContent:focus{outline:none}
-  @keyframes introChromeFlicker{
-    0%{opacity:0;animation-timing-function:steps(1,end)}
-    7%{opacity:1;animation-timing-function:steps(1,end)}
-    12%{opacity:0;animation-timing-function:steps(1,end)}
-    24%{opacity:1;animation-timing-function:steps(1,end)}
-    29%{opacity:0;animation-timing-function:steps(1,end)}
-    41%{opacity:1;animation-timing-function:steps(1,end)}
-    46%{opacity:0;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
-    100%{opacity:1}
-  }
   body.intro-reveal .toolbar,
   body.intro-reveal .carousel-panel,
   body.intro-reveal .utility-dock,
   body.intro-reveal .deck-arrow{
-    animation:introChromeFlicker 1.2s linear both;
     transition-duration:1s!important;
     transition-timing-function:cubic-bezier(.2,.8,.2,1)!important
   }

@@ -189,7 +189,37 @@
   /* ---------- intro ---------- */
   .enter-screen{position:fixed;inset:0;z-index:300;overflow:hidden;background:transparent;pointer-events:auto;transition:opacity 1s ease,visibility 1s ease}
   .enter-screen.done{opacity:0;visibility:hidden;pointer-events:none}
-  .intro-hud{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+  .intro-hud{position:absolute;inset:0;z-index:1;overflow:hidden;pointer-events:none;transition:opacity .65s ease}
+  .intro-welcome{
+    position:absolute;inset:0;z-index:2;display:grid;place-items:center;padding:7vw;
+    opacity:0;pointer-events:none;transition:opacity .75s ease;
+    background:radial-gradient(ellipse at 50% 50%,rgba(4,9,13,.32),transparent 64%)
+  }
+  body.intro-greeting .intro-welcome{opacity:1}
+  body.intro-greeting .intro-hud{opacity:.28}
+  .intro-welcome-inner{animation:introWelcomeFloat 5s ease-in-out infinite;will-change:transform}
+  .intro-welcome-svg{display:block;width:min(94vw,1180px);height:auto;overflow:visible;filter:drop-shadow(0 18px 60px rgba(0,0,0,.45))}
+  .intro-welcome-svg text{
+    font-family:var(--sans);font-size:112px;font-weight:650;letter-spacing:-.06em;
+    text-anchor:middle;text-rendering:geometricPrecision
+  }
+  .intro-welcome-outline{
+    fill:none;stroke:rgba(255,255,255,.9);stroke-width:1.8;stroke-linejoin:round;stroke-linecap:round;
+    stroke-dasharray:1600;stroke-dashoffset:1600
+  }
+  .intro-welcome-outline--accent{stroke:var(--accent)}
+  .intro-welcome-fill{fill:rgba(255,255,255,.92);opacity:0}
+  .intro-welcome-fill--accent{fill:var(--accent)}
+  body.intro-greeting .intro-welcome-outline{animation:introWelcomeDraw 1.7s cubic-bezier(.2,.8,.2,1) forwards}
+  body.intro-greeting .intro-welcome-fill{animation:introWelcomeFill .8s ease 1.35s forwards}
+  @keyframes introWelcomeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  @keyframes introWelcomeDraw{to{stroke-dashoffset:0}}
+  @keyframes introWelcomeFill{to{opacity:1}}
+  @media(max-width:700px){
+    .intro-welcome{padding:8vw 6vw}
+    .intro-welcome-svg{width:96vw}
+    .intro-welcome-outline{stroke-width:4.2}
+  }
   .intro-grid{
     position:absolute;inset:-10%;
     background-image:
@@ -209,63 +239,20 @@
   .intro-line--accent{stroke:var(--accent);stroke-opacity:.75}
   .intro-line--soft{stroke:rgba(255,255,255,.13)}
   .intro-node{fill:var(--accent);opacity:0;animation:introNode .6s ease forwards;animation-delay:var(--d,0s)}
-  .intro-glow{
-    position:absolute;inset:0;
-    background:radial-gradient(ellipse at 50% 46%,var(--accent-soft),transparent 54%);
-    opacity:0;animation:introGlow 3.2s ease forwards
-  }
   .intro-scan{
     position:absolute;left:0;right:0;top:-22vh;height:22vh;
     background:linear-gradient(180deg,transparent,rgba(255,225,194,.06) 54%,rgba(255,255,255,.2));
     box-shadow:0 1px 0 rgba(255,255,255,.18);
     opacity:0;animation:introScan 2.5s cubic-bezier(.3,0,.2,1) .6s forwards
   }
-  .intro-flare{
-    position:absolute;inset:0;pointer-events:none;opacity:0;
-    background:radial-gradient(ellipse at 50% 44%,rgba(255,255,255,.22),rgba(255,210,161,.08) 30%,transparent 64%);
-    mix-blend-mode:screen;animation:introFlare 3.4s ease-out forwards
-  }
   @keyframes introDraw{to{stroke-dashoffset:0}}
   @keyframes introNode{to{opacity:.9}}
   @keyframes introGrid{0%,8%{opacity:0}34%{opacity:.4}62%{opacity:.2}100%{opacity:0}}
-  @keyframes introGlow{
-    0%,22%{opacity:0}
-    38%{opacity:.55}
-    44%{opacity:.14}
-    52%{opacity:.48}
-    63%{opacity:.12}
-    78%{opacity:.32}
-    100%{opacity:0}
-  }
   @keyframes introScan{
     0%{transform:translateY(0);opacity:0}
     9%{opacity:.7}
     48%{opacity:.36}
     100%{transform:translateY(144vh);opacity:0}
-  }
-  @keyframes introFlare{
-    0%,36%{opacity:0}
-    39%{opacity:.28}
-    41%{opacity:.04}
-    45%{opacity:.16}
-    47%{opacity:0}
-    65%{opacity:0}
-    67%{opacity:.1}
-    69%{opacity:0}
-    100%{opacity:0}
-  }
-  body.intro-charge .scene-bg{animation:introSceneFlicker 1.75s steps(1,end) both}
-  @keyframes introSceneFlicker{
-    0%,100%{filter:none}
-    7%{filter:brightness(1.32) saturate(1.12)}
-    9%{filter:brightness(.74)}
-    13%{filter:brightness(1.16)}
-    15%{filter:none}
-    44%{filter:none}
-    46%{filter:brightness(1.2)}
-    48%{filter:none}
-    71%{filter:brightness(.84)}
-    73%{filter:none}
   }
   .scene-parallax{filter:blur(1.6px) brightness(.84);transition:filter 1.4s ease,transform .35s ease-out}
   body.ready .scene-parallax{filter:blur(0) brightness(.92)}

@@ -2021,6 +2021,8 @@ function publishState(){
 }
 
 /* ---------- entry ---------- */
+const WELCOME_DELAY_MS=1400;
+const WELCOME_HOLD_MS=3000;
 function enterWorld(){
   if(entered) return;
   const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -2028,7 +2030,6 @@ function enterWorld(){
   const finish=()=>{
     entered=true;
     if(screen) screen.classList.add('done');
-    document.body.classList.remove('intro-charge');
     document.body.classList.add('intro-reveal','ready');
     syncA11y();
     announce('Nour OS ready. Use the arrow keys or the card navigation to explore.');
@@ -2041,14 +2042,17 @@ function enterWorld(){
         if(hashPath()===path) applyCurrentPath();
       },reduced?0:420);
     }
-    setTimeout(()=>document.body.classList.remove('intro-reveal'),reduced?0:1500);
+    setTimeout(()=>document.body.classList.remove('intro-reveal','intro-greeting'),reduced?0:1500);
   };
   if(reduced){
     finish();
     return;
   }
-  document.body.classList.add('intro-charge');
-  setTimeout(finish,1900);
+  setTimeout(()=>{
+    document.body.classList.add('intro-greeting');
+    announce('Welcome to Nour’s Portfolio');
+    setTimeout(finish,WELCOME_HOLD_MS);
+  },WELCOME_DELAY_MS);
 }
 
 /* ---------- boot ---------- */
