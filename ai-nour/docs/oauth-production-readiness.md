@@ -170,15 +170,21 @@ Operational facts reflected in the policies:
 - App name: `AI Nour`.
 - Homepage: `https://nourchkair.com`.
 - Authorized domain: `nourchkair.com`.
-- Privacy policy URL: **empty**.
-- Terms of service URL: **empty**.
+- Privacy policy URL: `https://nourchkair.com/privacy/` — set 27 November 2026.
+- Terms of service URL: `https://nourchkair.com/terms/` — set 27 November 2026.
 - Publishing status: **Testing**; user type **External**; one test user (`nourchkair@gmail.com`), 100-user testing cap.
 - OAuth client: `AI Nour - Development`; authorized redirect URIs are local only:
   - `http://localhost:8787/oauth/google/callback`
   - `http://127.0.0.1:8791/auth/google/callback`
 - No production redirect URI is configured because the Worker has no OAuth callback route.
 
-The blank privacy/terms fields currently block publishing. The first manual action is to set them to the published URLs and save.
+Data Access currently lists unused scopes that would complicate verification:
+
+- Sensitive: `gmail.send`, `documents.readonly` (not used by the production path).
+- Restricted: `gmail.compose` (optional draft fallback only; not enabled; triggers a third-party security assessment).
+- Keep: `spreadsheets`, `calendar.events`, `calendar.calendarlist.readonly`, `calendar.events.freebusy`, `drive.file`.
+
+**Next manual action:** remove `gmail.send`, `gmail.compose`, and `documents.readonly` from Data Access, then save. Do not publish yet. After that, the remaining flow is verification (Calendar/Sheets/Drive), publishing out of Testing, and one reauthorization with the reduced scopes.
 
 ## 8. Remaining Google Console actions requiring the user
 
@@ -190,4 +196,4 @@ The blank privacy/terms fields currently block publishing. The first manual acti
 6. Decide whether the admin remains local/private or gets an approved private hostname.
 7. Approve publishing the app out of Testing.
 
-No publish, verification submission, redirect change, or reauthorization has been performed. **First manual action:** in Google Cloud Console → APIs & Services → OAuth consent screen → Branding, set the Privacy Policy URL to `https://nourchkair.com/privacy/` and the Terms of Service URL to `https://nourchkair.com/terms/`, then save. Do not publish yet.
+No publish, verification submission, redirect change, or reauthorization has been performed. **Next manual action:** in Google Cloud Console → Google Auth Platform → Data Access, remove the unused `gmail.send`, `gmail.compose`, and `documents.readonly` scopes; keep Sheets, Calendar, and Drive. Save, but do not publish yet.

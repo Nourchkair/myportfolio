@@ -179,7 +179,7 @@ Live browser check: `?ainour=beta` pill, gate, grounded reply, zero console erro
 
 ## 12. Remaining manual action
 
-**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires. The published legal URLs are now `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`.
+**Google OAuth durability.** The current refresh token works, but Google reports `refresh_token_expires_in` of about **565,769 seconds (~6.55 days)** because the OAuth app is still External/Testing. Publish and verify the app out of Testing, then reauthorize once for a durable refresh token. Until then, the production Google integrations will stop when that token expires. The published legal URLs are now set in the OAuth branding page: `https://nourchkair.com/privacy/` and `https://nourchkair.com/terms/`. Next manual action: remove unused `gmail.send`, `gmail.compose`, and `documents.readonly` scopes from Data Access before publishing/verification.
 
 A production OAuth callback route is not implemented. Reauthorization uses the local helper and then updates the Worker secret; routine AI Nour administration does not require Cloudflare access.
 
