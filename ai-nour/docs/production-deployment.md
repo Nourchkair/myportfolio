@@ -36,7 +36,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `https://fe2df689.nourchkair.pages.dev` |
+| Latest Pages deployment | `https://646d8b2c.nourchkair.pages.dev` |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -73,7 +73,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
 - Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
-- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `fe2df689-397a-41c9-bccc-2449a3cd1f34` (source `cba5f05`) are live.
+- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `646d8b2c-e735-4c0f-ad0f-9e6c494a4773` (source `bcfa0e0`) are live.
 - The daily spending cap was raised to **$3.00** for production acceptance testing; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
@@ -195,11 +195,11 @@ npm run deploy
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
 | Nupa legal validator | 64/64 | `npm run validate:legal` |
-| Nupa opening browser (local mock) | 18/18 | `results/nupa-v3-opening-browser.json` |
+| Nupa opening browser (local mock) | 20/20 | `results/nupa-v3-opening-browser.json` |
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
 | Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |
-| Production opening cards and centered consent modal | 10/10 | `results/nupa-production-intro.json` |
+| Production opening cards and centered consent modal | 11/11 | `results/nupa-production-intro.json` |
 | Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
 | Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |
 | Production Nupa visual layer | 6/6 | `results/nupa-production-visual.json` |

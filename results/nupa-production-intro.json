@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-27T17:11:22.324Z",
+  "generatedAt": "2026-11-27T18:36:25.702Z",
   "url": "https://nourchkair.com/?ainour=beta",
-  "passed": 10,
+  "passed": 11,
   "failed": 0,
-  "total": 10,
+  "total": 11,
   "checks": [
     {
       "name": "production intro waits for an explicit choice",
@@ -116,8 +116,12 @@
         "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
         "panelHidden": true,
         "modal": true,
-        "backdropFilter": "blur(18px) saturate(0.78)",
-        "centered": true
+        "backdropFilter": "blur(12px) saturate(0.9)",
+        "centered": true,
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)"
       }
     },
     {
@@ -139,8 +143,22 @@
         "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
         "panelHidden": true,
         "modal": true,
-        "backdropFilter": "blur(18px) saturate(0.78)",
-        "centered": true
+        "backdropFilter": "blur(12px) saturate(0.9)",
+        "centered": true,
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)"
+      }
+    },
+    {
+      "name": "consent modal is light transparent glass with a high-contrast button",
+      "pass": true,
+      "detail": {
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)",
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)"
       }
     },
     {
@@ -162,8 +180,12 @@
         "choice": "\u2726\n              \n                Explore with Nupa\n                Ask questions and get a guided tour.",
         "panelHidden": true,
         "modal": true,
-        "backdropFilter": "blur(18px) saturate(0.78)",
-        "centered": true
+        "backdropFilter": "blur(12px) saturate(0.9)",
+        "centered": true,
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)"
       }
     },
     {
@@ -175,7 +197,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T17:11:21.882Z"
+          "acceptedAt": "2026-11-27T18:36:25.273Z"
         },
         "gateVisible": true,
         "panelHidden": false,

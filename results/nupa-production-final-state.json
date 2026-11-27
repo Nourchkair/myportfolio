@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T17:02:00Z",
+  "generatedAt": "2026-11-27T17:34:00Z",
   "health": {
     "status": 200,
     "ok": true,
@@ -16,8 +16,8 @@
     "environment": "production"
   },
   "pages": {
-    "deploymentId": "fe2df689-397a-41c9-bccc-2449a3cd1f34",
-    "source": "cba5f05"
+    "deploymentId": "646d8b2c-e735-4c0f-ad0f-9e6c494a4773",
+    "source": "bcfa0e0"
   },
   "flags": {
     "assistant_enabled": true,

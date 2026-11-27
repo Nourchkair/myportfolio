@@ -2,7 +2,7 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths, browser keys and API routes remain unchanged.
 
-Status: **deployed to the production private beta on 27 November 2026.** Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a`; static deployment `fe2df689-397a-41c9-bccc-2449a3cd1f34`; source `cba5f05`.
+Status: **deployed to the production private beta on 27 November 2026.** Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a`; static deployment `646d8b2c-e735-4c0f-ad0f-9e6c494a4773`; source `bcfa0e0`.
 
 ## 1. Architecture
 
@@ -116,7 +116,7 @@ Local regression:
 - Portfolio validation: **261**
 - Legal validator: **64/64**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **18/18** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, centered consent modal outside the chat with blurred portfolio background, “Continue and agree” button, no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **20/20** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, centered consent modal outside the chat with blurred portfolio background, “Continue and agree” button, no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 
