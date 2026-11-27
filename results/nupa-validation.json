@@ -9,7 +9,7 @@
       "failed": 0
     },
     "legalValidator": {
-      "passed": 63,
+      "passed": 64,
       "failed": 0
     },
     "unitTests": {
@@ -42,10 +42,10 @@
       "failed": 0
     },
     "openingBrowser": {
-      "passed": 12,
+      "passed": 17,
       "failed": 0,
       "evidence": "results/nupa-v3-opening-browser.json",
-      "total": 12
+      "total": 17
     },
     "presentationBrowser": {
       "passed": 22,

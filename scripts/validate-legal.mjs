@@ -55,8 +55,8 @@ check('legal current branding', !/AI Nour|AI-Nour/.test(privacy + terms) && /Nup
 check('legal footer', index.includes('class="legal-foot"') && index.includes('href="/privacy/"') && index.includes('href="/terms/"'));
 check('contact legal links', index.includes('class="contact-legal"'));
 check('reading legal links', readPage.includes('href="/privacy/"') && readPage.includes('href="/terms/"'));
-check('assistant consent gate', companion.includes('id="ainourConsent"') && companion.includes('I am 18 or older and agree'));
-check('assistant one acceptance checkbox', !companion.includes('id="ainourAge"') && !companion.includes('age16'));
+check('assistant consent gate', companion.includes('id="ainourConsent"') && /By clicking Continue, you confirm you are 18 or older/.test(companion) && /agree to the/.test(companion));
+check('assistant no separate acceptance checkbox', !companion.includes('id="ainourAgree"') && !companion.includes('id="ainourAge"') && !companion.includes('age16'));
 check('assistant current consent version', companion.includes("2026-11-27-v1.2"));
 check('assistant no mic-error label', !companion.includes('Mic error'));
 check('assistant microphone consent', companion.includes('id="ainourMicConsent"') && companion.includes('Allow microphone'));
@@ -64,7 +64,8 @@ check('assistant disclaimer', companion.includes('id="ainourDisclaimer"') && com
 check('assistant legal links', companion.includes('href="/privacy/"') && companion.includes('href="/terms/"'));
 check('assistant Nupa branding', companion.includes('Nupa') && !/AI Nour|AI-Nour/.test(companion));
 check('assistant tagline', companion.includes('Your intelligent portfolio companion.'));
-check('assistant identity separation', /independent AI-powered portfolio guide/i.test(companion) && /not an AI representation/i.test(companion));
+check('assistant identity separation', /independent AI(-powered)? portfolio guide/i.test(companion) && /not Nour/i.test(companion));
+check('assistant Gemini and retention disclosure', /Text and voice are processed by Google Gemini/.test(companion) && /improve its products/.test(companion) && /kept for up to 7 days/.test(companion) && /site administrator/.test(companion) && /Do not share personal, sensitive or confidential information/.test(companion));
 check('opening independent choice', index.includes('Explore independently'));
 check('opening Nupa choice', index.includes('Explore with Nupa') && !/Explore with AI Nour/.test(index));
 check('assistant daily budget reset detail', companion.includes('DAILY_BUDGET_EXHAUSTED') && companion.includes('formatVoiceReset') && companion.includes('resetsAt'));

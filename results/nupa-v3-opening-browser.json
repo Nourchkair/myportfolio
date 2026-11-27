@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T16:18:18.598Z",
-  "passed": 12,
+  "generatedAt": "2026-11-27T16:38:54.457Z",
+  "passed": 17,
   "failed": 0,
-  "total": 12,
+  "total": 17,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -62,7 +62,12 @@
         "panelHidden": false,
         "consentVisible": true,
         "gateHidden": true,
-        "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.",
+        "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.",
+        "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.",
+        "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy.",
+        "button": "Continue \u2014 I\u2019m 18+ and agree",
+        "buttonAria": "Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "checkboxCount": 0,
         "choice": "\u2726\nExplore with Nupa\nAsk questions and get a guided tour.",
         "pill": "Nupa",
         "tagline": "YOUR INTELLIGENT PORTFOLIO COMPANION.",
@@ -82,10 +87,33 @@
       }
     },
     {
-      "name": "consent explains Nupa identity and the live guide",
+      "name": "consent welcomes the visitor with a short independent identity",
       "pass": true,
       "detail": {
-        "copy": "Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to th"
+        "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around."
+      }
+    },
+    {
+      "name": "consent has no separate acceptance checkbox",
+      "pass": true,
+      "detail": {
+        "checkboxCount": 0
+      }
+    },
+    {
+      "name": "consent button carries the 18+ and Terms/Privacy acceptance",
+      "pass": true,
+      "detail": {
+        "button": "Continue \u2014 I\u2019m 18+ and agree",
+        "buttonAria": "Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy",
+        "accept": "By clicking Continue, you confirm you are 18 or older and agree to the Terms of Use and Privacy Policy."
+      }
+    },
+    {
+      "name": "consent discloses Gemini, improvement use, retention, admin access and sensitive-data warning",
+      "pass": true,
+      "detail": {
+        "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information."
       }
     },
     {
@@ -95,6 +123,33 @@
         "/terms/",
         "/privacy/"
       ]
+    },
+    {
+      "name": "French consent is short, welcoming and complete",
+      "pass": true,
+      "detail": {
+        "locale": "FR",
+        "kicker": "AVANT DE COMMENCER",
+        "welcome": "Bienvenue \u2014 je suis Nupa, un guide de portfolio ind\u00e9pendant propuls\u00e9 par l\u2019IA, et non Nour. Je peux vous faire d\u00e9couvrir son travail, r\u00e9pondre \u00e0 vos questions et vous guider.",
+        "disclosure": "Le texte et la voix sont trait\u00e9s par Google Gemini, qui peut les utiliser pour am\u00e9liorer ses produits. Les transcriptions sont conserv\u00e9es jusqu\u2019\u00e0 7 jours et peuvent \u00eatre consult\u00e9es par l\u2019administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.",
+        "accept": "En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les Conditions d\u2019utilisation et la Politique de confidentialit\u00e9.",
+        "button": "Continuer \u2014 18 ans et j\u2019accepte"
+      }
+    },
+    {
+      "name": "Continue alone records age, Terms and Privacy acceptance",
+      "pass": true,
+      "detail": {
+        "consent": {
+          "version": "2026-11-27-v1.2",
+          "age18": true,
+          "terms": true,
+          "privacy": true,
+          "acceptedAt": "2026-11-27T16:38:50.627Z"
+        },
+        "gateVisible": true,
+        "consentHidden": true
+      }
     },
     {
       "name": "AI choice starts a text introduction after authorization",

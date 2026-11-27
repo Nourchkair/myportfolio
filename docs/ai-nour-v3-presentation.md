@@ -114,9 +114,9 @@ Local regression:
 - Admin auth: **16/16**
 - Live budget/duration: **9/9**
 - Portfolio validation: **261**
-- Legal validator: **63/63**
+- Legal validator: **64/64**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **12/12** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, consent reuse, independent-assistant disclosure, Nupa branding, text-first copy, legal links, Nupa introduction and French companion UI with English opening cards.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **17/17** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, beta-only Nupa path, simplified Continue-button consent with no checkbox, Gemini/retention/admin disclosure, legal links, Nupa introduction, French consent and French companion UI with English opening cards.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 

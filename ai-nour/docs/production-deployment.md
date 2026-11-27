@@ -194,8 +194,8 @@ npm run deploy
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
-| Nupa legal validator | 63/63 | `npm run validate:legal` |
-| Nupa opening browser (local mock) | 12/12 | `results/nupa-v3-opening-browser.json` |
+| Nupa legal validator | 64/64 | `npm run validate:legal` |
+| Nupa opening browser (local mock) | 17/17 | `results/nupa-v3-opening-browser.json` |
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
 | Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |

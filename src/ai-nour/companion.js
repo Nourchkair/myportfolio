@@ -154,7 +154,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=10', import.meta.url).href;
+  link.href = new URL('./companion.css?v=11', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -205,10 +205,11 @@ function panelMarkup() {
       <p id="ainourGateError" role="status" aria-live="polite" style="color:rgba(255,180,180,.8);margin:10px 0 0;min-height:1em"></p>
     </div>
     <div class="ainour-gate ainour-consent" id="ainourConsent" hidden>
-      <p id="ainourConsentIntro">Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.</p>
-      <label class="ainour-check"><input id="ainourAgree" type="checkbox"> <span id="ainourAgreeLabel">I am 18 or older and agree to the Terms of Use and Privacy Policy.</span></label>
-      <p class="ainour-legal-links"><a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> · <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a></p>
-      <button id="ainourConsentBtn" type="button">Continue</button>
+      <p class="ainour-consent-kicker" id="ainourConsentKicker">Before we begin</p>
+      <p class="ainour-consent-welcome" id="ainourConsentIntro">Welcome — I’m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.</p>
+      <p class="ainour-consent-disclosure" id="ainourConsentPrivacy">Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.</p>
+      <p class="ainour-consent-accept" id="ainourConsentAccept">By clicking Continue, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
+      <button id="ainourConsentBtn" type="button" aria-describedby="ainourConsentAccept ainourConsentPrivacy">Continue — I’m 18+ and agree</button>
       <p id="ainourConsentError" role="status" aria-live="polite" class="ainour-form-error"></p>
     </div>
     <div class="ainour-body" id="ainourBody" hidden>
@@ -282,9 +283,10 @@ function mount() {
     gateSubmit: panel.querySelector('#ainourKeySubmit'),
     gateError: panel.querySelector('#ainourGateError'),
     consent: panel.querySelector('#ainourConsent'),
+    consentKicker: panel.querySelector('#ainourConsentKicker'),
     consentIntro: panel.querySelector('#ainourConsentIntro'),
-    agree: panel.querySelector('#ainourAgree'),
-    agreeLabel: panel.querySelector('#ainourAgreeLabel'),
+    consentPrivacy: panel.querySelector('#ainourConsentPrivacy'),
+    consentAccept: panel.querySelector('#ainourConsentAccept'),
     consentBtn: panel.querySelector('#ainourConsentBtn'),
     consentError: panel.querySelector('#ainourConsentError'),
     micConsent: panel.querySelector('#ainourMicConsent'),
@@ -330,12 +332,6 @@ function mount() {
     await init();
   });
   els.consentBtn.addEventListener('click', async () => {
-    if (!els.agree.checked) {
-      els.consentError.textContent = state.locale === 'fr'
-        ? 'Confirmez que vous avez 18 ans ou plus et acceptez les conditions et la politique de confidentialité.'
-        : 'Confirm that you are 18 or older and agree to the Terms and Privacy Policy.';
-      return;
-    }
     els.consentError.textContent = '';
     saveConsent();
     if (state.sessionId && state.sessionConsentRequired) {
@@ -610,16 +606,28 @@ function updatePill() {
 
 function updateLegalCopy() {
   const fr = state.locale === 'fr';
+  if (els.consentKicker) els.consentKicker.textContent = fr ? 'Avant de commencer' : 'Before we begin';
   if (els.consentIntro) {
     els.consentIntro.textContent = fr
-      ? 'Nupa est un guide de portfolio indépendant, propulsé par l’IA et exploité par Nour Chkair. Ce n’est pas Nour et ce n’est pas une représentation par IA de lui. Nupa est un guide interactif, vivant et personnalisé pour les visiteurs professionnels de 18 ans ou plus. Confirmez que vous avez 18 ans ou plus et que vous acceptez les Conditions d’utilisation et la Politique de confidentialité. Vous pouvez commencer par le texte et passer à la voix plus tard; l’autorisation du microphone est demandée séparément. Le service fait appel à l’IA; ne communiquez pas de renseignements personnels, sensibles, confidentiels ou appartenant à des tiers.'
-      : 'Nupa is an independent AI-powered portfolio guide operated by Nour Chkair. Nupa is not Nour and not an AI representation of him. Nupa is a live, interactive, personalized portfolio guide for professional visitors aged 18 and older. Confirm that you are 18 or older and agree to the Terms of Use and Privacy Policy. You can start in text and switch to voice later; microphone permission is requested separately. AI processing is involved; do not share personal, sensitive, confidential, or third-party information.';
-
+      ? 'Bienvenue — je suis Nupa, un guide de portfolio indépendant propulsé par l’IA, et non Nour. Je peux vous faire découvrir son travail, répondre à vos questions et vous guider.'
+      : 'Welcome — I’m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.';
   }
-  if (els.agreeLabel) els.agreeLabel.textContent = fr
-    ? 'J’ai 18 ans ou plus et j’accepte les Conditions d’utilisation et la Politique de confidentialité.'
-    : 'I am 18 or older and agree to the Terms of Use and Privacy Policy.';
-  if (els.consentBtn) els.consentBtn.textContent = fr ? 'Continuer' : 'Continue';
+  if (els.consentPrivacy) {
+    els.consentPrivacy.textContent = fr
+      ? 'Le texte et la voix sont traités par Google Gemini, qui peut les utiliser pour améliorer ses produits. Les transcriptions sont conservées jusqu’à 7 jours et peuvent être consultées par l’administrateur du site. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
+      : 'Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.';
+  }
+  if (els.consentAccept) {
+    els.consentAccept.innerHTML = fr
+      ? 'En cliquant sur Continuer, vous confirmez avoir 18 ans ou plus et accepter les <a href="/terms/" target="_blank" rel="noopener">Conditions d’utilisation</a> et la <a href="/privacy/" target="_blank" rel="noopener">Politique de confidentialité</a>.'
+      : 'By clicking Continue, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.';
+  }
+  if (els.consentBtn) {
+    els.consentBtn.textContent = fr ? 'Continuer — 18 ans et j’accepte' : 'Continue — I’m 18+ and agree';
+    els.consentBtn.setAttribute('aria-label', fr
+      ? 'Continuer : confirmer avoir 18 ans ou plus et accepter les Conditions d’utilisation et la Politique de confidentialité'
+      : 'Continue: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy');
+  }
   if (els.micCopy) {
     els.micCopy.textContent = fr
       ? 'La voix de Nupa utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours dans ce service. Ne communiquez pas de renseignements personnels ou sensibles.'
@@ -652,7 +660,7 @@ function showConsent() {
   els.consent.hidden = false;
   els.body.hidden = true;
   els.consentError.textContent = '';
-  if (!els.panel.hidden) setTimeout(() => els.agree?.focus({ preventScroll: true }), 40);
+  if (!els.panel.hidden) setTimeout(() => els.consentBtn?.focus({ preventScroll: true }), 40);
 }
 
 function showBody() {

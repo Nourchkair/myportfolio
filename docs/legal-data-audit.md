@@ -57,7 +57,7 @@ This is an engineering/privacy audit, not a legal opinion. Canadian counsel shou
 
 | Consent | Implementation | Status |
 | --- | --- | --- |
-| 18+ eligibility and Terms/Privacy before AI use | One in-assistant acceptance checkbox; `CONSENT_VERSION=2026-11-27-v1.2`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
+| 18+ eligibility and Terms/Privacy before AI use | One Continue button confirms 18+ and Terms/Privacy acceptance; `CONSENT_VERSION=2026-11-27-v1.2`; accepted version/timestamp stored in `localStorage`, and server-normalized consent with `recordedAt` stored in D1 session state | Verified in browser and D1 |
 | Server-side consent | When `BETA_ACCESS_REQUIRED=true`, `/api/session`, new `/api/chat` sessions and new Live sessions require a valid `age18`/terms/privacy consent object; test returned `CONSENT_REQUIRED` without it and `201` with it | Verified with temporary beta-gated Worker (12/12) |
 | Existing sessions | `GET /api/session/:id`, chat, Live token/turn and tools reject stale or missing consent with `CONSENT_REQUIRED`; `POST /api/session/:id/consent` records the current version and timestamp without extending the session expiry | Verified with temporary beta-gated Worker |
 | Microphone consent | Inline assistant consent strip before `getUserMedia`; consent stored in `sessionStorage` for the tab; no microphone request occurs if cancelled | Verified in browser (cancel, budget, permission and missing-device paths) |
@@ -130,7 +130,7 @@ Current implementation:
 | Portfolio usable without AI/account | Verified | Default portfolio mounts no AI; reading view assistant-free. |
 | No advertising/analytics/tracking | Verified | No analytics/ad code found; only local preferences, AI session storage, admin cookie. |
 | No sale of personal information | Verified | No sale path, no ad/CRM resale. |
-| Age 18+ for Nupa | Verified in Terms, one-checkbox UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.2` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
+| Age 18+ for Nupa | Verified in Terms, one-button acceptance UI + server enforcement | Existing sessions must acknowledge the current `2026-11-27-v1.2` consent before reading, chat, Live voice or tools. The portfolio remains open to everyone. |
 | Microphone consent before processing | Verified | Inline assistant strip; browser permission follows separately. |
 | Contact/appointment consent | Verified | API consent scopes + appointment guard; public inquiry/booking UI is currently restricted/disabled. |
 | Conversation retention 7 days | Verified | Rolling expiry + cleanup; cleanup depends on cron running. |
