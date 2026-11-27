@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production private beta
 
-Status: **Nupa V3 is deployed to the production private beta. Legal version 1.2 is published, consent `2026-11-27-v1.2` is enforced, and the production persona is Nupa. Public/unrestricted AI access remains disabled.**
+Status: **Nupa V3 is deployed to the production private beta. Legal version 1.2 is published, consent `2026-11-27-v1.2` is enforced, the production persona is Nupa, and the daily testing cap is $3.00. Public/unrestricted AI access remains disabled.**
 
 ## 1. Live endpoints
 
@@ -30,7 +30,7 @@ Production currently has one active tester (Nour) and two revoked validation key
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3 release) |
+| Worker version | `28bcef6b-4260-495e-94bc-4fc7e90d203a` (Nupa V3, $3 daily testing cap) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -73,7 +73,8 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
 - Legal version **1.2** and consent **`2026-11-27-v1.2`** are live. Existing v1.1 sessions must re-accept before reading, chat, Live voice or tools.
-- Worker `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` and Pages deployment `93ce9423-261b-480c-98dd-a1aad6925234` (source `afe2c43`) are live.
+- Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a` and Pages deployment `93ce9423-261b-480c-98dd-a1aad6925234` (source `afe2c43`) are live.
+- The daily spending cap was raised to **$3.00** for production acceptance testing; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
@@ -119,10 +120,10 @@ CRM inquiry/appointment creation currently returns **403** by design. Calendar/M
 
 Production ledger at the final V2 check:
 
-- Cumulative: **$1.690215 USD / ~$2.4032 CAD**
-- Today: **$0.793352 USD**
+- Cumulative: **$2.089523 USD**
+- Today: **$1.192660 USD**
 - Held reservations: **$0**
-- Daily cap: **$1.00 USD**
+- Daily cap: **$3.00 USD** (production acceptance testing; cumulative cap unchanged)
 - Cumulative cap: **$7.00 USD (~$9.95 CAD)**
 - Live default: **300 seconds / $0.125 reservation**; 600-second maximum remains available in admin
 - Fixed monthly infrastructure: **$0**
@@ -141,7 +142,8 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3)
+- Current Worker version: `28bcef6b-4260-495e-94bc-4fc7e90d203a` (Nupa V3, $3 daily cap)
+- Previous Nupa Worker: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3, $1 daily cap)
 - Previous production Worker: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
@@ -149,6 +151,7 @@ This was tested in production, including recovery.
 - Static/legal rollback: Pages deployment `d3dd93bb-2bf5-4c60-a6ff-87792958a27c` (source `868b606`) or redeploy that commit.
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
+- Daily cap rollback: restore `DAILY_SPEND_CAP_USD_MICROS = "1000000"` in `wrangler.production.toml`, redeploy the Worker, and PATCH `/api/admin/limits` with `dailyCapUsdMicros: 1000000` if a stored control exists. Cumulative cap remains $7.00.
 - Safe notes: rolling back the Worker does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Full details are in `ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md`.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
@@ -200,12 +203,14 @@ npm run deploy
 | Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |
 | Production Nupa visual layer | 6/6 | `results/nupa-production-visual.json` |
 | Production admin startup | 1/1 | `results/nupa-production-admin.json` |
+| Production Live voice identity/authority | 6/6 | `results/nupa-production-live-verification.json` |
+| Production Live voice presentation tools | passed | `results/nupa-production-live.json` |
 | Consolidated production evidence | see record | `results/nupa-production-validation.json` |
 | Consent integration | 12/12 | `results/consent-tests.json` |
 | Live budget at 5 minutes | 9/9 | `results/live-budget-tests.json` |
 | Secret scan (current tree) | 7 credential patterns, 0 hits | `results/nupa-validation.json` |
 
-Production Nupa checks were run against `https://nourchkair.com` and `https://api.nourchkair.com` with the primary beta key. The browser run passed 16/17; the one failed assertion expected a highlight/cursor within a fixed observation window of a non-deterministic real-model presentation turn. The separate production visual test verified highlighting, cursor, spotlight, workflow tracing and cleanup at 6/6.
+Production Nupa checks were run against `https://nourchkair.com` and `https://api.nourchkair.com` with the primary beta key. The browser run passed 16/17; the one failed assertion expected a highlight/cursor within a fixed observation window of a non-deterministic real-model presentation turn. The separate production visual test verified highlighting, cursor, spotlight, workflow tracing and cleanup at 6/6. Real production Live sessions with Iapetus verified English and French identity, opinion/authority disclosures, audio generation and presentation tool calls. Real-device microphone, Bluetooth and iOS testing remain manual.
 
 ## 12. Remaining manual action
 

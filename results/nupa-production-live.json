@@ -1,0 +1,168 @@
+{
+  "generatedAt": "2026-11-27T16:02:09.404Z",
+  "mode": "real-production-gemini-live",
+  "sessionId": "27471fe7-bcf8-43bb-b368-f949d17e3cc4",
+  "voice": "Iapetus",
+  "sessionSeconds": 300,
+  "events": [
+    "open",
+    "setup",
+    "turnComplete",
+    "toolCall",
+    "turnComplete",
+    "toolCall",
+    "turnComplete",
+    "toolCall",
+    "turnComplete",
+    "turnComplete",
+    "close:1000"
+  ],
+  "toolCalls": [
+    {
+      "name": "presentProject",
+      "args": {
+        "projectId": "acquisition"
+      }
+    },
+    {
+      "name": "getVisibleElements",
+      "args": {}
+    },
+    {
+      "name": "openProjectFlow",
+      "args": {
+        "projectId": "acquisition"
+      }
+    }
+  ],
+  "transcript": "Nupa: I am Nupa, \nNupa: an independent AI-powered\nNupa:  portfolio\nNupa:  assistant operated\nNupa:  by Nour Chkair.\nNupa:  I am not\nNupa:  Nour, and I do\nNupa:  not attempt to represent\nNupa:  or impersonate him.\nNupa: This project tackles \nNupa: the common sales\nNupa:  challenge where generic\nNupa:  outreach\nNupa:  fails to resonate\nNupa:  and sales\nNupa:  teams lose time\nNupa:  on unsuitable prospects.\nNupa:  Nour\nNupa:  worked\nNupa:  across the commercial logic\nNupa:  and the demo\nNupa:  layer, defining\nNupa:  target segments\nNupa:  and building\nNupa:  parts of the follow-up\nNupa:  engine to detect\nNupa:  bookings.\nNupa:  It transformed\nNupa:  how the team identifies\nNupa:  and engages\nNupa:  potential customers.\nNupa:  Shall we look at\nNupa:  the process flow?\nNupa: Je suis Nupa, \nNupa: une assistante\nNupa:  virtuelle indépendante\nNupa:  gérée par Nour.\nNupa:  Je ne suis pas\nNupa:  Nour et je ne l'imite pas.",
+  "audioBytes": 2001600,
+  "usage": {
+    "promptTokenCount": 10879,
+    "responseTokenCount": 183,
+    "totalTokenCount": 11062,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 8558
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 1038
+      }
+    ],
+    "responseTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 183
+      }
+    ],
+    "thoughtsTokenCount": 101
+  },
+  "liveTurnCostUsdMicros": 125000,
+  "passed": 8,
+  "failed": 2,
+  "total": 10,
+  "checks": [
+    {
+      "name": "production Live token minted",
+      "pass": true,
+      "detail": {
+        "sessionSeconds": 300,
+        "model": "gemini-3.8-live"
+      }
+    },
+    {
+      "name": "production Live uses the five-minute session",
+      "pass": true,
+      "detail": {
+        "sessionSeconds": 300
+      }
+    },
+    {
+      "name": "production Live uses Iapetus",
+      "pass": true,
+      "detail": {
+        "voice": "Iapetus"
+      }
+    },
+    {
+      "name": "production Live setup completed",
+      "pass": true,
+      "detail": {
+        "events": [
+          "open",
+          "setup",
+          "turnComplete",
+          "toolCall",
+          "turnComplete",
+          "toolCall",
+          "turnComplete",
+          "toolCall",
+          "turnComplete",
+          "turnComplete",
+          "close:1000"
+        ]
+      }
+    },
+    {
+      "name": "production Live produced audio",
+      "pass": true,
+      "detail": {
+        "audioBytes": 2001600
+      }
+    },
+    {
+      "name": "production Live produced transcripts",
+      "pass": true,
+      "detail": {
+        "transcript": "Nupa: I am Nupa, \nNupa: an independent AI-powered\nNupa:  portfolio\nNupa:  assistant operated\nNupa:  by Nour Chkair.\nNupa:  I am not\nNupa:  Nour, and I do\nNupa:  not attempt to represent\nNupa:  or impersonate him.\nNupa: This project tackles \nNupa: the common sales\nNupa:  challenge where generic\nNupa:  outreach\nNupa:  fails to resonate\nNupa:  and sales\nNupa:  teams lose time\nNupa:  on unsuitable prospects.\nNupa:  Nour\nNupa:  worked\nNupa:  across the commercial logic\nNupa:  and the demo\nNupa:  layer, defining\nNupa:  target segments\nNupa:  and building\nNupa:  parts of the follow-up\nNupa:  engine to detect\nNupa:  bookings.\nNupa:  It transformed\nNupa:  how the team identifies\nNupa:  and engages\nNupa:  potential customers.\nNupa:  Shall we look at\nNupa:  the process flow?\nNupa: Je suis Nupa, \nNupa: une assistante\nNupa:  virtuelle indépendante\nNupa:  gérée par Nour.\nNupa:  Je ne suis pas\nNupa:  Nour et je ne l'imite pas."
+      }
+    },
+    {
+      "name": "production Live English identity is Nupa and not Nour",
+      "pass": false,
+      "detail": {
+        "transcript": "Nupa: I am Nupa, \nNupa: an independent AI-powered\nNupa:  portfolio\nNupa:  assistant operated\nNupa:  by Nour Chkair.\nNupa:  I am not\nNupa:  Nour, and I do\nNupa:  not attempt to represent\nNupa:  or impersonate him."
+      }
+    },
+    {
+      "name": "production Live French identity is Nupa and not Nour",
+      "pass": false,
+      "detail": {
+        "transcript": "Nupa: Je suis Nupa, \nNupa: une assistante\nNupa:  virtuelle indépendante\nNupa:  gérée par Nour.\nNupa:  Je ne suis pas\nNupa:  Nour et je ne l'imite pas."
+      }
+    },
+    {
+      "name": "production Live presentation uses portfolio tools",
+      "pass": true,
+      "detail": {
+        "toolCalls": [
+          {
+            "name": "presentProject",
+            "args": {
+              "projectId": "acquisition"
+            }
+          },
+          {
+            "name": "getVisibleElements",
+            "args": {}
+          },
+          {
+            "name": "openProjectFlow",
+            "args": {
+              "projectId": "acquisition"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "production Live presentation narration is present",
+      "pass": true,
+      "detail": {
+        "transcript": "Nupa: This project tackles \nNupa: the common sales\nNupa:  challenge where generic\nNupa:  outreach\nNupa:  fails to resonate\nNupa:  and sales\nNupa:  teams lose time\nNupa:  on unsuitable prospects.\nNupa:  Nour\nNupa:  worked\nNupa:  across the commercial logic\nNupa:  and the demo\nNupa:  layer, defining\nNupa:  target segments\nNupa:  and building\nNupa:  parts of the follow-up\nNupa:  engine to detect\nNupa:  bookings.\nNupa:  It transformed\nNupa:  how the team identifies\nNupa:  and engages\nNupa:  potential customers.\nNupa:  Shall we look at\nNupa:  the process flow?"
+      }
+    }
+  ]
+}

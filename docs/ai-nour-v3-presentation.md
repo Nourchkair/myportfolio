@@ -2,7 +2,7 @@
 
 > Historical naming note: this release was originally documented as AI Nour. The assistant is now Nupa; internal paths, browser keys and API routes remain unchanged.
 
-Status: **deployed to the production private beta on 27 November 2026.** Worker `bffabd0f-d1ca-4663-a897-b42ea9e7b08c`; static deployment `93ce9423-261b-480c-98dd-a1aad6925234`; source `afe2c43`.
+Status: **deployed to the production private beta on 27 November 2026.** Worker `28bcef6b-4260-495e-94bc-4fc7e90d203a`; static deployment `93ce9423-261b-480c-98dd-a1aad6925234`; source `afe2c43`.
 
 ## 1. Architecture
 

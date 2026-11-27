@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T08:40:53.305Z",
+  "generatedAt": "2026-11-27T16:04:08.476Z",
   "health": {
     "status": 200,
     "ok": true,
@@ -9,10 +9,10 @@
     "error": null,
     "textProvider": "gemini",
     "liveProvider": "gemini",
-    "time": "2026-11-27T08:40:52.940Z"
+    "time": "2026-11-27T16:04:07.741Z"
   },
   "worker": {
-    "version": "bffabd0f-d1ca-4663-a897-b42ea9e7b08c",
+    "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
     "environment": "production"
   },
   "pages": {
@@ -32,21 +32,21 @@
     "voice": "Iapetus"
   },
   "limits": {
-    "dailyCapUsdMicros": 1000000,
+    "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
     "liveSessionSeconds": 300,
     "maxLiveSessionSeconds": 600
   },
   "budget": {
-    "dailyUsdMicros": 942660,
-    "cumulativeUsdMicros": 1839523,
-    "dailySpentUsdMicros": 942660,
-    "cumulativeSpentUsdMicros": 1839523,
+    "dailyUsdMicros": 1192660,
+    "cumulativeUsdMicros": 2089523,
+    "dailySpentUsdMicros": 1192660,
+    "cumulativeSpentUsdMicros": 2089523,
     "heldLiveReservationsUsdMicros": 0,
-    "dailyCapUsdMicros": 1000000,
+    "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 57340,
-    "cumulativeRemainingUsdMicros": 5160477,
+    "dailyRemainingUsdMicros": 1807340,
+    "cumulativeRemainingUsdMicros": 4910477,
     "allowed": true
   },
   "persona": {

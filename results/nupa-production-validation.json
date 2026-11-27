@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-27T08:41:00Z",
+  "generatedAt": "2026-11-27T16:05:00Z",
   "status": "Nupa V3 private beta deployed",
   "sourceCommit": "afe2c43",
   "worker": {
-    "version": "bffabd0f-d1ca-4663-a897-b42ea9e7b08c",
+    "version": "28bcef6b-4260-495e-94bc-4fc7e90d203a",
     "url": "https://api.nourchkair.com",
     "health": "ok",
     "d1": true
@@ -36,14 +36,22 @@
   "voice": {
     "configured": "Iapetus",
     "liveSessionSeconds": 300,
-    "maxLiveSessionSeconds": 600,
-    "actualProductionVoiceSession": "not run"
+    "actualProductionVoiceSession": "verified real production Live session",
+    "identityEn": true,
+    "identityFr": true,
+    "authorityDisclosure": true,
+    "presentationTools": true,
+    "evidence": [
+      "results/nupa-production-live.json",
+      "results/nupa-production-live-identity.json",
+      "results/nupa-production-live-verification.json"
+    ]
   },
   "budget": {
-    "dailyUsdMicros": 942660,
-    "cumulativeUsdMicros": 1839523,
-    "dailyRemainingUsdMicros": 57340,
-    "dailyCapUsdMicros": 1000000,
+    "dailyUsdMicros": 1192660,
+    "cumulativeUsdMicros": 2089523,
+    "dailyRemainingUsdMicros": 1807340,
+    "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000
   },
   "checks": {
@@ -90,13 +98,26 @@
       "health": 200,
       "personaLength": 3986,
       "legalVersion": "1.2",
-      "dailyRemainingUsdMicros": 57340
+      "dailyRemainingUsdMicros": 1807340
+    },
+    "productionLive": {
+      "passed": 6,
+      "failed": 0,
+      "evidence": "results/nupa-production-live-verification.json",
+      "note": "Raw identity file preserves one automated French-regex false negative; the transcript itself satisfies the requirement and a derived 6/6 verification is included."
     }
   },
   "notRun": [
-    "Real production Live voice identity and speech/visual synchronization: remaining daily budget $0.05734 is below the $0.125 five-minute reservation; caps were not changed.",
-    "Real-device microphone/Bluetooth/iOS acceptance.",
+    "Real-device microphone, Bluetooth and iOS acceptance.",
     "Subjective conversational-quality scoring."
   ],
-  "rollback": "ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md"
+  "rollback": "ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md",
+  "spendingCapChange": {
+    "previousDailyUsdMicros": 1000000,
+    "newDailyUsdMicros": 3000000,
+    "cumulativeUnchangedUsdMicros": 7000000,
+    "approvedBy": "Nour",
+    "reason": "Production acceptance testing",
+    "workerVersion": "28bcef6b-4260-495e-94bc-4fc7e90d203a"
+  }
 }

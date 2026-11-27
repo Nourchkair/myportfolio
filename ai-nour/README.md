@@ -148,7 +148,7 @@ admin/ private UI ──► scripts/admin-server.mjs ──► Worker /api/admin
 - Production beta keys are SHA-256 hashed in D1; the full key is shown once at creation and can be revoked immediately.
 - The public portfolio does not mount Nupa; the beta entry and server-side key check are both required.
 - Live tokens are one-use, use a configurable provider-enforced expiry (default 300 seconds; 600-second maximum), use the **Iapetus** voice, carry a duration-scaled prepaid reservation (default $0.125 at 300s; $0.25 at 600s), and are capped at 12/day. Expired holds are charged as `live_unreported`.
-- Daily cap: `$1.00 USD`; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
+- Daily cap: `$3.00 USD` for production acceptance testing; cumulative cap: `$7.00 USD` (~$9.95 CAD), measured from D1 cost events plus held reservations.
 - Google writes are off by default and require an admin flag. With writes enabled, Calendar invitations are consent-gated; synthetic tests use one `@example.invalid` attendee and no real visitor.
 - Gmail adapter has no send method; it creates drafts only.
 - Resend is prepared but `EMAIL_SEND_ENABLED=false` by default; local processing is dry-run.

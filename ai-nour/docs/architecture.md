@@ -65,7 +65,7 @@ migrations/                0001–0006 D1 schema and data updates
 5. Tool calls go to `/api/tools/execute`; transcripts/usage go to `/api/live/turn`.
 6. The server charges `max(actual, reservation)` when usage is reported and reconciles the hold.
 7. If the hold expires unreported, scheduled cleanup records the reservation as `live_unreported` and marks the token expired.
-8. Daily 12-token cap, $1 daily cap, and $7 cumulative cap bound exposure.
+8. Daily 12-token cap, the current daily testing cap ($3.00), and $7 cumulative cap bound exposure.
 9. Session duration is configurable (default 300 seconds, maximum 600); the D1 transcript allows a new session to continue with context.
 
 ## Email flow

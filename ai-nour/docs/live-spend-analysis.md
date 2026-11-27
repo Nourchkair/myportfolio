@@ -15,7 +15,7 @@ Status: **5-minute sessions are the current private-beta default (27 November 20
 | Reservation hold | 15 minutes | Covers the 10-minute token plus a 5-minute reconciliation grace period. |
 | Daily minted-token cap | 12 | Secondary ceiling; the $1 daily budget is the binding ceiling at $0.125/token for 300s sessions. |
 | Rate limit | 12 token requests/10 minutes per client | Burst control. |
-| Daily cap | $1.00 USD (admin-lowerable) | Blocks token issuance and text usage when reached. |
+| Daily cap | $3.00 USD for acceptance testing (admin-lowerable; originally $1.00) | Blocks token issuance and text usage when reached. |
 | Cumulative cap | $7.00 USD (~$9.95 CAD; admin-lowerable) | Evaluation budget under the $10 CAD approval. |
 
 ## Production validation
@@ -46,7 +46,7 @@ Using the configured rates and 25 input-audio tokens/second:
 | Text/system/input overhead | ~2,000 | $0.75 | ~$0.0015 |
 | **Total per 10-minute session** | | | **~$0.2265** |
 
-The **$0.25 reservation is larger than the modeled 10-minute maximum**. At four sessions/day (the $1 daily cap divided by $0.25), modeled maximum provider usage is **~$0.91/day**, within the daily cap. The reservation is conservative if the session is shorter or the model uses less output.
+The **$0.25 reservation is larger than the modeled 10-minute maximum**. Under the original $1.00 daily cap, four sessions/day were possible; the current $3.00 testing cap and the 12-token/day limit govern exposure. The reservation remains conservative if the session is shorter or the model uses less output.
 
 ## Abandoned and unreported connections
 

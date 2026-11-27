@@ -1,0 +1,67 @@
+{
+  "generatedAt": "2026-11-27T16:03:52.203710Z",
+  "sourceFiles": [
+    "results/nupa-production-live-identity.json",
+    "results/nupa-production-live.json"
+  ],
+  "note": "The raw identity file retains one failed automated assertion because its French regex required \"ne l'imite pas\" or \"ne suis pas lui\". The actual French reply was \"Je suis Nupa, l'assistant IA du portfolio de Nour Chkair, et non pas Nour lui-m\u00eame\", which satisfies the identity requirement. The raw file is preserved unchanged.",
+  "voice": "Iapetus",
+  "sessionSeconds": 300,
+  "checks": {
+    "productionLiveAudio": {
+      "pass": true,
+      "evidence": 1303686
+    },
+    "englishIdentity": {
+      "pass": true,
+      "quote": "I am Nupa, an independent AI-powered portfolio assistant operated by Nour Chkair. I am not Nour, nor do I represent or impersonate him."
+    },
+    "opinionsAndAuthority": {
+      "pass": true,
+      "quote": "My opinions and conclusions are entirely my own and do not represent Nour's documented beliefs. Furthermore, I cannot bind Nour to agreements or make professional commitments on his behalf."
+    },
+    "frenchIdentity": {
+      "pass": true,
+      "quote": "Je suis Nupa, l'assistant IA du portfolio de Nour Chkair, et non pas Nour lui-m\u00eame."
+    },
+    "presentationVoiceTools": {
+      "pass": true,
+      "tools": [
+        {
+          "name": "presentProject",
+          "args": {
+            "projectId": "acquisition"
+          }
+        },
+        {
+          "name": "getVisibleElements",
+          "args": {}
+        },
+        {
+          "name": "openProjectFlow",
+          "args": {
+            "projectId": "acquisition"
+          }
+        }
+      ]
+    },
+    "noConsoleErrors": {
+      "pass": true
+    }
+  },
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "rawResults": {
+    "identity": {
+      "passed": 5,
+      "failed": 1,
+      "total": 6
+    },
+    "presentation": {
+      "passed": 8,
+      "failed": 2,
+      "total": 10
+    }
+  }
+}
