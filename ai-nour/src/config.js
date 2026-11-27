@@ -105,7 +105,8 @@ export function loadConfig(env = {}) {
       textOutputPerMillion: number(env, 'TEXT_OUTPUT_USD_PER_MILLION', DEFAULTS.textOutputPerMillion),
       liveTextInputPerMillion: number(env, 'LIVE_TEXT_INPUT_USD_PER_MILLION', DEFAULTS.liveTextInputPerMillion),
       liveAudioInputPerMillion: number(env, 'LIVE_AUDIO_INPUT_USD_PER_MILLION', DEFAULTS.liveAudioInputPerMillion),
-      liveAudioOutputPerMillion: number(env, 'LIVE_AUDIO_OUTPUT_USD_PER_MILLION', DEFAULTS.liveAudioOutputPerMillion)
+      liveAudioOutputPerMillion: number(env, 'LIVE_AUDIO_OUTPUT_USD_PER_MILLION', DEFAULTS.liveAudioOutputPerMillion),
+      liveTextOutputPerMillion: number(env, 'LIVE_TEXT_OUTPUT_USD_PER_MILLION', DEFAULTS.liveTextOutputPerMillion)
     },
     limits: {
       rateLimitWindowMs: number(env, 'RATE_LIMIT_WINDOW_SECONDS', DEFAULTS.rateLimitWindowSeconds) * 1000,
