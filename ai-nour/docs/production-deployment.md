@@ -111,8 +111,8 @@ CRM inquiry/appointment creation currently returns **403** by design. Calendar/M
 
 Production ledger at the final V2 check:
 
-- Cumulative: **$1.689069 USD / ~$2.4016 CAD**
-- Today: **$0.792206 USD**
+- Cumulative: **$1.690215 USD / ~$2.4032 CAD**
+- Today: **$0.793352 USD**
 - Held reservations: **$0**
 - Daily cap: **$1.00 USD**
 - Cumulative cap: **$7.00 USD (~$9.95 CAD)**
