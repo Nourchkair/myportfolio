@@ -47,7 +47,7 @@ The label is a state indicator, not a separate message, and respects reduced mot
 - Menu bar no longer contains “Nour OS”; the brand slot is the home mark only.
 - Standard text panel: **390×680** at (1039.8, 152) after content; **390×599.1** empty.
 - Collapsed chat: **390×217** at (1040, 152); only the latest assistant reply and the 44px composer bar.
-- Expanded panel: **760×702** at (672, 152).
+- Expanded panel: **760×740** at (672, 152).
 - Voice transcript state: the chat panel at **760×740**; the pill is the only voice control.
 - Composer: bar **364×44**; a single **32×32** Send button inset 6px from the bar’s right edge. No mic in the chat bar.
 - EN **32.6×28**, New **38.9×28**, aligned with the Viewing row; New’s right edge is flush with the composer bar.

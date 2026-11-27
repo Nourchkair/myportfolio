@@ -62,7 +62,7 @@ Verified:
 - Pill is labelled “Ask Nour AI”, sits immediately right of the menu bar, and has a text/chat icon plus a mic.
 - “Nour OS” was removed from the menu bar; the brand slot is now the home mark only.
 - No yellow orb/circle remains in the pill or panel. The yellow decorative orbs, context dot, thinking dot, and voice orb were removed.
-- Standard 390×680, collapsed 390×217 (latest AI reply + input line), expanded 760×702, mobile full-width sheet. Voice is controlled from the pill; the chat is transcript-only.
+- Standard 390×680, collapsed 390×217 (latest AI reply + input line), expanded 760×740, mobile full-width sheet. Voice is controlled from the pill; the chat is transcript-only.
 - Composer has only the send control inside the text bar; EN/New are enlarged at the top right of the Viewing row. There is no mic, orb, voice bar, or start/stop control inside the chat panel.
 - The old “AI representation” disclosure text was removed, and message labels (“You”/“AI Nour”) are no longer rendered in bubbles.
 - Thinking is hidden when idle; while generating it is a bare glowing line directly on the panel background, with no bubble, border, or background.
