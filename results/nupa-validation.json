@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T08:26:00Z",
+  "generatedAt": "2026-11-27T08:29:00Z",
   "release": "Nupa identity update + V3 interactive presentation",
   "status": "validated locally; not pushed or deployed",
   "validation": {
@@ -69,7 +69,7 @@
     "selfTest": true,
     "productionDryRun": true,
     "productionBeforeLength": 3606,
-    "productionAfterLength": 4020,
+    "productionAfterLength": 3986,
     "afterHasLegacyName": false,
     "afterHasLegacyRepresentation": false,
     "applied": false,
