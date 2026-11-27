@@ -1,4 +1,4 @@
-import './app/immersive.js?v=5';
+import './app/immersive.js?v=34';
 
 const aiNourParams = new URLSearchParams(location.search);
 const aiNourEnabled = aiNourParams.get('ainour') === '1'

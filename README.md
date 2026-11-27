@@ -48,7 +48,7 @@ Legacy aliases are canonicalized with `history.replaceState`: `#/about`, `#/abou
 index.html                 production immersive entry
 read.html                  generated accessible reading page
 spatial2.html              hash-preserving compatibility redirect
-assets/                    11 active scene, cover and portrait assets
+assets/                    16 active scene, cover, portrait and mask assets
 src/
   main.js                  module entry
   app/immersive.js          UI, rendering and manual interactions
@@ -121,7 +121,7 @@ await NourOS.openProjectFlow('safiy', 'context');
 - The public project model contains only overview and process data. Legacy Brief/System/Demonstrations/Technology fields and renderers were removed after dependency checks.
 - Retired projects (`WaterAir`, `Afuntime`, `Academia`, `ChefSkiss`, `TrackIt`) and legacy workshop/3D experiments live under `archive/`.
 - Project illustrations that may be useful as future evidence are preserved under `archive/assets/projects/`.
-- Active assets are limited to four scenes, five covers and two portraits (11 files, about 1.9 MB). Archived assets are about 43 MB.
+- Active assets are limited to four scenes, five covers, two portraits and five foreground masks (16 files, about 2.1 MB). Archived assets are about 43 MB.
 
 Project visuals are illustrations or conceptual process views, not live product captures, and no measured business results are claimed.
 
