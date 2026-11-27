@@ -27,7 +27,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `6f291984-9a00-4585-a6a5-68e4e6e3fcd7` (public access, $3 daily cap) |
+| Worker version | `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -71,7 +71,7 @@ No Resend key is installed. No permanent Google, Gemini, owner, or admin credent
 - Visitor-facing identity is **Nupa — Nour's Unique Portfolio Assistant**, an independent AI-powered portfolio guide operated by Nour Chkair. It is not Nour and never impersonates him.
 - Legal version **1.3** and consent **`2026-11-27-v1.3`** are live. Existing v1.2 sessions must re-accept before reading, chat, Live voice or tools.
 - Public access is enabled: `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; no beta key is requested.
-- Worker `6f291984-9a00-4585-a6a5-68e4e6e3fcd7` and Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) are live.
+- Worker `f5e81237-f8e1-41a1-9b7b-151225d05381` and Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) are live.
 - The daily spending cap is **$3.00**; the cumulative cap remains **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
@@ -140,7 +140,7 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `6f291984-9a00-4585-a6a5-68e4e6e3fcd7` (public access, $3 daily cap)
+- Current Worker version: `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap)
 - Previous Nupa Worker: `28bcef6b-4260-495e-94bc-4fc7e90d203a` (private-beta mode, $3 daily cap)
 - Previous Nupa Worker: `bffabd0f-d1ca-4663-a897-b42ea9e7b08c` (Nupa V3, $1 daily cap)
 - Previous production Worker: `5821d4e0-ebc1-496e-b853-6d0d58dd1cc5` (Iapetus voice release)
@@ -198,6 +198,7 @@ npm run deploy
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
 | Production Nupa static/legal | 5/5 | `results/nupa-production-static.json` |
 | Production public API/no-key access | 7/7 | `results/nupa-production-public-api.json` |
+| Production public preflight | 16/16 | `results/nupa-production-public-preflight.json` |
 | Production opening cards and centered consent modal | 11/11 | `results/nupa-production-intro.json` |
 | Public default entry and no-key conversation | 4/4 | `results/nupa-production-public-default.json` |
 | Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
