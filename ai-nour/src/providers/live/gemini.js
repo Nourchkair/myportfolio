@@ -16,7 +16,7 @@ export function createGeminiLiveProvider({
   async function mintToken({
     systemInstruction,
     tools = [],
-    voice = 'Aoede',
+    voice = 'Schedar',
     uses = 1,
     expireMs = 10 * 60_000,
     newSessionExpireMs = 2 * 60_000

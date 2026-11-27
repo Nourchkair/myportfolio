@@ -27,6 +27,9 @@ src/
   services/conversation.js chat loop, Live token/turn, reservation checks
   services/crm.js          inquiry/consent/booking/reschedule/cancel/reconcile
   services/crm-sheets.js   idempotent D1 → Google Sheet sync
+  knowledge/grounding.js   shared verified text/Live foundation and project dossiers
+  sessions/visitor.js      inferred visitor profile and prompt-safety filtering
+  tools/registry.js        navigation, knowledge and presentation tools
   integrations/email/      templates, queue, Resend/mock/Gmail-draft, webhooks
   integrations/google/     auth, Sheets, Calendar, Drive, Gmail drafts
   cost/service.js          text/Live cost, caps, expired-hold settlement
@@ -55,7 +58,7 @@ migrations/                0001–0004 D1 schema
 
 1. `POST /api/live/token` checks flags, rate limit, the global daily token count, and held-reservation budget.
 2. Creates a held reservation (default `$0.25` for a 600-second session) for 15 minutes.
-3. Mints a one-use Gemini token with a configurable `expireTime` (default **600 seconds**), 60-second new-session window, voice, system instruction, transcripts, and tools.
+3. Mints a one-use Gemini token with a configurable `expireTime` (default **600 seconds**), 60-second new-session window, **Schedar** voice, shared portfolio grounding, transcripts, and navigation/knowledge/presentation tools.
 4. The browser connects directly to Gemini; no permanent key is exposed.
 5. Tool calls go to `/api/tools/execute`; transcripts/usage go to `/api/live/turn`.
 6. The server charges `max(actual, reservation)` when usage is reported and reconciles the hold.

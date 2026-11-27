@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-27T05:04:38.191Z",
+  "mode": "real-gemini-live/context-update-and-page-awareness",
+  "sessionId": "53681868-c252-4665-9854-eb9146a42a67",
+  "voice": "Schedar",
+  "events": [
+    "open",
+    "setup",
+    "user-question-sent",
+    "close:1000"
+  ],
+  "transcript": "AI Nour: This step is all \nAI Nour: about showing personalized\nAI Nour:  value.\nAI Nour:  The system\nAI Nour:  generates tailored\nAI Nour:  demonstration websites\nAI Nour:  and AI experiences\nAI Nour:  for each\nAI Nour:  prospect, so\nAI Nour:  they can see exactly\nAI Nour:  how the solution\nAI Nour:  fits their business\nAI Nour:  before they even engage.\nAI Nour: \n\nIt connects\nAI Nour:  directly\nAI Nour:  to the outreach step,\nAI Nour:  where that context\nAI Nour:  is used to craft\nAI Nour:  highly relevant\nAI Nour:  messages instead\nAI Nour:  of generic pitches.",
+  "audioBytes": 1019520,
+  "usage": null,
+  "liveTurnCostUsdMicros": 80000,
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "results": [
+    {
+      "name": "short Live token minted for context test",
+      "pass": true,
+      "detail": {
+        "sessionSeconds": 120
+      }
+    },
+    {
+      "name": "context update did not produce a spoken response",
+      "pass": true,
+      "detail": {
+        "responseDuringContextUpdate": false,
+        "audioBytes": 0,
+        "events": [
+          "open",
+          "setup",
+          "user-question-sent",
+          "close:1000"
+        ]
+      }
+    },
+    {
+      "name": "Live setup completed",
+      "pass": true,
+      "detail": {
+        "events": [
+          "open",
+          "setup",
+          "user-question-sent",
+          "close:1000"
+        ]
+      }
+    },
+    {
+      "name": "context-aware answer produced audio",
+      "pass": true,
+      "detail": {
+        "audioBytes": 1019520
+      }
+    },
+    {
+      "name": "context-aware answer produced a transcript",
+      "pass": true,
+      "detail": {
+        "transcript": "AI Nour: This step is all \nAI Nour: about showing personalized\nAI Nour:  value.\nAI Nour:  The system\nAI Nour:  generates tailored\nAI Nour:  demonstration websites\nAI Nour:  and AI experiences\nAI Nour:  for each\nAI Nour:  prospect, so\nAI Nour:  they can see exactly\nAI Nour:  how the solution\nAI Nour:  fits their business\nAI Nour:  before they even engage.\nAI Nour: \n\nIt connects\nAI Nour:  directly\nAI Nour:  to the outreach step,\nAI Nour:  where that context\nAI Nour:  is used to craft\nAI Nour:  highly relevant\nAI Nour:  messages instead\nAI Nour:  of generic pitches."
+      }
+    },
+    {
+      "name": "answer references the current step",
+      "pass": true,
+      "detail": {
+        "transcript": "AI Nour: This step is all \nAI Nour: about showing personalized\nAI Nour:  value.\nAI Nour:  The system\nAI Nour:  generates tailored\nAI Nour:  demonstration websites\nAI Nour:  and AI experiences\nAI Nour:  for each\nAI Nour:  prospect, so\nAI Nour:  they can see exactly\nAI Nour:  how the solution\nAI Nour:  fits their business\nAI Nour:  before they even engage.\nAI Nour: \n\nIt connects\nAI Nour:  directly\nAI Nour:  to the outreach step,\nAI Nour:  where that context\nAI Nour:  is used to craft\nAI Nour:  highly relevant\nAI Nour:  messages instead\nAI Nour:  of generic pitches."
+      }
+    }
+  ]
+}

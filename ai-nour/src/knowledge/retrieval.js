@@ -335,6 +335,24 @@ export function buildContext(query, { limit = 4, maxChars = 3200, extraChunks = 
   return { text: lines.join('\n\n'), results };
 }
 
+export function getChunkById(id) {
+  const doc = docs.find((item) => item.id === id);
+  if (!doc) return null;
+  return {
+    id: doc.id,
+    type: doc.type,
+    title: doc.title,
+    text: doc.text,
+    route: doc.route,
+    tags: doc.tags,
+    keywords: doc.keywords || []
+  };
+}
+
+export function getChunksByIds(ids = []) {
+  return ids.map((id) => getChunkById(id)).filter(Boolean);
+}
+
 export function getEntities() {
   return entities;
 }

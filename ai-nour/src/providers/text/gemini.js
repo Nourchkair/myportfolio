@@ -65,6 +65,7 @@ export function createGeminiTextProvider({
         toolCalls,
         usage: usageSummary(json.usageMetadata),
         finishReason: candidate?.finishReason || null,
+        groundingMetadata: candidate?.groundingMetadata || null,
         model
       };
     } catch (error) {
@@ -100,5 +101,20 @@ export function createGeminiTextProvider({
     }
   }
 
-  return { name: 'gemini', model, generate };
+  async function research({ query, maxOutputTokens = 520 }) {
+    const body = {
+      systemInstruction: { parts: [{ text: 'Research the question using Google Search. Give a concise, calibrated synthesis. Include the source titles and URLs you relied on. Separate established facts from interpretation and uncertainty. Do not use portfolio facts unless the query is about the public portfolio.' }] },
+      contents: [{ role: 'user', parts: [{ text: String(query || '').slice(0, 1200) }] }],
+      tools: [{ googleSearch: {} }],
+      generationConfig: { temperature: 0.3, topP: 0.9, maxOutputTokens }
+    };
+    const result = await callOnce(body);
+    const sources = (result.groundingMetadata?.groundingChunks || [])
+      .map((chunk) => ({ title: chunk.web?.title || null, url: chunk.web?.uri || null }))
+      .filter((source) => source.url || source.title)
+      .slice(0, 6);
+    return { ...result, sources, researched: true };
+  }
+
+  return { name: 'gemini', model, generate, research };
 }

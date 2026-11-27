@@ -6,7 +6,7 @@ const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
 const DEV = params.get('ainour') === 'dev' && LOCAL;
 const API_BASE = (params.get('ainour-api') || (LOCAL ? 'http://127.0.0.1:8789' : 'https://api.nourchkair.com')).replace(/\/+$/, '');
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
-const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale', pos: 'ainour:panelpos' };
+const STORE = { key: 'ainour:key', owner: 'ainour:owner', session: 'ainour:session', locale: 'ainour:locale' };
 
 const state = {
   key: sessionStorage.getItem(STORE.key) || '',
@@ -17,11 +17,11 @@ const state = {
   meta: null,
   size: 'standard',
   busy: false,
-  thinking: false,
   unread: false,
   ready: false,
   mounted: false,
-  voice: 'idle'
+  voice: 'idle',
+  presentation: { active: false, projectId: null, nodeId: null, paused: false }
 };
 
 const voice = {
@@ -31,6 +31,10 @@ const voice = {
   inputContext: null,
   outputContext: null,
   processor: null,
+  micSource: null,
+  analyser: null,
+  orbFrame: null,
+  orbLevel: 0,
   sources: [],
   nextPlayTime: 0,
   usage: null,
@@ -49,6 +53,10 @@ let lastRoute = null;
 let aiNavUntil = 0;
 let mounted = false;
 let drag = null;
+let liveContextTimer = null;
+let lastLiveContext = '';
+let expectedAiRoutes = [];
+let expectedAiRoutesTimer = null;
 
 localStorage.setItem(STORE.owner, state.owner);
 
@@ -97,6 +105,7 @@ function pillMarkup() {
   return `
     <button class="ainour-pill-main" type="button" data-ainour="mode-text" aria-label="Ask Nour AI — open text chat">
       <svg class="ainour-pill-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5.2h12v8.2H8.8L5.4 16v-2.6H4z"/><path d="M7 8h6M7 10.6h4"/></svg>
+      <span class="ainour-orb" id="ainourOrb" aria-hidden="true"></span>
       <span id="ainourPillLabel">Ask Nour AI</span>
     </button>
     <span class="ainour-pill-sep" aria-hidden="true"></span>
@@ -139,7 +148,6 @@ function panelMarkup() {
     </div>
     <div class="ainour-body" id="ainourBody" hidden>
       <div class="ainour-thread" id="ainourThread" aria-live="polite"></div>
-      <div class="ainour-thinking" id="ainourThinking" role="status" aria-live="polite" hidden>Thinking<span class="ainour-thinking-dots" aria-hidden="true">…</span></div>
       <form class="ainour-compose" id="ainourForm">
         <div class="ainour-compose-bar">
           <textarea id="ainourInput" rows="1" maxlength="2000" placeholder="Ask about Nour's work, or say “open Safiy”…" aria-label="Message AI Nour"></textarea>
@@ -192,7 +200,6 @@ function mount() {
     gateError: panel.querySelector('#ainourGateError'),
     body: panel.querySelector('#ainourBody'),
     thread: panel.querySelector('#ainourThread'),
-    thinking: panel.querySelector('#ainourThinking'),
     form: panel.querySelector('#ainourForm'),
     input: panel.querySelector('#ainourInput'),
     send: panel.querySelector('#ainourSend'),
@@ -253,11 +260,11 @@ function mount() {
       els.panel.style.removeProperty('right');
       return;
     }
-    applySavedPosition();
     clampPanel();
   });
   initDrag();
 
+  localStorage.removeItem('ainour:panelpos');
   setLocaleButton();
   setSize('standard');
   updateContext();
@@ -269,7 +276,7 @@ function mount() {
   }
   if (toolbar) toolbar.addEventListener('transitionend', positionPill);
   if ('MutationObserver' in window) {
-    new MutationObserver(() => positionPill()).observe(document.body, {
+    new MutationObserver(() => schedulePillPosition()).observe(document.body, {
       attributes: true,
       attributeFilter: ['class', 'data-mode']
     });
@@ -288,8 +295,8 @@ function mount() {
       voiceView: () => openPanel(),
       startVoice,
       stopVoice,
+      runActions: (actions) => runActions(actions),
       setVoiceState: (value) => setState(value),
-      thinking: (active) => showThinking(Boolean(active)),
       demoVoice: (userText, assistantText) => {
         openPanel();
         voice.active = true;
@@ -302,24 +309,6 @@ function mount() {
       state
     };
   }
-}
-
-function applySavedPosition() {
-  if (window.innerWidth <= 760) return;
-  try {
-    const pos = JSON.parse(localStorage.getItem(STORE.pos) || 'null');
-    if (!pos || !Number.isFinite(pos.left) || !Number.isFinite(pos.top)) return;
-    els.panel.style.left = `${pos.left}px`;
-    els.panel.style.top = `${pos.top}px`;
-    els.panel.style.right = 'auto';
-    clampPanel();
-  } catch {}
-}
-
-function savePosition() {
-  if (!els.panel || els.panel.hidden || window.innerWidth <= 760) return;
-  const rect = els.panel.getBoundingClientRect();
-  localStorage.setItem(STORE.pos, JSON.stringify({ left: Math.round(rect.left), top: Math.round(rect.top) }));
 }
 
 function clampPanel() {
@@ -360,7 +349,6 @@ function initDrag() {
     if (!drag || (event.pointerId !== undefined && event.pointerId !== drag.pointerId)) return;
     drag = null;
     els.panel.classList.remove('is-dragging');
-    savePosition();
   };
   handle.addEventListener('pointerup', end);
   handle.addEventListener('pointercancel', end);
@@ -370,24 +358,110 @@ function voiceIsActive() {
   return voice.active || ['connecting', 'listening', 'processing', 'speaking'].includes(state.voice);
 }
 
-function positionPill() {
-  if (!els.pill) return;
-  if (window.innerWidth <= 760) {
-    els.pill.style.removeProperty('left');
-    els.pill.style.removeProperty('top');
-    els.pill.style.removeProperty('right');
-    return;
+function hasElementBox(el) {
+  if (!el) return false;
+  const style = getComputedStyle(el);
+  const rect = el.getBoundingClientRect();
+  return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+}
+
+function isElementVisible(el) {
+  if (!hasElementBox(el)) return false;
+  return Number(getComputedStyle(el).opacity || 1) > 0.05;
+}
+
+function pillAnchor() {
+  const body = document.body;
+  if (body.classList.contains('project-open')) {
+    const bar = document.querySelector('#project .pw-bar');
+    const right = document.querySelector('#project .pw-bar-right');
+    if (hasElementBox(right)) return { el: right, placement: 'left', nav: document.querySelector('#project .pw-global-nav') };
+    if (hasElementBox(bar)) return { el: bar, placement: 'below-right' };
+  }
+  if (body.classList.contains('about-open')) {
+    const bar = document.querySelector('#aboutView .about-bar');
+    const right = document.querySelector('#aboutView .about-bar .pw-bar-right');
+    if (hasElementBox(right)) return { el: right, placement: 'left', nav: document.querySelector('#aboutView .pw-global-nav') };
+    if (hasElementBox(bar)) return { el: bar, placement: 'below-right' };
+  }
+  if (body.dataset.mode === 'contact') {
+    const close = document.querySelector('#contactPanel .panel-close');
+    if (hasElementBox(close)) return { el: close, placement: 'left' };
   }
   const toolbar = document.getElementById('toolbar');
-  const rect = toolbar?.getBoundingClientRect();
-  const width = els.pill.offsetWidth || 190;
-  const height = els.pill.offsetHeight || 42;
-  const maxLeft = Math.max(10, window.innerWidth - width - 12);
-  const left = Math.min(Math.max(10, rect?.width ? rect.right + 10 : maxLeft), maxLeft);
-  const top = rect?.width ? rect.top + Math.max(0, (rect.height - height) / 2) : 26;
+  if (isElementVisible(toolbar)) return { el: toolbar, placement: 'right' };
+  return null;
+}
+
+function positionPill() {
+  if (!els.pill) return;
+  const width = els.pill.offsetWidth || 148;
+  const height = els.pill.offsetHeight || 34;
+  const margin = 12;
+  const gap = 8;
+  const viewportW = window.innerWidth;
+  const viewportH = window.innerHeight;
+
+  if (viewportW <= 760) {
+    const anchor = pillAnchor();
+    if (anchor) {
+      const rect = anchor.el.getBoundingClientRect();
+      const left = Math.min(Math.max(margin, rect.right - width), viewportW - width - margin);
+      const top = Math.min(rect.bottom + gap, viewportH - height - margin);
+      els.pill.style.left = `${Math.round(left)}px`;
+      els.pill.style.top = `${Math.round(top)}px`;
+      els.pill.style.right = 'auto';
+      return;
+    }
+    els.pill.style.left = `${Math.max(margin, viewportW - width - margin)}px`;
+    els.pill.style.top = `${margin}px`;
+    els.pill.style.right = 'auto';
+    return;
+  }
+
+  const anchor = pillAnchor();
+  if (!anchor) {
+    els.pill.style.left = `${Math.max(margin, viewportW - width - margin)}px`;
+    els.pill.style.top = `${margin + 6}px`;
+    els.pill.style.right = 'auto';
+    return;
+  }
+  const rect = anchor.el.getBoundingClientRect();
+  let left;
+  let top;
+  if (anchor.placement === 'left') {
+    left = rect.left - width - gap;
+    top = rect.top + (rect.height - height) / 2;
+    const navRect = anchor.nav?.getBoundingClientRect();
+    const collidesWithNav = navRect && navRect.width > 0 && left < navRect.right + gap;
+    if (left < margin || collidesWithNav) {
+      left = Math.min(Math.max(margin, rect.right - width), viewportW - width - margin);
+      top = rect.bottom + gap;
+    }
+  } else if (anchor.placement === 'below-right') {
+    left = Math.min(Math.max(margin, rect.right - width), viewportW - width - margin);
+    top = rect.bottom + gap;
+  } else {
+    left = rect.right + gap;
+    top = rect.top + (rect.height - height) / 2;
+    if (left + width > viewportW - margin) {
+      left = Math.min(Math.max(margin, rect.right - width), viewportW - width - margin);
+      top = rect.bottom + gap;
+    }
+  }
   els.pill.style.left = `${Math.round(left)}px`;
-  els.pill.style.top = `${Math.round(top)}px`;
+  els.pill.style.top = `${Math.round(Math.min(top, viewportH - height - margin))}px`;
   els.pill.style.right = 'auto';
+}
+
+let pillRepositionTimer = null;
+function schedulePillPosition() {
+  requestAnimationFrame(positionPill);
+  if (pillRepositionTimer) clearTimeout(pillRepositionTimer);
+  pillRepositionTimer = setTimeout(() => {
+    pillRepositionTimer = null;
+    positionPill();
+  }, 320);
 }
 
 function updatePill() {
@@ -419,13 +493,75 @@ function showBody() {
   els.body.hidden = false;
 }
 
+function positionPanelFromPill() {
+  if (!els.pill || !els.panel || window.innerWidth <= 760) return;
+  const pillRect = els.pill.getBoundingClientRect();
+  const panelRect = els.panel.getBoundingClientRect();
+  if (!pillRect.width || !panelRect.width) return;
+  const margin = 12;
+  const gap = 10;
+  let left = pillRect.right - panelRect.width;
+  let top = pillRect.bottom + gap;
+  left = Math.min(Math.max(margin, left), Math.max(margin, window.innerWidth - panelRect.width - margin));
+  top = Math.min(Math.max(margin, top), Math.max(margin, window.innerHeight - panelRect.height - margin));
+  els.panel.style.left = `${Math.round(left)}px`;
+  els.panel.style.top = `${Math.round(top)}px`;
+  els.panel.style.right = 'auto';
+}
+
+function animatePanelFromPill() {
+  if (!els.pill || !els.panel) return;
+  const pillRect = els.pill.getBoundingClientRect();
+  const panelRect = els.panel.getBoundingClientRect();
+  if (!pillRect.width || !panelRect.width) {
+    els.panel.classList.remove('is-morphing');
+    return;
+  }
+  const dx = (pillRect.left + pillRect.width / 2) - (panelRect.left + panelRect.width / 2);
+  const dy = (pillRect.top + pillRect.height / 2) - (panelRect.top + panelRect.height / 2);
+  const scaleX = Math.max(0.08, pillRect.width / panelRect.width);
+  const scaleY = Math.max(0.08, pillRect.height / panelRect.height);
+  els.panel.getAnimations().forEach((animation) => animation.cancel());
+  els.panel.classList.add('is-morphing');
+  const animation = els.panel.animate([
+    {
+      transformOrigin: 'center center',
+      transform: `translate(${dx}px, ${dy}px) scale(${scaleX}, ${scaleY})`,
+      opacity: 0,
+      borderRadius: '999px'
+    },
+    {
+      transformOrigin: 'center center',
+      transform: 'translate(0, 0) scale(1, 1)',
+      opacity: 1,
+      borderRadius: '22px'
+    }
+  ], {
+    duration: matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 320,
+    easing: 'cubic-bezier(.2,.9,.25,1)',
+    fill: 'both'
+  });
+  animation.finished.finally(() => {
+    els.panel.classList.remove('is-morphing');
+    try { animation.cancel(); } catch {}
+  });
+}
+
 async function openPanel() {
   state.unread = false;
-  if (els.panel.hidden) {
+  const wasHidden = els.panel.hidden;
+  if (wasHidden) {
     els.panel.hidden = false;
-    applySavedPosition();
+    els.panel.style.animation = 'none';
+    els.panel.classList.add('is-morphing');
+    setSize(state.size);
+    requestAnimationFrame(() => {
+      positionPanelFromPill();
+      animatePanelFromPill();
+    });
+  } else {
+    setSize(state.size);
   }
-  setSize(state.size);
   updatePill();
   if (!state.ready && state.key) await init();
   if (!state.key) showGate();
@@ -468,13 +604,6 @@ function setState(value) {
   updatePill();
 }
 
-function showThinking(active) {
-  state.thinking = active;
-  if (!els.thinking) return;
-  els.thinking.hidden = !active;
-  els.panel.dataset.thinking = active ? 'true' : 'false';
-}
-
 function updateContext() {
   if (!els.context) return;
   const status = window.NourOS?.getStatus?.();
@@ -513,8 +642,66 @@ function portfolioContext() {
     projectView: project?.open ? project.view : null,
     nodeId: project?.open ? project.nodeId : null,
     chapterId: about?.open ? about.chapterId : null,
-    view: project?.open ? 'project' : about?.open ? 'about' : status.context?.contact?.open ? 'contact' : 'portfolio'
+    view: project?.open ? 'project' : about?.open ? 'about' : status.context?.contact?.open ? 'contact' : 'portfolio',
+    navigationSource: Date.now() <= aiNavUntil ? 'assistant' : 'visitor',
+    presentation: {
+      active: state.presentation.active,
+      projectId: state.presentation.projectId,
+      nodeId: state.presentation.nodeId,
+      paused: state.presentation.paused
+    }
   };
+}
+
+function describeCurrentView() {
+  const status = window.NourOS?.getStatus?.();
+  if (!status) return 'Current view: portfolio.';
+  const project = status.context?.project?.open ? PROJECT_BY_ID[status.context.project.id] : null;
+  const flowNode = project?.flow?.nodes?.find((node) => node.id === status.context?.project?.nodeId);
+  const chapter = status.context?.about?.open
+    ? PROFESSIONAL_CHAPTERS.find((item) => item.id === status.context.about.chapterId)
+    : null;
+  return [
+    `Section: ${status.section || 'portfolio'}`,
+    project ? `Project: ${project.title} (${project.id})` : '',
+    project ? `Project view: ${status.context.project.view || 'overview'}` : '',
+    flowNode ? `Selected step: ${flowNode.title} (${flowNode.id})` : '',
+    chapter ? `Journey chapter: ${chapter.title} (${chapter.id})` : '',
+    `Route: ${status.route?.path || '/'}`,
+    `Navigation source: ${Date.now() <= aiNavUntil ? 'assistant' : 'visitor'}`,
+    state.presentation.active
+      ? `Presentation: active${state.presentation.projectId ? ` in ${state.presentation.projectId}` : ''}${state.presentation.paused ? ' (paused)' : ''}`
+      : 'Presentation: not active'
+  ].filter(Boolean).join('\n');
+}
+
+function queueAiRoute(route) {
+  if (!route) return;
+  expectedAiRoutes.push(route);
+  if (expectedAiRoutesTimer) clearTimeout(expectedAiRoutesTimer);
+  expectedAiRoutesTimer = setTimeout(() => { expectedAiRoutes = []; }, 5000);
+}
+
+function consumeAiRoute(route) {
+  const index = expectedAiRoutes.indexOf(route);
+  if (index < 0) return false;
+  expectedAiRoutes.splice(0, index + 1);
+  return true;
+}
+
+function sendLiveContextUpdate() {
+  if (!voice.active || !voice.session) return;
+  const text = `[Context update — not a visitor message]\n${describeCurrentView()}`;
+  if (text === lastLiveContext) return;
+  if (liveContextTimer) clearTimeout(liveContextTimer);
+  liveContextTimer = setTimeout(() => {
+    liveContextTimer = null;
+    if (!voice.active || !voice.session || text === lastLiveContext) return;
+    try {
+      voice.session.sendClientContent({ turns: text, turnComplete: false });
+      lastLiveContext = text;
+    } catch {}
+  }, 180);
 }
 
 function addMessage(role, content, actions = []) {
@@ -636,7 +823,6 @@ async function sendMessage(event) {
   els.input.style.height = '';
   addMessage('user', message);
   setState('processing');
-  showThinking(true);
   try {
     const data = await api('/api/chat', {
       method: 'POST',
@@ -664,46 +850,78 @@ async function sendMessage(event) {
   } finally {
     state.busy = false;
     els.send.disabled = false;
-    showThinking(false);
   }
 }
 
 async function runActions(actions) {
   const list = (actions || []).filter(Boolean);
-  if (!list.length) return;
+  if (!list.length) return { ok: true, applied: [] };
   if (!voice.active) setState('processing');
+  const applied = [];
+  let failed = false;
   for (let index = 0; index < list.length; index++) {
     const action = list[index];
     const status = window.NourOS;
-    if (!status) break;
-    aiNavUntil = Date.now() + 1700;
+    if (!status) { failed = true; break; }
+    if (action.type === 'presentationStart') {
+      state.presentation = { active: true, projectId: action.projectId || null, nodeId: action.startNodeId || null, paused: false };
+      continue;
+    }
+    if (action.type === 'presentationStep') {
+      state.presentation = { ...state.presentation, active: true, projectId: action.projectId || state.presentation.projectId, nodeId: action.nodeId || null, paused: false };
+      continue;
+    }
+    if (action.type === 'presentationPause') { state.presentation.paused = true; continue; }
+    if (action.type === 'presentationResume') { state.presentation.paused = false; continue; }
+    if (action.type === 'presentationEnd') {
+      state.presentation = { active: false, projectId: null, nodeId: null, paused: false };
+      continue;
+    }
+    aiNavUntil = Date.now() + 2500;
+    queueAiRoute(action.route);
     try {
-      if (action.type === 'navigate') await status.navigateTo(action.section);
-      else if (action.type === 'openProject') await status.openProject(action.projectId);
+      if (action.type === 'navigate') { await status.navigateTo(action.section); applied.push(action); }
+      else if (action.type === 'openProject') { await status.openProject(action.projectId); applied.push(action); }
       else if (action.type === 'openProjectFlow') {
         if (index > 0 && list[index - 1]?.type === 'openProject') await sleep(900);
         await status.openProjectFlow(action.projectId, action.nodeId || null);
-      } else if (action.type === 'openJourneyChapter') await status.openJourneyChapter(action.chapterId);
-      else if (action.type === 'openContact') await status.openContact();
+        applied.push(action);
+        if (state.presentation.active) state.presentation.nodeId = action.nodeId || null;
+      } else if (action.type === 'openJourneyChapter') { await status.openJourneyChapter(action.chapterId); applied.push(action); }
+      else if (action.type === 'openContact') { await status.openContact(); applied.push(action); }
     } catch (error) {
+      failed = true;
       if (String(error?.code || error?.message || '').includes('BUSY')) {
         await sleep(900);
         try {
-          if (action.type === 'openProject') await status.openProject(action.projectId);
-          if (action.type === 'openProjectFlow') await status.openProjectFlow(action.projectId, action.nodeId || null);
+          if (action.type === 'openProject') { await status.openProject(action.projectId); applied.push(action); failed = false; }
+          if (action.type === 'openProjectFlow') { await status.openProjectFlow(action.projectId, action.nodeId || null); applied.push(action); failed = false; }
         } catch {}
       }
     }
     if (index < list.length - 1) await sleep(250);
   }
-  aiNavUntil = Date.now() + 900;
+  aiNavUntil = Date.now() + 2500;
   updateContext();
+  sendLiveContextUpdate();
   if (!voice.active) setState('idle');
+  return { ok: !failed, applied };
 }
 
 function onNourState(status) {
+  const nextRoute = status?.route?.path || lastRoute;
+  const routeChanged = Boolean(nextRoute && nextRoute !== lastRoute);
+  const aiNavigation = routeChanged ? consumeAiRoute(nextRoute) : false;
+  if (routeChanged && !aiNavigation) {
+    expectedAiRoutes = [];
+    if (state.presentation.active) {
+      state.presentation = { active: false, projectId: null, nodeId: null, paused: false };
+    }
+  }
   updateContext();
-  lastRoute = status?.route?.path || lastRoute;
+  schedulePillPosition();
+  if (routeChanged) sendLiveContextUpdate();
+  lastRoute = nextRoute;
 }
 
 function toggleLocale() {
@@ -858,14 +1076,21 @@ async function handleLiveTool(toolCall) {
     try {
       const result = await api('/api/tools/execute', {
         method: 'POST',
-        body: JSON.stringify({ sessionId: state.sessionId, name: call.name, args: call.args || {} })
+        body: JSON.stringify({ sessionId: state.sessionId, name: call.name, args: call.args || {}, portfolioContext: portfolioContext() })
       });
-      if (result.ok) await runActions(result.actions || (result.action ? [result.action] : []));
+      const applied = result.ok
+        ? await runActions(result.actions || (result.action ? [result.action] : []))
+        : null;
+      const routes = (result.actions || (result.action ? [result.action] : [])).filter(Boolean).map((item) => item.route).filter(Boolean);
       responses.push({
         id: call.id,
         name: call.name,
         response: result.ok
-          ? { ok: true, routes: (result.actions || [result.action]).filter(Boolean).map((item) => item.route) }
+          ? {
+              ...(result.modelResponse || { ok: true }),
+              ok: true,
+              ...(routes.length ? { confirmed: applied?.ok === true, routes } : {})
+            }
           : { ok: false, error: result.error?.code }
       });
     } catch {
@@ -913,7 +1138,7 @@ async function startVoice() {
       model: token.model,
       config: token.config,
       callbacks: {
-        onopen: () => setState('listening'),
+        onopen: () => { setState('listening'); lastLiveContext = ''; sendLiveContextUpdate(); },
         onmessage: async (message) => {
           if (message.setupComplete) setState('listening');
           const activity = message.voiceActivity?.voiceActivityType || message.voiceActivity?.type;
@@ -951,18 +1176,23 @@ async function startVoice() {
         }
       }
     });
-    const source = voice.inputContext.createMediaStreamSource(voice.mic);
+    voice.micSource = voice.inputContext.createMediaStreamSource(voice.mic);
+    voice.analyser = voice.inputContext.createAnalyser();
+    voice.analyser.fftSize = 256;
+    voice.analyser.smoothingTimeConstant = 0.72;
+    voice.micSource.connect(voice.analyser);
     voice.processor = voice.inputContext.createScriptProcessor(4096, 1, 1);
     voice.processor.onaudioprocess = (event) => {
       if (!voice.session || !voice.active) return;
       const pcm16 = downsampleTo16k(event.inputBuffer.getChannelData(0), voice.inputContext.sampleRate);
       voice.session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm16), mimeType: 'audio/pcm;rate=16000' } });
     };
-    source.connect(voice.processor);
+    voice.micSource.connect(voice.processor);
     const silent = voice.inputContext.createGain();
     silent.gain.value = 0;
     voice.processor.connect(silent);
     silent.connect(voice.inputContext.destination);
+    startOrbAnimation();
     setState('listening');
   } catch (error) {
     await stopVoice();
@@ -973,6 +1203,9 @@ async function startVoice() {
 
 async function stopVoice() {
   voice.active = false;
+  stopOrbAnimation();
+  if (voice.micSource) { try { voice.micSource.disconnect(); } catch {} voice.micSource = null; }
+  if (voice.analyser) { try { voice.analyser.disconnect(); } catch {} voice.analyser = null; }
   if (voice.processor) { voice.processor.disconnect(); voice.processor = null; }
   if (voice.mic) { for (const track of voice.mic.getTracks()) track.stop(); voice.mic = null; }
   stopPlayback();
@@ -983,6 +1216,38 @@ async function stopVoice() {
   voice.userText = '';
   voice.assistantText = '';
   setState('idle');
+}
+
+function startOrbAnimation() {
+  stopOrbAnimation();
+  if (!voice.analyser || !els.pill) return;
+  const data = new Uint8Array(voice.analyser.fftSize);
+  const tick = () => {
+    if (!voice.analyser || !voice.active || !els.pill) {
+      voice.orbFrame = null;
+      els.pill?.style.setProperty('--orb-level', '0');
+      return;
+    }
+    voice.analyser.getByteTimeDomainData(data);
+    let sum = 0;
+    for (let index = 0; index < data.length; index += 1) {
+      const value = (data[index] - 128) / 128;
+      sum += value * value;
+    }
+    const rms = Math.sqrt(sum / data.length);
+    const target = Math.min(1, Math.max(0, rms * 9));
+    voice.orbLevel = voice.orbLevel * 0.72 + target * 0.28;
+    els.pill.style.setProperty('--orb-level', voice.orbLevel.toFixed(3));
+    voice.orbFrame = requestAnimationFrame(tick);
+  };
+  tick();
+}
+
+function stopOrbAnimation() {
+  if (voice.orbFrame) cancelAnimationFrame(voice.orbFrame);
+  voice.orbFrame = null;
+  voice.orbLevel = 0;
+  els.pill?.style.setProperty('--orb-level', '0');
 }
 
 function waitForNour() {

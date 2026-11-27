@@ -1,9 +1,9 @@
 {
-  "generatedAt": "2026-11-27T00:32:25.957Z",
+  "generatedAt": "2026-11-27T05:15:48.429Z",
   "mode": "mock-live/no-usage-reported",
-  "passed": 4,
+  "passed": 8,
   "failed": 0,
-  "total": 4,
+  "total": 8,
   "results": [
     {
       "name": "first Live token reserves budget",
@@ -18,7 +18,67 @@
       "pass": true,
       "detail": {
         "sessionSeconds": 600,
-        "expiresAt": "2026-11-27T00:42:25.867Z"
+        "expiresAt": "2026-11-27T05:25:48.411Z"
+      }
+    },
+    {
+      "name": "Live config uses Schedar",
+      "pass": true,
+      "detail": {
+        "voice": "Schedar"
+      }
+    },
+    {
+      "name": "Live config includes knowledge and presentation tools",
+      "pass": true,
+      "detail": {
+        "declarations": [
+          "openSection",
+          "openProject",
+          "openProjectFlow",
+          "openJourneyChapter",
+          "openContact",
+          "presentProject",
+          "presentProjectStep",
+          "pausePresentation",
+          "resumePresentation",
+          "endPresentation",
+          "searchPortfolio",
+          "getProjectDossier",
+          "getProjectStep",
+          "getJourneyChapter",
+          "getCurrentView"
+        ]
+      }
+    },
+    {
+      "name": "Live instruction includes verified portfolio grounding",
+      "pass": true,
+      "detail": {
+        "instructionLength": 17399
+      }
+    },
+    {
+      "name": "Live config omits disabled web research",
+      "pass": true,
+      "detail": {
+        "declarations": [
+          "openSection",
+          "openProject",
+          "openProjectFlow",
+          "openJourneyChapter",
+          "openContact",
+          "presentProject",
+          "presentProjectStep",
+          "pausePresentation",
+          "resumePresentation",
+          "endPresentation",
+          "searchPortfolio",
+          "getProjectDossier",
+          "getProjectStep",
+          "getJourneyChapter",
+          "getCurrentView"
+        ]
       }
     },
     {

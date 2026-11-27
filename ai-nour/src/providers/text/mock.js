@@ -54,5 +54,18 @@ export function createMockTextProvider({ model = 'mock-text' } = {}) {
     };
   }
 
-  return { name: 'mock', model, generate };
+  async function research({ query }) {
+    return {
+      text: `Synthetic researched summary for: ${String(query || '').slice(0, 120)}`,
+      parts: [],
+      toolCalls: [],
+      sources: [{ title: 'Synthetic source', url: 'https://example.invalid/research' }],
+      researched: true,
+      usage: { prompt: 60, output: 30, total: 90, promptText: 60, promptAudio: 0, outputAudio: 0 },
+      finishReason: 'STOP',
+      model
+    };
+  }
+
+  return { name: 'mock', model, generate, research };
 }

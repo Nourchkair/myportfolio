@@ -6,6 +6,7 @@ import { handleChat, handleLiveToken, handleLiveTurn } from '../services/convers
 import { getCorpusMeta, listChunks } from '../knowledge/retrieval.js';
 import { getToolDeclarations } from '../tools/registry.js';
 import { executeToolCall } from '../tools/registry.js';
+import { normalizePortfolioContext } from '../knowledge/context.js';
 import { badRequest } from '../http/errors.js';
 import { sha256Hex } from '../auth/secure.js';
 
@@ -25,7 +26,7 @@ export function registerSessionRoutes(router, services) {
         text_enabled: flags.text_enabled,
         live_enabled: flags.live_enabled
       },
-      tools: getToolDeclarations().map((tool) => tool.name)
+      tools: getToolDeclarations({ webResearchEnabled: config.webResearchEnabled }).map((tool) => tool.name)
     });
   });
 
@@ -121,7 +122,7 @@ export function registerSessionRoutes(router, services) {
     return json(result);
   });
 
-  router.post('/api/tools/execute', async ({ request }) => {
+  router.post('/api/tools/execute', async ({ request, requestId }) => {
     await requirePrototypeKey(request, config, db);
     const ownerHash = await requireOwnerHash(request);
     await requireAssistant(db);
@@ -129,16 +130,34 @@ export function registerSessionRoutes(router, services) {
     if (!body.sessionId) throw badRequest('sessionId is required');
     if (!body.name) throw badRequest('Tool name is required');
     await getOwnedSession({ db, sessionId: body.sessionId, ownerHash, now: Date.now() });
-    const result = executeToolCall(body.name, body.args || {});
+    const toolStarted = Date.now();
+    const result = await executeToolCall(body.name, body.args || {}, {
+      db,
+      retrieval: services.retrieval,
+      textProvider,
+      config,
+      cost,
+      portfolioContext: normalizePortfolioContext(body.portfolioContext)
+    });
+    let researchCostUsdMicros = 0;
+    if (result.usage) {
+      researchCostUsdMicros = await cost.recordText({
+        requestId: `${requestId}:research:${body.name}`,
+        model: result.model || config.textModel,
+        usage: result.usage,
+        capability: 'web_research',
+        now: toolStarted
+      });
+    }
     if (result.ok) {
       await db.logEvent({
         level: 'info',
         event: 'tool.executed',
         detail: { sessionId: body.sessionId, tool: body.name, route: result.action?.route || null },
-        now: Date.now()
+        now: toolStarted
       });
     }
-    return json(result);
+    return json({ ...result, costUsdMicros: researchCostUsdMicros });
   });
 
   router.get('/api/knowledge/search', async ({ request, url }) => {

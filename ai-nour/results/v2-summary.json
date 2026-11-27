@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-11-27T05:28:34.431Z",
+  "status": "V2 implemented and validated locally; production update pending at the time of this file",
+  "voice": {
+    "default": "Schedar",
+    "provider": "gemini-3.8-live",
+    "verifiedRealSession": true,
+    "liveSmoke": true
+  },
+  "persona": {
+    "defaultLength": 3606,
+    "productionControlUpdated": false
+  },
+  "grounding": {
+    "liveFoundation": true,
+    "publishedOverrides": true,
+    "tools": [
+      "searchPortfolio",
+      "getProjectDossier",
+      "getProjectStep",
+      "getJourneyChapter",
+      "getCurrentView"
+    ],
+    "customerAcquisitionDisambiguation": true,
+    "contributionVsSystem": true
+  },
+  "visitorIntelligence": {
+    "persistent": true,
+    "fields": [
+      "primaryType",
+      "role",
+      "industry",
+      "technicalFamiliarity",
+      "interests",
+      "depth",
+      "goals",
+      "challenges",
+      "locale"
+    ],
+    "injectionFiltered": true
+  },
+  "presentations": {
+    "start": true,
+    "step": true,
+    "pause": true,
+    "resume": true,
+    "end": true,
+    "manualNavigationPriority": true,
+    "confirmedLiveNavigation": true
+  },
+  "dynamicPageAwareness": {
+    "silentContextUpdates": true,
+    "selectedProjectStep": true,
+    "navigationSource": true
+  },
+  "webResearch": {
+    "implemented": true,
+    "enabled": false,
+    "reason": "Gemini Google Search grounding returned 429 RESOURCE_EXHAUSTED on the current free key"
+  },
+  "tests": {
+    "unit": {
+      "passed": 61,
+      "total": 61
+    },
+    "api": {
+      "passed": 23,
+      "total": 23
+    },
+    "crm": {
+      "passed": 14,
+      "total": 14
+    },
+    "admin": {
+      "passed": 16,
+      "total": 16
+    },
+    "liveBudget": {
+      "passed": 8,
+      "total": 8
+    },
+    "security": {
+      "passed": 8,
+      "total": 8
+    },
+    "portfolio": {
+      "passed": 261,
+      "total": 261
+    },
+    "liveSmoke": {
+      "passed": 12,
+      "total": 12
+    },
+    "liveContext": {
+      "passed": 6,
+      "total": 6
+    },
+    "conversationQuality": {
+      "scenarios": 13,
+      "passedScenarios": 13,
+      "averageScore": 1,
+      "totalCostUsdMicros": 18619,
+      "totalLatencyMs": 60699
+    },
+    "secretScan": {
+      "files": 429,
+      "valueHits": 0,
+      "patternHits": 0
+    }
+  },
+  "cost": {
+    "local": {
+      "cumulativeUsdMicros": 1310430,
+      "cumulativeUsd": 1.31043,
+      "cumulativeCad": 1.8633,
+      "dailySpentUsdMicros": 950097,
+      "dailyCapUsdMicros": 1000000,
+      "cumulativeCapUsdMicros": 7000000
+    },
+    "productionBeforeV2Validation": {
+      "cumulativeUsdMicros": 1682091,
+      "cumulativeUsd": 1.682091,
+      "cumulativeCad": 2.3918,
+      "dailySpentUsdMicros": 785228
+    },
+    "fixedMonthlyInfrastructureUsd": 0
+  },
+  "manualActions": [
+    "Google OAuth publishing/verification and durable refresh token (current Testing token expires in about 6.5 days)",
+    "Real-device voice acceptance: microphone, Bluetooth, iOS Safari, interruptions, French pronunciation and mobile feel",
+    "Visual acceptance of the pill/panel expansion, placement and listening orb",
+    "Public launch approval remains withheld"
+  ]
+}

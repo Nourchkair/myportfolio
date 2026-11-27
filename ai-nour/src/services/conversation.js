@@ -10,13 +10,26 @@ import {
   summarizeIfNeeded
 } from '../sessions/manager.js';
 import { executeToolCalls, getToolDeclarations } from '../tools/registry.js';
-import { normalizePortfolioContext, contextQuery, contextInstruction } from '../knowledge/context.js';
+import { normalizePortfolioContext, contextInstruction } from '../knowledge/context.js';
+import { buildGroundingContext, normalizeOverrides } from '../knowledge/grounding.js';
+import { updateVisitorProfile } from '../sessions/visitor.js';
 
 function cleanText(value, max) {
   const text = String(value || '').replace(/\s+/g, ' ').trim();
   if (!text) throw badRequest('Message cannot be empty');
   if (text.length > max) throw badRequest(`Message exceeds ${max} characters`);
   return text;
+}
+
+function plainText(value) {
+  return String(value || '')
+    .replace(/\*\*(.*?)\*\*/gs, '$1')
+    .replace(/__(.*?)__/gs, '$1')
+    .replace(/`([^`]+)`/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/^\s*[-*]\s+/gm, '• ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 
 function aggregateUsage(total, usage) {
@@ -83,25 +96,17 @@ export async function handleChat({
   const history = await historyContents({ db, sessionId: session.id, maxMessages: config.limits.maxHistoryMessages });
   const previousMessages = await db.listMessages(session.id, 20);
   const brief = buildConversationBrief({ session, messages: previousMessages, maxMessages: 6 });
-  const overrides = (await db.listKnowledgeOverrides())
-    .filter((item) => item.status === 'published')
-    .map((item) => ({
-      id: item.chunk_id,
-      type: 'override',
-      title: item.title || 'Published knowledge override',
-      text: item.text || '',
-      route: null,
-      tags: (() => { try { return JSON.parse(item.tags_json || '[]'); } catch { return []; } })(),
-      keywords: []
-    }));
-  const context = retrieval.buildContext([message, contextQuery(portfolioContext)].filter(Boolean).join(' '), { limit: 4, maxChars: 3200, extraChunks: overrides });
+  const overrides = normalizeOverrides(await db.listKnowledgeOverrides());
+  const visitor = updateVisitorProfile(session.state?.visitor, { userText: message, context: portfolioContext, locale, now });
+  const grounding = buildGroundingContext({ query: message, portfolioContext, overrides, mode: 'text' });
   const systemInstruction = buildSystemPrompt({
     persona: flags.persona,
-    context: context.text,
+    context: grounding.text,
     brief,
     locale,
     mode: 'text',
-    portfolioContext: contextInstruction(portfolioContext)
+    portfolioContext: contextInstruction(portfolioContext),
+    visitor
   });
 
   const contents = [...history, { role: 'user', parts: [{ text: message }] }];
@@ -115,9 +120,9 @@ export async function handleChat({
     response = await provider.generate({
       systemInstruction,
       contents,
-      tools: getToolDeclarations(),
-      temperature: 0.45,
-      maxOutputTokens: 520
+      tools: getToolDeclarations({ webResearchEnabled: config.webResearchEnabled }),
+      temperature: 0.7,
+      maxOutputTokens: 900
     });
     callIndex++;
     totalCostMicros += await cost.recordText({
@@ -131,10 +136,19 @@ export async function handleChat({
 
     if (!response.toolCalls?.length) break;
 
-    const executed = executeToolCalls(response.toolCalls);
+    const executed = await executeToolCalls(response.toolCalls, { db, retrieval, portfolioContext, textProvider: provider, config, cost });
     for (const item of executed) {
       if (item.actions?.length) actions.push(...item.actions);
       else if (item.action) actions.push(item.action);
+      if (item.usage) {
+        totalCostMicros += await cost.recordText({
+          requestId: `${requestId}:research:${callIndex}:${item.call.name}`,
+          model: item.model || config.textModel,
+          usage: item.usage,
+          capability: 'web_research',
+          now
+        });
+      }
     }
     contents.push({ role: 'model', parts: response.parts || response.toolCalls.map((call) => ({ functionCall: { name: call.name, args: call.args } })) });
     contents.push({
@@ -143,15 +157,13 @@ export async function handleChat({
         functionResponse: {
           name: item.call.name,
           ...(item.call.id ? { id: item.call.id } : {}),
-          response: item.ok
-            ? { ok: true, route: item.action?.route || null }
-            : { ok: false, error: item.error.code }
+          response: item.modelResponse || (item.ok ? { ok: true } : { ok: false, error: item.error?.code || 'TOOL_FAILED' })
         }
       }))
     });
   }
 
-  let reply = String(response?.text || '').trim();
+  let reply = plainText(response?.text || '');
   const uniqueActions = dedupeActions(actions);
   if (!reply && uniqueActions.length) {
     reply = locale === 'fr' ? 'Je vous ouvre cela.' : "I'm opening that for you.";
@@ -170,6 +182,7 @@ export async function handleChat({
     locale,
     meta: { actions: uniqueActions, model: response?.model || config.textModel, source: 'text', portfolioContext },
     usage: totalUsage,
+    visitor,
     now,
     ttlMs: config.limits.sessionTtlMs
   });
@@ -256,14 +269,22 @@ export async function handleLiveToken({
   const portfolioContext = normalizePortfolioContext(body.portfolioContext);
   const brief = buildConversationBrief({ session, messages, maxMessages: 6 });
   const detected = locale === 'auto' ? detectLocale(messages.filter((m) => m.role === 'user').at(-1)?.content || '', 'auto') : locale;
+  let visitor = session.state?.visitor || null;
+  for (const item of messages.filter((message) => message.role === 'user').slice(-6)) {
+    visitor = updateVisitorProfile(visitor, { userText: item.content, context: portfolioContext, locale: detected, now });
+  }
+  const overrides = normalizeOverrides(await db.listKnowledgeOverrides());
+  const grounding = buildGroundingContext({ query: messages.filter((message) => message.role === 'user').at(-1)?.content || '', portfolioContext, overrides, mode: 'live' });
   const systemInstruction = buildSystemPrompt({
     persona: flags.persona,
+    context: grounding.text,
     brief,
     locale: detected,
     mode: 'live',
-    portfolioContext: contextInstruction(portfolioContext)
+    portfolioContext: contextInstruction(portfolioContext),
+    visitor
   });
-  const tools = getToolDeclarations();
+  const tools = getToolDeclarations({ webResearchEnabled: config.webResearchEnabled });
   const liveTools = [{ functionDeclarations: tools }];
   const voice = config.liveVoice;
   const reservationId = crypto.randomUUID();
@@ -342,6 +363,7 @@ export async function handleLiveTurn({
   }
   const usage = body.usage || {};
   const locale = body.locale === 'fr' || body.locale === 'en' ? body.locale : detectLocale(userText, session.locale);
+  const visitor = updateVisitorProfile(session.state?.visitor, { userText, assistantText, locale, now });
   const usdMicros = await cost.recordLive({
     requestId: `${requestId}:live`,
     model: config.liveModel,
@@ -359,6 +381,7 @@ export async function handleLiveTurn({
     locale,
     meta: { source: 'live', usage },
     usage: { prompt: Number(usage.textInput || 0) + Number(usage.audioInput || 0), output: Number(usage.audioOutput || 0) },
+    visitor,
     now,
     ttlMs: config.limits.sessionTtlMs
   });

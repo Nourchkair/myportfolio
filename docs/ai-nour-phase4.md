@@ -2,7 +2,7 @@
 
 **Date:** 26 November 2026  
 **Branch:** `phase2/ai-nour-production`  
-**Status:** **production private beta deployed and restricted.** The production Worker, D1, custom domain, beta keys, admin, text/Live voice, portfolio navigation, Sheets sync, and Calendar/Meet were validated. Public access remains disabled. Personal acceptance and Google OAuth durability remain pending.
+**Status:** **production private beta deployed and restricted; conversational V2 is implemented and validated.** The production Worker, D1, custom domain, beta keys, admin, text/Live voice, portfolio navigation, Sheets sync, and Calendar/Meet were validated. Public access remains disabled. Personal acceptance and Google OAuth durability remain pending.
 
 ---
 

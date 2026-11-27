@@ -16,6 +16,10 @@ export function normalizePortfolioContext(input) {
   const chapter = chapterById.get(input.chapterId) || null;
   const nodeId = project && typeof input.nodeId === 'string' && project.flowNodes.includes(input.nodeId) ? input.nodeId : null;
   const route = text(input.route, 120);
+  const presentationProject = projectById.get(input.presentation?.projectId) || null;
+  const presentationNodeId = presentationProject && typeof input.presentation?.nodeId === 'string' && presentationProject.flowNodes.includes(input.presentation.nodeId)
+    ? input.presentation.nodeId
+    : null;
   if (!section && !project && !chapter) return null;
   return {
     section,
@@ -29,7 +33,16 @@ export function normalizePortfolioContext(input) {
     chapterTitle: chapter?.title || null,
     chapterLabel: chapter?.label || null,
     nodeId,
-    view: text(input.view, 40) || null
+    view: text(input.view, 40) || null,
+    navigationSource: input.navigationSource === 'assistant' ? 'assistant' : 'visitor',
+    presentation: input.presentation && typeof input.presentation === 'object'
+      ? {
+          active: input.presentation.active === true,
+          projectId: presentationProject?.id || null,
+          nodeId: presentationNodeId,
+          paused: input.presentation.paused === true
+        }
+      : null
   };
 }
 
@@ -57,5 +70,7 @@ export function contextInstruction(context) {
   if (context.nodeId) parts.push(`flow node: ${context.nodeId}`);
   if (context.chapterTitle) parts.push(`journey chapter: ${context.chapterTitle} (${context.chapterId})`);
   if (context.route) parts.push(`route: ${context.route}`);
-  return `The visitor is currently viewing the portfolio with ${parts.join('; ')}. Use this context to resolve pronouns and offer relevant navigation, but never override manual visitor navigation or assume they want to leave the current view.`;
+  if (context.navigationSource) parts.push(`last navigation: ${context.navigationSource}`);
+  if (context.presentation?.active) parts.push(`active presentation: ${context.presentation.projectId || 'unknown'}${context.presentation.nodeId ? ` at ${context.presentation.nodeId}` : ''}${context.presentation.paused ? ' (paused)' : ''}`);
+  return `The visitor is currently viewing the portfolio with ${parts.join('; ')}. Resolve pronouns and "this/that" against this view. Never override manual visitor navigation or assume they want to leave the current view.`;
 }

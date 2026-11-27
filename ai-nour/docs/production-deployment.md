@@ -48,6 +48,17 @@ Installed in Cloudflare Workers Secrets:
 
 No Resend key is installed. No permanent Google, Gemini, owner, or admin credential is sent to the browser.
 
+## 3b. Conversational V2
+
+- Live voice: **Schedar**.
+- Persona: production `persona_instruction` updated to the V2 character/grounding prompt.
+- Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
+- Visitor profile: inferred per session and persisted in D1 session state.
+- Presentation controls: start, step, pause, resume and end; manual navigation cancels the presentation.
+- Dynamic page context: silent `[Context update]` messages while Live is active.
+- Web research: implemented with Gemini Google Search grounding, but **disabled** (`WEB_RESEARCH_ENABLED=false`) because the current free key returns 429 for that capability.
+- V2 evidence: `docs/ai-nour-v2-conversational.md` and `results/v2-*`.
+
 ## 4. Administration
 
 The production-connected admin is local-only:

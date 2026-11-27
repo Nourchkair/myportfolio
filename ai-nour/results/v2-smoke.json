@@ -1,0 +1,76 @@
+{
+  "generatedAt": "2026-11-27T05:00:30.545Z",
+  "model": "gemini-3.8-live",
+  "checks": {
+    "session": true,
+    "textChat": true,
+    "textGrounded": true,
+    "textReply": "Safiy is a local-first AI workplace assistant that captures conversations, organizes professional knowledge, and provides contextual help across everyday tasks. By running locally by default, it bridges the gap between spoken discussions and business execution without compromising data privacy.",
+    "toolNavigation": true,
+    "toolReply": "Safiy's project page is opening up now. You can see how it bridges spoken conversations and local-first data privacy.",
+    "liveToken": true,
+    "liveConfigTools": true,
+    "liveSetup": true,
+    "liveAudio": true,
+    "liveToolCall": true,
+    "liveTranscript": true,
+    "liveTurnPersisted": true,
+    "sharedContext": true
+  },
+  "usage": {},
+  "costs": {
+    "textChatUsdMicros": 499,
+    "toolChatUsdMicros": 1015,
+    "liveTurnUsdMicros": 250000
+  },
+  "live": {
+    "events": [
+      "open",
+      "setup",
+      "toolCall",
+      "turnComplete",
+      "output-transcript",
+      "output-transcript",
+      "turnComplete"
+    ],
+    "transcript": "AI Nour: The Safiy project page \nAI Nour: is loading now.",
+    "audioBytes": 115202,
+    "toolCalls": [
+      {
+        "name": "openProject",
+        "args": {
+          "projectId": "safiy"
+        }
+      }
+    ],
+    "usage": {
+      "promptTokenCount": 6450,
+      "responseTokenCount": 66,
+      "totalTokenCount": 6516,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 5700
+        },
+        {
+          "modality": "AUDIO",
+          "tokenCount": 167
+        }
+      ],
+      "responseTokensDetails": [
+        {
+          "modality": "AUDIO",
+          "tokenCount": 66
+        }
+      ],
+      "thoughtsTokenCount": 58
+    }
+  },
+  "session": {
+    "id": "49775d48-413a-4802-8912-f9466302150f",
+    "messages": 6,
+    "summary": false
+  },
+  "passed": 12,
+  "failed": 0
+}

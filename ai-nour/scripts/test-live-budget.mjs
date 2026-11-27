@@ -62,6 +62,11 @@ async function main() {
     const first = await call('/api/live/token', { method: 'POST', body: { sessionId, locale: 'en' } });
     check('first Live token reserves budget', first.status === 200 && Boolean(first.body.reservationId) && first.body.reservationUsdMicros === 600_000, { status: first.status, reservationUsdMicros: first.body.reservationUsdMicros });
     check('Live token carries the configured 10-minute session duration', first.status === 200 && first.body.sessionSeconds === 600 && Date.parse(first.body.expiresAt) - Date.now() > 590_000, { sessionSeconds: first.body.sessionSeconds, expiresAt: first.body.expiresAt });
+    check('Live config uses Schedar', first.status === 200 && first.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName === 'Schedar', { voice: first.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName });
+    const declarations = first.body.config?.tools?.[0]?.functionDeclarations?.map((tool) => tool.name) || [];
+    check('Live config includes knowledge and presentation tools', ['searchPortfolio', 'getProjectDossier', 'getProjectStep', 'getCurrentView', 'presentProject', 'presentProjectStep'].every((name) => declarations.includes(name)), { declarations });
+    check('Live instruction includes verified portfolio grounding', /VERIFIED PORTFOLIO FACTS/i.test(first.body.config?.systemInstruction || '') && /Customer Acquisition/i.test(first.body.config?.systemInstruction || '') && /mergers and acquisitions/i.test(first.body.config?.systemInstruction || ''), { instructionLength: first.body.config?.systemInstruction?.length || 0 });
+    check('Live config omits disabled web research', !declarations.includes('webResearch'), { declarations });
 
     const budgetAfterFirst = await call('/api/admin/cost', { admin: true });
     check('held Live reservation counts toward budget', budgetAfterFirst.status === 200 && budgetAfterFirst.body.budget.heldLiveReservationsUsdMicros === 600_000, { held: budgetAfterFirst.body.budget?.heldLiveReservationsUsdMicros });
