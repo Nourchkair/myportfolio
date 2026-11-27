@@ -42,10 +42,10 @@
       "failed": 0
     },
     "openingBrowser": {
-      "passed": 17,
+      "passed": 18,
       "failed": 0,
       "evidence": "results/nupa-v3-opening-browser.json",
-      "total": 17
+      "total": 18
     },
     "presentationBrowser": {
       "passed": 22,
