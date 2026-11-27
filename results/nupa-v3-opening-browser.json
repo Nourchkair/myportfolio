@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T17:10:07.783Z",
-  "passed": 18,
+  "generatedAt": "2026-11-27T18:34:55.836Z",
+  "passed": 20,
   "failed": 0,
-  "total": 18,
+  "total": 20,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -66,7 +66,11 @@
         "panelHidden": true,
         "consentVisible": true,
         "consentModal": true,
-        "blur": "blur(18px) saturate(0.78)",
+        "blur": "blur(12px) saturate(0.9)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)",
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)",
         "gateHidden": true,
         "welcome": "Welcome \u2014 I\u2019m Nupa, an independent AI portfolio guide, not Nour. I can walk you through his work, answer questions and show you around.",
         "disclosure": "Text and voice are processed by Google Gemini, which may use them to improve its products. Transcripts are kept for up to 7 days and can be reviewed by the site administrator. Do not share personal, sensitive or confidential information.",
@@ -116,6 +120,22 @@
       }
     },
     {
+      "name": "consent button text has strong contrast",
+      "pass": true,
+      "detail": {
+        "buttonBgImage": "linear-gradient(135deg, rgb(255, 216, 171), rgb(240, 185, 126))",
+        "buttonColor": "rgb(33, 23, 14)"
+      }
+    },
+    {
+      "name": "consent modal is light transparent glass, not a dark slab",
+      "pass": true,
+      "detail": {
+        "modalBg": "rgba(255, 255, 255, 0.075)",
+        "overlayBg": "rgba(2, 6, 9, 0.3)"
+      }
+    },
+    {
       "name": "consent discloses Gemini, improvement use, retention, admin access and sensitive-data warning",
       "pass": true,
       "detail": {
@@ -151,7 +171,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T17:09:59.479Z"
+          "acceptedAt": "2026-11-27T18:34:48.519Z"
         },
         "gateVisible": true,
         "consentHidden": true

@@ -81,6 +81,10 @@ const consent = await beta.evaluate(() => ({
   consentVisible: !document.querySelector('#ainourConsent').hidden,
   consentModal: Boolean(document.querySelector('#ainourConsent .ainour-consent-modal')),
   blur: getComputedStyle(document.querySelector('#ainourConsent')).backdropFilter,
+  overlayBg: getComputedStyle(document.querySelector('#ainourConsent')).backgroundColor,
+  modalBg: getComputedStyle(document.querySelector('.ainour-consent-modal')).backgroundColor,
+  buttonBgImage: getComputedStyle(document.querySelector('#ainourConsentBtn')).backgroundImage,
+  buttonColor: getComputedStyle(document.querySelector('#ainourConsentBtn')).color,
   gateHidden: document.querySelector('#ainourGate').hidden,
   welcome: document.querySelector('#ainourConsentIntro').innerText,
   disclosure: document.querySelector('#ainourConsentPrivacy').innerText,
@@ -98,6 +102,8 @@ check('opening choice and companion use Nupa branding', /explore with nupa/i.tes
 check('consent welcomes the visitor with a short independent identity', /independent AI(-powered)? portfolio guide/i.test(consent.welcome) && /not Nour/i.test(consent.welcome) && !/live, interactive, personalized/i.test(consent.welcome), { welcome: consent.welcome });
 check('consent has no separate acceptance checkbox', consent.checkboxCount === 0, { checkboxCount: consent.checkboxCount });
 check('consent button says Continue and agree while age is confirmed in the acceptance line', /Continue and agree/i.test(consent.button) && !/18/.test(consent.button) && /18 or older/i.test(consent.accept) && /Terms of Use/i.test(consent.accept) && /Privacy Policy/i.test(consent.accept) && /18 or older/i.test(consent.buttonAria) && /Terms of Use/i.test(consent.buttonAria) && /Privacy Policy/i.test(consent.buttonAria), { button: consent.button, buttonAria: consent.buttonAria, accept: consent.accept });
+check('consent button text has strong contrast', /linear-gradient/i.test(consent.buttonBgImage) && !/255, 255, 255/.test(consent.buttonColor) && !/rgba\(0, 0, 0, 0\)/.test(consent.buttonBgImage), { buttonBgImage: consent.buttonBgImage, buttonColor: consent.buttonColor });
+check('consent modal is light transparent glass, not a dark slab', /rgba\(255, 255, 255/.test(consent.modalBg) && /rgba\(2, 6, 9, 0\.3\)/.test(consent.overlayBg), { modalBg: consent.modalBg, overlayBg: consent.overlayBg });
 check('consent discloses Gemini, improvement use, retention, admin access and sensitive-data warning', /Google Gemini/i.test(consent.disclosure) && /improve its products/i.test(consent.disclosure) && /7 days/i.test(consent.disclosure) && /administrator/i.test(consent.disclosure) && /Do not share personal, sensitive or confidential information/i.test(consent.disclosure), { disclosure: consent.disclosure });
 check('consent carries legal links', consent.links.includes('/terms/') && consent.links.includes('/privacy/'), consent.links);
 await beta.locator('#ainourConsentLocale').click();
