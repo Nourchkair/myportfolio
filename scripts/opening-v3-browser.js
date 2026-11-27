@@ -122,6 +122,29 @@ const accepted = await beta.evaluate(() => ({
 }));
 check('Continue alone records age, Terms and Privacy acceptance', accepted.consent.version === '2026-11-27-v1.2' && accepted.consent.age18 === true && accepted.consent.terms === true && accepted.consent.privacy === true && accepted.gateVisible === true && accepted.consentHidden === true, accepted);
 
+const indie = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent(api)}&v=${Date.now()}`);
+await indie.setViewportSize({ width: 1440, height: 900 });
+await indie.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 30000 });
+await indie.evaluate((key) => {
+  localStorage.setItem('ainour:consent', JSON.stringify({ version: '2026-11-27-v1.2', age18: true, terms: true, privacy: true, acceptedAt: new Date().toISOString() }));
+  sessionStorage.setItem('ainour:key', key);
+  localStorage.setItem('ainour:locale', 'en');
+  localStorage.removeItem('ainour:session');
+  localStorage.removeItem('ainour:owner');
+}, '__LOCAL_PROTOTYPE_KEY__');
+await indie.reload({ ignoreCache: true });
+await indie.waitForSelector('#introChoices [data-explore="independent"]', { timeout: 20000 });
+await indie.locator('[data-explore="independent"]').click();
+await indie.waitForFunction(() => document.body.classList.contains('ready'), { timeout: 20000 });
+await indie.waitForTimeout(600);
+const indieState = await indie.evaluate(() => ({
+  panelHidden: document.querySelector('#ainourPanel')?.hidden,
+  consentHidden: document.querySelector('#ainourConsent')?.hidden,
+  pill: Boolean(document.querySelector('#ainourPill')),
+  ready: document.body.classList.contains('ready')
+}));
+check('independent entry never opens the Nupa chat panel', indieState.panelHidden === true && indieState.consentHidden === true && indieState.ready === true, indieState);
+
 const ready = await openTab(`${base}/?ainour=dev&ainour-api=${encodeURIComponent(api)}&v=${Date.now()}`);
 await ready.setViewportSize({ width: 1440, height: 900 });
 await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 30000 });

@@ -1,4 +1,4 @@
-import './app/immersive.js?v=46';
+import './app/immersive.js?v=47';
 
 const aiNourParams = new URLSearchParams(location.search);
 const aiNourMode = aiNourParams.get('ainour');
@@ -8,7 +8,7 @@ const aiNourEnabled = aiNourMode === 'beta'
   || (aiNourLocal && aiNourMode === 'dev');
 
 if (aiNourEnabled) {
-  import('./ai-nour/companion.js?v=23')
+  import('./ai-nour/companion.js?v=24')
     .then((module) => module.mountCompanion())
     .catch((error) => console.warn('Nupa companion could not start', error));
 }

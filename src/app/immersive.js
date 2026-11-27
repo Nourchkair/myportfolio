@@ -2109,8 +2109,9 @@ if(initialRoute&&initialRoute.name==='reading'){
     event.preventDefault();
     event.stopPropagation();
     if (button.dataset.explore === 'ai') {
-      window.__ainourExploreRequested = true;
       window.dispatchEvent(new CustomEvent('ainour:explore'));
+    } else {
+      window.dispatchEvent(new CustomEvent('ainour:independent'));
     }
     finishIntro();
   }, true);

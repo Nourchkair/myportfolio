@@ -260,7 +260,6 @@ function mount() {
 
   const exploreButton = document.querySelector('#introChoices [data-explore="ai"]');
   if (exploreButton) exploreButton.hidden = false;
-  if (window.__ainourExploreRequested) state.exploreRequested = true;
 
   const panel = document.createElement('section');
   panel.className = 'ainour-panel';
@@ -371,6 +370,10 @@ function mount() {
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
   window.addEventListener('ainour:presentation-control', (event) => handlePresentationControl(event.detail?.action));
   window.addEventListener('ainour:explore', openExplore);
+  window.addEventListener('ainour:independent', () => {
+    state.exploreRequested = false;
+    if (!els.panel.hidden) closePanel();
+  });
   els.form.addEventListener('submit', sendMessage);
   els.input.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) {
@@ -1914,5 +1917,4 @@ export function mountCompanion() {
   if (mounted) return;
   mount();
   waitForNour();
-  if (state.exploreRequested) setTimeout(() => openPanel(), 80);
 }

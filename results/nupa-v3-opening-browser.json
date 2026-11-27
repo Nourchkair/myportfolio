@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T17:03:18.490Z",
-  "passed": 17,
+  "generatedAt": "2026-11-27T17:10:07.783Z",
+  "passed": 18,
   "failed": 0,
-  "total": 17,
+  "total": 18,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -151,10 +151,20 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T17:03:14.100Z"
+          "acceptedAt": "2026-11-27T17:09:59.479Z"
         },
         "gateVisible": true,
         "consentHidden": true
+      }
+    },
+    {
+      "name": "independent entry never opens the Nupa chat panel",
+      "pass": true,
+      "detail": {
+        "panelHidden": true,
+        "consentHidden": true,
+        "pill": true,
+        "ready": true
       }
     },
     {
