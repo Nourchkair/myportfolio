@@ -5,3 +5,4 @@
 .dev.vars.*
 *.log
 .DS_Store
+.private-beta-keys*

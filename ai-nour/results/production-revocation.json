@@ -1,0 +1,42 @@
+{
+  "generatedAt": "2026-11-27T04:01:14.235Z",
+  "base": "https://api.nourchkair.com",
+  "validationTesterId": "7e42957e-af9a-4453-b640-51bbd5f415be",
+  "primaryTesterId": "c12b3c7b-fd1b-41b4-a71f-f25fe6f8da7e",
+  "passed": 4,
+  "failed": 0,
+  "total": 4,
+  "results": [
+    {
+      "name": "temporary beta key revoked",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "testerStatus": "revoked"
+      }
+    },
+    {
+      "name": "revoked beta key is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "primary acceptance key still works",
+      "pass": true,
+      "detail": {
+        "status": 200
+      }
+    },
+    {
+      "name": "admin inventory reflects revocation",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "active": 1,
+        "revoked": 1
+      }
+    }
+  ]
+}

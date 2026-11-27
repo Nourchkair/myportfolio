@@ -1,0 +1,163 @@
+{
+  "generatedAt": "2026-11-27T03:59:55.356Z",
+  "base": "https://api.nourchkair.com",
+  "sessionId": "5c58d735-6ea1-455b-8b9a-87ee65ea0a75",
+  "passed": 16,
+  "failed": 0,
+  "total": 16,
+  "results": [
+    {
+      "name": "production health endpoint",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "service": "ai-nour-phase2-dev",
+        "version": "phase4-0.4.0",
+        "d1": true
+      }
+    },
+    {
+      "name": "missing beta key is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "invalid beta key is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "valid beta key is accepted",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "version": "phase4-0.4.0",
+        "flags": {
+          "assistant_enabled": true,
+          "text_enabled": true,
+          "live_enabled": true
+        }
+      }
+    },
+    {
+      "name": "authorized beta session is created",
+      "pass": true,
+      "detail": {
+        "status": 201
+      }
+    },
+    {
+      "name": "production admin bearer works",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "environment": "production",
+        "version": "phase4-0.4.0"
+      }
+    },
+    {
+      "name": "production beta access is required",
+      "pass": true,
+      "detail": {
+        "security": {
+          "betaAccessRequired": true,
+          "adminEnabled": true
+        }
+      }
+    },
+    {
+      "name": "spending caps are production values",
+      "pass": true,
+      "detail": {
+        "budget": {
+          "dailyUsdMicros": 34559,
+          "cumulativeUsdMicros": 34559,
+          "dailySpentUsdMicros": 34559,
+          "cumulativeSpentUsdMicros": 34559,
+          "heldLiveReservationsUsdMicros": 0,
+          "dailyCapUsdMicros": 1000000,
+          "cumulativeCapUsdMicros": 7000000,
+          "dailyRemainingUsdMicros": 965441,
+          "cumulativeRemainingUsdMicros": 6965441,
+          "allowed": true
+        }
+      }
+    },
+    {
+      "name": "Google integrations are configured",
+      "pass": true,
+      "detail": {
+        "google": {
+          "configured": true,
+          "spreadsheet": true,
+          "calendar": true,
+          "knowledgeFolder": true,
+          "backupFolder": true,
+          "allowSyntheticWrites": false
+        }
+      }
+    },
+    {
+      "name": "external writes remain disabled",
+      "pass": true,
+      "detail": {
+        "google_writes_enabled": false
+      }
+    },
+    {
+      "name": "Resend remains disabled",
+      "pass": true,
+      "detail": {
+        "email": {
+          "provider": "resend",
+          "sendEnabled": false,
+          "from": "AI Nour <appointments@mail.nourchkair.com>",
+          "webhookConfigured": false,
+          "internalNotifications": false
+        }
+      }
+    },
+    {
+      "name": "unauthenticated admin is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "invalid admin token is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "production CORS allows the portfolio origin",
+      "pass": true,
+      "detail": {
+        "status": 204,
+        "allowOrigin": "https://nourchkair.com"
+      }
+    },
+    {
+      "name": "production CORS rejects other origins",
+      "pass": true,
+      "detail": {
+        "status": 204,
+        "allowOrigin": null
+      }
+    },
+    {
+      "name": "beta tester inventory is admin-only",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "active": 2
+      }
+    }
+  ]
+}

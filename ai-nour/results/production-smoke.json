@@ -1,0 +1,77 @@
+{
+  "generatedAt": "2026-11-27T04:00:38.294Z",
+  "model": "gemini-3.8-live",
+  "checks": {
+    "session": true,
+    "textChat": true,
+    "textGrounded": true,
+    "textReply": "Safiy is a local-first AI workplace assistant that captures conversations, organizes professional knowledge, and provides contextual help. It bridges the gap between workplace discussions and business execution to make AI a seamless part of daily workflows.",
+    "toolNavigation": true,
+    "toolReply": "I have opened the Safiy project for you.",
+    "liveToken": true,
+    "liveConfigTools": true,
+    "liveSetup": true,
+    "liveAudio": true,
+    "liveToolCall": true,
+    "liveTranscript": true,
+    "liveTurnPersisted": true,
+    "sharedContext": true
+  },
+  "usage": {},
+  "costs": {
+    "textChatUsdMicros": 126,
+    "toolChatUsdMicros": 270,
+    "liveTurnUsdMicros": 250000
+  },
+  "live": {
+    "events": [
+      "open",
+      "setup",
+      "toolCall",
+      "turnComplete",
+      "output-transcript",
+      "output-transcript",
+      "turnComplete",
+      "close:1000"
+    ],
+    "transcript": "AI Nour: I've opened the Safiy \nAI Nour: project for you.",
+    "audioBytes": 107522,
+    "toolCalls": [
+      {
+        "name": "openProject",
+        "args": {
+          "projectId": "safiy"
+        }
+      }
+    ],
+    "usage": {
+      "promptTokenCount": 1430,
+      "responseTokenCount": 63,
+      "totalTokenCount": 1493,
+      "promptTokensDetails": [
+        {
+          "modality": "TEXT",
+          "tokenCount": 942
+        },
+        {
+          "modality": "AUDIO",
+          "tokenCount": 194
+        }
+      ],
+      "responseTokensDetails": [
+        {
+          "modality": "AUDIO",
+          "tokenCount": 63
+        }
+      ],
+      "thoughtsTokenCount": 54
+    }
+  },
+  "session": {
+    "id": "d2640d57-3f52-467c-93b0-dc7dce59cbaa",
+    "messages": 6,
+    "summary": false
+  },
+  "passed": 12,
+  "failed": 0
+}

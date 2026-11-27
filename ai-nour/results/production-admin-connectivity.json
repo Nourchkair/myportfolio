@@ -1,0 +1,82 @@
+{
+  "generatedAt": "2026-11-27T04:01:47.471Z",
+  "adminBase": "http://127.0.0.1:8791",
+  "worker": "https://api.nourchkair.com",
+  "passed": 9,
+  "failed": 0,
+  "total": 9,
+  "results": [
+    {
+      "name": "unauthenticated admin proxy is rejected",
+      "pass": true,
+      "detail": {
+        "status": 401
+      }
+    },
+    {
+      "name": "unauthenticated admin page starts sign-in",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "location": "/auth/google/start"
+      }
+    },
+    {
+      "name": "sign-in start redirects to Google",
+      "pass": true,
+      "detail": {
+        "status": 302,
+        "google": true
+      }
+    },
+    {
+      "name": "signed local admin session reaches production Worker",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "environment": "production",
+        "version": "phase4-0.4.0"
+      }
+    },
+    {
+      "name": "production admin sees beta access required",
+      "pass": true,
+      "detail": {
+        "security": {
+          "betaAccessRequired": true,
+          "adminEnabled": true
+        }
+      }
+    },
+    {
+      "name": "production admin sees zero external writes",
+      "pass": true,
+      "detail": {
+        "google_writes_enabled": false
+      }
+    },
+    {
+      "name": "production admin sees Resend disabled",
+      "pass": true,
+      "detail": {
+        "sendEnabled": false
+      }
+    },
+    {
+      "name": "signed admin page renders",
+      "pass": true,
+      "detail": {
+        "status": 200,
+        "hasBetaPanel": true
+      }
+    },
+    {
+      "name": "admin page denies framing and caching",
+      "pass": true,
+      "detail": {
+        "xfo": "DENY",
+        "cache": "no-store"
+      }
+    }
+  ]
+}

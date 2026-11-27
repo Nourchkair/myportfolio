@@ -12,7 +12,8 @@ const env = Object.fromEntries(fs.readFileSync(path.join(root, '.dev.vars'), 'ut
 }));
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 const owner = `real-smoke-${crypto.randomUUID()}`;
-const headers = { 'x-prototype-key': env.PROTOTYPE_ACCESS_KEY, 'x-owner-token': owner, 'content-type': 'application/json' };
+const betaKey = process.env.AINOUR_BETA_KEY || env.PROTOTYPE_ACCESS_KEY;
+const headers = { 'x-prototype-key': betaKey, 'x-owner-token': owner, 'content-type': 'application/json' };
 const results = { generatedAt: new Date().toISOString(), model: 'gemini-3.8-live', checks: {}, usage: {}, costs: {} };
 
 async function api(pathname, options = {}) {
@@ -141,6 +142,6 @@ results.session = { id: sessionId, messages: view.session.messages?.length || 0,
 results.passed = Object.values(results.checks).filter((value) => value === true).length;
 results.failed = Object.values(results.checks).filter((value) => value === false).length;
 fs.mkdirSync(path.join(root, 'results'), { recursive: true });
-fs.writeFileSync(path.join(root, 'results/real-smoke.json'), JSON.stringify(results, null, 2));
+fs.writeFileSync(path.join(root, process.env.SMOKE_RESULT_FILE || 'results/real-smoke.json'), JSON.stringify(results, null, 2));
 console.log(JSON.stringify(results, null, 2));
 if (results.failed) process.exitCode = 1;
