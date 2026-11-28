@@ -2116,6 +2116,7 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
         }
       }
     });
+    void sendTourPromptIfNeeded();
     const expiresAt = Date.parse(token.expiresAt);
     if (Number.isFinite(expiresAt)) {
       voice.expiryTimer = setTimeout(async () => {
@@ -2164,11 +2165,9 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
 }
 
 async function sendTourPromptIfNeeded() {
-  if (!voice.active || !voice.tourPrompt || voice.tourPromptSent) return;
+  if (!voice.active || !voice.tourPrompt || voice.tourPromptSent || !voice.session) return;
   voice.tourPromptSent = true;
-  if (voice.active && voice.session) {
-    voice.session.sendClientContent({ turns: voice.tourPrompt, turnComplete: true });
-  }
+  voice.session.sendClientContent({ turns: voice.tourPrompt, turnComplete: true });
 }
 
 async function stopVoice() {

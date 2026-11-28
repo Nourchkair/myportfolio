@@ -1,0 +1,59 @@
+{
+  "generatedAt": "2026-11-28T00:54:37.767Z",
+  "passed": 3,
+  "failed": 2,
+  "total": 5,
+  "checks": [
+    {
+      "name": "voice experience starts on the main view with chat closed",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "tourHidden": true,
+        "panelHidden": true,
+        "barVisible": false,
+        "projectOpen": false,
+        "voiceState": "listening",
+        "voiceError": "",
+        "assistant": [],
+        "consent": "2026-11-27-v1.4"
+      }
+    },
+    {
+      "name": "no automatic predefined presentation starts",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "tourHidden": true,
+        "panelHidden": true,
+        "barVisible": false,
+        "projectOpen": false,
+        "voiceState": "listening",
+        "voiceError": "",
+        "assistant": [],
+        "consent": "2026-11-27-v1.4"
+      }
+    },
+    {
+      "name": "Nupa introduces itself and asks one natural question",
+      "pass": false,
+      "detail": {
+        "intro": ""
+      }
+    },
+    {
+      "name": "Nupa mentions interruption, independent navigation or stopping",
+      "pass": false,
+      "detail": {
+        "intro": ""
+      }
+    },
+    {
+      "name": "no console errors in the dynamic voice-tour entry",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}
