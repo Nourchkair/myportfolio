@@ -129,7 +129,7 @@ Migrations: `0001_init.sql`, `0002_phase2.sql`, `0003_crm_idempotency.sql`, `000
 - `budget()` includes spent cost events + held text reservations + held Live reservations.
 - Text requests atomically insert a `spend_reservations` hold; Live token issuance atomically inserts a `live_tokens` hold with cap/concurrency predicates.
 - Reported Live turns are charged at actual token-estimated usage, capped by the reservation remainder. `POST /api/live/end` releases the hold; a no-usage end or an expired unreported hold settles conservatively.
-- Defaults: $1/day, $7 cumulative (~$9.95 CAD), 300-second sessions, $0.125 reservation at 300s, 600-second maximum, 12 Live tokens/day.
+- Defaults: $3/day, $7 cumulative, 300-second sessions, $0.125 reservation at 300s, 600-second maximum. The daily Live-token count is temporarily **0 = unlimited** for testing; the spending caps and per-window rate limits remain in force.
 
 ## Phase 4 follow-ups
 

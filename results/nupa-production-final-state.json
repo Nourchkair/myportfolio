@@ -12,7 +12,7 @@
     "time": "2026-11-27T16:04:07.741Z"
   },
   "worker": {
-    "version": "29667f8f-6d37-491c-b8ba-fbc9f9496040",
+    "version": "c9870564-3991-4015-a927-4b9f3bb0d7c5",
     "environment": "production"
   },
   "pages": {
@@ -102,6 +102,7 @@
     "opening": "natural short introduction",
     "prompt": "structured compact Live prompt",
     "pipeline": "AudioWorklet + adaptive playback",
-    "evidence": "results/nupa-voice-production-validation.json"
+    "evidence": "results/nupa-voice-production-validation.json",
+    "dailyLiveTokenLimit": "temporarily unlimited (0)"
   }
 }

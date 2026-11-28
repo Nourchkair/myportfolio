@@ -277,7 +277,7 @@ export async function handleLiveToken({
 
   const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
   const tokensToday = await db.countLiveTokensSince(dayStart);
-  if (tokensToday >= config.limits.maxLiveTokensPerDay) {
+  if (config.limits.maxLiveTokensPerDay > 0 && tokensToday >= config.limits.maxLiveTokensPerDay) {
     throw liveSessionLimit('The daily voice session limit has been reached. Try again after the daily reset.', dayStart + 86_400_000);
   }
 
