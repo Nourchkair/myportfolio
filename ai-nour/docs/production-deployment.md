@@ -18,7 +18,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 
 - Nupa is publicly available in beta to visitors aged 18 and older.
 - No account or beta key is required.
-- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” then shows a separate microphone-consent panel and starts a live spoken experience on the main portfolio view; the chat panel is not opened. Nupa introduces itself, asks one natural question, then dynamically chooses what to present. “Use text chat instead” opens chat.
+- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” then shows a separate microphone-consent panel and starts a live spoken experience on the main portfolio view; the chat panel is not opened. Nupa introduces itself, asks one natural question, then dynamically chooses what to present. No navigation, project opening or presentation action is applied until the visitor has spoken. The top-nav About button now returns to the home section instead of opening the About/Me panel. “Use text chat instead” opens chat.
 - Legacy beta keys and tester records remain in D1 for historical/admin purposes only; they are no longer checked for access.
 - Anonymous owner credentials are server-issued; per-visitor and global API/chat/Live/tool limits, concurrent voice leases, spending caps, tool allowlists and the admin bearer-token boundary remain in force.
 - Cloudflare Free edge rate limiting is active: rule **Nupa API edge rate limit**, hostname `api.nourchkair.com`, path starts with `/api/`, excluding `/api/health`; **30 requests per 10 seconds per IP**, action **Block** for 10 seconds. Cloudflare Free provides one rate limiting rule; managed WAF rules are a paid-plan feature, so application validation and the free rule provide the edge layer.
@@ -226,7 +226,7 @@ npm run deploy
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
-| Nupa legal validator (v1.4 paid/public) | 74/74 | `npm run validate:legal` |
+| Nupa legal validator (v1.4 paid/public) | 76/76 | `npm run validate:legal` |
 | Public-beta controls (local public Worker) | 23/23 | `results/public-controls-tests.json` |
 | Unit tests | 75/75 | `npm test` |
 | Paid-tier production text | passed | `results/paid-tier-text.json` (if retained) |

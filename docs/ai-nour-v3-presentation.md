@@ -22,7 +22,7 @@ Status: **deployed publicly on 27 November 2026.** Worker `00fb071e-77f7-4192-a4
 The opening greeting now offers two optional paths without blocking entry:
 
 - **Explore independently** — immediately completes the intro and leaves the portfolio in its normal state.
-- **Explore with Nupa** — available on the public portfolio; on first use it shows the short “Meet Nupa.” / “Let’s explore” consent panel, then a separate microphone-consent panel. “Allow microphone and start” begins a live, conversational experience on the main portfolio view without opening the chat panel. Nupa introduces itself, asks one natural question, then dynamically chooses what to present based on the response. “Use text chat instead” opens chat. No beta key is required.
+- **Explore with Nupa** — available on the public portfolio; on first use it shows the short “Meet Nupa.” / “Let’s explore” consent panel, then a separate microphone-consent panel. “Allow microphone and start” begins a live, conversational experience on the main portfolio view without opening the chat panel. Nupa introduces itself, asks one natural question, then dynamically chooses what to present based on the response. No project or presentation action is applied before the visitor speaks. “Use text chat instead” opens chat. No beta key is required.
 
 If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. The first Nupa choice shows a concise paid-processing/retention/admin disclosure with inline Terms and Privacy links and no checkbox. “Let’s explore” records consent; microphone consent remains separate and appears only when voice is activated.
 
@@ -114,7 +114,7 @@ Local regression:
 - Admin auth: **16/16**
 - Live budget/duration: **9/9**
 - Portfolio validation: **261**
-- Legal validator: **74/74**
+- Legal validator: **76/76**
 
 Nupa opening experience (`results/nupa-v3-opening-browser.json`): **22/22** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, public Nupa path, centered “Meet Nupa.” consent panel outside the chat with blurred portfolio background, “Let’s explore” action, no checkbox, paid-Gemini/retention/admin disclosure, legal links, a separate bilingual microphone-consent panel, voice-tour entry on the main view without opening chat, no automatic predefined tour, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
 

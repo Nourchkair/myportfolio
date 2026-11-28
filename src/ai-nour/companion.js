@@ -1445,7 +1445,7 @@ async function startVoiceTour() {
   els.tourError.textContent = '';
   sessionStorage.setItem(MIC_CONSENT_STORE, '1');
   hideTourPanel();
-  window.NourOS?.navigateTo?.('home');
+  try { await window.NourOS?.navigateTo?.('home'); } catch {}
   const started = await startVoice({ openPanel: false, skipMicConsent: true, tour: true });
   if (started) return;
   showTourPanel();
@@ -1952,6 +1952,8 @@ async function persistVoiceTurn() {
   voice.assistantText = '';
   voice.tourPrompt = '';
   voice.tourPromptSent = false;
+  voice.tourActive = false;
+  voice.tourVisitorSpoke = false;
 }
 
 function pausePresentationForVoiceEnd() {
@@ -1970,22 +1972,24 @@ async function handleLiveTool(toolCall) {
         method: 'POST',
         body: JSON.stringify({ sessionId: state.sessionId, name: call.name, args: call.args || {}, portfolioContext: portfolioContext() })
       });
-      const applied = result.ok
-        ? await runActions(result.actions || (result.action ? [result.action] : []))
-        : null;
-      const routes = (result.actions || (result.action ? [result.action] : [])).filter(Boolean).map((item) => item.route).filter(Boolean);
+      const actions = result.ok ? result.actions || (result.action ? [result.action] : []) : [];
+      const gated = voice.tourActive && !voice.tourVisitorSpoke && actions.length > 0;
+      const applied = result.ok && !gated ? await runActions(actions) : null;
+      const routes = actions.filter(Boolean).map((item) => item.route).filter(Boolean);
       const visualFailure = applied && applied.ok === false;
       responses.push({
         id: call.id,
         name: call.name,
-        response: result.ok && !visualFailure
-          ? {
-              ...(result.modelResponse || { ok: true }),
-              ok: true,
-              ...(routes.length ? { confirmed: applied?.ok === true, routes } : {}),
-              ...(applied?.applied?.length ? { visualApplied: true } : {})
-            }
-          : { ok: false, error: visualFailure ? 'VISUAL_ACTION_FAILED' : result.error?.code }
+        response: gated
+          ? { ok: false, error: 'WAIT_FOR_VISITOR_INTENT' }
+          : result.ok && !visualFailure
+            ? {
+                ...(result.modelResponse || { ok: true }),
+                ok: true,
+                ...(routes.length ? { confirmed: applied?.ok === true, routes } : {}),
+                ...(applied?.applied?.length ? { visualApplied: true } : {})
+              }
+            : { ok: false, error: visualFailure ? 'VISUAL_ACTION_FAILED' : result.error?.code }
       });
     } catch {
       responses.push({ id: call.id, name: call.name, response: { ok: false, error: 'TOOL_FAILED' } });
@@ -2034,6 +2038,8 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
   voice.userDraftId = null;
   voice.assistantDraftId = null;
   voice.tourPromptSent = false;
+  voice.tourActive = tour;
+  voice.tourVisitorSpoke = false;
   voice.tourPrompt = tour
     ? (state.locale === 'fr'
       ? "Tu commences une expérience de portfolio en direct avec un visiteur. Présente-toi brièvement comme Nupa, dans ta propre voix, et explique en une ou deux phrases qu’il s’agit d’une expérience interactive et personnalisée. Mentionne naturellement que le visiteur peut t’interrompre, poser des questions, naviguer seul ou arrêter à tout moment. Pose ensuite une seule question ouverte et naturelle pour découvrir ce qui l’amène au portfolio ou ce qu’il souhaite explorer. N’utilise pas de questionnaire, ne pose pas une liste de questions et ne commence pas encore à naviguer ni à présenter. Attends sa réponse. Après sa réponse, choisis la direction de présentation la plus pertinente à partir des connaissances disponibles sur le portfolio, puis commence à naviguer, à mettre en évidence et à présenter le contenu pertinent. Adapte la présentation au fil de la conversation. N’utilise pas de visites prédéfinies ni de scénarios rigides par catégorie de visiteur. S’il n’a pas d’objectif précis, lance avec assurance une vue d’ensemble générale du portfolio."
@@ -2076,6 +2082,7 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
             setState('listening');
           }
           if (message.serverContent?.inputTranscription?.text) {
+            voice.tourVisitorSpoke = true;
             voice.userText += message.serverContent.inputTranscription.text;
             appendVoiceTranscript('user', message.serverContent.inputTranscription.text);
           }
@@ -2187,6 +2194,8 @@ async function stopVoice() {
   voice.assistantText = '';
   voice.tourPrompt = '';
   voice.tourPromptSent = false;
+  voice.tourActive = false;
+  voice.tourVisitorSpoke = false;
   if (state.sessionId) {
     void api('/api/live/end', {
       method: 'POST',

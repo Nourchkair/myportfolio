@@ -2134,14 +2134,14 @@ schedulePrewarm(PROJECT_CARDS[0].id);
 $('readViewBtn').addEventListener('click',()=>{location.href='read.html';});
 
 $('brandHome').addEventListener('click',goHome);
-$('NavMe').addEventListener('click',()=>goMe());
+$('NavMe').addEventListener('click',()=>goHome());
 $('NavProjects').addEventListener('click',goProjects);
 $('NavContact').addEventListener('click',goContact);
-$('projectNavMe').addEventListener('click',()=>goMe());
+$('projectNavMe').addEventListener('click',()=>goHome());
 $('projectNavProjects').addEventListener('click',goProjects);
 $('projectNavContact').addEventListener('click',goContact);
 $('aboutBack').addEventListener('click',()=>closeAbout());
-$('aboutNavMe').addEventListener('click',()=>goMe());
+$('aboutNavMe').addEventListener('click',()=>goHome());
 $('aboutNavProjects').addEventListener('click',goProjects);
 $('aboutNavContact').addEventListener('click',goContact);
 $('deckPrev').addEventListener('click',()=>navCard(-1));
