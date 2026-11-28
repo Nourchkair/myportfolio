@@ -28,7 +28,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `c9870564-3991-4015-a927-4b9f3bb0d7c5` (v1.4 public beta, $3 daily cap, Sadachbia + voice refinement, temporary unlimited daily Live tokens) |
+| Worker version | `7258a8c9-480f-4028-9d67-b0e6ad503719` (v1.4 public beta, $3 daily cap, Sadachbia + voice refinement, temporary testing limits) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -64,7 +64,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.4` before reading, chat, Live voice or tools. Enforcement applies in public mode, not only when a beta key is required.
-- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$3.00**; the cumulative cap is **$7.00**. Sadachbia is the deployed voice. The daily Live-token count is temporarily **0 = unlimited** for testing; the $3/$7 spending caps and per-window rate limits remain enforced. Admin can restore up to 600 seconds.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$3.00**; the cumulative cap is **$7.00**. Sadachbia is the deployed voice. For testing, the daily Live-token count and Live rate limits are **0 = unlimited**, and concurrent/owner session limits are **20**. The $3/$7 spending caps remain enforced. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 
@@ -150,8 +150,10 @@ These are internal token-based estimates, not confirmed Google invoices. The Gem
 ### Temporary testing mode (28 November 2026)
 
 - `MAX_LIVE_TOKENS_PER_DAY=0` means unlimited daily Live sessions.
-- The $3 daily / $7 cumulative spending caps and Live rate limits remain active.
-- Re-enable a finite count after testing.
+- `LIVE_RATE_LIMIT=0` and `GLOBAL_LIVE_RATE_LIMIT=0` mean unlimited Live attempts.
+- `MAX_CONCURRENT_LIVE_SESSIONS=20` and `MAX_LIVE_SESSIONS_PER_OWNER=20` reduce cooldown blocking for testing.
+- The $3 daily / $7 cumulative spending caps remain active.
+- Re-enable finite counts after testing.
 
 ### Voice refinement implementation (deployed)
 
@@ -177,7 +179,8 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `c9870564-3991-4015-a927-4b9f3bb0d7c5` (temporary unlimited daily Live tokens)
+- Current Worker version: `7258a8c9-480f-4028-9d67-b0e6ad503719` (temporary testing limits)
+- Previous Worker: `c9870564-3991-4015-a927-4b9f3bb0d7c5` (temporary unlimited daily Live tokens)
 - Previous Worker: `29667f8f-6d37-491c-b8ba-fbc9f9496040` (Sadachbia + voice refinement)
 - Previous Worker: `00fb071e-77f7-4192-a46e-d09b9fd796fe` (Iapetus, voice-tour onboarding)
 - Previous Nupa Worker: `f5e81237-f8e1-41a1-9b7b-151225d05381` (live public access, $3 daily cap)

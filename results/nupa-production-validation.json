@@ -3,7 +3,7 @@
   "status": "Nupa V3 private beta deployed with voice refinement",
   "sourceCommit": "ba12362",
   "worker": {
-    "version": "c9870564-3991-4015-a927-4b9f3bb0d7c5",
+    "version": "7258a8c9-480f-4028-9d67-b0e6ad503719",
     "url": "https://api.nourchkair.com",
     "health": "ok",
     "d1": true

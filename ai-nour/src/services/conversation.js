@@ -260,20 +260,24 @@ export async function handleLiveToken({
   body,
   now
 }) {
-  const rate = await db.checkRateLimit({
-    bucket: `live:${clientHash}`,
-    limit: config.limits.liveRateLimit,
-    windowMs: config.limits.rateLimitWindowMs,
-    now
-  });
-  if (!rate.allowed) throw tooMany('Too many Live sessions. Please wait before trying again.');
-  const globalRate = await db.checkRateLimit({
-    bucket: 'live:global',
-    limit: config.limits.globalLiveRateLimit,
-    windowMs: config.limits.rateLimitWindowMs,
-    now
-  });
-  if (!globalRate.allowed) throw tooMany('Nupa voice is receiving too many requests right now. Please try again shortly.');
+  if (config.limits.liveRateLimit > 0) {
+    const rate = await db.checkRateLimit({
+      bucket: `live:${clientHash}`,
+      limit: config.limits.liveRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now
+    });
+    if (!rate.allowed) throw tooMany('Too many Live sessions. Please wait before trying again.');
+  }
+  if (config.limits.globalLiveRateLimit > 0) {
+    const globalRate = await db.checkRateLimit({
+      bucket: 'live:global',
+      limit: config.limits.globalLiveRateLimit,
+      windowMs: config.limits.rateLimitWindowMs,
+      now
+    });
+    if (!globalRate.allowed) throw tooMany('Nupa voice is receiving too many requests right now. Please try again shortly.');
+  }
 
   const dayStart = Math.floor(now / 86_400_000) * 86_400_000;
   const tokensToday = await db.countLiveTokensSince(dayStart);
