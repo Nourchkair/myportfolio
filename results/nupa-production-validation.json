@@ -1,17 +1,17 @@
 {
-  "generatedAt": "2026-11-27T21:02:00Z",
+  "generatedAt": "2026-11-28T00:42:00Z",
   "status": "Nupa V3 private beta deployed",
-  "sourceCommit": "c7406a7",
+  "sourceCommit": "ebd174f",
   "worker": {
-    "version": "78ea8cea-d0b3-4a6e-a523-29d0f386806c",
+    "version": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
     "url": "https://api.nourchkair.com",
     "health": "ok",
     "d1": true
   },
   "pages": {
-    "deploymentId": "b1e253eb-2490-4c14-90f6-b14dfb07fa7f",
+    "deploymentId": "b0065dbd-6f52-4b8f-86bc-e5fa49ead239",
     "url": "https://nourchkair.com",
-    "preview": "https://b1e253eb.nourchkair.pages.dev"
+    "preview": "https://b0065dbd.nourchkair.pages.dev"
   },
   "legal": {
     "privacyVersion": "1.4",
@@ -48,10 +48,10 @@
     ]
   },
   "budget": {
-    "dailyUsdMicros": 1695858,
-    "cumulativeUsdMicros": 2592721,
-    "dailyRemainingUsdMicros": 0,
-    "dailyCapUsdMicros": 1000000,
+    "dailyUsdMicros": 131611,
+    "cumulativeUsdMicros": 2724332,
+    "dailyRemainingUsdMicros": 2868389,
+    "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000
   },
   "checks": {
@@ -140,6 +140,20 @@
       "passed": 4,
       "failed": 0,
       "evidence": "results/live-token-restrictions.json"
+    },
+    "productionOpening": {
+      "passed": 5,
+      "failed": 0,
+      "evidence": "results/nupa-production-opening.json"
+    },
+    "productionVoiceTour": {
+      "passed": 5,
+      "failed": 0,
+      "evidence": "results/nupa-production-voice-tour.json"
+    },
+    "productionBudget": {
+      "passed": true,
+      "evidence": "results/nupa-production-budget.json"
     }
   },
   "notRun": [

@@ -186,7 +186,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 10. Nupa identity and public access (version 1.3)
 
-**Status:** v1.4 deployed publicly on 27 November 2026. Legal version 1.4 and consent `2026-11-27-v1.4` are live, public access requires no beta key, and the production persona is Nupa. Worker `78ea8cea-d0b3-4a6e-a523-29d0f386806c`; Pages `b1e253eb-2490-4c14-90f6-b14dfb07fa7f`.
+**Status:** v1.4 deployed publicly on 27 November 2026. Legal version 1.4 and consent `2026-11-27-v1.4` are live, public access requires no beta key, and the production persona is Nupa. Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe`; Pages `b0065dbd-6f52-4b8f-86bc-e5fa49ead239`.
 
 **Public-access approval:** Nour approved removing the beta-key gate and enabling public Nupa access on 27 November 2026.
 
@@ -205,7 +205,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 - **Paid processing:** Privacy Policy and Terms now describe paid Gemini API processing, Google’s Data Processing Addendum, no product-improvement use under those terms, limited abuse/security/legal logging, and no zero-retention promise.
 - **No retroactive claim:** both language versions state that earlier unpaid conversations are not retroactively covered by paid-tier protections.
-- **Simplified onboarding:** “Meet Nupa.”, a one-sentence portfolio introduction, a concise paid-processing/retention/admin disclosure, inline Terms/Privacy links, one “Let’s explore” action and no checkbox. “Explore with Nupa” shows a separate microphone-consent panel, then starts a live spoken portfolio tour without opening the chat panel; “Use text chat instead” opens chat.
+- **Simplified onboarding:** “Meet Nupa.”, a one-sentence portfolio introduction, a concise paid-processing/retention/admin disclosure, inline Terms/Privacy links, one “Let’s explore” action and no checkbox. “Explore with Nupa” shows a separate microphone-consent panel, then starts a live spoken portfolio tour and opens Customer Acquisition directly in presentation mode without opening the chat panel; “Use text chat instead” opens chat.
 - **Server-side consent:** public sessions, existing sessions, chat, Live voice and tools enforce `2026-11-27-v1.4`; accepted timestamps and policy versions remain recorded.
 - **Server-issued ownership:** `POST /api/owner` issues a random 256-bit owner credential. The browser stores it; D1 stores only its SHA-256 hash. Cross-owner session access returns 404.
 - **Removed web research:** no `webResearch` tool, Google Search grounding, `WEB_RESEARCH_ENABLED` flag, research route cost, provider method, admin control, dependency or prompt path remains. Text and voice cannot initiate external search.

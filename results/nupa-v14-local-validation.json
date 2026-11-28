@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-11-27T20:05:00Z",
-  "status": "deployed and validated in production",
+  "status": "deployed and validated in production (voice-tour update)",
   "release": {
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
@@ -13,22 +13,13 @@
     "liveModel": "gemini-3.8-live"
   },
   "production": {
-    "worker": "78ea8cea-d0b3-4a6e-a523-29d0f386806c",
-    "pages": "b1e253eb-2490-4c14-90f6-b14dfb07fa7f",
-    "source": "c7406a7",
+    "worker": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
+    "pages": "b0065dbd-6f52-4b8f-86bc-e5fa49ead239",
+    "source": "ebd174f",
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
-    "dailyCapUsdMicros": 1000000,
-    "note": "AI paused until UTC daily reset because current internal daily estimate exceeds the $1 cap.",
-    "budgetAtReport": {
-      "dailyUsdMicros": 1695858,
-      "cumulativeUsdMicros": 2592721,
-      "dailyCapUsdMicros": 1000000,
-      "cumulativeCapUsdMicros": 7000000,
-      "dailyRemainingUsdMicros": 0,
-      "cumulativeRemainingUsdMicros": 4407279,
-      "allowed": false
-    }
+    "dailyCapUsdMicros": 3000000,
+    "note": "AI available; current daily internal estimate $0.131611, cumulative $2.724332."
   },
   "paidTier": {
     "reportedByUser": {
@@ -93,7 +84,7 @@
       "evidence": "ai-nour/results/public-controls-tests.json"
     },
     "openingBrowser": {
-      "passed": 21,
+      "passed": 22,
       "failed": 0,
       "evidence": "results/nupa-v3-opening-browser.json"
     },
@@ -138,6 +129,14 @@
     "cloudflareEdgeRateLimit": {
       "passed": 30,
       "blocked": 10
+    },
+    "productionOpening": {
+      "passed": 5,
+      "failed": 0
+    },
+    "productionVoiceTour": {
+      "passed": 5,
+      "failed": 0
     }
   },
   "notRun": [

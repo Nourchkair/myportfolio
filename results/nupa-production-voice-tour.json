@@ -1,0 +1,56 @@
+{
+  "generatedAt": "2026-11-28T00:40:26.885Z",
+  "passed": 5,
+  "failed": 0,
+  "total": 5,
+  "checks": [
+    {
+      "name": "production voice-tour panel appears after consent",
+      "pass": true,
+      "detail": {
+        "title": "Explore with Nupa.",
+        "start": "Allow microphone and start",
+        "copy": "Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.",
+        "panelHidden": true
+      }
+    },
+    {
+      "name": "Allow microphone starts a live tour and presentation mode without chat",
+      "pass": true,
+      "detail": {
+        "tourHidden": true,
+        "panelHidden": true,
+        "hash": "#/projects/acquisition/flow",
+        "barVisible": true,
+        "barText": "NUPA\nCustomer Acquisition\n5 / 9\n\u2039\nPause\n\u203a\nEnd",
+        "voiceState": "listening",
+        "voiceError": "",
+        "consent": "2026-11-27-v1.4",
+        "messages": []
+      }
+    },
+    {
+      "name": "presentation bar shows the Customer Acquisition flow",
+      "pass": true,
+      "detail": {
+        "barText": "NUPA\nCustomer Acquisition\n5 / 9\n\u2039\nPause\n\u203a\nEnd"
+      }
+    },
+    {
+      "name": "stopping voice leaves the presentation state recoverable",
+      "pass": true,
+      "detail": {
+        "barVisible": true,
+        "voiceState": "idle",
+        "panelHidden": true
+      }
+    },
+    {
+      "name": "no console errors in the production voice-tour flow",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

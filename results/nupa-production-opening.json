@@ -1,0 +1,62 @@
+{
+  "generatedAt": "2026-11-28T00:41:17.505Z",
+  "passed": 5,
+  "failed": 0,
+  "total": 5,
+  "checks": [
+    {
+      "name": "independent portfolio browsing works",
+      "pass": true,
+      "detail": {
+        "ready": true,
+        "panelHidden": true,
+        "consentHidden": true,
+        "tourHidden": true
+      }
+    },
+    {
+      "name": "Meet Nupa consent panel is short and has no checkbox",
+      "pass": true,
+      "detail": {
+        "title": "Meet Nupa.",
+        "button": "Let\u2019s explore",
+        "checkbox": 0,
+        "panelHidden": true
+      }
+    },
+    {
+      "name": "voice-tour microphone panel follows consent",
+      "pass": true,
+      "detail": {
+        "title": "Explore with Nupa.",
+        "start": "Allow microphone and start",
+        "text": "Use text chat instead",
+        "copy": "Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.",
+        "panelHidden": true,
+        "consentHidden": true,
+        "links": [
+          "/privacy/",
+          "/terms/"
+        ]
+      }
+    },
+    {
+      "name": "Use text chat opens the companion and records v1.4 consent",
+      "pass": true,
+      "detail": {
+        "panelHidden": false,
+        "tourHidden": true,
+        "consentHidden": true,
+        "bodyVisible": true,
+        "version": "2026-11-27-v1.4"
+      }
+    },
+    {
+      "name": "production opening flow has no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

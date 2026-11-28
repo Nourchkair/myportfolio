@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T21:02:00Z",
+  "generatedAt": "2026-11-28T00:42:00Z",
   "health": {
     "status": 200,
     "ok": true,
@@ -12,12 +12,12 @@
     "time": "2026-11-27T16:04:07.741Z"
   },
   "worker": {
-    "version": "78ea8cea-d0b3-4a6e-a523-29d0f386806c",
+    "version": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
     "environment": "production"
   },
   "pages": {
-    "deploymentId": "b1e253eb-2490-4c14-90f6-b14dfb07fa7f",
-    "source": "c7406a7"
+    "deploymentId": "b0065dbd-6f52-4b8f-86bc-e5fa49ead239",
+    "source": "ebd174f"
   },
   "flags": {
     "assistant_enabled": true,
@@ -39,17 +39,17 @@
     "maxLiveSessionSeconds": 600
   },
   "budget": {
-    "dailyUsdMicros": 1695858,
-    "cumulativeUsdMicros": 2592721,
-    "dailySpentUsdMicros": 1695858,
-    "cumulativeSpentUsdMicros": 2592721,
+    "dailyUsdMicros": 131611,
+    "cumulativeUsdMicros": 2724332,
+    "dailySpentUsdMicros": 131611,
+    "cumulativeSpentUsdMicros": 2724332,
     "heldLiveReservationsUsdMicros": 0,
     "heldSpendReservationsUsdMicros": 0,
-    "dailyCapUsdMicros": 1000000,
+    "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 0,
-    "cumulativeRemainingUsdMicros": 4407279,
-    "allowed": false
+    "dailyRemainingUsdMicros": 2868389,
+    "cumulativeRemainingUsdMicros": 4275668,
+    "allowed": true
   },
   "persona": {
     "length": 3986,
@@ -84,5 +84,11 @@
     "limit": "30/10s/IP",
     "action": "Block 10s",
     "active": true
+  },
+  "voiceTour": {
+    "panel": true,
+    "liveTour": true,
+    "presentationStart": true,
+    "evidence": "results/nupa-production-voice-tour.json"
   }
 }

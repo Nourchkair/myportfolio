@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T20:59:13.201Z",
+  "generatedAt": "2026-11-28T00:41:30.548Z",
   "base": "https://api.nourchkair.com",
   "passed": 7,
   "failed": 0,
@@ -26,21 +26,26 @@
       "pass": true
     },
     {
-      "name": "exhausted daily cap blocks AI without breaking session access",
+      "name": "paid text works and cap is $3",
       "pass": true
     },
     {
-      "name": "unauthenticated admin rejected",
+      "name": "cumulative cap is $7",
       "pass": true
     }
   ],
-  "consentVersion": "2026-11-27-v1.4",
-  "chatError": {
-    "code": "BUDGET_EXCEEDED",
-    "message": "The remaining daily Nupa allowance is not enough for another request",
-    "details": {
-      "scope": "daily",
-      "resetsAt": 1795824000000
-    }
+  "budget": {
+    "dailyUsdMicros": 131611,
+    "cumulativeUsdMicros": 2724332,
+    "dailySpentUsdMicros": 131611,
+    "cumulativeSpentUsdMicros": 2724332,
+    "heldLiveReservationsUsdMicros": 0,
+    "heldSpendReservationsUsdMicros": 0,
+    "heldReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 2868389,
+    "cumulativeRemainingUsdMicros": 4275668,
+    "allowed": true
   }
 }

@@ -1,0 +1,20 @@
+{
+  "generatedAt": "2026-11-28T00:40:40.711Z",
+  "session": 201,
+  "chat": 200,
+  "reply": "budget-check",
+  "budget": {
+    "dailyUsdMicros": 129416,
+    "cumulativeUsdMicros": 2722137,
+    "dailySpentUsdMicros": 129416,
+    "cumulativeSpentUsdMicros": 2722137,
+    "heldLiveReservationsUsdMicros": 0,
+    "heldSpendReservationsUsdMicros": 0,
+    "heldReservationsUsdMicros": 0,
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "dailyRemainingUsdMicros": 2870584,
+    "cumulativeRemainingUsdMicros": 4277863,
+    "allowed": true
+  }
+}
