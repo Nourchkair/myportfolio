@@ -1,0 +1,75 @@
+{
+  "generatedAt": "2026-11-28T07:30:08.624210+00:00",
+  "status": "deployed and validated in production",
+  "sourceCommit": "ba12362",
+  "worker": {
+    "version": "29667f8f-6d37-491c-b8ba-fbc9f9496040",
+    "url": "https://api.nourchkair.com",
+    "health": "ok"
+  },
+  "pages": {
+    "deploymentId": "14a38369-7926-41a4-a966-67d80af1f14b",
+    "url": "https://nourchkair.com",
+    "preview": "https://14a38369.nourchkair.pages.dev"
+  },
+  "config": {
+    "model": "gemini-3.8-live",
+    "voice": "Sadachbia",
+    "prompt": "structured compact Live prompt",
+    "audioPipeline": "AudioWorklet anti-alias resampler + adaptive playback + gain ramps",
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000
+  },
+  "apiMeta": {
+    "version": "phase4-0.4.0",
+    "live": "gemini-3.8-live",
+    "voice": "Sadachbia",
+    "flags": {
+      "assistant_enabled": true,
+      "text_enabled": true,
+      "live_enabled": true
+    }
+  },
+  "productionVoiceCheck": {
+    "environment": "https://nourchkair.com, public mode",
+    "microphone": "fake MediaStreamDestination",
+    "voiceState": "listening",
+    "assistantTranscript": "I\u2019m Nupa, Nour\u2019s Unique Portfolio Assistant. What brought you to check out his work today?",
+    "consoleErrors": [],
+    "naturalOpening": true,
+    "capabilityRecital": false
+  },
+  "workletCheck": {
+    "ok": true,
+    "contextSampleRate": 48000,
+    "module": "/src/ai-nour/audio-worklet.js?v=1"
+  },
+  "budget": {
+    "dailyUsdMicros": 1390509,
+    "cumulativeUsdMicros": 3983230,
+    "dailyRemainingUsdMicros": 1609491,
+    "cumulativeRemainingUsdMicros": 3016770,
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000,
+    "heldLiveReservationsUsdMicros": 0,
+    "allowed": true
+  },
+  "notChanged": [
+    "No Gemini 2.5 Native Audio switch",
+    "No budget increase",
+    "No new provider",
+    "No database migration"
+  ],
+  "remainingChecks": [
+    "Subjective listening",
+    "iPhone Safari",
+    "Android Chrome",
+    "Bluetooth headset",
+    "longer conversations and presentation synchronization"
+  ],
+  "evidence": [
+    "results/nupa-production-budget.json",
+    "results/nupa-voice-local-e2e.json",
+    "results/nupa-voice-local-interruption.json"
+  ]
+}

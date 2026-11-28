@@ -175,7 +175,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 - [x] Google/Gemini/Cloudflare/Resend wording and the no-sale/no-own-model-training statements.
 - [x] Ontario/Canada governing law and consumer-rights carve-out.
 - [x] English and French texts.
-- [x] Five-minute Live sessions with the $3 daily and $7 cumulative caps; Sadachbia configured in source (production remains Iapetus until approved deployment); admin can restore up to 10 minutes.
+- [x] Five-minute Live sessions with the $3 daily and $7 cumulative caps; Sadachbia deployed and verified; admin can restore up to 10 minutes.
 - [x] Voice error distinction and local-time daily reset message.
 - [x] Publish `/privacy/` and `/terms/`, verify both URLs, language sections and links.
 - [ ] Add the published URLs to the Google OAuth Console and complete verification/publishing; this remains the next manual action.

@@ -101,9 +101,9 @@ code{font-size:11px;color:#c7d4e2;background:#0d1319;border:1px solid var(--line
 <div class="wrap">
   <div class="eyebrow">Nupa · voice refinement · 28 Nov 2026</div>
   <h1>Listen to the four configurations.</h1>
-  <p class="lede">Source configuration is now <b>gemini-3.8-live + Sadachbia</b>, with a shorter natural opening, a structured Live prompt and a new audio pipeline. Nothing is deployed. Production remains Iapetus until approval.</p>
+  <p class="lede">Deployed on 28 November 2026: <b>gemini-3.8-live + Sadachbia</b>, with a shorter natural opening, a structured Live prompt and a new audio pipeline. Production validation passed with a natural intro and no console errors.</p>
 
-  <div class="note"><b>How to compare:</b> A is the current production shape. B changes the voice and opening only. C adds the optimized prompt. D is the C audio rendered through the new playback scheduling. English and French clips use the same scenario within each configuration. Acoustic metrics are shown separately from the subjective scorecard at the bottom.</div>
+  <div class="note"><b>How to compare:</b> A is the previous production shape. B changes the voice and opening only. C adds the optimized prompt. D is the C audio rendered through the new playback scheduling. English and French clips use the same scenario within each configuration. Acoustic metrics are shown separately from the subjective scorecard at the bottom.</div>
 
   <div class="grid">__CARDS__</div>
 
@@ -134,7 +134,7 @@ code{font-size:11px;color:#c7d4e2;background:#0d1319;border:1px solid var(--line
 
   <div class="note"><b>Preliminary read:</b> A still recites the interactive-experience disclaimer and runs long. B/C remove it and cut the opening roughly in half. C is the shortest and most consistent, with roughly half the prompt tokens of A. D preserves the C prosody and is the pipeline check; it adds 60 ms of lead and 8 ms fades by design. The subjective question is whether C/D sound warmer and more alive than A in the room, not just more dynamic on paper.</div>
 
-  <div class="footer">Generated from <code>results/nupa-voice-refinement.json</code> and <code>results/audio-samples/analysis.json</code>. WAVs are local and intentionally untracked. No production deployment. No credentials embedded.</div>
+  <div class="footer">Generated from <code>results/nupa-voice-refinement.json</code> and <code>results/audio-samples/analysis.json</code>. WAVs are local and intentionally untracked. Deployed 28 November 2026. No credentials embedded.</div>
 </div>
 </body>
 </html>

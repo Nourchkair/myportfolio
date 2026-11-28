@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-28T01:10:00Z",
+  "generatedAt": "2026-11-28T07:30:17.489128+00:00",
   "health": {
     "status": 200,
     "ok": true,
@@ -12,12 +12,12 @@
     "time": "2026-11-27T16:04:07.741Z"
   },
   "worker": {
-    "version": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
+    "version": "29667f8f-6d37-491c-b8ba-fbc9f9496040",
     "environment": "production"
   },
   "pages": {
-    "deploymentId": "d84f8883-dce2-4c6a-a55b-10815b6f6979",
-    "source": "39b29ac"
+    "deploymentId": "14a38369-7926-41a4-a966-67d80af1f14b",
+    "source": "ba12362"
   },
   "flags": {
     "assistant_enabled": true,
@@ -30,7 +30,7 @@
   "models": {
     "text": "gemini-flash-lite-latest",
     "live": "gemini-3.8-live",
-    "voice": "Iapetus"
+    "voice": "Sadachbia"
   },
   "limits": {
     "dailyCapUsdMicros": 3000000,
@@ -39,16 +39,17 @@
     "maxLiveSessionSeconds": 600
   },
   "budget": {
-    "dailyUsdMicros": 636037,
-    "cumulativeUsdMicros": 3228758,
-    "dailySpentUsdMicros": 636037,
-    "cumulativeSpentUsdMicros": 3228758,
+    "dailyUsdMicros": 1390509,
+    "cumulativeUsdMicros": 3983230,
+    "dailySpentUsdMicros": 1390509,
+    "cumulativeSpentUsdMicros": 3983230,
     "heldLiveReservationsUsdMicros": 0,
     "heldSpendReservationsUsdMicros": 0,
+    "heldReservationsUsdMicros": 0,
     "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 2363963,
-    "cumulativeRemainingUsdMicros": 3771242,
+    "dailyRemainingUsdMicros": 1609491,
+    "cumulativeRemainingUsdMicros": 3016770,
     "allowed": true
   },
   "persona": {
@@ -94,5 +95,13 @@
     "evidence": "results/nupa-production-home-about.json",
     "homeStart": true,
     "aboutNavHome": true
+  },
+  "voiceRefinement": {
+    "status": "deployed and validated",
+    "voice": "Sadachbia",
+    "opening": "natural short introduction",
+    "prompt": "structured compact Live prompt",
+    "pipeline": "AudioWorklet + adaptive playback",
+    "evidence": "results/nupa-voice-production-validation.json"
   }
 }

@@ -1,6 +1,6 @@
 # Nupa voice refinement — implementation and validation
 
-**Status:** implemented in source, **not deployed**. Production remains `gemini-3.8-live` + `Iapetus` until approval.
+**Status:** **deployed and validated in production** on 28 November 2026. Production is now `gemini-3.8-live` + `Sadachbia`.
 
 - **Source configuration:** `gemini-3.8-live` + `Sadachbia`
 - **Opening:** natural one-sentence intro + one genuine question
@@ -160,6 +160,17 @@ This validates the new voice/config, compact prompt, AudioWorklet startup and Li
 
 A second local session tested interruption: a synthetic 2.7s follow-up (“Actually, tell me about Safiy instead.”) was played while Nupa was speaking. Nupa stopped the previous response, answered the new question, and the interface opened the Safiy project. No console errors. The synthetic pronunciation was transcribed as “Safi I”, so real-voice pronunciation still needs manual testing. Evidence: `results/nupa-voice-local-interruption.json`.
 
+### Production check
+
+- Worker: `29667f8f-6d37-491c-b8ba-fbc9f9496040`
+- Pages: `14a38369-7926-41a4-a966-67d80af1f14b` (source `ba12362`)
+- `/api/meta`: `gemini-3.8-live`, voice **Sadachbia**
+- Production voice check: voice state **listening**, no console errors
+- Production transcript: “I’m Nupa, Nour’s Unique Portfolio Assistant. What brought you to check out his work today?”
+- No capability/legal recital
+- AudioWorklet module loaded at 48kHz
+- Evidence: `results/nupa-voice-production-validation.json`
+
 
 ## Verification
 
@@ -174,7 +185,7 @@ A second local session tested interruption: a synthetic 2.7s follow-up (“Actua
 Not yet verified:
 
 - Real network jitter, Bluetooth, iOS/Safari and background/foreground transitions on physical devices.
-- An actual production Live session with the new token prompt and Sadachbia; the production token endpoint still uses Iapetus.
+- A full production Live session with a real microphone and the complete presentation flow; the deployment check used a fake microphone.
 - Subjective ratings.
 
 ## Cost accounting
@@ -182,26 +193,26 @@ Not yet verified:
 - Direct refinement API tests: **~$0.099** estimated from usage metadata (13 generated samples; excludes the local D render).
 - Previous audit direct tests: **~$0.313**.
 - Combined direct testing: **~$0.408**, outside the app ledger.
-- App ledger unchanged at the last snapshot: **$1.263273 today / $3.855994 cumulative**; **$3.144006** cumulative remaining.
+- App ledger after the production check: **$1.390509 today / $3.983230 cumulative**; **$3.016770** cumulative remaining.
 - Caps remain **$3.00 daily / $7.00 cumulative**. No credits purchased, no budget increase, no new provider.
 
 ## Deployment state
 
-- Source changes are local/committed on `phase2/ai-nour-production` (not deployed).
-- Production Pages `d84f8883-dce2-4c6a-a55b-10815b6f6979` and Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe` remain unchanged.
-- Production voice remains **Iapetus** until an approved deployment.
+- Deployed from `phase2/ai-nour-production` at `ba12362`.
+- Production Pages `14a38369-7926-41a4-a966-67d80af1f14b` (source `ba12362`) and Worker `29667f8f-6d37-491c-b8ba-fbc9f9496040`.
+- Production voice is **Sadachbia**.
 
 ## Recommended next step
 
-Approve a canary deployment of the source configuration, then validate:
+The deployment is complete. Remaining validation:
 
-1. Sadachbia + short opening on production Live, EN/FR.
-2. Optimized prompt with factual questions, project dossiers, journey chapters and a full presentation.
-3. New audio pipeline on desktop Chrome, iPhone Safari, Android Chrome and a Bluetooth headset.
-4. Blind subjective comparison against the current production clips.
+1. Subjective listening to production Sadachbia, EN/FR.
+2. Factual questions, project dossiers, journey chapters and a full presentation on production.
+3. New audio pipeline on iPhone Safari, Android Chrome and a Bluetooth headset.
+4. Blind comparison against the archived Iapetus clips.
 5. Confirm no regression in tool confirmation, presentation sync, interruption or spending controls.
 
-If the canary is rejected, rollback is limited to the voice/config/prompt/audio files; no data migration is involved.
+Rollback is limited to the Worker/Pages versions; no data migration is involved.
 
 ## Artifacts
 
@@ -209,6 +220,8 @@ If the canary is rejected, rollback is limited to the voice/config/prompt/audio 
 |---|---|
 | Refinement validation page | `results/audio-samples/refinement.html` |
 | Refinement results (JSON) | `results/nupa-voice-refinement.json` |
+| Production voice validation | `results/nupa-voice-production-validation.json` |
+| Production budget snapshot | `results/nupa-production-budget.json` |
 | Full acoustic analysis | `results/audio-samples/analysis.json` / `.csv` |
 | Original voice audit | `results/nupa-voice-audit.md` |
 | Prompt proposal | `results/nupa-voice-prompt-proposal.md` |

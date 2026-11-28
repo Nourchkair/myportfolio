@@ -28,13 +28,13 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `00fb071e-77f7-4192-a46e-d09b9fd796fe` (v1.4 public beta, $3 daily cap, voice-tour onboarding) |
+| Worker version | `29667f8f-6d37-491c-b8ba-fbc9f9496040` (v1.4 public beta, $3 daily cap, Sadachbia + voice refinement) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `d84f8883-dce2-4c6a-a55b-10815b6f6979` / `https://d84f8883.nourchkair.pages.dev` (source `39b29ac`) |
+| Latest Pages deployment | `14a38369-7926-41a4-a966-67d80af1f14b` / `https://14a38369.nourchkair.pages.dev` (source `ba12362`) |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -48,7 +48,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 
 ## 3b. Conversational V2
 
-- Live voice: **Sadachbia** in the source configuration; the deployed production Worker still uses **Iapetus** until the approved deployment. `LIVE_VOICE` remains the single configuration switch; presentation architecture is unchanged.
+- Live voice: **Sadachbia** deployed and verified. `LIVE_VOICE` remains the single configuration switch; presentation architecture is unchanged.
 - Persona: source defaults and the production `persona_instruction` both define Nupa. The production persona is 3,986 characters, has one identity paragraph, and preserves the existing character, grounding and conversation instructions.
 - Live grounding: foundational portfolio context plus `searchPortfolio`, `getProjectDossier`, `getProjectStep`, `getJourneyChapter` and `getCurrentView`.
 - Visitor profile: inferred per session and persisted in D1 session state.
@@ -64,7 +64,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.4` before reading, chat, Live voice or tools. Enforcement applies in public mode, not only when a beta key is required.
-- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$3.00**; the cumulative cap is **$7.00**. Sadachbia is the configured source voice; production remains Iapetus until deployment. Admin can restore up to 600 seconds.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$3.00**; the cumulative cap is **$7.00**. Sadachbia is the deployed voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 
@@ -124,7 +124,7 @@ Production ledger before the paid-tier verification calls:
 - Today: **$1.445858 USD** (read at report time)
 - Paid text test: **+$0.000717** internal estimate at the rates then configured
 - Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
-- Current internal estimate: **$1.263273 USD today / $3.855994 cumulative** as of 2026-11-28T06:42Z (after the voice audit; includes conservative $0.125 Live reservation settlements). Cumulative remaining: **$3.144006**. Direct voice-audit API spend is outside this ledger (~$0.31 estimated).
+- Current internal estimate: **$1.390509 USD today / $3.983230 cumulative** as of 2026-11-28T07:29Z (after the production voice-refinement check; includes conservative $0.125 Live reservation settlement). Cumulative remaining: **$3.016770**. Direct voice-audit API spend is outside this ledger (~$0.41 estimated total).
 - Held reservations: **$0** before the paid Live test
 - Daily cap: **$3.00 USD** (live); cumulative cap **$7.00 USD**
 - Cumulative cap: **$7.00 USD**
@@ -135,26 +135,26 @@ Production ledger before the paid-tier verification calls:
 
 These are internal token-based estimates, not confirmed Google invoices. The Gemini API key cannot read the project, billing tier, credit balance or invoices, so those figures remain user-provided. Text requests hold a $0.02 atomic reservation while in flight. Live holds an atomic session reservation; each reported turn is charged at actual token-estimated usage, capped by the reservation remainder, and `/api/live/end` releases the hold. A session that ends with no reported usage is charged the reservation conservatively; an expired unreported reservation is settled to the unreserved remainder. The old Live code charged the full $0.125 reservation instead of reported token usage, so the ledger overstates the two paid Live tests; the token-level estimate for the first test is $0.006611, not $0.125. The ledger is intentionally left intact as a conservative audit record.
 
-### Voice audit (investigation only, no production change)
+### Voice audit and refinement (deployed)
 
 - Report: `results/nupa-voice-audit.md`
 - Sample index: `results/audio-samples/index.html`
 - Prompt proposal: `results/nupa-voice-prompt-proposal.md`
 - Main finding: the flat/robotic impression came primarily from the voice choice and the long scripted opening, with 3.8 Live itself less micro-expressive than 2.5 Native. Playback preserves the raw Gemini prosody.
-- Implemented in source, pending approval/deploy: `Sadachbia`, a short natural opening, a structured Live prompt and the audio pipeline changes. Production still uses `Iapetus` until deployment.
+- Deployed: `Sadachbia`, a short natural opening, a structured Live prompt and the audio pipeline changes.
 - Refinement validation: `results/nupa-voice-refinement.md` / `results/audio-samples/refinement.html`.
-- Direct refinement API spend is separate (~$0.10 estimated); the app ledger is unchanged at the last snapshot.
+- Production check passed: natural intro, no capability recital, voice state listening, no console errors. Direct refinement API spend is separate (~$0.10 estimated).
 
-**Deployment timing:** the latest internal ledger snapshot is $1.263273 today / $3.855994 cumulative, with $3.144006 cumulative remaining; AI is available.
+**Deployment timing:** the latest internal ledger snapshot is $1.390509 today / $3.983230 cumulative, with $3.016770 cumulative remaining; AI is available.
 
-### Voice refinement implementation (source only, pending approval)
+### Voice refinement implementation (deployed)
 
-- Configured voice: `Sadachbia` through `LIVE_VOICE`; production remains `Iapetus` until deployment.
+- Configured voice: `Sadachbia` through `LIVE_VOICE`; deployed and verified in production.
 - Opening: removed the live/interactive/personalized capability recital; natural one-sentence intro plus one genuine question.
 - Live prompt: structured into core identity/policies, conversational personality, voice delivery, portfolio knowledge, visitor context, presentation/tool use and pronunciation. Compact live grounding (~8.5k chars) with retrieval tools for details.
 - Audio: AudioWorklet microphone resampler with a windowed-sinc anti-alias filter; filtered ScriptProcessor fallback; provider-rate parsing; adaptive playback lead; gain fades; AudioContext resume and device-change handling.
 - Validation: `results/nupa-voice-refinement.md`, `results/nupa-voice-refinement.json`, `results/audio-samples/refinement.html`.
-- No deployment, no model switch, no budget change.
+- Deployed on 28 November 2026; no model switch, no budget change.
 
 **Rate review (27 November 2026):** `gemini-3.8-live` matches Google's published paid rates: $0.75 text input, $3.00 audio input, $12.00 audio output per 1M tokens. The `gemini-flash-lite-latest` alias is not documented on Google's pricing page. Google publishes $0.10/$0.40 for 2.5 Flash-Lite, $0.25/$1.50 for 3.1 Flash-Lite and $0.30/$2.50 for 3.5 Flash-Lite. The application now uses the highest current Flash-Lite rates ($0.30 input/$2.50 output) as a conservative ceiling, so the internal ledger may overstate text cost if the alias resolves to an older generation. Review these rates whenever the alias changes or a pinned model is adopted.
 
@@ -171,7 +171,9 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `f5e81237-f8e1-41a1-9b7b-151225d05381` (live public access, $3 daily cap)
+- Current Worker version: `29667f8f-6d37-491c-b8ba-fbc9f9496040` (Sadachbia + voice refinement)
+- Previous Worker: `00fb071e-77f7-4192-a46e-d09b9fd796fe` (Iapetus, voice-tour onboarding)
+- Previous Nupa Worker: `f5e81237-f8e1-41a1-9b7b-151225d05381` (live public access, $3 daily cap)
 - Previous Nupa Worker: `78ea8cea-d0b3-4a6e-a523-29d0f386806c` (v1.4 first public release, $1 daily cap)
 - Previous Nupa Worker: `07a45644-d9e4-4157-a9b4-b80439a51c6a` (v1.4 first deploy, same static release)
 - Previous Nupa Worker: `f5e81237-f8e1-41a1-9b7b-151225d05381` (public access, $3 daily cap)
@@ -181,7 +183,7 @@ This was tested in production, including recovery.
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The current v1.4 Pages deployment is `d84f8883-dce2-4c6a-a55b-10815b6f6979` (source `39b29ac`); the prior dynamic-tour deployment is `ba62a481-ca9b-40c4-8e2f-20536a844c8f` (source `93b7c3b`), and the first v1.4 deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
+- Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The current Pages deployment is `14a38369-7926-41a4-a966-67d80af1f14b` (source `ba12362`); the previous v1.4 deployment is `d84f8883-dce2-4c6a-a55b-10815b6f6979` (source `39b29ac`); the prior dynamic-tour deployment is `ba62a481-ca9b-40c4-8e2f-20536a844c8f` (source `93b7c3b`), and the first v1.4 deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
 - Daily cap: the release uses `DAILY_SPEND_CAP_USD_MICROS = "3000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 3000000` if a lower stored control exists. Cumulative cap remains $7.00.
@@ -250,6 +252,7 @@ npm run deploy
 | Nupa unit tests | 76/76 | `ai-nour && npm test` |
 | Voice refinement local Live e2e | passed | `results/nupa-voice-local-e2e.json` |
 | Voice refinement interruption | passed | `results/nupa-voice-local-interruption.json` |
+| Production voice refinement check | passed | `results/nupa-voice-production-validation.json` |
 | Public-beta controls (local public Worker) | 23/23 | `results/public-controls-tests.json` |
 | Paid-tier production text | passed | `results/paid-tier-text.json` (if retained) |
 | Paid-tier production Live voice | passed | `results/paid-tier-live.json` |

@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-27T20:05:00Z",
-  "status": "deployed and validated in production (home/About correction)",
+  "generatedAt": "2026-11-28T07:30:17.489128+00:00",
+  "status": "deployed and validated in production (voice refinement)",
   "release": {
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
@@ -8,18 +8,18 @@
     "cumulativeCapUsdMicros": 7000000,
     "liveSessionSeconds": 300,
     "maxLiveSessionSeconds": 600,
-    "liveVoice": "Iapetus",
+    "liveVoice": "Sadachbia",
     "textModel": "gemini-flash-lite-latest",
     "liveModel": "gemini-3.8-live"
   },
   "production": {
-    "worker": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
-    "pages": "d84f8883-dce2-4c6a-a55b-10815b6f6979",
-    "source": "39b29ac",
+    "worker": "29667f8f-6d37-491c-b8ba-fbc9f9496040",
+    "pages": "14a38369-7926-41a4-a966-67d80af1f14b",
+    "source": "ba12362",
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
     "dailyCapUsdMicros": 3000000,
-    "note": "AI available; daily internal estimate $0.636037, cumulative $3.228758."
+    "note": "AI available; daily internal estimate $1.390509, cumulative $3.983230; voice Sadachbia deployed."
   },
   "paidTier": {
     "reportedByUser": {
@@ -143,6 +143,10 @@
     },
     "productionHomeAbout": {
       "passed": 6,
+      "failed": 0
+    },
+    "productionVoiceRefinement": {
+      "passed": 1,
       "failed": 0
     }
   },

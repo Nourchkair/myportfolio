@@ -1,10 +1,10 @@
 {
   "generatedAt": "2026-11-28T07:10:49.914183+00:00",
-  "status": "implementation and validation only; not deployed",
-  "deploymentState": "source only; production remains gemini-3.8-live + Iapetus until approval",
+  "status": "deployed and validated in production",
+  "deploymentState": "deployed 28 November 2026: Worker 29667f8f-6d37-491c-b8ba-fbc9f9496040; Pages 14a38369-7926-41a4-a966-67d80af1f14b; source ba12362",
   "config": {
     "model": "gemini-3.8-live",
-    "voice": "Sadachbia (provisional source configuration)"
+    "voice": "Sadachbia (deployed)"
   },
   "promptComparison": {
     "oldSystemChars": {
@@ -315,12 +315,14 @@
     "resamplerToneTest": "1kHz preserved; 12kHz attenuated",
     "playbackOfflineTest": "passed",
     "pipelineRender": "C audio rendered through new playAudio scheduling; pitch/energy preserved",
-    "realDevices": "not yet tested",
+    "realDevices": "not yet tested (iPhone Safari, Android Chrome, Bluetooth)",
     "localEndToEnd": "passed (Sadachbia, compact prompt, AudioWorklet, live token/turn, no console errors)",
     "localEndToEndEvidence": "results/nupa-voice-local-e2e.json",
     "localInterruption": "passed (stopped previous response, answered Safiy, opened project, no console errors)",
     "localInterruptionEvidence": "results/nupa-voice-local-interruption.json",
-    "pronunciationCaveat": "Synthetic \u201cSafiy\u201d was transcribed as \u201cSafi I\u201d; real-voice pronunciation still needs testing."
+    "pronunciationCaveat": "Synthetic \u201cSafiy\u201d was transcribed as \u201cSafi I\u201d; real-voice pronunciation still needs testing.",
+    "productionVoiceCheck": "passed",
+    "productionVoiceCheckEvidence": "results/nupa-voice-production-validation.json"
   },
   "acousticVsSubjective": {
     "acoustic": "YIN F0, semitone variance, frame-to-frame pitch movement, RMS variation, pause ratio, spectral centroid, chunk/first-audio timing.",
@@ -348,5 +350,26 @@
     "D is an OfflineAudioContext 48kHz render of the C audio through the new playAudio scheduling; it tests pipeline scheduling/resampling, not real network jitter or Bluetooth.",
     "The production token endpoint still uses Iapetus until the source configuration is deployed with approval.",
     "Direct provider spend is separate from the app ledger."
-  ]
+  ],
+  "productionCheck": {
+    "apiMeta": {
+      "model": "gemini-3.8-live",
+      "voice": "Sadachbia"
+    },
+    "voiceState": "listening",
+    "assistantTranscript": "I\u2019m Nupa, Nour\u2019s Unique Portfolio Assistant. What brought you to check out his work today?",
+    "capabilityRecital": false,
+    "consoleErrors": [],
+    "workletLoaded": true,
+    "evidence": "results/nupa-voice-production-validation.json"
+  },
+  "costs": {
+    "directRefinementUsd": 0.0994,
+    "directAuditUsd": 0.313,
+    "appLedgerAfter": {
+      "dailyUsdMicros": 1390509,
+      "cumulativeUsdMicros": 3983230,
+      "cumulativeRemainingUsdMicros": 3016770
+    }
+  }
 }

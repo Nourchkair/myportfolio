@@ -1,5 +1,7 @@
 # Nupa voice naturalness & audio-quality audit
 
+> **Historical audit.** The follow-up refinement was deployed on 28 November 2026: `gemini-3.8-live` + `Sadachbia`, natural opening, compact structured prompt and new audio pipeline. See `results/nupa-voice-refinement.md` and `results/nupa-voice-production-validation.json`.
+
 **Status:** investigation only. No production voice, model, prompt or deployment was changed.
 
 - **Production:** `gemini-3.8-live` + `Iapetus`
