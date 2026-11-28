@@ -122,10 +122,18 @@
     "highlightedTarget": "flow-node:acquisition:improve",
     "cursor": "flow-node:acquisition:improve",
     "presentationStep": "3 / 9",
-    "note": "presentProjectStep now applies the verified node highlight deterministically."
+    "note": "presentProjectStep now applies the verified node highlight deterministically.",
+    "finalPromptRecheck": {
+      "sessionId": "1092999b-7595-4e64-a416-44189dab2bf8",
+      "segmentsObserved": 3,
+      "partialTranscriptSegments": 0,
+      "highlightedTarget": "flow-node:acquisition:find",
+      "presentationStep": "2 / 9",
+      "highlightsAfterEnd": 0
+    }
   },
   "residualQualityNotes": [
-    "Two short partial assistant transcript segments appeared at tool boundaries during the full run. The continuation prompt now tells the model to call presentProjectStep and wait before speaking any part of the next segment; not re-run after that prompt change.",
-    "17 presentation-step calls were recorded for the 9-node workflow; some were repeated or same-turn. Narrative did not visibly loop and ended at crm, but call-level deduplication remains a possible refinement."
+    "The first full 9-node run had two short partial transcript segments at tool boundaries. The final prompt revision was re-checked in a short run: three complete segments and no partial transcripts in the observed window. A full 9-node re-run after the revision remains a manual item.",
+    "17 presentation-step calls were recorded for the 9-node first run; some were repeated or same-turn. The narrative did not visibly loop and ended at crm, but call-level deduplication remains a possible refinement."
   ]
 }

@@ -503,6 +503,99 @@
     "toolCallFrequency": "17 presentation-step calls were recorded for a 9-node workflow; some calls occurred in the same turn or repeated a node. The narrative did not visibly loop and ended at crm, but call-level deduplication remains a possible refinement.",
     "speechBoundaries": "Two short partial assistant transcript segments appeared at tool boundaries (\"After improving the\" and \"The system then catches replies and scheduled\"). The continuation prompt was strengthened after this run to call presentProjectStep and wait for confirmation before speaking any part of the next segment; not re-run after that prompt change.",
     "visualEmphasis": "The later run confirmed the new deterministic node highlight and cursor; no trick effects or bottom bar.",
-    "subjective": "Not scored. Listening quality, pacing and device behavior remain manual."
+    "subjective": "Not scored. Listening quality, pacing and device behavior remain manual.",
+    "finalPromptRecheck": "The final prompt re-run produced three complete narration segments with no partial transcript segments in the observed window. `presentProjectStep` advanced to find (2/9) with a deterministic node highlight. This is a short-window check, not a full 9-node re-run."
+  },
+  "finalPromptRun": {
+    "sessionId": "1092999b-7595-4e64-a416-44189dab2bf8",
+    "purpose": "Re-check the final tool-boundary prompt and deterministic highlight after the prompt revision.",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Walk me through the customer acquisition system. Explain the problem. The workflow and Norse contribution.",
+        "at": 1795855750554
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855779450
+      },
+      {
+        "role": "assistant",
+        "content": "The core problem with traditional sales outreach is that it's often generic, making it hard for a prospect to see why the offer matters to them. At the same time, sales teams need a steady stream of replies and meetings to keep moving. Nour's contribution focused on connecting the commercial logic with the demo layer. He defined the target segments and qualification criteria, then built the engines for H2Ops's demo follow-up, including inbox sync and booking detection.",
+        "at": 1795855779451
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855780722
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855780723
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855795269
+      },
+      {
+        "role": "assistant",
+        "content": "This process starts by defining the target customer. This means identifying the ideal profile based on industry, location, company size, and business needs to ensure the sales team focuses its efforts where they matter most.",
+        "at": 1795855795270
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855796588
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855796589
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855809068
+      },
+      {
+        "role": "assistant",
+        "content": "Once the profile is defined, the system uncovers potential buyers. It searches for businesses matching the target criteria, building a structured list of opportunities without relying solely on manual research.",
+        "at": 1795855809069
+      }
+    ],
+    "toolEvents": [
+      {
+        "event": "live.token.issued",
+        "detail": "{\"sessionId\":\"1092999b-7595-4e64-a416-44189dab2bf8\",\"model\":\"gemini-3.8-live\",\"reservationUsdMicros\":450000}",
+        "at": 1795855738590
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"1092999b-7595-4e64-a416-44189dab2bf8\",\"tool\":\"presentProject\",\"route\":null}",
+        "at": 1795855750550
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"1092999b-7595-4e64-a416-44189dab2bf8\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855780717
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"1092999b-7595-4e64-a416-44189dab2bf8\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855796585
+      }
+    ],
+    "observed": {
+      "firstThreeSegmentsComplete": true,
+      "partialTranscriptSegments": 0,
+      "highlightedTarget": "flow-node:acquisition:find",
+      "presentationStep": "2 / 9",
+      "endedByPill": true,
+      "highlightsAfterEnd": 0,
+      "bottomBar": false
+    }
   }
 }
