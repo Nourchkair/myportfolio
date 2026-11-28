@@ -28,7 +28,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `7258a8c9-480f-4028-9d67-b0e6ad503719` (v1.4 public beta, $3 daily cap, Sadachbia + voice refinement, temporary testing limits) |
+| Worker version | `b46d76ba-f80d-4599-b73e-b867451eb182` (v1.4 public beta, $3 daily cap, Sadachbia + voice refinement, temporary testing limits) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -153,6 +153,7 @@ These are internal token-based estimates, not confirmed Google invoices. The Gem
 - `LIVE_RATE_LIMIT=0` and `GLOBAL_LIVE_RATE_LIMIT=0` mean unlimited Live attempts.
 - `MAX_CONCURRENT_LIVE_SESSIONS=20` and `MAX_LIVE_SESSIONS_PER_OWNER=20` reduce cooldown blocking for testing.
 - The $3 daily / $7 cumulative spending caps remain active.
+- Incident fixed in `b46d76ba-f80d-4599-b73e-b867451eb182`: the first unlimited-rate deployment scoped the `rate` variable too narrowly, causing a 500 after token minting. Orphaned token holds and leases were cleared; a fresh token mint returned 200 with Sadachbia.
 - Re-enable finite counts after testing.
 
 ### Voice refinement implementation (deployed)
@@ -179,7 +180,8 @@ This was tested in production, including recovery.
 
 ## 9. Rollback
 
-- Current Worker version: `7258a8c9-480f-4028-9d67-b0e6ad503719` (temporary testing limits)
+- Current Worker version: `b46d76ba-f80d-4599-b73e-b867451eb182` (temporary testing limits, token-mint fix)
+- Previous Worker: `7258a8c9-480f-4028-9d67-b0e6ad503719` (temporary testing limits, token-mint regression)
 - Previous Worker: `c9870564-3991-4015-a927-4b9f3bb0d7c5` (temporary unlimited daily Live tokens)
 - Previous Worker: `29667f8f-6d37-491c-b8ba-fbc9f9496040` (Sadachbia + voice refinement)
 - Previous Worker: `00fb071e-77f7-4192-a46e-d09b9fd796fe` (Iapetus, voice-tour onboarding)

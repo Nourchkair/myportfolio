@@ -260,8 +260,9 @@ export async function handleLiveToken({
   body,
   now
 }) {
+  let rate = null;
   if (config.limits.liveRateLimit > 0) {
-    const rate = await db.checkRateLimit({
+    rate = await db.checkRateLimit({
       bucket: `live:${clientHash}`,
       limit: config.limits.liveRateLimit,
       windowMs: config.limits.rateLimitWindowMs,
@@ -396,7 +397,9 @@ export async function handleLiveToken({
       speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName: voice } } }
     },
     locale: detected,
-    rateLimit: { remaining: rate.remaining, resetAt: rate.resetAt }
+    rateLimit: rate
+      ? { remaining: rate.remaining, resetAt: rate.resetAt }
+      : { remaining: null, resetAt: null, unlimited: true }
   };
 }
 
