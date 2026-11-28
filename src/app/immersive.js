@@ -5,7 +5,7 @@ import { SCENES } from '../data/environments.js';
 import { parseRoute, normalizePath } from './routes.js';
 import { createStore, initialState } from './store.js';
 import { installCommandApi } from './commands.js';
-import { createPresentationController } from './presentation.js?v=13';
+import { createPresentationController } from './presentation.js?v=16';
 
 
 /* Project data now lives in the approved PROJECTS registry in os-app2.js. */
@@ -2338,6 +2338,7 @@ const commandApi=installCommandApi({
   },
   getPresentationTargets(options){ return presentationController?.getTargets(options)||{targets:[]}; },
   getPresentationTarget(targetId){ return presentationController?.getTarget(targetId)||null; },
+  getTargetForElement(element){ return presentationController?.getTargetForElement(element)||null; },
   applyPresentationAction(action){ return presentationController?.applyAction(action)||{ok:false,error:'PRESENTATION_UNAVAILABLE'}; },
   cancelPresentationActions(){ presentationController?.cancelPending(); },
   waitForPresentationTarget(targetId){ return presentationController?.waitForTarget(targetId)||Promise.resolve(false); },

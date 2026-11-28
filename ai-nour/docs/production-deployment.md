@@ -156,6 +156,18 @@ These are internal token-based estimates, not confirmed Google invoices. The Gem
 - Incident fixed in `b46d76ba-f80d-4599-b73e-b867451eb182`: the first unlimited-rate deployment scoped the `rate` variable too narrowly, causing a 500 after token minting. Orphaned token holds and leases were cleared; a fresh token mint returned 200 with Sadachbia.
 - Re-enable finite counts after testing.
 
+### Immersive presentation upgrade (local, pending approval)
+
+- Default Live duration target: **900 seconds**; admin maximum 900. Migration `0009_live_session_900.sql` sets the D1 control.
+- Reservation: **$0.45** at 900s (`$0.03/min`), 20-minute hold; caps remain $3 daily / $7 cumulative.
+- Gemini audio-only Live sessions support up to **15 minutes**; no provider resumption is required for a contiguous 15-minute session. Network-drop resumption remains a separate reliability item.
+- Explicit end and `pagehide` release the lease immediately. If the browser disappears without end, the lease expires at 900 seconds but the conservative budget hold can remain for up to 20 minutes; verify real mobile `pagehide` behavior before relying on immediate recovery.
+- Frontend: bottom presentation bar removed; all active-session controls consolidated into the Nupa pill (mute, pause/resume, end).
+- Context awareness: selection, hover, click, focus, scroll, zoom and recent interactions are aggregated and sent through the silent `sendContextUpdate` channel; no screenshot/desktop capture.
+- Presentation: adaptive depth, autonomous continuation after a presentation segment/audio playback, text-range quote highlighting, existing zoom/trace/spotlight tools.
+- Local validation: `results/nupa-immersive-local-validation.json`, `results/nupa-immersive-15m-token.json`.
+- Not deployed.
+
 ### Voice refinement implementation (deployed)
 
 - Configured voice: `Sadachbia` through `LIVE_VOICE`; deployed and verified in production.
@@ -232,7 +244,7 @@ For the static site, redeploy the prior commit with `npm run deploy` from the re
 ## 10. Deployment commands
 
 ```bash
-# 1. D1 first (additive; 0007 adds text spend reservations, 0008 adds active voice-session leases)
+# 1. D1 first (additive; 0007 adds text spend reservations, 0008 adds active voice-session leases, 0009 sets the 900-second Live control)
 cd ai-nour
 npx wrangler d1 migrations apply ai-nour-production --remote --config wrangler.production.toml
 
@@ -260,11 +272,15 @@ npm run deploy
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
 | Nupa legal validator (v1.4 paid/public) | 79/79 | `npm run validate:legal` |
-| Portfolio validator | 270/270 | `npm run validate` |
-| Nupa unit tests | 76/76 | `ai-nour && npm test` |
+| Portfolio validator | 278/278 | `npm run validate` |
+| Nupa unit tests | 78/78 | `ai-nour && npm test` |
 | Voice refinement local Live e2e | passed | `results/nupa-voice-local-e2e.json` |
 | Voice refinement interruption | passed | `results/nupa-voice-local-interruption.json` |
 | Production voice refinement check | passed | `results/nupa-voice-production-validation.json` |
+| Local 15-minute token/reservation | passed | `results/nupa-immersive-15m-token.json` |
+| Local immersive presentation controls | 21/21 | `results/nupa-immersive-presentation.json` |
+| Local selection/autonomous/pill validation | passed | `results/nupa-immersive-local-validation.json` |
+| Local full autonomous presentation | passed to natural end | `results/nupa-immersive-walkthrough.json` |
 | Public-beta controls (local public Worker) | 23/23 | `results/public-controls-tests.json` |
 | Paid-tier production text | passed | `results/paid-tier-text.json` (if retained) |
 | Paid-tier production Live voice | passed | `results/paid-tier-live.json` |

@@ -53,6 +53,19 @@ const state = {
 };
 document.documentElement.dataset.ainourLocale = state.locale;
 
+const interfaceContext = {
+  selection: null,
+  hover: null,
+  focus: null,
+  click: null,
+  scroll: null,
+  recent: []
+};
+let selectionTimer = null;
+let hoverTimer = null;
+let scrollTimer = null;
+
+
 const voice = {
   active: false,
   session: null,
@@ -74,6 +87,13 @@ const voice = {
   playbackUnderruns: 0,
   chunksSinceUnderrun: 0,
   wasHidden: false,
+  muted: false,
+  lastActivityAt: 0,
+  lastAudioAt: 0,
+  presentationActionPending: false,
+  continuationTimer: null,
+  continuationCount: 0,
+  inactivityTimer: null,
   usage: null,
   lastTotals: { text: 0, audioIn: 0, audioOut: 0, thoughts: 0 },
   userText: '',
@@ -200,7 +220,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=17', import.meta.url).href;
+  link.href = new URL('./companion.css?v=19', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -215,6 +235,15 @@ function pillMarkup() {
     <span class="ainour-pill-sep" aria-hidden="true"></span>
     <button class="ainour-pill-mic" type="button" data-ainour="mode-voice" aria-label="Start voice with Nupa" title="Voice">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="7.1" y="3.1" width="5.8" height="9.2" rx="2.9"/><path d="M4.8 9.6a5.2 5.2 0 0 0 10.4 0M10 15v2.2M7.8 17.2h4.4"/></svg>
+    </button>
+    <button class="ainour-pill-action" type="button" data-ainour="presentation-pause" aria-label="Pause presentation" title="Pause presentation" hidden>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5.5 4v8M10.5 4v8"/></svg>
+    </button>
+    <button class="ainour-pill-action" type="button" data-ainour="presentation-resume" aria-label="Resume presentation" title="Resume presentation" hidden>
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M5 3.8v8.4L12 8z"/></svg>
+    </button>
+    <button class="ainour-pill-action ainour-pill-end" type="button" data-ainour="end-live" aria-label="End live session" title="End live session" hidden>
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M4.5 4.5l7 7M11.5 4.5l-7 7"/></svg>
     </button>
   `;
 }
@@ -283,7 +312,7 @@ function consentMarkup() {
       </div>
       <h2 class="ainour-consent-welcome" id="ainourConsentIntro">Meet Nupa.</h2>
       <p class="ainour-consent-lede" id="ainourConsentLede">Your intelligent portfolio companion. Explore, ask questions and discover Nour’s work at your own pace.</p>
-      <p class="ainour-consent-disclosure" id="ainourConsentPrivacy">Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.</p>
+      <p class="ainour-consent-disclosure" id="ainourConsentPrivacy">Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. While you browse, Nupa also receives the current portfolio view and any portfolio text you select as context; it does not capture your screen or other browser content. Do not share personal, sensitive or confidential information.</p>
       <p class="ainour-consent-accept" id="ainourConsentAccept">By selecting “Let’s explore”, you confirm you are 18 or older and agree to the <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a> and <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a>.</p>
       <button id="ainourConsentBtn" type="button" aria-describedby="ainourConsentAccept ainourConsentPrivacy">Let’s explore</button>
       <button id="ainourConsentDismiss" class="ainour-consent-dismiss" type="button">Not now</button>
@@ -301,7 +330,7 @@ function tourMarkup() {
       </div>
       <h2 class="ainour-consent-welcome" id="ainourTourTitle">Explore with Nupa.</h2>
       <p class="ainour-consent-lede" id="ainourTourLede">Let Nupa guide you through Nour’s work in a live, spoken presentation.</p>
-      <p class="ainour-consent-disclosure" id="ainourTourCopy">Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.</p>
+      <p class="ainour-consent-disclosure" id="ainourTourCopy">Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Nupa also receives the current portfolio view and any portfolio text you select as context; it does not capture your screen or other browser content. Do not share personal, sensitive or confidential information.</p>
       <p class="ainour-consent-accept" id="ainourTourLegal">By starting the voice tour, you allow microphone access for this tab. You can stop at any time. <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a></p>
       <button id="ainourTourStart" type="button" aria-describedby="ainourTourCopy ainourTourLegal">Allow microphone and start</button>
       <button id="ainourTourText" class="ainour-consent-dismiss" type="button">Use text chat instead</button>
@@ -358,6 +387,9 @@ function mount() {
     pill,
     pillText: pill.querySelector('[data-ainour="mode-text"]'),
     pillVoice: pill.querySelector('[data-ainour="mode-voice"]'),
+    pillPause: pill.querySelector('[data-ainour="presentation-pause"]'),
+    pillResume: pill.querySelector('[data-ainour="presentation-resume"]'),
+    pillEnd: pill.querySelector('[data-ainour="end-live"]'),
     pillLabel: pill.querySelector('#ainourPillLabel'),
     panel,
     tagline: panel.querySelector('#ainourTagline'),
@@ -412,8 +444,14 @@ function mount() {
     if (action === 'mode-text') {
       openPanel();
     } else if (action === 'mode-voice') {
-      if (voiceIsActive()) stopVoice();
+      if (voiceIsActive()) toggleMicMute();
       else startVoice();
+    } else if (action === 'presentation-pause') {
+      void handlePresentationControl('pause');
+    } else if (action === 'presentation-resume') {
+      void handlePresentationControl('resume');
+    } else if (action === 'end-live') {
+      void endLiveSession();
     }
   });
   panel.addEventListener('click', (event) => {
@@ -478,7 +516,6 @@ function mount() {
   });
   els.micAllow.addEventListener('click', () => resolveMicConsent(true));
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
-  window.addEventListener('ainour:presentation-control', (event) => handlePresentationControl(event.detail?.action));
   window.addEventListener('ainour:explore', openExplore);
   window.addEventListener('ainour:independent', () => {
     state.exploreRequested = false;
@@ -723,13 +760,38 @@ function updatePill() {
   els.pill.dataset.unread = state.unread ? 'true' : 'false';
   els.pill.setAttribute('aria-expanded', String(!els.panel.hidden));
   const fr = state.locale === 'fr';
-  const voiceLabel = ['connecting', 'listening', 'speaking'].includes(state.voice) || voice.active;
-  const label = state.voice === 'error' ? (fr ? 'Voix indisponible' : 'Voice unavailable') : voiceLabel ? (fr ? 'Écoute' : 'Listening') : 'Nupa';
+  const active = voiceIsActive();
+  const muted = active && voice.muted;
+  const label = state.voice === 'error' ? (fr ? 'Voix indisponible' : 'Voice unavailable') : active ? (muted ? (fr ? 'Micro coupé' : 'Muted') : (fr ? 'Écoute' : 'Listening')) : 'Nupa';
   els.pillLabel.textContent = label;
+  els.pill.dataset.muted = muted ? 'true' : 'false';
   els.pillText.setAttribute('aria-label', `${label} — ${fr ? 'ouvrir le clavardage' : 'open text chat'}`);
   els.pillText.classList.toggle('is-active', !els.panel.hidden);
-  els.pillVoice.classList.toggle('is-active', voiceIsActive());
-  els.pillVoice.setAttribute('aria-label', fr ? (voiceIsActive() ? 'Arrêter la voix avec Nupa' : 'Démarrer la voix avec Nupa') : (voiceIsActive() ? 'Stop voice with Nupa' : 'Start voice with Nupa'));
+  els.pillVoice.classList.toggle('is-active', active);
+  els.pillVoice.hidden = false;
+  els.pillVoice.setAttribute('aria-label', fr
+    ? (active ? (muted ? 'Activer le microphone' : 'Couper le microphone') : 'Démarrer la voix avec Nupa')
+    : (active ? (muted ? 'Unmute microphone' : 'Mute microphone') : 'Start voice with Nupa'));
+  els.pillVoice.title = active ? (muted ? (fr ? 'Activer le micro' : 'Unmute microphone') : (fr ? 'Couper le micro' : 'Mute microphone')) : (fr ? 'Voix' : 'Voice');
+  const presentation = active && state.presentation.active;
+  if (els.pillPause) {
+    els.pillPause.hidden = !presentation || state.presentation.paused;
+    const text = fr ? 'Mettre la présentation en pause' : 'Pause presentation';
+    els.pillPause.setAttribute('aria-label', text);
+    els.pillPause.title = text;
+  }
+  if (els.pillResume) {
+    els.pillResume.hidden = !presentation || !state.presentation.paused;
+    const text = fr ? 'Reprendre la présentation' : 'Resume presentation';
+    els.pillResume.setAttribute('aria-label', text);
+    els.pillResume.title = text;
+  }
+  if (els.pillEnd) {
+    els.pillEnd.hidden = !active;
+    const text = fr ? 'Terminer la session vocale' : 'End live session';
+    els.pillEnd.setAttribute('aria-label', text);
+    els.pillEnd.title = text;
+  }
   requestAnimationFrame(positionPill);
 }
 
@@ -750,8 +812,8 @@ function updateLegalCopy() {
   }
   if (els.consentPrivacy) {
     els.consentPrivacy.textContent = fr
-      ? 'Le texte et la voix sont traités par Google Gemini selon les conditions des services payants, qui n’utilisent pas les requêtes ni les réponses pour améliorer les produits de Google. Les conversations sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
-      : 'Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.';
+      ? 'Le texte et la voix sont traités par Google Gemini selon les conditions des services payants, qui n’utilisent pas les requêtes ni les réponses pour améliorer les produits de Google. Les conversations sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Pendant votre navigation, Nupa reçoit aussi la vue actuelle du portfolio et le texte du portfolio que vous sélectionnez comme contexte; elle ne capture pas votre écran ni le contenu d’autres onglets. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
+      : 'Text and voice are processed by Google Gemini under Google’s paid API terms, which do not use prompts or responses to improve Google’s products. Conversations are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. While you browse, Nupa also receives the current portfolio view and any portfolio text you select as context; it does not capture your screen or other browser content. Do not share personal, sensitive or confidential information.';
   }
   if (els.consentAccept) {
     els.consentAccept.innerHTML = fr
@@ -778,8 +840,8 @@ function updateLegalCopy() {
   }
   if (els.tourCopy) {
     els.tourCopy.textContent = fr
-      ? 'Nupa utilisera votre microphone et transmettra l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
-      : 'Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.';
+      ? 'Nupa utilisera votre microphone et transmettra l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Nupa reçoit aussi la vue actuelle du portfolio et le texte du portfolio que vous sélectionnez comme contexte; elle ne capture pas votre écran ni le contenu d’autres onglets. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
+      : 'Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Nupa also receives the current portfolio view and any portfolio text you select as context; it does not capture your screen or other browser content. Do not share personal, sensitive or confidential information.';
   }
   if (els.tourLegal) {
     els.tourLegal.innerHTML = fr
@@ -1142,6 +1204,10 @@ function setState(value) {
 function updateContext() {
   if (!els.context) return;
   const status = window.NourOS?.getStatus?.();
+  if (interfaceContext.selection?.targetId) {
+    const selectedTarget = window.NourOS?.getPresentationTarget?.(interfaceContext.selection.targetId);
+    if (!selectedTarget || selectedTarget.visible === false) clearSelectionContext();
+  }
   const viewing = state.locale === 'fr' ? 'Vous consultez' : 'Viewing';
   if (!status) {
     els.contextLabel.innerHTML = `${viewing} <b>portfolio</b>`;
@@ -1189,9 +1255,123 @@ function portfolioContext() {
       totalSteps: state.presentation.totalSteps,
       label: state.presentation.label
     },
-    targets: window.NourOS?.getPresentationTargets?.({ visibleOnly: true, limit: 40 })?.targets || []
+    targets: window.NourOS?.getPresentationTargets?.({ visibleOnly: true, limit: 40 })?.targets || [],
+    interaction: {
+      selection: interfaceContext.selection ? { text: interfaceContext.selection.text, targetId: interfaceContext.selection.targetId, label: interfaceContext.selection.label, at: interfaceContext.selection.at } : null,
+      hover: interfaceContext.hover ? { targetId: interfaceContext.hover.targetId, label: interfaceContext.hover.label, at: interfaceContext.hover.at } : null,
+      focus: interfaceContext.focus ? { targetId: interfaceContext.focus.targetId, label: interfaceContext.focus.label, at: interfaceContext.focus.at } : null,
+      click: interfaceContext.click ? { targetId: interfaceContext.click.targetId, label: interfaceContext.click.label, at: interfaceContext.click.at } : null,
+      scroll: interfaceContext.scroll,
+      recent: interfaceContext.recent.slice(0, 6)
+    }
   };
 }
+
+function inNupaChrome(element) {
+  return Boolean(element?.closest?.('.ainour-pill, .ainour-panel, .ainour-consent-overlay, .ainour-tour-overlay'));
+}
+
+function interactionTarget(element) {
+  if (!element || inNupaChrome(element)) return null;
+  try {
+    const target = window.NourOS?.getTargetForElement?.(element);
+    if (target) return target;
+  } catch {}
+  const label = String(element.innerText || element.textContent || element.getAttribute?.('aria-label') || '').replace(/\s+/g, ' ').trim().slice(0, 140);
+  return { id: null, kind: element.tagName?.toLowerCase() || 'element', label };
+}
+
+function rememberInteraction(type, element, extra = {}) {
+  const target = interactionTarget(element);
+  if (!target) return;
+  const item = {
+    type,
+    targetId: target.id || null,
+    label: target.label || '',
+    at: Date.now(),
+    ...extra
+  };
+  if (type === 'hover') interfaceContext.hover = item;
+  else if (type === 'focus') interfaceContext.focus = item;
+  else if (type === 'click') interfaceContext.click = item;
+  interfaceContext.recent = [item, ...interfaceContext.recent.filter((entry) => !(entry.type === item.type && entry.targetId === item.targetId))].slice(0, 8);
+  sendLiveContextUpdate();
+}
+
+function clearSelectionContext() {
+  interfaceContext.selection = null;
+  interfaceContext.recent = interfaceContext.recent.filter((entry) => entry.type !== 'selection');
+}
+
+function captureSelection() {
+  const selection = window.getSelection();
+  const text = String(selection?.toString?.() || '').replace(/\s+/g, ' ').trim().slice(0, 500);
+  if (!text) {
+    // Clicking Nupa can clear the visual selection; keep the last meaningful one.
+    if (inNupaChrome(document.activeElement)) return;
+    clearSelectionContext();
+    return;
+  }
+  const node = selection.anchorNode;
+  const element = node?.nodeType === 1 ? node : node?.parentElement;
+  if (!element || inNupaChrome(element)) return;
+  if (element.closest('input, textarea, select, [contenteditable="true"]')) {
+    clearSelectionContext();
+    return;
+  }
+  if (!element.closest('main, #mainContent, #carouselPanel, #project, #aboutView, #contactPanel')) {
+    clearSelectionContext();
+    return;
+  }
+  const target = interactionTarget(element);
+  interfaceContext.selection = {
+    text,
+    targetId: target?.id || null,
+    label: target?.label || '',
+    at: Date.now()
+  };
+  interfaceContext.recent = [{ type: 'selection', targetId: target?.id || null, label: text.slice(0, 80), at: Date.now() }, ...interfaceContext.recent].slice(0, 8);
+  sendLiveContextUpdate();
+}
+
+function scheduleSelectionCapture() {
+  if (selectionTimer) clearTimeout(selectionTimer);
+  selectionTimer = setTimeout(() => { selectionTimer = null; captureSelection(); }, 160);
+}
+
+function scheduleHoverCapture(event) {
+  const element = event.target?.closest?.('[data-flow-node], .os-card, .project-card, .pro-narrative p, .pw-contribution-block, .card-tags span, .pro-chips span, [data-pro-chapter], button, a');
+  if (!element || inNupaChrome(element)) return;
+  if (hoverTimer) clearTimeout(hoverTimer);
+  hoverTimer = setTimeout(() => {
+    hoverTimer = null;
+    const target = interactionTarget(element);
+    if (target && (!interfaceContext.hover || interfaceContext.hover.targetId !== target.id)) rememberInteraction('hover', element);
+  }, 220);
+}
+
+function scheduleScrollCapture() {
+  if (scrollTimer) clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(() => {
+    scrollTimer = null;
+    const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    interfaceContext.scroll = { y: Math.round(scrollY), percent: Math.round((scrollY / max) * 100), at: Date.now() };
+    sendLiveContextUpdate();
+  }, 280);
+}
+
+document.addEventListener('selectionchange', scheduleSelectionCapture);
+document.addEventListener('pointerover', scheduleHoverCapture, { passive: true });
+document.addEventListener('pointerdown', (event) => {
+  if (inNupaChrome(event.target)) return;
+  rememberInteraction('click', event.target);
+}, { passive: true });
+document.addEventListener('focusin', (event) => {
+  if (inNupaChrome(event.target)) return;
+  rememberInteraction('focus', event.target);
+});
+addEventListener('scroll', scheduleScrollCapture, { passive: true });
+addEventListener('resize', scheduleScrollCapture, { passive: true });
 
 function describeCurrentView() {
   const status = window.NourOS?.getStatus?.();
@@ -1201,7 +1381,18 @@ function describeCurrentView() {
   const chapter = status.context?.about?.open
     ? PROFESSIONAL_CHAPTERS.find((item) => item.id === status.context.about.chapterId)
     : null;
+  const selected = interfaceContext.selection?.text
+    ? `SELECTED TEXT — use when the visitor says "highlighted", "selected" or "this text": "${interfaceContext.selection.text}"${interfaceContext.selection.targetId ? ` (target ${interfaceContext.selection.targetId})` : ''}`
+    : '';
+  const latest = interfaceContext.recent[0];
+  const primary = latest
+    ? (latest.type === 'selection'
+      ? selected
+      : `PRIMARY REFERENT — ${latest.type}: ${latest.targetId || latest.label || 'current view'}`)
+    : '';
   return [
+    primary,
+    selected && primary !== selected ? selected : '',
     `Section: ${status.section || 'portfolio'}`,
     project ? `Project: ${project.title} (${project.id})` : '',
     project ? `Project view: ${status.context.project.view || 'overview'}` : '',
@@ -1215,6 +1406,23 @@ function describeCurrentView() {
     (() => {
       const targets = window.NourOS?.getPresentationTargets?.({ visibleOnly: true, limit: 24 })?.targets || [];
       return targets.length ? `Visible targets: ${targets.map((target) => `${target.id} (${target.label})`).join('; ')}` : '';
+    })(),
+    (() => {
+      const parts = [];
+      for (const key of ['hover', 'focus', 'click']) {
+        const item = interfaceContext[key];
+        if (!item || Date.now() - item.at > 120000) continue;
+        parts.push(`${key === 'click' ? 'Last click' : key === 'focus' ? 'Focused' : 'Hovered'}: ${item.targetId || item.label || 'element'}`);
+      }
+      if (interfaceContext.scroll) {
+        parts.push(`Scroll: ${interfaceContext.scroll.percent}% at y=${interfaceContext.scroll.y}`);
+      }
+      const zoom = window.NourOS?.getPresentationState?.()?.effects?.zoom;
+      if (zoom) parts.push(`Workflow zoom: ${Math.round(Number(zoom.scale || 1) * 100)}%`);
+      if (interfaceContext.recent.length) {
+        parts.push(`Recent interactions: ${interfaceContext.recent.slice(0, 5).map((item) => `${item.type}${item.targetId ? `:${item.targetId}` : ''}`).join(', ')}`);
+      }
+      return parts.length ? `INTERACTION CONTEXT:\n${parts.join('\n')}` : '';
     })()
   ].filter(Boolean).join('\n');
 }
@@ -1235,6 +1443,10 @@ function consumeAiRoute(route) {
 
 function sendLiveContextUpdate() {
   if (!voice.active || !voice.session) return;
+  if (state.voice === 'speaking' || state.voice === 'processing' || state.voice === 'connecting') {
+    voice.contextPending = true;
+    return;
+  }
   const text = `[Context update — not a visitor message]\n${describeCurrentView()}`;
   if (text === lastLiveContext) return;
   if (liveContextTimer) clearTimeout(liveContextTimer);
@@ -1242,8 +1454,11 @@ function sendLiveContextUpdate() {
     liveContextTimer = null;
     if (!voice.active || !voice.session || text === lastLiveContext) return;
     try {
-      voice.session.sendClientContent({ turns: text, turnComplete: false });
-      lastLiveContext = text;
+      if (voice.systemInstruction && typeof voice.session.sendContextUpdate === 'function') {
+        const full = `${voice.systemInstruction}\n\nLIVE CONTEXT (silent; do not answer this block)\n${text}`;
+        voice.session.sendContextUpdate({ systemInstruction: { role: 'user', parts: [{ text: full }] } });
+        lastLiveContext = text;
+      }
     } catch {}
   }, 180);
 }
@@ -1636,6 +1851,7 @@ async function runActions(actions) {
   updateContext();
   sendLiveContextUpdate();
   if (!voice.active) setState('idle');
+  updatePill();
   return { ok: !failed && !cancelled, cancelled, applied, failed };
 }
 
@@ -1646,6 +1862,8 @@ function onNourState(status) {
   if (routeChanged && !aiNavigation) {
     expectedAiRoutes = [];
     aiActionEpoch += 1;
+    cancelPresentationContinuation();
+    voice.presentationActionPending = false;
     if (state.presentation.active) {
       const project = status?.context?.project;
       const projectId = project?.open ? project.id : state.presentation.projectId;
@@ -1674,6 +1892,7 @@ function onNourState(status) {
       });
       window.NourOS?.applyPresentationAction?.({ type: 'clearVisualEffects' });
     }
+    updatePill();
   }
   updateContext();
   schedulePillPosition();
@@ -1687,80 +1906,29 @@ async function handlePresentationControl(action) {
   if (!status) return;
   if (action === 'pause') {
     state.presentation = { ...state.presentation, paused: true };
+    cancelPresentationContinuation();
+    voice.presentationActionPending = false;
     if (voice.active) stopPlayback();
     await status.applyPresentationAction?.({ type: 'presentationPause' });
+    updatePill();
     return;
   }
   if (action === 'resume') {
     state.presentation = { ...state.presentation, paused: false };
     await status.applyPresentationAction?.({ type: 'presentationResume' });
+    updatePill();
+    requestPresentationResume();
     return;
   }
   if (action === 'end') {
     state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
     aiActionEpoch += 1;
+    cancelPresentationContinuation();
+    voice.presentationActionPending = false;
     await status.applyPresentationAction?.({ type: 'presentationEnd' });
     status.cancelPresentationActions?.();
+    updatePill();
     return;
-  }
-  if (action === 'next' || action === 'prev') await movePresentationStep(action);
-}
-
-async function movePresentationStep(direction) {
-  const project = PROJECT_BY_ID[state.presentation.projectId];
-  if (!project?.flow?.nodes?.length) return;
-  const ids = project.flow.nodes.map((node) => node.id);
-  const current = ids.indexOf(state.presentation.nodeId);
-  const base = current < 0 ? 0 : current + (direction === 'next' ? 1 : -1);
-  const index = Math.max(0, Math.min(ids.length - 1, base));
-  const nodeId = ids[index];
-  const node = project.flow.nodes.find((item) => item.id === nodeId);
-  state.presentation = {
-    ...state.presentation,
-    active: true,
-    paused: false,
-    projectId: project.id,
-    nodeId,
-    stepIndex: index + 1,
-    totalSteps: ids.length,
-    label: node?.title || nodeId
-  };
-  aiNavUntil = Date.now() + 5000;
-  queueAiRoute(`/projects/${project.id}/flow/${nodeId}`);
-  await window.NourOS?.applyPresentationAction?.({
-    type: 'presentationStep',
-    projectId: project.id,
-    nodeId,
-    stepIndex: index + 1,
-    totalSteps: ids.length,
-    label: node?.title || nodeId
-  });
-  await window.NourOS?.openProjectFlow?.(project.id, nodeId);
-  await window.NourOS?.applyPresentationAction?.({
-    type: 'highlightElement',
-    targetIds: [`flow-node:${project.id}:${nodeId}`],
-    style: 'glow',
-    waitForTarget: `flow-node:${project.id}:${nodeId}`
-  });
-  updateContext();
-  sendLiveContextUpdate();
-  if (voice.active && voice.session) {
-    try {
-      voice.session.sendClientContent({
-        turns: `[Presentation control — not a visitor message] The visitor selected ${direction}. Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step and why it matters commercially or to Nour's contribution. Do not restart the tour and do not ask permission for every step.`,
-        turnComplete: true
-      });
-    } catch {}
-  } else {
-    addMessage('system', `Step ${index + 1} of ${ids.length}: ${node?.title || nodeId}`);
-    if (!state.busy && state.ready) {
-      await openPanel();
-      await sendMessage(null, {
-        message: `Continue the presentation from step ${index + 1}, "${node?.title || nodeId}". Explain how it connects to the previous step and why it matters commercially or to Nour's contribution. Keep it concise, do not restart the tour, and do not ask permission for every step.`,
-        showUser: false,
-        pausePresentation: false
-      });
-    }
   }
 }
 
@@ -1960,12 +2128,128 @@ function playAudio(base64, mimeType) {
   }
   source.start(start);
   voice.nextPlayTime = start + buffer.duration;
+  voice.lastAudioAt = Date.now();
   const entry = { source, gain };
   voice.sources.push(entry);
   source.onended = () => {
     voice.sources = voice.sources.filter((item) => item !== entry);
     try { gain.disconnect(); } catch {}
   };
+}
+
+function cancelPresentationContinuation() {
+  if (voice.continuationTimer) clearTimeout(voice.continuationTimer);
+  voice.continuationTimer = null;
+}
+
+function looksLikeCheckpoint(text = '') {
+  const value = String(text).trim();
+  if (!value) return false;
+  if (/[?？]\s*$/.test(value)) return true;
+  return /(would you like|shall i|do you want|want me to|should i|souhaitez-vous|voulez-vous|puis-je|dois-je|aimeriez-vous)/i.test(value);
+}
+
+function waitForPlaybackIdle(maxMs = 120000) {
+  const started = Date.now();
+  return new Promise((resolve) => {
+    const check = () => {
+      if (!voiceIsActive() || Date.now() - started >= maxMs) { setTimeout(resolve, 100); return; }
+      if (!voice.sources.length && Date.now() - voice.lastAudioAt > 350) { setTimeout(resolve, 100); return; }
+      setTimeout(check, 120);
+    };
+    check();
+  });
+}
+
+function schedulePresentationContinuation(finalText = '') {
+  if (!voiceIsActive() || !state.presentation.active || state.presentation.paused || !voice.presentationActionPending) return;
+  if (looksLikeCheckpoint(finalText)) {
+    voice.presentationActionPending = false;
+    return;
+  }
+  cancelPresentationContinuation();
+  const epoch = aiActionEpoch;
+  voice.continuationTimer = setTimeout(async () => {
+    voice.continuationTimer = null;
+    if (!voiceIsActive() || !state.presentation.active || state.presentation.paused || epoch !== aiActionEpoch) return;
+    await waitForPlaybackIdle();
+    if (!voiceIsActive() || !state.presentation.active || state.presentation.paused || epoch !== aiActionEpoch) return;
+    voice.presentationActionPending = false;
+    voice.continuationCount += 1;
+    if (voice.continuationCount > 24) return;
+    touchVoiceActivity();
+    try {
+      voice.session?.sendClientContent({
+        turns: '[Presentation continuation — not a visitor message] Continue the active presentation from the current step. Advance one meaningful segment, use the next relevant visual target, and connect it to the previous point. When the current subject is a project workflow, call presentProjectStep for the next verified node and wait for the frontend confirmation before speaking any part of the next segment, including a lead-in. Do not say a partial sentence before a tool call. Do not ask permission or repeat covered material. If the requested subject is complete, conclude naturally and call endPresentation.',
+        turnComplete: true
+      });
+    } catch {}
+  }, 650);
+}
+
+function requestPresentationResume() {
+  if (!voiceIsActive() || !state.presentation.active) return;
+  cancelPresentationContinuation();
+  const epoch = aiActionEpoch;
+  setTimeout(async () => {
+    if (!voiceIsActive() || !state.presentation.active || state.presentation.paused || epoch !== aiActionEpoch) return;
+    await waitForPlaybackIdle(8000);
+    if (!voiceIsActive() || !state.presentation.active || state.presentation.paused || epoch !== aiActionEpoch) return;
+    touchVoiceActivity();
+    try {
+      voice.session?.sendClientContent({
+        turns: '[Presentation resume — not a visitor message] Resume the presentation from the current context. Continue one meaningful segment without asking permission or repeating what was already covered.',
+        turnComplete: true
+      });
+    } catch {}
+  }, 350);
+}
+
+function touchVoiceActivity() {
+  voice.lastActivityAt = Date.now();
+}
+
+function toggleMicMute() {
+  if (!voiceIsActive()) return;
+  voice.muted = !voice.muted;
+  for (const track of voice.mic?.getAudioTracks?.() || []) track.enabled = !voice.muted;
+  touchVoiceActivity();
+  updatePill();
+}
+
+async function endLiveSession() {
+  if (!voiceIsActive()) return;
+  aiActionEpoch += 1;
+  cancelPresentationContinuation();
+  window.NourOS?.cancelPresentationActions?.();
+  state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+  await window.NourOS?.applyPresentationAction?.({ type: 'presentationEnd' });
+  await stopVoice();
+}
+
+function startInactivityWatch() {
+  stopInactivityWatch();
+  voice.lastActivityAt = Date.now();
+  voice.inactivityTimer = setInterval(() => {
+    if (!voiceIsActive()) return;
+    if (Date.now() - voice.lastActivityAt < 5 * 60_000) return;
+    void endForInactivity();
+  }, 30_000);
+}
+
+function stopInactivityWatch() {
+  if (voice.inactivityTimer) clearInterval(voice.inactivityTimer);
+  voice.inactivityTimer = null;
+}
+
+async function endForInactivity() {
+  if (!voiceIsActive()) return;
+  await stopVoice();
+  setState('error');
+  showVoiceError(state.locale === 'fr'
+    ? 'La session vocale a pris fin après une longue période d’inactivité. Relancez la voix pour continuer.'
+    : 'The voice session ended after a period of inactivity. Start voice again to continue.');
+  setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
 }
 
 function micConstraints() {
@@ -2013,7 +2297,7 @@ async function setupInputGraph() {
     voice.micNode = worklet;
     worklet.port.onmessage = (event) => {
       const data = event.data;
-      if (data?.type !== 'samples' || !voice.active || !voice.session) return;
+      if (data?.type !== 'samples' || !voice.active || !voice.session || voice.muted) return;
       const pcm = new Int16Array(data.buffer);
       if (!pcm.length) return;
       try {
@@ -2036,7 +2320,7 @@ async function setupInputGraph() {
   voice.micFilters = [first, second];
   voice.processor = context.createScriptProcessor(4096, 1, 1);
   voice.processor.onaudioprocess = (event) => {
-    if (!voice.session || !voice.active) return;
+    if (!voice.session || !voice.active || voice.muted) return;
     const pcm16 = resampleTo16k(event.inputBuffer.getChannelData(0), context.sampleRate);
     try {
       voice.session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm16), mimeType: 'audio/pcm;rate=16000' } });
@@ -2058,6 +2342,7 @@ async function refreshMicrophone() {
     const stream = await navigator.mediaDevices.getUserMedia(micConstraints());
     const previous = voice.mic;
     voice.mic = stream;
+    for (const track of stream.getAudioTracks()) track.enabled = !voice.muted;
     attachMicTrackEnd(stream);
     if (voice.micSource) {
       try { voice.micSource.disconnect(); } catch {}
@@ -2202,6 +2487,11 @@ async function handleLiveTool(toolCall) {
       const actions = result.ok ? result.actions || (result.action ? [result.action] : []) : [];
       const gated = voice.tourActive && !voice.tourVisitorSpoke && actions.length > 0;
       const applied = result.ok && !gated ? await runActions(actions) : null;
+      const presentationAction = actions.some((item) => item && (String(item.type || '').startsWith('presentation') || VISUAL_ACTIONS.has(item.type)));
+      if (applied && presentationAction) {
+        if (actions.some((item) => item?.type === 'presentationStart')) voice.continuationCount = 0;
+        voice.presentationActionPending = true;
+      }
       const routes = actions.filter(Boolean).map((item) => item.route).filter(Boolean);
       const visualFailure = applied && applied.ok === false;
       responses.push({
@@ -2271,6 +2561,10 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
   voice.playbackLead = PLAYBACK_MIN_LEAD;
   voice.playbackUnderruns = 0;
   voice.chunksSinceUnderrun = 0;
+  voice.muted = false;
+  voice.presentationActionPending = false;
+  voice.continuationCount = 0;
+  cancelPresentationContinuation();
   voice.tourPrompt = tour
     ? (state.locale === 'fr'
       ? "Commence comme une personne, pas comme un présentateur. Présente-toi en une phrase, puis pose une vraie question sur ce qui amène la personne dans le portfolio de Nour. N’énumère pas les fonctionnalités, n’explique pas l’interface et ne mentionne pas que l’expérience est en direct, interactive ou personnalisée. Ne commence pas encore à présenter. Après la réponse, choisis la direction la plus pertinente à partir des connaissances du portfolio et commence naturellement, sans visite rigide ni script."
@@ -2283,6 +2577,9 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
     });
     state.sessionId = token.sessionId;
     voice.reservationId = token.reservationId;
+    voice.systemInstruction = typeof token.config?.systemInstruction === 'string'
+      ? token.config.systemInstruction
+      : (token.config?.systemInstruction?.parts || []).map((part) => part.text || '').join('\n');
     localStorage.setItem(STORE.session, state.sessionId);
     voice.mic = await navigator.mediaDevices.getUserMedia(micConstraints());
     attachMicTrackEnd(voice.mic);
@@ -2297,14 +2594,17 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
       model: token.model,
       config: token.config,
       callbacks: {
-        onopen: () => { setState('listening'); lastLiveContext = ''; sendLiveContextUpdate(); },
+        onopen: () => { setState('listening'); lastLiveContext = ''; },
         onmessage: async (message) => {
-          if (message.setupComplete) { setState('listening'); void sendTourPromptIfNeeded(); }
+          if (message.serverContent || message.toolCall || message.voiceActivity) touchVoiceActivity();
+          if (message.setupComplete) { setState('listening'); lastLiveContext = ''; sendLiveContextUpdate(); void sendTourPromptIfNeeded(); }
           const activity = message.voiceActivity?.voiceActivityType || message.voiceActivity?.type;
           if (activity === 'START_OF_SPEECH') setState('listening');
           else if (activity === 'END_OF_SPEECH') setState('processing');
           if (message.serverContent?.interrupted) {
             aiActionEpoch += 1;
+            cancelPresentationContinuation();
+            voice.presentationActionPending = false;
             window.NourOS?.cancelPresentationActions?.();
             if (state.presentation.active) {
               state.presentation = { ...state.presentation, paused: true };
@@ -2329,9 +2629,12 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
             }
           }
           if (message.serverContent?.turnComplete) {
+            const finalText = voice.assistantText;
             setState('listening');
             await persistVoiceTurn();
             voice.turnId = randomId(12);
+            if (voice.contextPending) { voice.contextPending = false; sendLiveContextUpdate(); }
+            schedulePresentationContinuation(finalText);
           }
           if (message.usageMetadata) voice.usage = message.usageMetadata;
           if (message.toolCall) await handleLiveTool(message.toolCall);
@@ -2372,6 +2675,7 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
     voice.micSource = voice.inputContext.createMediaStreamSource(voice.mic);
     connectMicSource(voice.micSource);
     resumeAudioContexts();
+    startInactivityWatch();
     startOrbAnimation();
     setState('listening');
     return true;
@@ -2396,8 +2700,42 @@ async function sendTourPromptIfNeeded() {
   voice.session.sendClientContent({ turns: voice.tourPrompt, turnComplete: true });
 }
 
+function endVoiceOnPageHide() {
+  if (!voice.active) return;
+  const sessionId = state.sessionId;
+  const reservationId = voice.reservationId;
+  voice.active = false;
+  stopInactivityWatch();
+  cancelPresentationContinuation();
+  window.NourOS?.cancelPresentationActions?.();
+  state.presentation = { active: false, projectId: null, nodeId: null, paused: false, stepIndex: 0, totalSteps: 0, label: '' };
+  window.NourOS?.applyPresentationAction?.({ type: 'presentationEnd' });
+  try { voice.session?.close(); } catch {}
+  voice.session = null;
+  for (const track of voice.mic?.getTracks?.() || []) track.stop();
+  voice.mic = null;
+  setState('idle');
+  if (sessionId) {
+    try {
+      fetch(resolveApi('/api/live/end'), {
+        method: 'POST',
+        keepalive: true,
+        headers: {
+          'content-type': 'application/json',
+          'x-prototype-key': state.key,
+          'x-owner-token': state.owner
+        },
+        body: JSON.stringify({ sessionId, reservationId })
+      }).catch(() => {});
+    } catch {}
+  }
+}
+window.addEventListener('pagehide', endVoiceOnPageHide);
+
 async function stopVoice() {
   voice.active = false;
+  stopInactivityWatch();
+  cancelPresentationContinuation();
   if (voice.expiryTimer) { clearTimeout(voice.expiryTimer); voice.expiryTimer = null; }
   stopOrbAnimation();
   const hadPlayback = voice.sources.length > 0;

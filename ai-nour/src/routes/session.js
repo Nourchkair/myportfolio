@@ -193,10 +193,11 @@ export function registerSessionRoutes(router, services) {
       sessionId: body.sessionId,
       now
     });
-    // Keep the active lease until the provider token expires. Closing the
-    // browser UI does not revoke the ephemeral Gemini token, so releasing the
-    // lease early would allow a second concurrent session.
-    return json({ ok: true, ...settled });
+    // An explicit end is a visitor-controlled stop: release the concurrency
+    // lease immediately so the visitor can start a new session without waiting
+    // for the old token to expire. The browser also drops the token on end.
+    const leaseReleased = await db.deleteLiveSessionLease(body.sessionId, body.reservationId || null).catch(() => false);
+    return json({ ok: true, ...settled, leaseReleased });
   });
 
   router.post('/api/tools/execute', async ({ request }) => {

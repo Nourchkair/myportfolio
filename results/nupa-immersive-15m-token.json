@@ -1,0 +1,35 @@
+{
+  "generatedAt": "2026-11-28T08:26:19.569982+00:00",
+  "environment": {
+    "worker": "http://127.0.0.1:8789",
+    "static": "http://127.0.0.1:8771",
+    "provider": "gemini-3.8-live",
+    "voice": "Sadachbia"
+  },
+  "localControlLiveSessionSeconds": "900",
+  "token": {
+    "status": 200,
+    "sessionSeconds": 900,
+    "reservationUsdMicros": 450000,
+    "expiresAt": "2026-11-28T08:29:04.095Z",
+    "model": "gemini-3.8-live",
+    "voice": "Sadachbia"
+  },
+  "end": {
+    "status": 200,
+    "released": true,
+    "leaseReleased": true,
+    "unreportedUsdMicros": 450000,
+    "activeLeasesAfter": 0
+  },
+  "providerLimit": {
+    "audioOnlySessionMinutes": 15,
+    "source": "Gemini Live API capabilities guide",
+    "resumptionNeededFor15Minutes": false
+  },
+  "notes": [
+    "Local Worker/D1 test, not production.",
+    "The explicit end was tested without a live provider turn, so the reservation was conservatively charged in the local ledger.",
+    "Network-drop resumption is not implemented."
+  ]
+}

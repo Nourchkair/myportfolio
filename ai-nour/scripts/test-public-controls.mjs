@@ -136,7 +136,7 @@ async function main() {
     check('concurrent voice error is explicit', liveBlocked?.body.error?.code === 'LIVE_SESSION_LIMIT', { error: liveBlocked?.body.error?.code, details: liveBlocked?.body.error?.details });
     const liveOk = live.find((item) => item.status === 200);
     const liveTools = liveOk?.body.config?.tools?.[0]?.functionDeclarations?.map((tool) => tool.name) || [];
-    check('voice cannot start web research and keeps Iapetus', !liveTools.includes('webResearch') && liveOk?.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName === 'Iapetus', { tools: liveTools, voice: liveOk?.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName });
+    check('voice cannot start web research and keeps Sadachbia', !liveTools.includes('webResearch') && liveOk?.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName === 'Sadachbia', { tools: liveTools, voice: liveOk?.body.config?.speechConfig?.voiceConfig?.prebuiltVoiceConfig?.voiceName });
 
     const liveOwnerRecord = liveOwners.find((item) => item.sessionId === liveOk?.body.sessionId);
     const turn = await call('/api/live/turn', {
@@ -150,10 +150,10 @@ async function main() {
         userText: 'Lease check',
         assistantText: 'Lease check',
         reservationId: liveOk.body.reservationId,
-        usage: { textInput: 0, audioInput: 0, audioOutput: 4000 }
+        usage: { textInput: 0, audioInput: 0, audioOutput: 40000 }
       }
     });
-    check('Live usage above the reservation is recorded, not capped to the reservation', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 48000 && turn.body.costUsdMicros > liveOk.body.reservationUsdMicros, { status: turn.status, cost: turn.body.costUsdMicros, reservation: liveOk.body.reservationUsdMicros });
+    check('Live usage above the reservation is recorded, not capped to the reservation', turn.status === 200 && turn.body.duplicate === false && turn.body.costUsdMicros === 480000 && turn.body.costUsdMicros > liveOk.body.reservationUsdMicros, { status: turn.status, cost: turn.body.costUsdMicros, reservation: liveOk.body.reservationUsdMicros });
 
     const fourth = await call('/api/owner', { method: 'POST', ip: '203.0.113.70' });
     const fourthSession = await call('/api/session', { method: 'POST', owner: fourth.body.ownerToken, body: { locale: 'en', consent }, ip: '203.0.113.70' });
@@ -161,12 +161,13 @@ async function main() {
     check('active voice leases still block a new session after a reported turn', blockedByLease.status === 429 && blockedByLease.body.error?.code === 'LIVE_SESSION_LIMIT', { status: blockedByLease.status, error: blockedByLease.body.error?.code });
 
     const ended = await call('/api/live/end', { method: 'POST', owner: liveOwnerRecord.owner, body: { sessionId: liveOwnerRecord.sessionId, reservationId: liveOk.body.reservationId }, ip: liveOwnerRecord.ip });
-    const stillBlocked = await call('/api/live/token', { method: 'POST', owner: fourth.body.ownerToken, body: { sessionId: fourthSession.body.session?.id, locale: 'en' }, ip: '203.0.113.70' });
-    check('ending a session settles the reservation but keeps the lease until token expiry', ended.status === 200 && ended.body.ok === true && ended.body.released === true && ended.body.unreportedUsdMicros === 0 && stillBlocked.status === 429, { ended: ended.status, released: ended.body.released, unreported: ended.body.unreportedUsdMicros, next: stillBlocked.status, error: stillBlocked.body.error?.code });
+    const afterEnd = await call('/api/live/token', { method: 'POST', owner: fourth.body.ownerToken, body: { sessionId: fourthSession.body.session?.id, locale: 'en' }, ip: '203.0.113.70' });
+    check('ending a session releases the reservation and the concurrency lease immediately', ended.status === 200 && ended.body.ok === true && ended.body.released === true && ended.body.unreportedUsdMicros === 0 && ended.body.leaseReleased === true && afterEnd.status === 200, { ended: ended.status, released: ended.body.released, leaseReleased: ended.body.leaseReleased, unreported: ended.body.unreportedUsdMicros, next: afterEnd.status, error: afterEnd.body.error?.code });
 
-    d1(`UPDATE live_session_leases SET expires_at=0 WHERE session_id='${liveOwnerRecord.sessionId}'`);
+    d1(`UPDATE live_session_leases SET expires_at=0 WHERE session_id='${fourthSession.body.session?.id}'`);
+    d1(`UPDATE live_tokens SET expires_at=0 WHERE session_id='${fourthSession.body.session?.id}' AND status='held'`);
     const afterExpiry = await call('/api/live/token', { method: 'POST', owner: fourth.body.ownerToken, body: { sessionId: fourthSession.body.session?.id, locale: 'en' }, ip: '203.0.113.70' });
-    check('expired leases are the only way to release voice concurrency', afterExpiry.status === 200, { status: afterExpiry.status, error: afterExpiry.body.error?.code });
+    check('expired lease and reservation release voice concurrency', afterExpiry.status === 200, { status: afterExpiry.status, error: afterExpiry.body.error?.code });
     if (afterExpiry.status === 200) await call('/api/live/end', { method: 'POST', owner: fourth.body.ownerToken, body: { sessionId: fourthSession.body.session?.id, reservationId: afterExpiry.body.reservationId }, ip: '203.0.113.70' });
 
     const adminNoAuth = await call('/api/admin/status');

@@ -9,7 +9,7 @@ const COMMANDS=Object.freeze([
   'navigateTo','showProjectCard','openProject','openProjectFlow','highlightFlowNode',
   'openJourneyChapter','openContact','openReadingView','goBack',
   'getCurrentState','getStatus','subscribe',
-  'getPresentationTargets','getPresentationTarget','applyPresentationAction',
+  'getPresentationTargets','getPresentationTarget','getTargetForElement','applyPresentationAction',
   'cancelPresentationActions','waitForPresentationTarget','getPresentationState'
 ]);
 
@@ -117,6 +117,7 @@ export function createCommandApi(adapter,store){
     goBack(){ return run('goBack',[],()=>adapter.goBack()); },
     getPresentationTargets(options={}){ return adapter.getPresentationTargets?.(options)||{targets:[]}; },
     getPresentationTarget(targetId){ return adapter.getPresentationTarget?.(targetId)||null; },
+    getTargetForElement(element){ return adapter.getTargetForElement?.(element)||null; },
     applyPresentationAction(action){ return runPresentation('applyPresentationAction',()=>adapter.applyPresentationAction?.(action)||{ok:false,error:'PRESENTATION_UNAVAILABLE'}); },
     cancelPresentationActions(){ adapter.cancelPresentationActions?.(); return {ok:true}; },
     waitForPresentationTarget(targetId){ return adapter.waitForPresentationTarget?.(targetId)??Promise.resolve(false); },

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-28T00:38:17.147Z",
+  "generatedAt": "2026-11-28T08:46:06.193Z",
   "mode": "public/mock-providers/local-d1",
   "passed": 23,
   "failed": 0,
@@ -157,7 +157,7 @@
       }
     },
     {
-      "name": "voice cannot start web research and keeps Iapetus",
+      "name": "voice cannot start web research and keeps Sadachbia",
       "pass": true,
       "detail": {
         "tools": [
@@ -193,7 +193,7 @@
           "compareElements",
           "clearVisualEffects"
         ],
-        "voice": "Iapetus"
+        "voice": "Sadachbia"
       }
     },
     {
@@ -201,8 +201,8 @@
       "pass": true,
       "detail": {
         "status": 200,
-        "cost": 48000,
-        "reservation": 1000
+        "cost": 480000,
+        "reservation": 15000
       }
     },
     {
@@ -214,18 +214,18 @@
       }
     },
     {
-      "name": "ending a session settles the reservation but keeps the lease until token expiry",
+      "name": "ending a session releases the reservation and the concurrency lease immediately",
       "pass": true,
       "detail": {
         "ended": 200,
         "released": true,
+        "leaseReleased": true,
         "unreported": 0,
-        "next": 429,
-        "error": "LIVE_SESSION_LIMIT"
+        "next": 200
       }
     },
     {
-      "name": "expired leases are the only way to release voice concurrency",
+      "name": "expired lease and reservation release voice concurrency",
       "pass": true,
       "detail": {
         "status": 200
@@ -264,28 +264,28 @@
         "limits": {
           "dailyCapUsdMicros": 3000000,
           "cumulativeCapUsdMicros": 7000000,
-          "liveSessionSeconds": 60,
-          "maxLiveSessionSeconds": 600,
+          "liveSessionSeconds": 900,
+          "maxLiveSessionSeconds": 900,
           "maxConcurrentLiveSessions": 2,
           "maxLiveSessionsPerOwner": 1,
           "chatRateLimit": 30,
           "globalChatRateLimit": 3,
           "liveRateLimit": 12,
-          "globalLiveRateLimit": 6,
-          "maxLiveTokensPerDay": 12
+          "globalLiveRateLimit": 0,
+          "maxLiveTokensPerDay": 0
         },
         "budget": {
-          "dailyUsdMicros": 84585,
-          "cumulativeUsdMicros": 84585,
-          "dailySpentUsdMicros": 83585,
-          "cumulativeSpentUsdMicros": 83585,
-          "heldLiveReservationsUsdMicros": 1000,
+          "dailyUsdMicros": 559585,
+          "cumulativeUsdMicros": 559585,
+          "dailySpentUsdMicros": 529585,
+          "cumulativeSpentUsdMicros": 529585,
+          "heldLiveReservationsUsdMicros": 30000,
           "heldSpendReservationsUsdMicros": 0,
-          "heldReservationsUsdMicros": 1000,
+          "heldReservationsUsdMicros": 30000,
           "dailyCapUsdMicros": 3000000,
           "cumulativeCapUsdMicros": 7000000,
-          "dailyRemainingUsdMicros": 2915415,
-          "cumulativeRemainingUsdMicros": 6915415,
+          "dailyRemainingUsdMicros": 2440415,
+          "cumulativeRemainingUsdMicros": 6440415,
           "allowed": true
         }
       }

@@ -59,14 +59,14 @@ migrations/                0001–0006 D1 schema and data updates
 ## Live flow
 
 1. `POST /api/live/token` checks flags, per-visitor/global rate limits, the global daily token count, the atomic held-reservation budget, and the active voice-session leases.
-2. Creates a held reservation (default `$0.125` for a 300-second session; the 600-second maximum remains configurable) for 15 minutes.
-3. Mints a one-use Gemini token with a configurable `expireTime` (default **300 seconds**), 60-second new-session window, **Sadachbia** voice (deployed), shared portfolio grounding, transcripts, and navigation/knowledge/presentation tools.
+2. Creates a held reservation (default `$0.45` for a 900-second session at `$0.03/min`; 20-minute hold) before minting the token.
+3. Mints a one-use Gemini token with a configurable `expireTime` (default **900 seconds**, the audio-only Live API maximum), 60-second new-session window, **Sadachbia** voice, shared portfolio grounding, transcripts, and navigation/knowledge/presentation tools.
 4. The browser connects directly to Gemini; no permanent key is exposed.
 5. Tool calls go to `/api/tools/execute`; transcripts/usage go to `/api/live/turn`.
 6. The server charges `max(actual, reservation)` when usage is reported and reconciles the hold.
 7. If the hold expires unreported, scheduled cleanup records the reservation as `live_unreported` and marks the token expired.
 8. Daily 12-token cap, the approved $3.00 daily cap, $7.00 cumulative cap, global 2 / per-visitor 1 active voice sessions, text atomic $0.02 reservations and Live atomic session reservations bound exposure. `POST /api/live/end` releases a lease.
-9. Session duration is configurable (default 300 seconds, maximum 600); the D1 transcript allows a new session to continue with context.
+9. Session duration is configurable (default 900 seconds, maximum 900); the D1 transcript allows a new session to continue with context.
 
 ## Email flow
 
@@ -129,7 +129,7 @@ Migrations: `0001_init.sql`, `0002_phase2.sql`, `0003_crm_idempotency.sql`, `000
 - `budget()` includes spent cost events + held text reservations + held Live reservations.
 - Text requests atomically insert a `spend_reservations` hold; Live token issuance atomically inserts a `live_tokens` hold with cap/concurrency predicates.
 - Reported Live turns are charged at actual token-estimated usage, capped by the reservation remainder. `POST /api/live/end` releases the hold; a no-usage end or an expired unreported hold settles conservatively.
-- Defaults: $3/day, $7 cumulative, 300-second sessions, $0.125 reservation at 300s, 600-second maximum. The daily Live-token count and Live rate limits are temporarily **0 = unlimited** for testing, with concurrent/owner session limits at 20; the spending caps remain in force.
+- Defaults: $3/day, $7 cumulative, 900-second sessions, $0.45 reservation at 900s, 900-second maximum. The daily Live-token count and Live rate limits are temporarily **0 = unlimited** for testing, with concurrent/owner session limits at 20; the spending caps remain in force.
 
 ## Phase 4 follow-ups
 

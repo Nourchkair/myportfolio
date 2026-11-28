@@ -8,14 +8,14 @@ Status: **deployed publicly on 27 November 2026.** Worker `00fb071e-77f7-4192-a4
 
 | Layer | Responsibility |
 | --- | --- |
-| `src/app/presentation.js` | Target registry, highlight/spotlight system, virtual Nupa cursor, tooltips, workflow tracing, compare/zoom, presentation bar, cancellation and layout synchronisation. |
+| `src/app/presentation.js` | Target registry, highlight/spotlight system, virtual Nupa cursor, tooltips, workflow tracing, compare/zoom, presentation state, cancellation and layout synchronisation. |
 | `src/app/commands.js` | Extends the existing `window.NourOS` command API with presentation targets, visual actions, readiness waits and cancellation. |
 | `src/app/immersive.js` | Bridges presentation actions to the real portfolio navigation and existing interaction logic (project flow, journey tabs, project cards). |
 | `ai-nour/src/tools/registry.js` | Allowlisted presentation tools, target validation, action construction and navigation/readiness metadata. |
 | `ai-nour/src/knowledge/context.js` | Normalises the client’s approved target registry into the model’s portfolio context. |
 | `ai-nour/src/sessions/manager.js` | Mode-selection, visual-tool, presentation-step, interruption and visitor-tailoring instructions. |
-| `src/ai-nour/companion.js` | Orchestrates tool actions, presentation state, text/voice transitions, bar controls, pauses and cancellation. |
-| `src/ai-nour/companion.css` | Native glass highlight, spotlight, cursor, tooltip and presentation-control styling, including reduced-motion and mobile rules. |
+| `src/ai-nour/companion.js` | Orchestrates tool actions, presentation state, text/voice transitions, unified-pill controls, pauses and cancellation. |
+| `src/ai-nour/companion.css` | Native glass highlight, spotlight, cursor, tooltip, text-range highlight and unified-pill styling, including reduced-motion and mobile rules. |
 
 ## 1b. Opening experience
 
@@ -32,7 +32,7 @@ Nupa selects the mode from intent, without asking the visitor to configure one:
 
 - **Conversation** — answers without visual manipulation; still receives the current section/project/flow/chapter.
 - **Contextual assistance** — one or more focused highlights, spotlight, hover, expand, point or compare actions, followed by natural conversation.
-- **Presentation** — project or workflow navigation with step-by-step visual actions, a minimal presentation bar, pause/resume/previous/next/end controls and progress.
+- **Presentation** — project or workflow navigation with step-by-step visual actions and internal presentation state. Active-session controls live in the unified Nupa pill; there is no bottom presentation bar.
 
 The prompt explicitly discourages full presentations for simple factual questions and visual overuse when the answer is clear in words.
 
@@ -45,7 +45,7 @@ Stable target ids are generated for approved components only:
 - `project-text:<projectId>:<view>:<index>`, `project-contribution:*`, `project-tag:*`
 - `flow:<projectId>`, `flow-node:<projectId>:<nodeId>`, `flow-link:<projectId>:<from>-><to>`
 - `journey`, `journey-chapter:*`, `journey-tab:*`, `journey-text:*`, `journey-chip:*`
-- `contact`, `about`, `control:presentation-*`
+- `contact`, `about`
 
 The registry exposes labels, semantic descriptions, available actions, relationships and knowledge references. It is generated from the actual application state and verified project/journey data; arbitrary CSS selectors and JavaScript execution are not accepted.
 
@@ -70,12 +70,14 @@ Paragraph, capability, contribution-block, and journey-text ids use semantic slu
 
 ## 5. Presentation controls
 
-A single compact glass bar appears only while presenting:
+The bottom presentation bar has been removed. All active-session controls live in the existing top-right Nupa pill:
 
-- “Nupa” live indicator, project/step label and `current / total` progress.
-- Previous, pause, resume, next and end.
-- The visitor can always end visual assistance; controls are keyboard-focusable and the bar is a labelled region, not a focus trap.
-- On mobile the bar is constrained to the viewport and placed above the home indicator.
+- Inactive: chat access, Nupa label and microphone button.
+- Active voice: animated voice indicator, label, mute/unmute, pause/resume when presenting, and end live session.
+- Paused: resume replaces pause; the voice session and presentation context remain active.
+- End: terminates Live, releases the microphone, cancels pending actions, clears visual effects and preserves the visitor’s current page.
+
+Presentation state and progression tracking remain internal for orchestration. Visitors can also ask verbally to pause, skip, continue or stop. On mobile the pill stays within the viewport.
 
 ## 6. Speech / animation synchronisation
 
@@ -87,17 +89,17 @@ The implementation is **step-level**, not word-level.
 4. Visual actions resolve the target, scroll it into view, apply the effect and return an acknowledgement.
 5. In Live voice, the frontend sends the tool response only after `runActions` completes, so Gemini receives the visual confirmation before it speaks the step.
 6. In text, actions are applied before the assistant reply is added to the transcript.
-7. Presentation actions carry `stepIndex`, `totalSteps` and a label for progress.
+7. Presentation actions carry `stepIndex`, `totalSteps` and a label for internal orchestration. They are no longer shown as a bottom progress bar.
 8. The current Gemini Live model exposes turn completion, voice activity and interruption events; it does not expose reliable word-level timestamps. The implementation therefore uses step-level readiness and interruption events rather than pretending to have word-level sync.
 
 ## 7. Interruptions and adaptation
 
 - A monotonic action epoch cancels stale visual sequences and prevents outdated tool responses from overriding newer visitor actions.
-- Manual route changes cancel pending visual actions, clear effects and **pause** the presentation. The bar remains available, the current location is sent to Nupa, and it can adapt or resume. Only an explicit stop/end terminates the session.
+- Manual route changes cancel pending visual actions, clear effects and **pause** the presentation. The Nupa pill remains available, the current location is sent to Nupa, and it can adapt or resume. Only an explicit stop/end terminates the session.
 - Live interruption pauses the presentation, stops queued audio playback and cancels pending visual sequencing while preserving the current context.
-- Text previous/next requests a contextual explanation from the model, not merely a highlight movement; the same presentation state carries across text and voice, including voice-session expiry.
+- The same presentation state carries across text and voice, including voice-session expiry.
 - Sending a text message during a presentation pauses it before the question is processed.
-- Presentation controls can pause/resume/end; previous/next move to real flow nodes, highlight them, and request a contextual explanation in text or a continuation in voice.
+- The unified pill can pause, resume or end. Verbal requests can still skip, go back, continue or explore another section.
 - Visitor profile and current context continue to drive emphasis: recruiter, business owner, technical visitor or curious visitor.
 
 ## 8. Validation
@@ -134,21 +136,20 @@ Public default entry (`results/nupa-production-public-default.json`): **4/4** �
 - Sequential highlight with final target retained.
 - Cancellation of a stale sequence without wiping the current highlight.
 - Invalid target rejection.
-- Clear effects preserving the presentation bar.
+- Clear effects preserving internal presentation state and no bottom bar.
 - Pause, resume and end.
 - Reduced-motion behavior.
-- Mobile bar at 390px viewport: 291px wide, no overflow.
+- Mobile pill at 390px viewport: fits with no overflow.
 - Stable semantic paragraph/tag ids resolve and highlight.
-- Nupa bar/cursor branding.
-- French presentation-control labels (`Terminer`, `Reprendre`, `Étape suivante`).
+- Nupa pill/cursor branding.
+- French pill control labels.
 
-Nupa AI orchestration run (`results/nupa-v3-chat.json`):
+Earlier Nupa AI orchestration run (`results/nupa-v3-chat.json`, before the unified-pill change):
 
 - Text message → `highlightElement` → highlighted project card + cursor + action chip.
-- Text message → `presentProject` → bar, project and flow open at the verified demo step with `5 / 9` progress.
-- Manual `navigateTo('home')` → pending effects cleared, presentation paused, bar retained.
-- Text **Next** → contextual assistant explanation added and progress advanced.
-- Explicit **End** → presentation terminated, bar hidden and effects cleared.
+- Text message → `presentProject` → project and flow open at the verified demo step with internal `5 / 9` progress; no bottom bar.
+- Manual `navigateTo('home')` → pending effects cleared and presentation paused; pill remains available.
+- Explicit **End** → presentation terminated, effects cleared and voice resources released.
 - Identity in text: “Who are you? Are you Nour?” → “No, I’m Nupa…” with no claim to be Nour.
 - Identity in French: “Es-tu Nour ?” → “Non, je suis Nupa…” with no claim to be Nour.
 - No browser console errors.
@@ -194,4 +195,4 @@ A real Gemini text call also selected `highlightElement` for “Highlight the Cu
 10. Manually click another section/project during a presentation; verify visual effects stop immediately.
 11. Test the same scenarios on a phone/touch viewport and with reduced motion enabled.
 12. Test English and French prompts; verify narration language and visual targeting.
-13. Verify the presentation bar pause/resume/previous/next/end controls.
+13. Verify the unified pill mute, pause/resume and end controls; confirm no bottom presentation bar exists.

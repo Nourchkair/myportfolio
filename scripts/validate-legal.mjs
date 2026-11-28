@@ -86,7 +86,7 @@ check('no web research surface', !/webResearch|WEB_RESEARCH_ENABLED|googleSearch
 check('production daily cap is $3', /DAILY_SPEND_CAP_USD_MICROS = "3000000"/.test(read('ai-nour/wrangler.production.toml')) && /textReservationUsdMicros/.test(read('ai-nour/src/config.js')));
 check('voice concurrency leases and release endpoint', fs.existsSync(path.join(root, 'ai-nour/migrations/0008_live_session_leases.sql')) && read('ai-nour/src/routes/session.js').includes("'/api/live/end'") && read('ai-nour/src/services/conversation.js').includes('acquireLiveSessionLease'));
 check('conservative Flash-Lite text rates', /TEXT_INPUT_USD_PER_MILLION = "0.30"/.test(read('ai-nour/wrangler.production.toml')) && /TEXT_OUTPUT_USD_PER_MILLION = "2.50"/.test(read('ai-nour/wrangler.production.toml')));
-check('five-minute production default', /LIVE_SESSION_SECONDS = "300"/.test(read('ai-nour/wrangler.production.toml')));
+check('fifteen-minute production default', /LIVE_SESSION_SECONDS = "900"/.test(read('ai-nour/wrangler.production.toml')) && /MAX_LIVE_SESSION_SECONDS = "900"/.test(read('ai-nour/wrangler.production.toml')));
 
 for (const file of ['dist/privacy/index.html', 'dist/terms/index.html', 'dist/_redirects']) {
   check(`dist: ${file}`, fs.existsSync(path.join(root, file)));

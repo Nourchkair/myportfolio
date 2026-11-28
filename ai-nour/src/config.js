@@ -132,11 +132,11 @@ export function loadConfig(env = {}) {
       maxHistoryMessages: number(env, 'MAX_HISTORY_MESSAGES', DEFAULTS.maxHistoryMessages),
       summaryTriggerMessages: number(env, 'SUMMARY_TRIGGER_MESSAGES', DEFAULTS.summaryTriggerMessages),
       liveTokenReservationUsdMicros: number(env, 'LIVE_TOKEN_RESERVATION_USD_MICROS', 80_000),
-      liveTokenReservationPerMinuteUsdMicros: number(env, 'LIVE_TOKEN_RESERVATION_PER_MINUTE_USD_MICROS', 25_000),
-      liveSessionSeconds: number(env, 'LIVE_SESSION_SECONDS', number(env, 'LIVE_TOKEN_TTL_SECONDS', 600)),
-      maxLiveSessionSeconds: number(env, 'MAX_LIVE_SESSION_SECONDS', 600),
+      liveTokenReservationPerMinuteUsdMicros: number(env, 'LIVE_TOKEN_RESERVATION_PER_MINUTE_USD_MICROS', 30_000),
+      liveSessionSeconds: number(env, 'LIVE_SESSION_SECONDS', number(env, 'LIVE_TOKEN_TTL_SECONDS', 900)),
+      maxLiveSessionSeconds: number(env, 'MAX_LIVE_SESSION_SECONDS', 900),
       liveTokenNewSessionTtlSeconds: number(env, 'LIVE_TOKEN_NEW_SESSION_TTL_SECONDS', 60),
-      liveTokenHoldMs: number(env, 'LIVE_TOKEN_HOLD_SECONDS', 900) * 1000,
+      liveTokenHoldMs: number(env, 'LIVE_TOKEN_HOLD_SECONDS', 1200) * 1000,
       maxLiveTokensPerDay: number(env, 'MAX_LIVE_TOKENS_PER_DAY', 12),
       sessionTtlMs: number(env, 'SESSION_TTL_HOURS', 168) * 3_600_000
     }

@@ -211,6 +211,15 @@ check('voice recovers audio contexts on visibility/device changes',/visibilitych
 check('configured live voice is Sadachbia',read('ai-nour/src/config.js').includes("liveVoice: 'Sadachbia'")&&read('ai-nour/wrangler.production.toml').includes('LIVE_VOICE = "Sadachbia"'));
 check('live prompt is structured',['CORE IDENTITY AND POLICIES','CONVERSATIONAL PERSONALITY','VOICE DELIVERY','PORTFOLIO KNOWLEDGE','PRESENTATION AND TOOL USE'].every((section)=>livePromptSource.includes(section)));
 check('live introduction is natural and short',/Start like a person, not a presenter/.test(companionSource)&&/ask one genuine question/.test(companionSource));
+check('live duration defaults to fifteen minutes',/LIVE_SESSION_SECONDS = "900"/.test(read('ai-nour/wrangler.production.toml'))&&/MAX_LIVE_SESSION_SECONDS = "900"/.test(read('ai-nour/wrangler.production.toml')));
+check('live reservation is conservative for fifteen minutes',/LIVE_TOKEN_RESERVATION_PER_MINUTE_USD_MICROS = "30000"/.test(read('ai-nour/wrangler.production.toml')));
+check('bottom presentation bar is removed',!/ai-pres-bar/.test(companionSource)&&!/ai-pres-bar/.test(read('src/app/presentation.js'))&&!/ai-pres-bar/.test(read('src/ai-nour/companion.css')));
+check('unified Nupa pill exposes voice and presentation controls',/presentation-pause/.test(companionSource)&&/presentation-resume/.test(companionSource)&&/end-live/.test(companionSource)&&/toggleMicMute/.test(companionSource));
+check('presentation supports phrase highlighting',/getTargetForElement/.test(read('src/app/presentation.js'))&&/findTextRange/.test(read('src/app/presentation.js'))&&/quote/.test(read('ai-nour/src/tools/registry.js')));
+check('interface awareness captures selection and interaction context',/selectionchange/.test(companionSource)&&/pointerover/.test(companionSource)&&/INTERACTION CONTEXT/.test(companionSource));
+check('context updates use the silent context channel',/sendContextUpdate/.test(companionSource)&&/LIVE CONTEXT \(silent/.test(companionSource));
+check('explicit voice end releases the lease',/leaseReleased/.test(read('ai-nour/src/routes/session.js')));
+
 
 /* ---------- output ---------- */
 const summary={

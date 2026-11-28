@@ -35,38 +35,25 @@ const highlighted = await p.evaluate(() => ({
 await send('Present the Acquisition project');
 await p.waitForTimeout(1700);
 const presented = await p.evaluate(() => ({
-  bar: !document.querySelector('.ai-pres-bar').hidden,
-  title: document.querySelector('.ai-pres-title')?.textContent,
-  progress: document.querySelector('.ai-pres-progress')?.textContent,
+  active: window.NourOS.getPresentationState().presentation.active,
   projectOpen: document.querySelector('#project').classList.contains('open'),
   flow: document.querySelector('#project').classList.contains('project-flow-mode'),
-  presentation: window.NourOS.getPresentationState().presentation
+  presentation: window.NourOS.getPresentationState().presentation,
+  hasBottomBar: Boolean(document.querySelector('.ai-pres-bar'))
 }));
 
 await p.evaluate(() => window.NourOS.navigateTo('home'));
 await p.waitForTimeout(900);
 const manualNavigation = await p.evaluate(() => ({
-  barHidden: document.querySelector('.ai-pres-bar')?.hidden,
-  paused: document.querySelector('.ai-pres-bar')?.classList.contains('is-paused'),
+  paused: window.NourOS.getPresentationState().presentation.paused,
   presentation: window.NourOS.getPresentationState().presentation,
   highlights: document.querySelectorAll('.ai-highlight').length,
   cursorHidden: document.querySelector('.ai-pres-cursor')?.hidden
 }));
 
-const beforeTextStep = await p.evaluate(() => document.querySelectorAll('.ainour-msg.assistant').length);
-await p.locator('[data-ai-pres="next"]').click();
-await p.waitForTimeout(2200);
-const textStep = await p.evaluate(() => ({
-  assistantMessages: document.querySelectorAll('.ainour-msg.assistant').length,
-  barVisible: !document.querySelector('.ai-pres-bar').hidden,
-  paused: document.querySelector('.ai-pres-bar').classList.contains('is-paused'),
-  node: window.NourOS.getPresentationState().presentation.nodeId,
-  progress: document.querySelector('.ai-pres-progress')?.textContent
-}));
-
-await p.locator('[data-ai-pres="end"]').click();
+await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationEnd' }));
 await p.waitForTimeout(300);
-const explicitlyEnded = await p.evaluate(() => ({ barHidden: document.querySelector('.ai-pres-bar').hidden, presentation: window.NourOS.getPresentationState().presentation, highlights: document.querySelectorAll('.ai-highlight').length }));
+const explicitlyEnded = await p.evaluate(() => ({ presentation: window.NourOS.getPresentationState().presentation, highlights: document.querySelectorAll('.ai-highlight').length, hasBottomBar: Boolean(document.querySelector('.ai-pres-bar')) }));
 
 await send('Who are you? Are you Nour?');
 await p.waitForTimeout(700);
@@ -88,7 +75,6 @@ console.log(JSON.stringify({
   highlighted,
   presented,
   manualNavigation,
-  textStep: { before: beforeTextStep, ...textStep },
   explicitlyEnded,
   identity: {
     en: { ...identityEn, ok: /^No, I'm Nupa/.test(identityEn.text) && /not him/.test(identityEn.text) },

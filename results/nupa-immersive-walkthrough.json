@@ -1,0 +1,508 @@
+{
+  "generatedAt": "2026-11-28T08:42:44.821382+00:00",
+  "environment": "local Worker + local D1 + real Gemini 3.8 Live; synthetic WAV through a fake MediaStreamDestination; not production",
+  "fullPresentation": {
+    "sessionId": "05306021-f724-4eff-9755-12c8722eb8e6",
+    "visitorPrompts": [
+      "Walk me through the customer acquisition system. Explain the problem, the workflow, and Nour\u2019s contribution."
+    ],
+    "requiredContinuePrompts": 0,
+    "toolEvents": [
+      {
+        "event": "live.token.issued",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"model\":\"gemini-3.8-live\",\"reservationUsdMicros\":450000}",
+        "at": 1795855006816
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProject\",\"route\":null}",
+        "at": 1795855019995
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855059757
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855062334
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855074328
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855085425
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855086658
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855089404
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855090590
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855092513
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855105207
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855107796
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855108929
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855110674
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855113522
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855123916
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855131797
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855134459
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"05306021-f724-4eff-9755-12c8722eb8e6\",\"tool\":\"endPresentation\",\"route\":null}",
+        "at": 1795855142933
+      }
+    ],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Walk me through the customer acquisition system. Explain the problem, the workflow, and Nord's contribution.",
+        "at": 1795855020002
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855058511
+      },
+      {
+        "role": "assistant",
+        "content": "The core problem this system solves is that traditional sales outreach is often too generic, making it hard for prospects to see the value in an offer. Teams waste countless hours on manual research and struggle with inconsistent follow-ups. The workflow starts by defining the ideal customer, finding new prospects, and enriching the data. It then uses AI to generate personalized demonstrations, conducts intelligent outreach, and manages nurturing based on how the customer engages. Nour worked across the commercial logic and the follow-up layer. He defined the target segments and criteria for prioritization, and built parts of the demo follow-up engine, including inbox sync and booking detection.",
+        "at": 1795855058512
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855059760
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855059761
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855072352
+      },
+      {
+        "role": "assistant",
+        "content": "We begin by defining the target customer. This establishes the ideal profile based on industry, company size, and specific business needs so the team knows exactly where to focus.",
+        "at": 1795855072353
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855084568
+      },
+      {
+        "role": "assistant",
+        "content": "Once the profile is clear, the system finds new prospects. It identifies businesses matching that profile, creating a structured list of opportunities without relying entirely on manual research.",
+        "at": 1795855084569
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855084982
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855084983
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855085428
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855085429
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855086297
+      },
+      {
+        "role": "assistant",
+        "content": "After improving the",
+        "at": 1795855086298
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855086661
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855086662
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855089408
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855089409
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855090593
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855090594
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855092522
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855092523
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855103906
+      },
+      {
+        "role": "assistant",
+        "content": "Once prospects are prioritized, the system generates personalized demonstrations. This shows how the proposed solution works in their specific environment before the team reaches out.",
+        "at": 1795855103907
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855104806
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855104807
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855105210
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855105211
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855107802
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855107803
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855108932
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855108933
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855110679
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855110680
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855121126
+      },
+      {
+        "role": "assistant",
+        "content": "Then, the system crafts personalized, relevant messages for each prospect, ensuring communication adds value rather than acting as a cold pitch.",
+        "at": 1795855121127
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855131057
+      },
+      {
+        "role": "assistant",
+        "content": "Follow-up sequences automatically adapt based on whether a prospect engages with the demo, ensuring we don't send unnecessary messages once a meeting is booked.",
+        "at": 1795855131058
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855131805
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855131806
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855132828
+      },
+      {
+        "role": "assistant",
+        "content": "The system then catches replies and scheduled",
+        "at": 1795855132829
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855140430
+      },
+      {
+        "role": "assistant",
+        "content": "The system then catches replies and scheduled appointments, ensuring promising conversations are handed off to the sales team immediately.",
+        "at": 1795855140431
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855141282
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855141283
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855149536
+      },
+      {
+        "role": "assistant",
+        "content": "Finally, all interactions are centralized in the C.R.M. to maintain pipeline visibility and track every opportunity's status.",
+        "at": 1795855149537
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855155275
+      },
+      {
+        "role": "assistant",
+        "content": "That summarizes the entire workflow from target definition to pipeline management.",
+        "at": 1795855155276
+      }
+    ],
+    "observedProgression": [
+      "target",
+      "find",
+      "improve",
+      "prioritize",
+      "demo",
+      "outreach",
+      "nurture",
+      "replies/bookings",
+      "crm"
+    ],
+    "finalRoute": "/projects/acquisition/flow/crm",
+    "presentationActiveAfter": false,
+    "voiceStillLiveAfter": true,
+    "naturalConclusion": "That summarizes the entire workflow from target definition to pipeline management.",
+    "endPresentationCalled": true
+  },
+  "autoHighlightRun": {
+    "sessionId": "958b55bd-8acf-4179-926f-bfb9530c8276",
+    "toolEvents": [
+      {
+        "event": "live.token.issued",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"model\":\"gemini-3.8-live\",\"reservationUsdMicros\":450000}",
+        "at": 1795855272682
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"tool\":\"presentProject\",\"route\":null}",
+        "at": 1795855286272
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855290183
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855309270
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855321217
+      },
+      {
+        "event": "tool.executed",
+        "detail": "{\"sessionId\":\"958b55bd-8acf-4179-926f-bfb9530c8276\",\"tool\":\"presentProjectStep\",\"route\":null}",
+        "at": 1795855330895
+      }
+    ],
+    "messages": [
+      {
+        "role": "user",
+        "content": "Walk me through the customer acquisition system. Explain the problem. The workflow and North's contribution.",
+        "at": 1795855286279
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855307940
+      },
+      {
+        "role": "assistant",
+        "content": "The core problem this system solves is that sales teams often waste time on poorly qualified prospects while generic outreach fails to communicate the actual value of the offer. Nour worked across the commercial logic and the demo layer, defining target segments and qualification criteria, and building the engine that detects replies and bookings to keep the pipeline moving.",
+        "at": 1795855307941
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855308863
+      },
+      {
+        "role": "assistant",
+        "content": "It starts by",
+        "at": 1795855308864
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855309276
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855309277
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855319973
+      },
+      {
+        "role": "assistant",
+        "content": "After defining the ideal profile, the system automatically finds matching prospects, creating a structured list of opportunities without the team needing to rely on manual research.",
+        "at": 1795855319974
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855321220
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855321221
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855329560
+      },
+      {
+        "role": "assistant",
+        "content": "Then, it polishes those records by identifying decisionmakers and contact details to reduce duplicate or incomplete entries.",
+        "at": 1795855329561
+      },
+      {
+        "role": "user",
+        "content": "[voice turn]",
+        "at": 1795855330898
+      },
+      {
+        "role": "assistant",
+        "content": "[voice response]",
+        "at": 1795855330899
+      }
+    ],
+    "observed": {
+      "route": "/projects/acquisition/flow/improve",
+      "presentationStep": "3 / 9",
+      "highlightedTarget": "flow-node:acquisition:improve",
+      "cursor": "flow-node:acquisition:improve",
+      "highlights": 1
+    },
+    "note": "Ended manually after observing the highlight; the deterministic highlight is added inside presentProjectStep/presentProject."
+  },
+  "qualityNotes": {
+    "autonomousProgression": "Works: one request produced multiple connected segments, advanced through verified workflow nodes and ended naturally with endPresentation.",
+    "toolCallFrequency": "17 presentation-step calls were recorded for a 9-node workflow; some calls occurred in the same turn or repeated a node. The narrative did not visibly loop and ended at crm, but call-level deduplication remains a possible refinement.",
+    "speechBoundaries": "Two short partial assistant transcript segments appeared at tool boundaries (\"After improving the\" and \"The system then catches replies and scheduled\"). The continuation prompt was strengthened after this run to call presentProjectStep and wait for confirmation before speaking any part of the next segment; not re-run after that prompt change.",
+    "visualEmphasis": "The later run confirmed the new deterministic node highlight and cursor; no trick effects or bottom bar.",
+    "subjective": "Not scored. Listening quality, pacing and device behavior remain manual."
+  }
+}

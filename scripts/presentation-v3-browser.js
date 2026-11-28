@@ -17,28 +17,12 @@ const initialTargets = await p.evaluate(() => window.NourOS.getPresentationTarge
 check('visible target registry exposes approved home targets', initialTargets.includes('main-card:projects') && initialTargets.includes('section:home'), { initialTargets });
 
 const start = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationStart', projectId: 'acquisition', stepIndex: 1, totalSteps: 9, label: 'Customer Acquisition' }));
-check('presentation bar starts', start.ok === true && await p.evaluate(() => !document.querySelector('.ai-pres-bar').hidden), { start });
+check('presentation state starts without a bottom bar', start.ok === true && await p.evaluate(() => window.NourOS.getPresentationState().presentation.active), { start });
 const presentationBranding = await p.evaluate(() => ({
-  barName: document.querySelector('.ai-pres-copy b')?.innerText.trim(),
-  region: document.querySelector('.ai-pres-bar')?.getAttribute('aria-label'),
-  cursor: document.querySelector('.ai-pres-cursor-label')?.innerText.trim()
+  cursor: document.querySelector('.ai-pres-cursor-label')?.innerText.trim(),
+  hasBottomBar: Boolean(document.querySelector('.ai-pres-bar'))
 }));
-check('presentation controls and cursor use Nupa branding', /^nupa$/i.test(presentationBranding.barName) && /Nupa/.test(presentationBranding.region) && presentationBranding.cursor === 'Nupa', presentationBranding);
-await p.evaluate(() => {
-  document.documentElement.dataset.ainourLocale = 'fr';
-  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: 'fr' } }));
-});
-const frenchControls = await p.evaluate(() => ({
-  region: document.querySelector('.ai-pres-bar')?.getAttribute('aria-label'),
-  end: document.querySelector('[data-ai-pres="end"]')?.innerText.trim(),
-  resume: document.querySelector('[data-ai-pres="resume"]')?.innerText.trim(),
-  next: document.querySelector('[data-ai-pres="next"]')?.getAttribute('aria-label')
-}));
-check('presentation controls localize to French', /présentation de Nupa/.test(frenchControls.region) && frenchControls.end === 'Terminer' && frenchControls.resume === 'Reprendre' && frenchControls.next === 'Étape suivante', frenchControls);
-await p.evaluate(() => {
-  document.documentElement.dataset.ainourLocale = 'en';
-  document.dispatchEvent(new CustomEvent('ainour:locale', { detail: { locale: 'en' } }));
-});
+check('presentation layer uses the Nupa cursor and no bottom bar', presentationBranding.cursor === 'Nupa' && presentationBranding.hasBottomBar === false, presentationBranding);
 
 const deck = await p.evaluate(async () => {
   await window.NourOS.showProjectCard('acquisition');
@@ -119,15 +103,15 @@ const invalid = await p.evaluate(async () => window.NourOS.applyPresentationActi
 check('invalid frontend target is rejected', invalid.ok === false, { invalid });
 
 const clear = await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'clearVisualEffects' }));
-const cleared = await p.evaluate(() => ({ highlights: document.querySelectorAll('.ai-highlight').length, cursorHidden: document.querySelector('.ai-pres-cursor').hidden, spotlightHidden: document.querySelector('.ai-pres-spotlight').hidden, barVisible: !document.querySelector('.ai-pres-bar').hidden }));
-check('clear effects preserves the presentation bar', clear.ok === true && cleared.highlights === 0 && cleared.cursorHidden === true && cleared.spotlightHidden === true && cleared.barVisible === true, { clear, cleared });
+const cleared = await p.evaluate(() => ({ highlights: document.querySelectorAll('.ai-highlight').length, cursorHidden: document.querySelector('.ai-pres-cursor').hidden, spotlightHidden: document.querySelector('.ai-pres-spotlight').hidden, active: window.NourOS.getPresentationState().presentation.active }));
+check('clear effects preserves presentation state without a bottom bar', clear.ok === true && cleared.highlights === 0 && cleared.cursorHidden === true && cleared.spotlightHidden === true && cleared.active === true, { clear, cleared });
 
 await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationPause' }));
-const paused = await p.evaluate(() => document.querySelector('.ai-pres-bar').classList.contains('is-paused'));
+const paused = await p.evaluate(() => window.NourOS.getPresentationState().presentation.paused);
 await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationResume' }));
-const resumed = await p.evaluate(() => !document.querySelector('.ai-pres-bar').classList.contains('is-paused'));
+const resumed = await p.evaluate(() => !window.NourOS.getPresentationState().presentation.paused);
 await p.evaluate(async () => window.NourOS.applyPresentationAction({ type: 'presentationEnd' }));
-const ended = await p.evaluate(() => document.querySelector('.ai-pres-bar').hidden === true);
+const ended = await p.evaluate(() => !window.NourOS.getPresentationState().presentation.active);
 check('pause, resume and end controls update presentation state', paused && resumed && ended, { paused, resumed, ended });
 
 await p.emulateMedia({ reducedMotion: 'reduce' });
@@ -143,10 +127,10 @@ const mobile = await p.evaluate(async () => {
   await window.NourOS.applyPresentationAction({ type: 'presentationStart', projectId: 'acquisition', stepIndex: 1, totalSteps: 9, label: 'Customer Acquisition' });
   await window.NourOS.showProjectCard('acquisition');
   await new Promise((resolve) => setTimeout(resolve, 400));
-  const bar = document.querySelector('.ai-pres-bar').getBoundingClientRect();
-  return { width: Math.round(bar.width), left: Math.round(bar.left), right: Math.round(bar.right), viewport: innerWidth, overflow: bar.left < 0 || bar.right > innerWidth, css: Boolean(document.querySelector('link[data-ainour-css]')) };
+  const pill = document.querySelector('#ainourPill').getBoundingClientRect();
+  return { width: Math.round(pill.width), left: Math.round(pill.left), right: Math.round(pill.right), viewport: innerWidth, overflow: pill.left < 0 || pill.right > innerWidth, css: Boolean(document.querySelector('link[data-ainour-css]')), hasBottomBar: Boolean(document.querySelector('.ai-pres-bar')) };
 });
-check('mobile presentation bar fits the viewport', mobile.width > 0 && mobile.width <= mobile.viewport && mobile.overflow === false, { mobile });
+check('mobile Nupa pill fits the viewport and no bottom bar exists', mobile.width > 0 && mobile.width <= mobile.viewport && mobile.overflow === false && mobile.hasBottomBar === false, { mobile });
 
 const summary = {
   generatedAt: new Date().toISOString(),

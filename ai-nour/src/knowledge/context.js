@@ -33,6 +33,46 @@ function normalizeTarget(input) {
   };
 }
 
+function normalizeInteraction(input) {
+  if (!input || typeof input !== 'object') return null;
+  const target = (value) => {
+    if (!value || typeof value !== 'object') return null;
+    return {
+      targetId: text(value.targetId, 160) || null,
+      label: text(value.label, 140) || null,
+      at: Number(value.at) || null
+    };
+  };
+  const selection = input.selection && typeof input.selection === 'object'
+    ? {
+        text: text(input.selection.text, 500) || '',
+        targetId: text(input.selection.targetId, 160) || null,
+        label: text(input.selection.label, 140) || null,
+        at: Number(input.selection.at) || null
+      }
+    : null;
+  const scroll = input.scroll && typeof input.scroll === 'object'
+    ? { y: Number(input.scroll.y) || 0, percent: Math.min(100, Math.max(0, Number(input.scroll.percent) || 0)), at: Number(input.scroll.at) || null }
+    : null;
+  const recent = Array.isArray(input.recent)
+    ? input.recent.slice(0, 8).map((item) => ({
+        type: text(item?.type, 40) || '',
+        targetId: text(item?.targetId, 160) || null,
+        label: text(item?.label, 100) || null,
+        at: Number(item?.at) || null
+      })).filter((item) => item.type)
+    : [];
+  if (!selection?.text && !input.hover && !input.focus && !input.click && !scroll && !recent.length) return null;
+  return {
+    selection,
+    hover: target(input.hover),
+    focus: target(input.focus),
+    click: target(input.click),
+    scroll,
+    recent
+  };
+}
+
 export function normalizePortfolioContext(input) {
   if (!input || typeof input !== 'object') return null;
   const section = sections.has(input.section) ? input.section : null;
@@ -63,6 +103,7 @@ export function normalizePortfolioContext(input) {
     view: text(input.view, 40) || null,
     navigationSource: input.navigationSource === 'assistant' ? 'assistant' : 'visitor',
     targets,
+    interaction: normalizeInteraction(input.interaction),
     presentation: input.presentation && typeof input.presentation === 'object'
       ? {
           active: input.presentation.active === true,
@@ -101,5 +142,8 @@ export function contextInstruction(context) {
   if (context.navigationSource) parts.push(`last navigation: ${context.navigationSource}`);
   if (context.presentation?.active) parts.push(`active presentation: ${context.presentation.projectId || 'unknown'}${context.presentation.nodeId ? ` at ${context.presentation.nodeId}` : ''}${context.presentation.paused ? ' (paused)' : ''}`);
   if (context.targets?.length) parts.push(`visible presentation targets: ${context.targets.filter((target) => target.visible).slice(0, 24).map((target) => target.id).join(', ') || 'none'}`);
-  return `The visitor is currently viewing the portfolio with ${parts.join('; ')}. Resolve pronouns and "this/that" against this view. Never override manual visitor navigation or assume they want to leave the current view. Use only the listed presentation target IDs for visual actions.`;
+  if (context.interaction?.selection?.text) parts.push(`selected text: "${context.interaction.selection.text}"${context.interaction.selection.targetId ? ` (target ${context.interaction.selection.targetId})` : ''}`);
+  const latest = context.interaction?.recent?.[0];
+  if (latest && latest.type !== 'selection') parts.push(`most recent interaction: ${latest.type}${latest.targetId ? ` (${latest.targetId})` : latest.label ? ` (${latest.label})` : ''}`);
+  return `The visitor is currently viewing the portfolio with ${parts.join('; ')}. Resolve pronouns and "this/that" against this view, and prioritize selected text when present. Never override manual visitor navigation or assume they want to leave the current view. Use only the listed presentation target IDs for visual actions.`;
 }

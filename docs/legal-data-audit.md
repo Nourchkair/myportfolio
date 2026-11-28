@@ -143,7 +143,8 @@ Current implementation:
 | Public access enabled | Verified | `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; beta-key prompt removed; consent v1.4 enforced in public mode. |
 | Anonymous ownership | Verified | Owner credentials are server-issued, hashed in D1, and required for session reads, chat, voice and tools; cross-owner reads return 404. |
 | Abuse and concurrency controls | Verified | Per-visitor and global chat/tool rate limits, concurrent voice caps, Live token expiry, atomic spend reservations and emergency shutdown tested in the public-mode Worker. |
-| Five-minute Live sessions | Verified | Production default `LIVE_SESSION_SECONDS=300`; reservation `$0.125`; admin can restore up to 600 seconds. |
+| Five-minute Live sessions | Verified (current production) | Production default `LIVE_SESSION_SECONDS=300`; reservation `$0.125`; admin can restore up to 600 seconds. |
+| Fifteen-minute Live target | Prepared locally, pending approval | Default and maximum `900` seconds; reservation `$0.45`; caps unchanged at $3/day and $7 cumulative; migration `0009`. |
 | Voice error distinction | Verified | Daily budget, cumulative budget, microphone permission, missing device, rate limit, disabled, provider, network and expiry paths mapped; no raw provider/financial details shown. |
 
 ## 8. Gaps and qualifications before publication
@@ -209,6 +210,22 @@ Approved by Nour on **27 November 2026** with these amendments:
 - **Server-side consent:** public sessions, existing sessions, chat, Live voice and tools enforce `2026-11-27-v1.4`; accepted timestamps and policy versions remain recorded.
 - **Server-issued ownership:** `POST /api/owner` issues a random 256-bit owner credential. The browser stores it; D1 stores only its SHA-256 hash. Cross-owner session access returns 404.
 - **Removed web research:** no `webResearch` tool, Google Search grounding, `WEB_RESEARCH_ENABLED` flag, research route cost, provider method, admin control, dependency or prompt path remains. Text and voice cannot initiate external search.
-- **Spending controls:** text requests reserve an atomic $0.02 against daily/cumulative caps; Live reservations are atomic and conditional on caps, global voice concurrency and per-visitor concurrency. Reported Live turns are charged at actual token-estimated usage, bounded by a physical per-session maximum; legitimate usage above the monetary reservation is recorded rather than capped to it. `/api/live/end` settles any shortfall up to the reservation and releases the budget hold but keeps the concurrency lease until the Gemini token expires. No-usage and expired unreported sessions charge at least the reservation. Internal estimates remain distinct from Google invoices. Live rates match Google's published Gemini 3.8 Live paid rates. Text rates use $0.30/$2.50 per 1M as a conservative ceiling because the `gemini-flash-lite-latest` alias is not documented on the pricing page (2.5 Flash-Lite is $0.10/$0.40; 3.1 is $0.25/$1.50; 3.5 is $0.30/$2.50).
+- **Spending controls:** text requests reserve an atomic $0.02 against daily/cumulative caps; Live reservations are atomic and conditional on caps, global voice concurrency and per-visitor concurrency. Reported Live turns are charged at actual token-estimated usage, bounded by a physical per-session maximum; legitimate usage above the monetary reservation is recorded rather than capped to it. `/api/live/end` settles any shortfall up to the reservation, releases the budget hold and releases the concurrency lease on an explicit visitor end. No-usage and expired unreported sessions charge at least the reservation. Internal estimates remain distinct from Google invoices. Live rates match Google's published Gemini 3.8 Live paid rates. Text rates use $0.30/$2.50 per 1M as a conservative ceiling because the `gemini-flash-lite-latest` alias is not documented on the pricing page (2.5 Flash-Lite is $0.10/$0.40; 3.1 is $0.25/$1.50; 3.5 is $0.30/$2.50).
 - **Abuse controls:** per-visitor and global chat/tool limits, 8-tool maximum per model round, server-side tool validation, owner-issuance limits, Live token expiry, active voice-session leases that survive a reported turn, explicit `/api/live/end` release, and emergency shutdown.
 - **Verification:** public-mode local Worker 23/23; legal validator 76/76; unit tests 75/75; API 23/23; consent 12/12; Live budget 9/9; actual paid text and Live production calls succeeded.
+
+
+## Interaction-context review (local upgrade, pending deployment)
+
+Nupa now sends structured portfolio interaction context to Gemini through the silent Live context channel: current route/section, visible presentation targets, selected portfolio text, hover/click/focus target, scroll position, workflow zoom and recent interactions.
+
+- No screenshots, desktop capture, browser-wide monitoring or continuous screen streaming.
+- No form values, credentials, passwords, private messages or unrelated browser content. Selection capture is restricted to the portfolio main surface and skips inputs, textareas, selects and contenteditable elements.
+- Selected text is limited to 500 characters and is portfolio content.
+- The in-app consent disclosure and the Privacy Policy now state that Nupa receives the current portfolio view and selected portfolio text as context, and that it does not capture the screen, other browser content, form values or credentials. A consent-version bump is not required unless legal review treats this as a new processing purpose; it remains the same provider and purpose (portfolio assistance).
+- Context updates use `sendContextUpdate`, not a user turn, so they do not trigger speech.
+- Local-only until approved for deployment.
+
+### Fifteen-minute voice target (local, pending approval)
+
+The local upgrade sets `LIVE_SESSION_SECONDS=900` and `MAX_LIVE_SESSION_SECONDS=900`, with a **$0.45** reservation at `$0.03/minute` and a 20-minute hold. Gemini audio-only Live sessions support up to 15 minutes, so no provider resumption is required for a contiguous 15-minute session. The $3 daily and $7 cumulative caps are unchanged. An explicit `/api/live/end` now releases the concurrency lease immediately; the lease still expires naturally if the browser disappears. Migration `0009_live_session_900.sql` sets the D1 control. Production remains at 300 seconds until deployment approval.

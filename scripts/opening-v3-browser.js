@@ -194,10 +194,11 @@ const aiPanel = await ready.evaluate(() => ({
 check('Use text chat opens the Nupa panel on demand', aiPanel.panelHidden === false && aiPanel.bodyVisible === true && aiPanel.consentHidden === true && aiPanel.tourHidden === true, aiPanel);
 const entryState = await ready.evaluate(() => ({
   hash: location.hash,
-  barVisible: Boolean(document.querySelector('.ai-pres-bar')) && !document.querySelector('.ai-pres-bar').hidden,
+  barVisible: Boolean(document.querySelector('.ai-pres-bar')),
+  presentationActive: window.NourOS?.getPresentationState?.()?.presentation?.active === true,
   projectOpen: Boolean(document.querySelector('.project-overlay.open'))
 }));
-check('voice-tour entry stays on the main view and does not auto-start a presentation', !/acquisition/i.test(entryState.hash) && entryState.barVisible === false, entryState);
+check('voice-tour entry stays on the main view and does not auto-start a presentation', !/acquisition/i.test(entryState.hash) && entryState.barVisible === false && entryState.presentationActive === false, entryState);
 await ready.evaluate(() => document.querySelector('[data-ainour="locale"]').click());
 await ready.waitForTimeout(150);
 const french = await ready.evaluate(() => ({

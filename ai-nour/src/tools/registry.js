@@ -35,7 +35,7 @@ const KNOWLEDGE_TOOLS = new Set([
 
 const TARGET_ACTIONS = new Set(['navigate', 'scroll', 'highlight', 'spotlight', 'hover', 'expand', 'collapse', 'point', 'trace', 'zoom', 'compare']);
 const TARGET_ID_RE = /^(?:(?:journey|contact|about)|(?:(?:section|main-card|project-card|project|project-hero|project-overview|project-contribution|project-text|project-tag|flow|flow-node|flow-link|journey-chapter|journey-tab|journey-text|journey-chip|control):[a-zA-Z0-9_:>.-]+))$/;
-const CONTROL_IDS = new Set(['presentation-bar', 'presentation-pause', 'presentation-resume', 'presentation-prev', 'presentation-next', 'presentation-end', 'assistant']);
+const CONTROL_IDS = new Set();
 const TARGET_SLUG_RE = /^[a-z0-9][a-z0-9-]{1,60}$/;
 const OVERVIEW_VIEWS = new Set(['what', 'challenges', 'value']);
 
@@ -74,7 +74,8 @@ const presentationDefinitions = [
         targetIds: { type: 'ARRAY', items: { type: 'STRING' }, description: 'One to eight approved target ids.' },
         style: { type: 'STRING', enum: ['outline', 'glow', 'emphasis'], description: 'Visual treatment.' },
         sequence: { type: 'BOOLEAN', description: 'Highlight the targets one at a time.' },
-        stepMs: { type: 'INTEGER', description: 'Sequential highlight interval, 300-3000ms.' }
+        stepMs: { type: 'INTEGER', description: 'Sequential highlight interval, 300-3000ms.' },
+        quote: { type: 'STRING', description: 'Optional exact sentence or phrase inside the first target to highlight in place of the whole element.' }
       }
     }
   },
@@ -476,6 +477,7 @@ function visualAction(name, args = {}) {
     const sequence = args.sequence === true;
     const stepMs = Math.min(3000, Math.max(300, Number(args.stepMs) || 650));
     const first = targetParts(targetIds[0]);
+    const quote = String(args.quote || '').replace(/\s+/g, ' ').trim().slice(0, 240);
     return {
       ok: true,
       action: {
@@ -484,6 +486,7 @@ function visualAction(name, args = {}) {
         style,
         sequence,
         stepMs,
+        ...(quote ? { quote } : {}),
         navigationRoute,
         waitForTarget: targetIds[0]
       }
@@ -627,6 +630,14 @@ export function validateToolCall(name, args = {}) {
         route: node.nodeId ? `${result.project.route}/flow/${node.nodeId}` : `${result.project.route}/flow`,
         waitForTarget: node.nodeId ? `flow-node:${result.project.id}:${node.nodeId}` : `flow:${result.project.id}`
       });
+      if (node.nodeId) {
+        actions.push({
+          type: 'highlightElement',
+          targetIds: [`flow-node:${result.project.id}:${node.nodeId}`],
+          style: 'glow',
+          waitForTarget: `flow-node:${result.project.id}:${node.nodeId}`
+        });
+      }
     }
     return { ok: true, actions, action: actions[0] };
   }
@@ -652,6 +663,12 @@ export function validateToolCall(name, args = {}) {
           projectId: result.project.id,
           nodeId: node.nodeId,
           route: `${result.project.route}/flow/${node.nodeId}`,
+          waitForTarget: `flow-node:${result.project.id}:${node.nodeId}`
+        },
+        {
+          type: 'highlightElement',
+          targetIds: [`flow-node:${result.project.id}:${node.nodeId}`],
+          style: 'glow',
           waitForTarget: `flow-node:${result.project.id}:${node.nodeId}`
         }
       ]

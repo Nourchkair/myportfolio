@@ -126,9 +126,13 @@ test('presentation steps carry render readiness and progress metadata', () => {
   assert.equal(start.actions[0].totalSteps, 9);
   assert.equal(start.actions[1].waitForTarget, 'project:acquisition');
   assert.equal(start.actions[2].waitForTarget, 'flow-node:acquisition:demo');
+  assert.equal(start.actions[3].type, 'highlightElement');
+  assert.equal(start.actions[3].targetIds[0], 'flow-node:acquisition:demo');
   const step = validateToolCall('presentProjectStep', { projectId: 'acquisition', nodeId: 'outreach' });
   assert.equal(step.ok, true);
   assert.equal(step.actions[0].stepIndex, 6);
   assert.equal(step.actions[0].totalSteps, 9);
   assert.equal(step.actions[1].waitForTarget, 'flow-node:acquisition:outreach');
+  assert.equal(step.actions[2].type, 'highlightElement');
+  assert.equal(step.actions[2].targetIds[0], 'flow-node:acquisition:outreach');
 });

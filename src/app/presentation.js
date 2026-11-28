@@ -3,41 +3,11 @@ import { PROFESSIONAL_CHAPTERS } from '../data/journey.js';
 
 const CHAPTER_BY_ID = Object.fromEntries(PROFESSIONAL_CHAPTERS.map((chapter) => [chapter.id, chapter]));
 const MAIN_CARDS = ['journey', 'profile', 'projects'];
-const CONTROL_TARGETS = {
-  'presentation-bar': 'Presentation controls',
-  'presentation-pause': 'Pause presentation',
-  'presentation-resume': 'Resume presentation',
-  'presentation-prev': 'Previous presentation step',
-  'presentation-next': 'Next presentation step',
-  'presentation-end': 'End presentation',
-  assistant: 'Nupa assistant'
-};
-const CHROME_LABELS = {
-  en: {
-    region: 'Nupa presentation controls',
-    pause: 'Pause',
-    resume: 'Resume',
-    end: 'End',
-    prev: 'Previous presentation step',
-    next: 'Next presentation step'
-  },
-  fr: {
-    region: 'Commandes de présentation de Nupa',
-    pause: 'Pause',
-    resume: 'Reprendre',
-    end: 'Terminer',
-    prev: 'Étape précédente',
-    next: 'Étape suivante'
-  }
-};
-function chromeLabels() {
-  return CHROME_LABELS[document.documentElement.dataset.ainourLocale === 'fr' ? 'fr' : 'en'];
-}
-
 let app = null;
 let dom = null;
 let presentation = { active: false, paused: false, projectId: null, nodeId: null, stepIndex: 0, totalSteps: 0, label: '' };
 let highlights = new Map();
+let textHighlights = [];
 let spotlightId = null;
 let cursorId = null;
 let cursorLabel = '';
@@ -425,17 +395,6 @@ function buildTargets() {
     });
   });
 
-  Object.entries(CONTROL_TARGETS).forEach(([control, label]) => add({
-    id: `control:${control}`,
-    kind: 'control',
-    label,
-    description: 'Presentation interface control.',
-    actions: ['highlight', 'spotlight', 'point'],
-    relationships: [],
-    knowledgeRef: 'presentation',
-    element: () => control === 'presentation-bar' ? dom?.bar || null : control.startsWith('presentation-') ? dom?.bar?.querySelector(`[data-ai-pres="${control.replace('presentation-', '')}"]`) || null : null
-  }));
-
   return targets;
 }
 
@@ -463,6 +422,29 @@ function getTarget(id) {
   return targetIndex().find((target) => target.id === id) || null;
 }
 
+function getTargetForElement(element) {
+  if (!(element instanceof Element)) return null;
+  const candidate = element.closest('[data-flow-node], .os-card, .project-card, .pro-narrative p, .pw-contribution-block, .card-tags span, .pro-chips span, [data-pro-chapter], button, a') || element;
+  const depth = (node) => {
+    let value = 0;
+    let current = node;
+    while (current) { value += 1; current = current.parentElement; }
+    return value;
+  };
+  const matches = buildTargets().map((item) => ({ item, resolved: item.element?.() })).filter(({ resolved }) => {
+    return resolved && (resolved === candidate || resolved.contains(candidate) || candidate.contains(resolved));
+  });
+  if (!matches.length) return null;
+  matches.sort((a, b) => {
+    const aExact = a.resolved === candidate ? 1 : 0;
+    const bExact = b.resolved === candidate ? 1 : 0;
+    if (aExact !== bExact) return bExact - aExact;
+    return depth(b.resolved) - depth(a.resolved);
+  });
+  const target = matches[0].item;
+  return { id: target.id, kind: target.kind, label: target.label, description: target.description, knowledgeRef: target.knowledgeRef };
+}
+
 function resolveElement(id) {
   const target = buildTargets().find((item) => item.id === id);
   return target?.element?.() || null;
@@ -486,7 +468,7 @@ function navigationFor(id) {
     const card = id.split(':')[1];
     return { method: 'navigateTo', args: [card === 'profile' ? 'me' : card] };
   }
-  if (id === 'contact' || id.startsWith('control:presentation')) return id === 'contact' ? { method: 'openContact', args: [] } : null;
+  if (id === 'contact') return { method: 'openContact', args: [] };
   if (id === 'about' || id === 'journey' || id.startsWith('journey-')) {
     const chapterId = id.split(':')[1];
     return { method: 'openJourneyChapter', args: chapterId && CHAPTER_BY_ID[chapterId] ? [chapterId] : [] };
@@ -554,8 +536,16 @@ function clearFlowTraceClasses() {
   document.querySelectorAll('#projectFlow .ai-flow-trace').forEach((element) => element.classList.remove('ai-flow-trace'));
 }
 
+function clearTextHighlights() {
+  for (const entry of textHighlights) {
+    for (const element of entry.elements) element.remove();
+  }
+  textHighlights = [];
+}
+
 function clearHighlights() {
   clearFlowTraceClasses();
+  clearTextHighlights();
   for (const element of highlights.values()) {
     element.classList.remove('ai-highlight', 'ai-highlight--outline', 'ai-highlight--glow', 'ai-highlight--emphasis');
   }
@@ -643,16 +633,70 @@ function highlightTargets(ids, style = 'glow') {
   return valid;
 }
 
+function findTextRange(element, quote) {
+  const wanted = String(quote || '').replace(/\s+/g, ' ').trim();
+  if (!wanted) return null;
+  const walker = document.createTreeWalker(element, NodeFilter.SHOW_TEXT);
+  let node = walker.nextNode();
+  while (node) {
+    const text = String(node.nodeValue || '');
+    const index = text.indexOf(wanted);
+    if (index >= 0) {
+      const range = document.createRange();
+      range.setStart(node, index);
+      range.setEnd(node, index + wanted.length);
+      return range;
+    }
+    node = walker.nextNode();
+  }
+  return null;
+}
+
+function renderTextHighlight(range) {
+  if (!dom?.layer || !range) return [];
+  const elements = [];
+  for (const rect of range.getClientRects()) {
+    if (rect.width < 2 || rect.height < 2) continue;
+    const mark = document.createElement('div');
+    mark.className = 'ai-text-highlight';
+    mark.style.left = `${rect.left - 3}px`;
+    mark.style.top = `${rect.top - 2}px`;
+    mark.style.width = `${rect.width + 6}px`;
+    mark.style.height = `${rect.height + 4}px`;
+    dom.layer.appendChild(mark);
+    elements.push(mark);
+  }
+  return elements;
+}
+
+function syncTextHighlights() {
+  for (const entry of textHighlights) {
+    for (const element of entry.elements) element.remove();
+    entry.elements = renderTextHighlight(entry.range);
+  }
+}
+
+function applyTextHighlight(element, quote) {
+  const range = findTextRange(element, quote);
+  if (!range) return null;
+  const elements = renderTextHighlight(range);
+  if (!elements.length) return null;
+  textHighlights.push({ range, elements });
+  return elements;
+}
+
 async function applyHighlight(action) {
   const ids = action.targetIds || [action.targetId];
   if (!action.additive) clearHighlights();
   clearSpotlight();
   if (!action.sequence) {
     await ensureVisible(ids[0]);
-    const applied = highlightTargets(ids, action.style);
+    const targetElement = action.quote ? resolveElement(effectiveId(ids[0])) : null;
+    const textApplied = targetElement ? applyTextHighlight(targetElement, action.quote) : null;
+    const applied = textApplied ? [ids[0]] : highlightTargets(ids, action.style);
     await nextFrame();
     sync();
-    return applied.length ? { ok: true, targetIds: applied } : { ok: false, error: 'TARGET_NOT_RENDERED' };
+    return applied.length ? { ok: true, targetIds: applied, ...(textApplied ? { quote: action.quote } : {}) } : { ok: false, error: 'TARGET_NOT_RENDERED' };
   }
   const token = ++effectEpoch;
   for (const id of ids) {
@@ -933,23 +977,6 @@ function applyScroll(action) {
   return ensureVisible(action.targetId).then((ok) => ok ? { ok: true, targetId: action.targetId } : { ok: false, error: 'TARGET_NOT_RENDERED' });
 }
 
-function updateBar() {
-  if (!dom?.bar) return;
-  dom.bar.hidden = !presentation.active;
-  dom.bar.classList.toggle('is-paused', presentation.paused);
-  if (!presentation.active) return;
-  const label = presentation.label || (presentation.projectId ? projectById(presentation.projectId)?.title : 'Nupa');
-  const progress = presentation.totalSteps
-    ? `${Math.max(0, presentation.stepIndex)} / ${presentation.totalSteps}`
-    : '';
-  dom.bar.querySelector('.ai-pres-title').textContent = label || 'Nupa';
-  dom.bar.querySelector('.ai-pres-progress').textContent = progress;
-  const pause = dom.bar.querySelector('[data-ai-pres="pause"]');
-  const resume = dom.bar.querySelector('[data-ai-pres="resume"]');
-  if (pause) pause.hidden = presentation.paused;
-  if (resume) resume.hidden = !presentation.paused;
-}
-
 async function applyPresentation(action) {
   if (action.type === 'presentationStart' || action.type === 'presentationStep') {
     clearEffects();
@@ -962,7 +989,6 @@ async function applyPresentation(action) {
       totalSteps: Number(action.totalSteps) || 0,
       label: action.label || presentation.label || ''
     };
-    updateBar();
     return { ok: true };
   }
   if (action.type === 'presentationPause') {
@@ -975,18 +1001,15 @@ async function applyPresentation(action) {
       ...(action.totalSteps !== undefined ? { totalSteps: Number(action.totalSteps) || 0 } : {}),
       ...(action.label ? { label: action.label } : {})
     };
-    updateBar();
     return { ok: true, paused: true };
   }
   if (action.type === 'presentationResume') {
     presentation.paused = false;
-    updateBar();
     return { ok: true, paused: false };
   }
   if (action.type === 'presentationEnd') {
     presentation = { active: false, paused: false, projectId: null, nodeId: null, stepIndex: 0, totalSteps: 0, label: '' };
     clearEffects();
-    updateBar();
     return { ok: true };
   }
   return { ok: false, error: 'UNKNOWN_PRESENTATION_ACTION' };
@@ -1027,6 +1050,7 @@ function scheduleSync() {
 
 function sync() {
   if (!dom) return;
+  syncTextHighlights();
   for (const [id, element] of highlights) {
     if (!element.isConnected) {
       const replacement = resolveElement(effectiveId(id));
@@ -1046,22 +1070,6 @@ function sync() {
   }
 }
 
-function applyChromeLocale() {
-  if (!dom) return;
-  const labels = chromeLabels();
-  dom.bar.setAttribute('aria-label', labels.region);
-  const pause = dom.bar.querySelector('[data-ai-pres="pause"]');
-  const resume = dom.bar.querySelector('[data-ai-pres="resume"]');
-  const end = dom.bar.querySelector('[data-ai-pres="end"]');
-  const prev = dom.bar.querySelector('[data-ai-pres="prev"]');
-  const next = dom.bar.querySelector('[data-ai-pres="next"]');
-  if (pause) { pause.textContent = labels.pause; pause.setAttribute('aria-label', labels.pause); }
-  if (resume) { resume.textContent = labels.resume; resume.setAttribute('aria-label', labels.resume); }
-  if (end) { end.textContent = labels.end; end.setAttribute('aria-label', labels.end); }
-  if (prev) prev.setAttribute('aria-label', labels.prev);
-  if (next) next.setAttribute('aria-label', labels.next);
-}
-
 function ensureDom() {
   if (dom) return dom;
   const layer = document.createElement('div');
@@ -1070,36 +1078,15 @@ function ensureDom() {
     <div class="ai-pres-spotlight" aria-hidden="true" hidden></div>
     <svg class="ai-pres-connectors" aria-hidden="true"></svg>
     <div class="ai-pres-cursor" aria-hidden="true" hidden><span class="ai-pres-cursor-ring"></span><span class="ai-pres-cursor-dot"></span><span class="ai-pres-cursor-label">Nupa</span></div>
-    <div class="ai-pres-tooltip" role="status" aria-live="polite" hidden></div>
-    <div class="ai-pres-bar" role="region" aria-label="Nupa presentation controls" hidden>
-      <span class="ai-pres-live" aria-hidden="true"></span>
-      <span class="ai-pres-copy"><b>Nupa</b><span class="ai-pres-title"></span></span>
-      <span class="ai-pres-progress"></span>
-      <span class="ai-pres-controls">
-        <button type="button" data-ai-pres="prev" aria-label="Previous presentation step">‹</button>
-        <button type="button" data-ai-pres="pause" aria-label="Pause presentation">Pause</button>
-        <button type="button" data-ai-pres="resume" aria-label="Resume presentation" hidden>Resume</button>
-        <button type="button" data-ai-pres="next" aria-label="Next presentation step">›</button>
-        <button type="button" data-ai-pres="end" aria-label="End presentation">End</button>
-      </span>
-    </div>`;
+    <div class="ai-pres-tooltip" role="status" aria-live="polite" hidden></div>`;
   document.body.appendChild(layer);
-  layer.addEventListener('click', (event) => {
-    const button = event.target.closest('[data-ai-pres]');
-    if (!button) return;
-    event.preventDefault();
-    window.dispatchEvent(new CustomEvent('ainour:presentation-control', { detail: { action: button.dataset.aiPres } }));
-  });
   dom = {
     layer,
     spotlight: layer.querySelector('.ai-pres-spotlight'),
     connectors: layer.querySelector('.ai-pres-connectors'),
     cursor: layer.querySelector('.ai-pres-cursor'),
-    tooltip: layer.querySelector('.ai-pres-tooltip'),
-    bar: layer.querySelector('.ai-pres-bar')
+    tooltip: layer.querySelector('.ai-pres-tooltip')
   };
-  applyChromeLocale();
-  document.addEventListener('ainour:locale', applyChromeLocale);
   const refresh = () => scheduleSync();
   addEventListener('scroll', refresh, { capture: true, passive: true });
   addEventListener('resize', refresh, { passive: true });
@@ -1113,12 +1100,13 @@ export function createPresentationController(options = {}) {
   return {
     getTargets,
     getTarget,
+    getTargetForElement,
     applyAction,
     cancelPending,
     clearEffects,
     waitForTarget,
     ensureVisible,
-    getState: () => ({ presentation: { ...presentation }, effects: { highlights: [...highlights.keys()], spotlight: spotlightId, cursor: cursorId, compare: [...compareIds] } }),
+    getState: () => ({ presentation: { ...presentation }, effects: { highlights: [...highlights.keys()], spotlight: spotlightId, cursor: cursorId, compare: [...compareIds], zoom: zoomState } }),
     sync,
     isActive: () => presentation.active
   };
