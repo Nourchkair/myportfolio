@@ -1,0 +1,74 @@
+{
+  "generatedAt": "2026-11-28T01:09:14.429Z",
+  "passed": 6,
+  "failed": 0,
+  "total": 6,
+  "checks": [
+    {
+      "name": "Explore from a project deep-link returns to home and stays there",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "panelHidden": true,
+        "barVisible": false,
+        "projectOpen": false,
+        "deck": "main",
+        "voiceState": "speaking",
+        "voiceError": "",
+        "assistant": [
+          "Hi there! I'm Nupa, Nour's independent AI-powered portfolio assistant. This is a live, interactive, and personalized experience where you're in the driver's seat\u2014so feel free to interrupt, ask questions, or explore on your own at any time. What brings you to Nour's work today, or is there a particular area you're curious about?"
+        ]
+      }
+    },
+    {
+      "name": "no project or presentation opens before the visitor speaks",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "panelHidden": true,
+        "barVisible": false,
+        "projectOpen": false,
+        "deck": "main",
+        "voiceState": "speaking",
+        "voiceError": "",
+        "assistant": [
+          "Hi there! I'm Nupa, Nour's independent AI-powered portfolio assistant. This is a live, interactive, and personalized experience where you're in the driver's seat\u2014so feel free to interrupt, ask questions, or explore on your own at any time. What brings you to Nour's work today, or is there a particular area you're curious about?"
+        ]
+      }
+    },
+    {
+      "name": "Nupa introduces itself and asks one question",
+      "pass": true,
+      "detail": {
+        "intro": [
+          "Hi there! I'm Nupa, Nour's independent AI-powered portfolio assistant. This is a live, interactive, and personalized experience where you're in the driver's seat\u2014so feel free to interrupt, ask questions, or explore on your own at any time. What brings you to Nour's work today, or is there a particular area you're curious about?"
+        ]
+      }
+    },
+    {
+      "name": "About nav opens home, not the About/Me panel",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "aboutOpen": false,
+        "mode": "home"
+      }
+    },
+    {
+      "name": "About from the project deck also opens home",
+      "pass": true,
+      "detail": {
+        "hash": "#/home",
+        "aboutOpen": false,
+        "mode": "home"
+      }
+    },
+    {
+      "name": "no console errors",
+      "pass": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ]
+}

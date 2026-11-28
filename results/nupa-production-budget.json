@@ -1,20 +1,20 @@
 {
-  "generatedAt": "2026-11-28T00:56:27.946Z",
+  "generatedAt": "2026-11-28T01:09:28.603Z",
   "session": 201,
   "chat": 200,
-  "reply": "final-budget",
+  "reply": "home-about-ok",
   "budget": {
-    "dailyUsdMicros": 508847,
-    "cumulativeUsdMicros": 3101568,
-    "dailySpentUsdMicros": 508847,
-    "cumulativeSpentUsdMicros": 3101568,
+    "dailyUsdMicros": 636037,
+    "cumulativeUsdMicros": 3228758,
+    "dailySpentUsdMicros": 636037,
+    "cumulativeSpentUsdMicros": 3228758,
     "heldLiveReservationsUsdMicros": 0,
     "heldSpendReservationsUsdMicros": 0,
     "heldReservationsUsdMicros": 0,
     "dailyCapUsdMicros": 3000000,
     "cumulativeCapUsdMicros": 7000000,
-    "dailyRemainingUsdMicros": 2491153,
-    "cumulativeRemainingUsdMicros": 3898432,
+    "dailyRemainingUsdMicros": 2363963,
+    "cumulativeRemainingUsdMicros": 3771242,
     "allowed": true
   }
 }

@@ -1,6 +1,6 @@
 {
   "generatedAt": "2026-11-27T20:05:00Z",
-  "status": "deployed and validated in production (dynamic voice-tour update)",
+  "status": "deployed and validated in production (home/About correction)",
   "release": {
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
@@ -14,12 +14,12 @@
   },
   "production": {
     "worker": "00fb071e-77f7-4192-a46e-d09b9fd796fe",
-    "pages": "ba62a481-ca9b-40c4-8e2f-20536a844c8f",
-    "source": "93b7c3b",
+    "pages": "d84f8883-dce2-4c6a-a55b-10815b6f6979",
+    "source": "39b29ac",
     "legalVersion": "1.4",
     "consentVersion": "2026-11-27-v1.4",
     "dailyCapUsdMicros": 3000000,
-    "note": "AI available; daily internal estimate $0.508847, cumulative $3.101568."
+    "note": "AI available; daily internal estimate $0.636037, cumulative $3.228758."
   },
   "paidTier": {
     "reportedByUser": {
@@ -94,7 +94,7 @@
       "evidence": "results/nupa-v3-presentation-browser.json"
     },
     "legal": {
-      "passed": 74,
+      "passed": 76,
       "failed": 0
     },
     "portfolio": {
@@ -140,6 +140,10 @@
     },
     "dynamicTourIntent": {
       "passed": true
+    },
+    "productionHomeAbout": {
+      "passed": 6,
+      "failed": 0
     }
   },
   "notRun": [
