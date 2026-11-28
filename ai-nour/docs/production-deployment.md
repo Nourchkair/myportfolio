@@ -18,7 +18,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 
 - Nupa is publicly available in beta to visitors aged 18 and older.
 - No account or beta key is required.
-- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” then shows a separate microphone-consent panel and starts a live spoken tour with Customer Acquisition opened directly in presentation mode; the chat panel is not opened. “Use text chat instead” opens chat.
+- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” then shows a separate microphone-consent panel and starts a live spoken experience on the main portfolio view; the chat panel is not opened. Nupa introduces itself, asks one natural question, then dynamically chooses what to present. “Use text chat instead” opens chat.
 - Legacy beta keys and tester records remain in D1 for historical/admin purposes only; they are no longer checked for access.
 - Anonymous owner credentials are server-issued; per-visitor and global API/chat/Live/tool limits, concurrent voice leases, spending caps, tool allowlists and the admin bearer-token boundary remain in force.
 - Cloudflare Free edge rate limiting is active: rule **Nupa API edge rate limit**, hostname `api.nourchkair.com`, path starts with `/api/`, excluding `/api/health`; **30 requests per 10 seconds per IP**, action **Block** for 10 seconds. Cloudflare Free provides one rate limiting rule; managed WAF rules are a paid-plan feature, so application validation and the free rule provide the edge layer.
@@ -226,14 +226,14 @@ npm run deploy
 | Production Calendar/Meet | 13/13 | `results/production-crm-google.json` |
 | Final restricted state | 8/8 | `results/production-final-state.json` |
 | Legal validator (v1.1 production release) | 46/46 | `npm run validate:legal` |
-| Nupa legal validator (v1.4 paid/public) | 72/72 | `npm run validate:legal` |
+| Nupa legal validator (v1.4 paid/public) | 74/74 | `npm run validate:legal` |
 | Public-beta controls (local public Worker) | 23/23 | `results/public-controls-tests.json` |
 | Unit tests | 75/75 | `npm test` |
 | Paid-tier production text | passed | `results/paid-tier-text.json` (if retained) |
 | Paid-tier production Live voice | passed | `results/paid-tier-live.json` |
 | Gemini-enforced Live token reuse/expiry | 4/4 | `results/live-token-restrictions.json` |
 | Cloudflare Free edge rate limit | active | `Nupa API edge rate limit`, 30 req/10s/IP, Block 10s |
-| Nupa opening browser (local mock) | 20/20 | `results/nupa-v3-opening-browser.json` |
+| Nupa opening browser (local mock) | 22/22 | `results/nupa-v3-opening-browser.json` |
 | Nupa presentation browser (local mock) | 22/22 | `results/nupa-v3-presentation-browser.json` |
 | Nupa identity in text, EN/FR (local mock) | 2/2 | `results/nupa-v3-chat.json` |
 | Production Nupa static/legal | 6/6 | `results/nupa-production-static.json` |

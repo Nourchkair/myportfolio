@@ -534,7 +534,6 @@ function mount() {
       voiceView: () => openPanel(),
       startVoice,
       stopVoice,
-      startGuidedPresentation,
       runActions: (actions) => runActions(actions),
       setVoiceState: (value) => setState(value),
       demoVoice: (userText, assistantText) => {
@@ -1446,6 +1445,7 @@ async function startVoiceTour() {
   els.tourError.textContent = '';
   sessionStorage.setItem(MIC_CONSENT_STORE, '1');
   hideTourPanel();
+  window.NourOS?.navigateTo?.('home');
   const started = await startVoice({ openPanel: false, skipMicConsent: true, tour: true });
   if (started) return;
   showTourPanel();
@@ -1951,9 +1951,7 @@ async function persistVoiceTurn() {
   voice.userText = '';
   voice.assistantText = '';
   voice.tourPrompt = '';
-  voice.tourFollowPrompt = '';
   voice.tourPromptSent = false;
-  voice.tourPresentationStarted = false;
 }
 
 function pausePresentationForVoiceEnd() {
@@ -2036,16 +2034,10 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
   voice.userDraftId = null;
   voice.assistantDraftId = null;
   voice.tourPromptSent = false;
-  voice.tourPresentationStarted = false;
   voice.tourPrompt = tour
     ? (state.locale === 'fr'
-      ? "Commence maintenant la visite guidée. Le projet Customer Acquisition s’ouvre pour vous. Décrivez l’étape actuelle, puis poursuivez les étapes clés une à une avec les outils de présentation. Parlez naturellement et brièvement en français. Ne me demandez pas ce que je veux explorer et n’attendez pas ma permission à chaque étape."
-      : "Begin the guided presentation now. The Customer Acquisition project is being opened for you. Narrate the current step, then continue through the key steps one at a time using the presentation tools. Speak naturally and concisely in English. Do not ask me what to explore first, and do not wait for permission before each step.")
-    : '';
-  voice.tourFollowPrompt = tour
-    ? (state.locale === 'fr'
-      ? "Le projet Customer Acquisition est déjà ouvert et le mode présentation a démarré. Décrivez l’étape actuelle, puis poursuivez les étapes clés une à une avec les outils de présentation. Ne redémarrez pas la présentation, ne me demandez pas ce que je veux explorer et n’attendez pas ma permission à chaque étape. Parlez naturellement et brièvement en français."
-      : "The Customer Acquisition project is already open and presentation mode has started. Narrate the current step, then continue through the key steps one at a time using the presentation tools. Do not restart the presentation, do not ask me what to explore, and do not wait for permission before each step. Speak naturally and concisely in English.")
+      ? "Tu commences une expérience de portfolio en direct avec un visiteur. Présente-toi brièvement comme Nupa, dans ta propre voix, et explique en une ou deux phrases qu’il s’agit d’une expérience interactive et personnalisée. Mentionne naturellement que le visiteur peut t’interrompre, poser des questions, naviguer seul ou arrêter à tout moment. Pose ensuite une seule question ouverte et naturelle pour découvrir ce qui l’amène au portfolio ou ce qu’il souhaite explorer. N’utilise pas de questionnaire, ne pose pas une liste de questions et ne commence pas encore à naviguer ni à présenter. Attends sa réponse. Après sa réponse, choisis la direction de présentation la plus pertinente à partir des connaissances disponibles sur le portfolio, puis commence à naviguer, à mettre en évidence et à présenter le contenu pertinent. Adapte la présentation au fil de la conversation. N’utilise pas de visites prédéfinies ni de scénarios rigides par catégorie de visiteur. S’il n’a pas d’objectif précis, lance avec assurance une vue d’ensemble générale du portfolio."
+      : "You are starting a live portfolio experience with a visitor. Introduce yourself briefly as Nupa, in your own voice, and explain in one or two sentences that this is a live, interactive and personalized experience. Mention naturally that the visitor can interrupt, ask questions, navigate independently, or stop at any time. Then ask one natural, open question to discover what brings them to the portfolio or what they would like to explore. Do not run an onboarding questionnaire, do not ask a list of questions, and do not start navigating or presenting yet. Wait for their response. After their response, choose the most relevant presentation direction from the available portfolio knowledge, then begin navigating, highlighting and presenting the relevant content. Adapt continuously as the conversation develops. Do not use rigid predefined tours or visitor-category scripts. If they have no specific objective, confidently initiate a general portfolio overview.")
     : '';
   try {
     const token = await api('/api/live/token', {
@@ -2171,39 +2163,11 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
   }
 }
 
-async function startGuidedPresentation() {
-  if (!state.sessionId) return false;
-  try {
-    const result = await api('/api/tools/execute', {
-      method: 'POST',
-      body: JSON.stringify({
-        sessionId: state.sessionId,
-        name: 'presentProject',
-        args: { projectId: 'acquisition', includeFlow: true, startNodeId: 'demo' },
-        portfolioContext: portfolioContext()
-      })
-    });
-    if (!result.ok) return false;
-    const actions = (result.actions || [result.action]).filter(Boolean);
-    if (!actions.length) return false;
-    await runActions(actions);
-    return true;
-  } catch {
-    return false;
-  }
-}
-
 async function sendTourPromptIfNeeded() {
   if (!voice.active || !voice.tourPrompt || voice.tourPromptSent) return;
   voice.tourPromptSent = true;
-  let prompt = voice.tourPrompt;
-  if (!voice.tourPresentationStarted) {
-    voice.tourPresentationStarted = true;
-    const started = await startGuidedPresentation();
-    if (started && voice.tourFollowPrompt) prompt = voice.tourFollowPrompt;
-  }
   if (voice.active && voice.session) {
-    voice.session.sendClientContent({ turns: prompt, turnComplete: true });
+    voice.session.sendClientContent({ turns: voice.tourPrompt, turnComplete: true });
   }
 }
 
@@ -2223,9 +2187,7 @@ async function stopVoice() {
   voice.userText = '';
   voice.assistantText = '';
   voice.tourPrompt = '';
-  voice.tourFollowPrompt = '';
   voice.tourPromptSent = false;
-  voice.tourPresentationStarted = false;
   if (state.sessionId) {
     void api('/api/live/end', {
       method: 'POST',

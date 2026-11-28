@@ -192,15 +192,12 @@ const aiPanel = await ready.evaluate(() => ({
   tourHidden: document.querySelector('#ainourTour')?.hidden
 }));
 check('Use text chat opens the Nupa panel on demand', aiPanel.panelHidden === false && aiPanel.bodyVisible === true && aiPanel.consentHidden === true && aiPanel.tourHidden === true, aiPanel);
-await ready.evaluate(async () => { window.__guidedTourStarted = await window.AINourPrototype.startGuidedPresentation(); });
-await ready.waitForTimeout(3500);
-const guided = await ready.evaluate(() => ({
-  started: window.__guidedTourStarted,
+const entryState = await ready.evaluate(() => ({
   hash: location.hash,
   barVisible: Boolean(document.querySelector('.ai-pres-bar')) && !document.querySelector('.ai-pres-bar').hidden,
-  barText: document.querySelector('.ai-pres-bar')?.innerText.trim()
+  projectOpen: Boolean(document.querySelector('.project-overlay.open'))
 }));
-check('guided presentation mode opens Customer Acquisition directly', guided.started === true && /acquisition/i.test(guided.hash) && guided.barVisible === true, guided);
+check('voice-tour entry stays on the main view and does not auto-start a presentation', !/acquisition/i.test(entryState.hash) && entryState.barVisible === false, entryState);
 await ready.evaluate(() => document.querySelector('[data-ainour="locale"]').click());
 await ready.waitForTimeout(150);
 const french = await ready.evaluate(() => ({

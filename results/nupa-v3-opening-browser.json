@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-28T00:34:54.884Z",
+  "generatedAt": "2026-11-28T00:53:16.311Z",
   "passed": 22,
   "failed": 0,
   "total": 22,
@@ -174,7 +174,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-28T00:34:45.682Z"
+          "acceptedAt": "2026-11-28T00:53:09.251Z"
         },
         "gateVisible": true,
         "consentHidden": true
@@ -221,13 +221,12 @@
       }
     },
     {
-      "name": "guided presentation mode opens Customer Acquisition directly",
+      "name": "voice-tour entry stays on the main view and does not auto-start a presentation",
       "pass": true,
       "detail": {
-        "started": true,
-        "hash": "#/projects/acquisition/flow/demo",
-        "barVisible": true,
-        "barText": "NUPA\nCustomer Acquisition\n5 / 9\n\u2039\nPause\n\u203a\nEnd"
+        "hash": "#/home",
+        "barVisible": false,
+        "projectOpen": false
       }
     },
     {

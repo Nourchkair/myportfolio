@@ -1,0 +1,32 @@
+{
+  "generatedAt": "2026-11-28T00:49:51.051Z",
+  "voice": "Iapetus",
+  "sessionSeconds": 300,
+  "events": [
+    "open",
+    "setup",
+    "turnComplete:1",
+    "usage",
+    "turnComplete:2",
+    "usage"
+  ],
+  "intro": {
+    "text": "Hello! I'm Nupa, Nour's independent AI portfolio assistant. This is a live, interactive and personalized experience where you can interrupt, ask questions, navigate independently, or stop at any time. What brings you to the portfolio today, or what would you like to explore first?",
+    "tools": []
+  },
+  "followUp": {
+    "text": "",
+    "tools": [
+      {
+        "turn": 2,
+        "name": "openProject",
+        "args": {
+          "projectId": "acquisition"
+        }
+      }
+    ]
+  },
+  "audioBytes": 862080,
+  "passed": true,
+  "note": "Intro should ask a question without presenting. After a business-owner response, Nupa should choose a presentation direction via tools."
+}

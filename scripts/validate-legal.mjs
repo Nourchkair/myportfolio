@@ -67,6 +67,8 @@ check('assistant legal links', companion.includes('href="/privacy/"') && compani
 check('assistant Nupa branding', companion.includes('Nupa') && !/AI Nour|AI-Nour/.test(companion));
 check('assistant tagline', companion.includes('Your intelligent portfolio companion.'));
 check('assistant primary action', companion.includes('Let’s explore') && !/Continue and agree/.test(companion));
+check('voice tour does not auto-start a predefined presentation', !/startGuidedPresentation|tourPresentationStarted|tourFollowPrompt/.test(companion) && /do not start navigating or presenting yet/i.test(companion) && /one natural, open question|one natural, open question/i.test(companion));
+check('voice tour asks for a dynamic presentation direction', /most relevant presentation direction/i.test(companion) && /do not use rigid predefined tours/i.test(companion) && /confidently initiate a general portfolio overview/i.test(companion));
 check('assistant identity separation', /independent AI/i.test(companion) && /Nupa is not Nour Chkair/i.test(privacy) && /Nupa is not Nour Chkair/i.test(terms));
 check('assistant paid Gemini and retention disclosure', /Text and voice are processed by Google Gemini/.test(companion) && /paid API terms/.test(companion) && /do not use prompts or responses to improve/.test(companion) && /kept for up to 7 days/.test(companion) && /site administrator/.test(companion) && /Do not share personal, sensitive or confidential information/.test(companion));
 check('opening independent choice', index.includes('Explore independently'));
