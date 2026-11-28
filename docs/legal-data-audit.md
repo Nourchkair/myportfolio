@@ -201,7 +201,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 11. Paid-tier and public-beta update (version 1.4)
 
-**Prepared:** 27 November 2026, not deployed pending approval.
+**Deployed:** 27 November 2026; voice-tour onboarding and $3 daily cap deployed 28 November 2026.
 
 - **Paid processing:** Privacy Policy and Terms now describe paid Gemini API processing, Google’s Data Processing Addendum, no product-improvement use under those terms, limited abuse/security/legal logging, and no zero-retention promise.
 - **No retroactive claim:** both language versions state that earlier unpaid conversations are not retroactively covered by paid-tier protections.
