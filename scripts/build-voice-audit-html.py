@@ -62,7 +62,7 @@ def audio_path(file: str) -> str:
 
 
 def main() -> None:
-    rows = json.loads(ANALYSIS.read_text())["samples"]
+    rows = [row for row in json.loads(ANALYSIS.read_text())["samples"] if not row["name"].startswith("v2-")]
     samples = []
     for row in rows:
         name = row["name"]

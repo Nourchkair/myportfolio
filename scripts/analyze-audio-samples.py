@@ -306,6 +306,7 @@ def analyze(path: Path) -> dict:
         "locale": locale,
         "variant": variant,
         "transcript": meta.get("transcript", ""),
+        "sample_rate": rate,
         "duration_s": round(duration, 3),
         "speech_s": round(speech_seconds, 3),
         "pause_s": round(pause_seconds, 3),

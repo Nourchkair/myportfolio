@@ -72,16 +72,28 @@ function render(chunks, maxChars = 14000) {
   return lines.join('\n\n');
 }
 
-export function foundationContext({ overrides = [], maxChars = 14000 } = {}) {
-  const ids = [
-    ...PROFILE_IDS,
-    ...PROJECT_FOUNDATION_IDS,
-    ...JOURNEY_FOUNDATION_IDS,
-    'site:contact'
-  ];
+export function foundationContext({ overrides = [], maxChars = 14000, compact = false } = {}) {
+  const ids = compact
+    ? [
+        ...PROFILE_IDS,
+        ...entities.projects.flatMap((project) => ([
+          `${project.id}:identity`,
+          `${project.id}:what`,
+          `${project.id}:contribution`
+        ])),
+        'site:contact'
+      ]
+    : [
+        ...PROFILE_IDS,
+        ...PROJECT_FOUNDATION_IDS,
+        ...JOURNEY_FOUNDATION_IDS,
+        'site:contact'
+      ];
   const chunks = mergeOverrides(getChunksByIds(ids), overrides);
   return {
-    text: `VERIFIED PORTFOLIO FACTS AND GUARDRAILS:\n${FACT_GUARDRAILS}\n\n${render(chunks, maxChars)}`,
+    text: compact
+      ? `VERIFIED PORTFOLIO FACTS:\n${render(chunks, maxChars)}`
+      : `VERIFIED PORTFOLIO FACTS AND GUARDRAILS:\n${FACT_GUARDRAILS}\n\n${render(chunks, maxChars)}`,
     chunks
   };
 }
@@ -191,14 +203,22 @@ export function journeyChapter(chapterId, { overrides = [] } = {}) {
   };
 }
 
-export function currentView(context, { overrides = [] } = {}) {
+export function currentView(context, { overrides = [], compact = false } = {}) {
   if (!context) return { text: '', chunks: [] };
   const chunks = [];
   const parts = [contextInstruction(context)];
   if (context.projectId) {
     const dossier = projectDossier(context.projectId, { overrides });
     if (dossier) {
-      parts.push(dossierText(dossier));
+      if (compact) {
+        parts.push([
+          `PROJECT: ${dossier.title} (${dossier.id}), ${dossier.project}${dossier.category ? ` — ${dossier.category}` : ''}`,
+          `What it is: ${dossier.what}`,
+          `Nour's contribution: ${dossier.contribution}`
+        ].filter(Boolean).join('\n'));
+      } else {
+        parts.push(dossierText(dossier));
+      }
       chunks.push(...dossier.chunks);
       if (context.nodeId) {
         const step = flowStep(context.projectId, context.nodeId, { overrides });
@@ -211,19 +231,19 @@ export function currentView(context, { overrides = [] } = {}) {
   } else if (context.chapterId) {
     const chapter = journeyChapter(context.chapterId, { overrides });
     if (chapter) {
-      parts.push(chapter.text);
+      parts.push(compact ? chapter.text.slice(0, 3000) : chapter.text);
       chunks.push(...chapter.chunks);
     }
   } else {
     const query = contextQuery(context) || context.section || 'Nour Chkair portfolio';
-    const results = search(query, { limit: 6, extraChunks: overrides });
-    parts.push(render(results, 6000));
+    const results = search(query, { limit: compact ? 3 : 6, extraChunks: overrides });
+    parts.push(render(results, compact ? 2500 : 6000));
     chunks.push(...results);
   }
   return { text: parts.filter(Boolean).join('\n\n'), chunks };
 }
 
-export function searchPortfolio(query, { overrides = [], limit = 6 } = {}) {
+export function searchPortfolio(query, { overrides = [], limit = 6, maxChars = 7000 } = {}) {
   const results = search(String(query || ''), { limit, extraChunks: overrides });
   const chunks = results;
   return {
@@ -235,9 +255,10 @@ export function searchPortfolio(query, { overrides = [], limit = 6 } = {}) {
 }
 
 export function buildGroundingContext({ query = '', portfolioContext = null, overrides = [], mode = 'text' } = {}) {
-  const foundation = foundationContext({ overrides, maxChars: mode === 'live' ? 14000 : 10000 });
-  const view = currentView(portfolioContext, { overrides });
-  const searchResults = searchPortfolio([query, contextQuery(portfolioContext)].filter(Boolean).join(' '), { overrides, limit: mode === 'live' ? 6 : 5 });
+  const compact = mode === 'live';
+  const foundation = foundationContext({ overrides, maxChars: compact ? 7000 : 10000, compact });
+  const view = currentView(portfolioContext, { overrides, compact });
+  const searchResults = searchPortfolio([query, contextQuery(portfolioContext)].filter(Boolean).join(' '), { overrides, limit: compact ? 3 : 5, maxChars: compact ? 2200 : 7000 });
   const seen = new Set();
   const chunks = [];
   for (const chunk of [...foundation.chunks, ...view.chunks, ...searchResults.chunks]) {
@@ -250,7 +271,7 @@ export function buildGroundingContext({ query = '', portfolioContext = null, ove
       foundation.text,
       view.text ? `CURRENT VIEW CONTEXT:\n${view.text}` : '',
       searchResults.text ? `QUERY-SPECIFIC VERIFIED CONTEXT:\n${searchResults.text}` : ''
-    ].filter(Boolean).join('\n\n').slice(0, mode === 'live' ? 20000 : 14000),
+    ].filter(Boolean).join('\n\n').slice(0, mode === 'live' ? 12000 : 14000),
     chunks,
     searchResults: searchResults.results,
     foundation

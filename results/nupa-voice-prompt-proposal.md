@@ -1,6 +1,6 @@
 # Nupa spoken-delivery prompt proposal
 
-Status: **proposal only**. Nothing here is deployed. The production voice and model remain `gemini-3.8-live` + `Iapetus`.
+Status: **implemented in source, not deployed**. The source configuration is now `gemini-3.8-live` + `Sadachbia`; production remains `Iapetus` until approval. See `results/nupa-voice-refinement.md` for validation.
 
 The goal is not to add more personality rules. It is to remove the instructions that make Nupa sound like it is reading a product tour, and to give the voice model a small number of concrete delivery behaviours.
 

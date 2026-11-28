@@ -199,6 +199,19 @@ const busyAdapter=createCommandApi({...adapter,isBusy:()=>true},state);
 const busyResult=await busyAdapter.openProject(PROJECTS[0].id);
 check('API reports BUSY during transitions',busyResult.ok===false&&busyResult.error.code==='BUSY');
 
+/* ---------- voice pipeline contracts ---------- */
+const companionSource=read('src/ai-nour/companion.js');
+const livePromptSource=read('ai-nour/src/sessions/manager.js');
+check('voice worklet exists',exists('src/ai-nour/audio-worklet.js'));
+check('voice pipeline uses AudioWorklet',/audioWorklet\.addModule/.test(companionSource)&&/nupa-mic-resampler/.test(companionSource));
+check('voice fallback has anti-alias filters',/createBiquadFilter/.test(companionSource)&&/resampleTo16k/.test(companionSource));
+check('voice playback respects provider mime rate',/parseAudioFormat/.test(companionSource)&&/part\.inlineData\.mimeType/.test(companionSource));
+check('voice interruptions use gain ramps',/linearRampToValueAtTime/.test(companionSource)&&/stopPlayback\(20\)/.test(companionSource));
+check('voice recovers audio contexts on visibility/device changes',/visibilitychange/.test(companionSource)&&/devicechange/.test(companionSource));
+check('configured live voice is Sadachbia',read('ai-nour/src/config.js').includes("liveVoice: 'Sadachbia'")&&read('ai-nour/wrangler.production.toml').includes('LIVE_VOICE = "Sadachbia"'));
+check('live prompt is structured',['CORE IDENTITY AND POLICIES','CONVERSATIONAL PERSONALITY','VOICE DELIVERY','PORTFOLIO KNOWLEDGE','PRESENTATION AND TOOL USE'].every((section)=>livePromptSource.includes(section)));
+check('live introduction is natural and short',/Start like a person, not a presenter/.test(companionSource)&&/ask one genuine question/.test(companionSource));
+
 /* ---------- output ---------- */
 const summary={
   passed:passes.length,

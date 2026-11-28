@@ -1,0 +1,23 @@
+{
+  "generatedAt": "2026-11-28T07:16:31.247100+00:00",
+  "environment": {
+    "frontend": "http://127.0.0.1:8771/index.html?ainour=dev",
+    "worker": "http://127.0.0.1:8789"
+  },
+  "test": "play a synthetic follow-up question while the assistant is speaking",
+  "result": {
+    "sawSpeaking": true,
+    "interruptAudioSeconds": 2.6786041666666667,
+    "userTranscript": "Actually, tell me about Safi I instead.",
+    "assistantTranscript": "Safiy is a local-first AI workplace assistant designed to keep your business conversations from getting lost after meetings. Nour worked on the knowledge and release side, adding features like Knowledge Bank imports and making sure retrieval indexing was smooth for beta users. It's built to keep sensitive discussions private by handling tasks locally on the Mac by default.",
+    "voiceState": "speaking",
+    "route": "/projects/safiy",
+    "projectOpen": "safiy",
+    "consoleErrors": []
+  },
+  "notes": [
+    "The model stopped the previous response, handled the new question and opened the Safiy project.",
+    "The synthetic TTS pronunciation was transcribed as \u201cSafi I\u201d; real-voice pronunciation still needs manual testing.",
+    "Fake microphone stream; local Worker with Sadachbia and the optimized prompt; not production."
+  ]
+}

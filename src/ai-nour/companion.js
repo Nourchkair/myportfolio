@@ -12,6 +12,11 @@ const CONSENT_VERSION = '2026-11-27-v1.4';
 const CONSENT_STORE = 'ainour:consent';
 const MIC_CONSENT_STORE = 'ainour:mic-consent';
 const OWNER_SOURCE_STORE = 'ainour:owner-source';
+const AUDIO_WORKLET_VERSION = '1';
+const MIC_TARGET_RATE = 16000;
+const PLAYBACK_MIN_LEAD = 0.06;
+const PLAYBACK_MAX_LEAD = 0.25;
+const PLAYBACK_LEAD_STEP = 0.04;
 
 function readConsent() {
   try {
@@ -55,12 +60,20 @@ const voice = {
   inputContext: null,
   outputContext: null,
   processor: null,
+  micNode: null,
+  micFilters: [],
+  silentGain: null,
   micSource: null,
   analyser: null,
   orbFrame: null,
   orbLevel: 0,
   sources: [],
   nextPlayTime: 0,
+  playbackStarted: false,
+  playbackLead: PLAYBACK_MIN_LEAD,
+  playbackUnderruns: 0,
+  chunksSinceUnderrun: 0,
+  wasHidden: false,
   usage: null,
   lastTotals: { text: 0, audioIn: 0, audioOut: 0, thoughts: 0 },
   userText: '',
@@ -1464,8 +1477,8 @@ function startExploreIntroIfNeeded() {
 
 async function startExploreIntro() {
   const prompt = state.locale === 'fr'
-    ? "Présente-toi brièvement comme Nupa, un guide de portfolio indépendant propulsé par l’IA. Explique que cette exploration est une présentation interactive, vivante et personnalisée, et que je peux t’interrompre, poser des questions, demander plus de détails, naviguer seul, sauter des sections, mettre en pause ou reprendre, ou terminer l’expérience à tout moment. Demande-moi ce que je souhaite explorer en premier. Ne commence pas encore une présentation complète et ne demande pas de confirmation pour chaque étape."
-    : "Introduce yourself briefly as Nupa, an independent AI portfolio guide. Explain that this is a live, interactive, personalized presentation and that I can interrupt, ask questions, request more detail, navigate independently, skip sections, pause or resume, or end the experience at any time. Ask what I want to explore first. Do not start a full presentation yet, and do not ask for permission before every step.";
+    ? "Commence comme une personne, pas comme un présentateur. Présente-toi en une phrase, puis pose une vraie question sur ce qui amène la personne dans le portfolio de Nour. N’énumère pas les fonctionnalités, n’explique pas l’interface et ne mentionne pas que l’expérience est en direct, interactive ou personnalisée. Ne commence pas encore à présenter."
+    : "Start like a person, not a presenter. Introduce yourself in one sentence, then ask one genuine question about what brought the person to Nour's portfolio. Do not list features, explain the interface, or mention that the experience is live, interactive or personalized. Do not start presenting yet.";
   await sendMessage(null, { message: prompt, showUser: false, pausePresentation: false });
 }
 
@@ -1838,12 +1851,16 @@ function base64FromInt16(samples) {
   return btoa(binary);
 }
 
-function downsampleTo16k(float32, sourceRate) {
-  const ratio = sourceRate / 16000;
+function resampleTo16k(float32, sourceRate) {
+  const ratio = sourceRate / MIC_TARGET_RATE;
   const length = Math.floor(float32.length / ratio);
   const output = new Int16Array(length);
   for (let i = 0; i < length; i++) {
-    const sample = float32[Math.floor(i * ratio)] || 0;
+    const position = i * ratio;
+    const lower = Math.floor(position);
+    const upper = Math.min(float32.length - 1, lower + 1);
+    const fraction = position - lower;
+    const sample = (float32[lower] || 0) * (1 - fraction) + (float32[upper] || 0) * fraction;
     output[i] = Math.max(-1, Math.min(1, sample)) * 0x7fff;
   }
   return output;
@@ -1853,33 +1870,243 @@ function base64ToInt16(base64) {
   const binary = atob(base64);
   const bytes = new Uint8Array(binary.length);
   for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Int16Array(bytes.buffer);
+  const usable = bytes.byteLength - (bytes.byteLength % 2);
+  return new Int16Array(bytes.buffer, 0, usable / 2);
 }
 
-function stopPlayback() {
-  for (const source of voice.sources) {
-    try { source.stop(); } catch {}
+function parseAudioFormat(mimeType) {
+  const params = {};
+  for (const part of String(mimeType || '').split(';').slice(1)) {
+    const [key, value] = part.trim().split('=');
+    if (key && value) params[key.toLowerCase()] = value;
   }
-  voice.sources = [];
-  voice.nextPlayTime = 0;
+  return {
+    sampleRate: Math.max(8000, Math.min(96000, Number(params.rate) || 24000)),
+    channels: Math.max(1, Math.min(2, Number(params.channels) || 1))
+  };
 }
 
-function playAudio(base64) {
-  if (!voice.outputContext) return;
-  const pcm = base64ToInt16(base64);
-  const buffer = voice.outputContext.createBuffer(1, pcm.length, 24000);
-  const channel = buffer.getChannelData(0);
-  for (let i = 0; i < pcm.length; i++) channel[i] = pcm[i] / 0x8000;
-  const source = voice.outputContext.createBufferSource();
-  source.buffer = buffer;
-  source.connect(voice.outputContext.destination);
-  const now = voice.outputContext.currentTime;
-  if (voice.nextPlayTime < now) voice.nextPlayTime = now;
-  source.start(voice.nextPlayTime);
-  voice.nextPlayTime += buffer.duration;
-  voice.sources.push(source);
-  source.onended = () => { voice.sources = voice.sources.filter((item) => item !== source); };
+function stopPlayback(fadeMs = 30) {
+  const context = voice.outputContext;
+  const now = context?.currentTime || 0;
+  const fade = Math.max(0, fadeMs) / 1000;
+  const entries = voice.sources.slice();
+  voice.sources = [];
+  for (const entry of entries) {
+    const { source, gain } = entry;
+    try {
+      if (gain && fade > 0) {
+        gain.gain.cancelScheduledValues(now);
+        gain.gain.setValueAtTime(gain.gain.value, now);
+        gain.gain.linearRampToValueAtTime(0, now + fade);
+      } else if (gain) {
+        gain.gain.setValueAtTime(0, now);
+      }
+      setTimeout(() => { try { source.stop(); } catch {} }, fadeMs + 10);
+    } catch {}
+  }
+  voice.nextPlayTime = 0;
+  voice.playbackStarted = false;
+  voice.playbackLead = PLAYBACK_MIN_LEAD;
+  voice.chunksSinceUnderrun = 0;
 }
+
+function playAudio(base64, mimeType) {
+  const context = voice.outputContext;
+  if (!context) return;
+  if (context.state === 'suspended') context.resume().catch(() => {});
+  const format = parseAudioFormat(mimeType);
+  const pcm = base64ToInt16(base64);
+  if (!pcm.length) return;
+  const frames = Math.floor(pcm.length / format.channels);
+  if (!frames) return;
+  const buffer = context.createBuffer(format.channels, frames, format.sampleRate);
+  for (let channelIndex = 0; channelIndex < format.channels; channelIndex++) {
+    const channel = buffer.getChannelData(channelIndex);
+    for (let frame = 0; frame < frames; frame++) {
+      channel[frame] = pcm[frame * format.channels + channelIndex] / 0x8000;
+    }
+  }
+  const source = context.createBufferSource();
+  source.buffer = buffer;
+  const gain = context.createGain();
+  source.connect(gain);
+  gain.connect(context.destination);
+  const now = context.currentTime;
+  const first = !voice.playbackStarted;
+  let start = voice.nextPlayTime;
+  let gap = false;
+  if (first || start < now + 0.005) {
+    if (!first && start < now) {
+      voice.playbackUnderruns += 1;
+      voice.playbackLead = Math.min(PLAYBACK_MAX_LEAD, voice.playbackLead + PLAYBACK_LEAD_STEP);
+      voice.chunksSinceUnderrun = 0;
+    }
+    start = now + voice.playbackLead;
+    gap = true;
+    voice.playbackStarted = true;
+  } else {
+    voice.chunksSinceUnderrun += 1;
+    if (voice.chunksSinceUnderrun > 25) {
+      voice.playbackLead = Math.max(PLAYBACK_MIN_LEAD, voice.playbackLead - 0.005);
+      voice.chunksSinceUnderrun = 0;
+    }
+  }
+  if (gap) {
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(1, start + 0.008);
+  } else {
+    gain.gain.setValueAtTime(1, start);
+  }
+  source.start(start);
+  voice.nextPlayTime = start + buffer.duration;
+  const entry = { source, gain };
+  voice.sources.push(entry);
+  source.onended = () => {
+    voice.sources = voice.sources.filter((item) => item !== entry);
+    try { gain.disconnect(); } catch {}
+  };
+}
+
+function micConstraints() {
+  return { audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true } };
+}
+
+async function createMicWorklet(context) {
+  if (!context.audioWorklet?.addModule || typeof AudioWorkletNode === 'undefined') return null;
+  try {
+    await context.audioWorklet.addModule(new URL(`./audio-worklet.js?v=${AUDIO_WORKLET_VERSION}`, import.meta.url));
+    return new AudioWorkletNode(context, 'nupa-mic-resampler', {
+      numberOfInputs: 1,
+      numberOfOutputs: 1,
+      outputChannelCount: [1],
+      channelCount: 1,
+      channelCountMode: 'explicit',
+      processorOptions: { targetRate: MIC_TARGET_RATE }
+    });
+  } catch (error) {
+    console.warn('Nupa microphone worklet unavailable; using filtered fallback', error);
+    return null;
+  }
+}
+
+function connectMicSource(source) {
+  if (!source) return;
+  source.connect(voice.analyser);
+  if (voice.micNode) source.connect(voice.micNode);
+  else if (voice.micFilters[0]) source.connect(voice.micFilters[0]);
+}
+
+async function setupInputGraph() {
+  const context = voice.inputContext;
+  if (!context) return;
+  voice.analyser = context.createAnalyser();
+  voice.analyser.fftSize = 256;
+  voice.analyser.smoothingTimeConstant = 0.72;
+  voice.silentGain = context.createGain();
+  voice.silentGain.gain.value = 0;
+  voice.analyser.connect(voice.silentGain);
+  voice.silentGain.connect(context.destination);
+
+  const worklet = await createMicWorklet(context);
+  if (worklet) {
+    voice.micNode = worklet;
+    worklet.port.onmessage = (event) => {
+      const data = event.data;
+      if (data?.type !== 'samples' || !voice.active || !voice.session) return;
+      const pcm = new Int16Array(data.buffer);
+      if (!pcm.length) return;
+      try {
+        voice.session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm), mimeType: 'audio/pcm;rate=16000' } });
+      } catch {}
+    };
+    worklet.connect(voice.silentGain);
+    return;
+  }
+
+  const first = context.createBiquadFilter();
+  first.type = 'lowpass';
+  first.frequency.value = 7200;
+  first.Q.value = 0.707;
+  const second = context.createBiquadFilter();
+  second.type = 'lowpass';
+  second.frequency.value = 7200;
+  second.Q.value = 0.707;
+  first.connect(second);
+  voice.micFilters = [first, second];
+  voice.processor = context.createScriptProcessor(4096, 1, 1);
+  voice.processor.onaudioprocess = (event) => {
+    if (!voice.session || !voice.active) return;
+    const pcm16 = resampleTo16k(event.inputBuffer.getChannelData(0), context.sampleRate);
+    try {
+      voice.session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm16), mimeType: 'audio/pcm;rate=16000' } });
+    } catch {}
+  };
+  second.connect(voice.processor);
+  voice.processor.connect(voice.silentGain);
+}
+
+function attachMicTrackEnd(stream) {
+  for (const track of stream?.getAudioTracks?.() || []) {
+    track.onended = () => { if (voice.active) void refreshMicrophone(); };
+  }
+}
+
+async function refreshMicrophone() {
+  if (!voice.active || !voice.inputContext) return;
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia(micConstraints());
+    const previous = voice.mic;
+    voice.mic = stream;
+    attachMicTrackEnd(stream);
+    if (voice.micSource) {
+      try { voice.micSource.disconnect(); } catch {}
+    }
+    voice.micSource = voice.inputContext.createMediaStreamSource(stream);
+    connectMicSource(voice.micSource);
+    for (const track of previous?.getTracks?.() || []) track.stop();
+  } catch {
+    showVoiceError(state.locale === 'fr'
+      ? 'Le microphone a changé ou n’est plus disponible. Relancez la voix.'
+      : 'The microphone changed or is no longer available. Restart voice.');
+    await stopVoice();
+    setState('error');
+    setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
+  }
+}
+
+function resumeAudioContexts() {
+  for (const context of [voice.inputContext, voice.outputContext]) {
+    if (context?.state === 'suspended') context.resume().catch(() => {});
+  }
+}
+
+function handleAudioVisibility() {
+  if (document.hidden) {
+    voice.wasHidden = true;
+    return;
+  }
+  if (!voice.wasHidden) return;
+  voice.wasHidden = false;
+  const wasSuspended = voice.outputContext?.state === 'suspended' || voice.inputContext?.state === 'suspended';
+  resumeAudioContexts();
+  if (wasSuspended) {
+    stopPlayback(10);
+    voice.nextPlayTime = 0;
+  }
+}
+
+async function handleDeviceChange() {
+  if (!voice.active) return;
+  const track = voice.mic?.getAudioTracks?.()[0];
+  if (!track || track.readyState === 'ended') await refreshMicrophone();
+  else resumeAudioContexts();
+}
+
+document.addEventListener('visibilitychange', handleAudioVisibility);
+window.addEventListener('focus', resumeAudioContexts);
+window.addEventListener('pageshow', resumeAudioContexts);
+navigator.mediaDevices?.addEventListener?.('devicechange', handleDeviceChange);
 
 function usageTotals(metadata) {
   const details = (items) => Object.fromEntries((items || []).map((item) => [String(item.modality || '').toLowerCase(), Number(item.tokenCount || 0)]));
@@ -2040,10 +2267,14 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
   voice.tourPromptSent = false;
   voice.tourActive = tour;
   voice.tourVisitorSpoke = false;
+  voice.playbackStarted = false;
+  voice.playbackLead = PLAYBACK_MIN_LEAD;
+  voice.playbackUnderruns = 0;
+  voice.chunksSinceUnderrun = 0;
   voice.tourPrompt = tour
     ? (state.locale === 'fr'
-      ? "Tu commences une expérience de portfolio en direct avec un visiteur. Présente-toi brièvement comme Nupa, dans ta propre voix, et explique en une ou deux phrases qu’il s’agit d’une expérience interactive et personnalisée. Mentionne naturellement que le visiteur peut t’interrompre, poser des questions, naviguer seul ou arrêter à tout moment. Pose ensuite une seule question ouverte et naturelle pour découvrir ce qui l’amène au portfolio ou ce qu’il souhaite explorer. N’utilise pas de questionnaire, ne pose pas une liste de questions et ne commence pas encore à naviguer ni à présenter. Attends sa réponse. Après sa réponse, choisis la direction de présentation la plus pertinente à partir des connaissances disponibles sur le portfolio, puis commence à naviguer, à mettre en évidence et à présenter le contenu pertinent. Adapte la présentation au fil de la conversation. N’utilise pas de visites prédéfinies ni de scénarios rigides par catégorie de visiteur. S’il n’a pas d’objectif précis, lance avec assurance une vue d’ensemble générale du portfolio."
-      : "You are starting a live portfolio experience with a visitor. Introduce yourself briefly as Nupa, in your own voice, and explain in one or two sentences that this is a live, interactive and personalized experience. Mention naturally that the visitor can interrupt, ask questions, navigate independently, or stop at any time. Then ask one natural, open question to discover what brings them to the portfolio or what they would like to explore. Do not run an onboarding questionnaire, do not ask a list of questions, and do not start navigating or presenting yet. Wait for their response. After their response, choose the most relevant presentation direction from the available portfolio knowledge, then begin navigating, highlighting and presenting the relevant content. Adapt continuously as the conversation develops. Do not use rigid predefined tours or visitor-category scripts. If they have no specific objective, confidently initiate a general portfolio overview.")
+      ? "Commence comme une personne, pas comme un présentateur. Présente-toi en une phrase, puis pose une vraie question sur ce qui amène la personne dans le portfolio de Nour. N’énumère pas les fonctionnalités, n’explique pas l’interface et ne mentionne pas que l’expérience est en direct, interactive ou personnalisée. Ne commence pas encore à présenter. Après la réponse, choisis la direction la plus pertinente à partir des connaissances du portfolio et commence naturellement, sans visite rigide ni script."
+      : "Start like a person, not a presenter. Introduce yourself in one sentence, then ask one genuine question about what brought the person to Nour's portfolio. Do not list features, explain the interface, or mention that the experience is live, interactive or personalized. Do not start presenting yet. After the answer, choose the most relevant direction from the portfolio knowledge and begin naturally, without a rigid tour or script.")
     : '';
   try {
     const token = await api('/api/live/token', {
@@ -2053,11 +2284,12 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
     state.sessionId = token.sessionId;
     voice.reservationId = token.reservationId;
     localStorage.setItem(STORE.session, state.sessionId);
-    voice.mic = await navigator.mediaDevices.getUserMedia({
-      audio: { channelCount: 1, echoCancellation: true, noiseSuppression: true, autoGainControl: true }
-    });
-    voice.inputContext = new AudioContext();
-    voice.outputContext = new AudioContext({ sampleRate: 24000 });
+    voice.mic = await navigator.mediaDevices.getUserMedia(micConstraints());
+    attachMicTrackEnd(voice.mic);
+    voice.inputContext = new AudioContext({ latencyHint: 'interactive' });
+    voice.outputContext = new AudioContext({ latencyHint: 'interactive' });
+    voice.outputContext.onstatechange = () => { if (voice.outputContext?.state === 'running') resumeAudioContexts(); };
+    await setupInputGraph();
     const { GoogleGenAI } = await import('./vendor/genai.js');
     const ai = new GoogleGenAI({ apiKey: token.token, httpOptions: { apiVersion: 'v1alpha' } });
     voice.active = true;
@@ -2092,7 +2324,7 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
           }
           for (const part of message.serverContent?.modelTurn?.parts || []) {
             if (part.inlineData?.data) {
-              playAudio(part.inlineData.data);
+              playAudio(part.inlineData.data, part.inlineData.mimeType);
               setState('speaking');
             }
           }
@@ -2138,21 +2370,8 @@ async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = 
       }, Math.max(1000, expiresAt - Date.now()));
     }
     voice.micSource = voice.inputContext.createMediaStreamSource(voice.mic);
-    voice.analyser = voice.inputContext.createAnalyser();
-    voice.analyser.fftSize = 256;
-    voice.analyser.smoothingTimeConstant = 0.72;
-    voice.micSource.connect(voice.analyser);
-    voice.processor = voice.inputContext.createScriptProcessor(4096, 1, 1);
-    voice.processor.onaudioprocess = (event) => {
-      if (!voice.session || !voice.active) return;
-      const pcm16 = downsampleTo16k(event.inputBuffer.getChannelData(0), voice.inputContext.sampleRate);
-      voice.session.sendRealtimeInput({ audio: { data: base64FromInt16(pcm16), mimeType: 'audio/pcm;rate=16000' } });
-    };
-    voice.micSource.connect(voice.processor);
-    const silent = voice.inputContext.createGain();
-    silent.gain.value = 0;
-    voice.processor.connect(silent);
-    silent.connect(voice.inputContext.destination);
+    connectMicSource(voice.micSource);
+    resumeAudioContexts();
     startOrbAnimation();
     setState('listening');
     return true;
@@ -2181,14 +2400,26 @@ async function stopVoice() {
   voice.active = false;
   if (voice.expiryTimer) { clearTimeout(voice.expiryTimer); voice.expiryTimer = null; }
   stopOrbAnimation();
+  const hadPlayback = voice.sources.length > 0;
+  stopPlayback(20);
   if (voice.micSource) { try { voice.micSource.disconnect(); } catch {} voice.micSource = null; }
+  if (voice.micNode) {
+    try { voice.micNode.port.close(); } catch {}
+    try { voice.micNode.disconnect(); } catch {}
+    voice.micNode = null;
+  }
+  for (const filter of voice.micFilters) { try { filter.disconnect(); } catch {} }
+  voice.micFilters = [];
+  if (voice.silentGain) { try { voice.silentGain.disconnect(); } catch {} voice.silentGain = null; }
   if (voice.analyser) { try { voice.analyser.disconnect(); } catch {} voice.analyser = null; }
   if (voice.processor) { voice.processor.disconnect(); voice.processor = null; }
   if (voice.mic) { for (const track of voice.mic.getTracks()) track.stop(); voice.mic = null; }
-  stopPlayback();
+  if (hadPlayback) await new Promise((resolve) => setTimeout(resolve, 40));
   if (voice.session) { try { voice.session.close(); } catch {} voice.session = null; }
   if (voice.inputContext) { try { await voice.inputContext.close(); } catch {} voice.inputContext = null; }
   if (voice.outputContext) { try { await voice.outputContext.close(); } catch {} voice.outputContext = null; }
+  voice.playbackUnderruns = 0;
+  voice.wasHidden = false;
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';

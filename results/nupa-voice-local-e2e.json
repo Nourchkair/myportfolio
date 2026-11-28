@@ -1,0 +1,41 @@
+{
+  "generatedAt": "2026-11-28T07:13:57.943282+00:00",
+  "environment": {
+    "frontend": "http://127.0.0.1:8771/index.html?ainour=dev",
+    "worker": "http://127.0.0.1:8789",
+    "localD1": ".wrangler/swift-browser-state"
+  },
+  "config": {
+    "model": "gemini-3.8-live",
+    "voice": "Sadachbia",
+    "livePrompt": "structured compact prompt",
+    "audioPipeline": "AudioWorklet + adaptive playback"
+  },
+  "flow": [
+    "owner issued",
+    "session created",
+    "live token issued",
+    "voice tour started with fake MediaStreamDestination microphone"
+  ],
+  "result": {
+    "voiceState": "listening",
+    "bodyVoice": null,
+    "tourHidden": true,
+    "panelHidden": true,
+    "error": "",
+    "assistantTranscript": "I'm Nupa, Nour's portfolio assistant, and I'm curious what brought you to his work today?",
+    "consoleErrors": []
+  },
+  "workerRequests": [
+    "GET /api/meta 200",
+    "POST /api/owner 200",
+    "POST /api/session 201",
+    "POST /api/live/token 200",
+    "POST /api/live/turn 200"
+  ],
+  "notes": [
+    "End-to-end local check, not production. Fake microphone stream; subjective audio not scored.",
+    "Validates the new voice/config, compact prompt, AudioWorklet startup and Live turn persistence together.",
+    "Real microphone, Bluetooth and iOS remain manual."
+  ]
+}

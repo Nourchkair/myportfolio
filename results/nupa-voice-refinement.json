@@ -1,0 +1,352 @@
+{
+  "generatedAt": "2026-11-28T07:10:49.914183+00:00",
+  "status": "implementation and validation only; not deployed",
+  "deploymentState": "source only; production remains gemini-3.8-live + Iapetus until approval",
+  "config": {
+    "model": "gemini-3.8-live",
+    "voice": "Sadachbia (provisional source configuration)"
+  },
+  "promptComparison": {
+    "oldSystemChars": {
+      "en": 30218,
+      "fr": 30225
+    },
+    "newSystemChars": {
+      "en": 13854,
+      "fr": 13925
+    },
+    "reductionPercent": 54.2,
+    "oldIntroChars": {
+      "en": 968,
+      "fr": 1057
+    },
+    "newIntroChars": {
+      "en": 408,
+      "fr": 430
+    },
+    "firstTurnPromptTokens": {
+      "old": 6555,
+      "new": 3328,
+      "reductionPercent": 49.2
+    },
+    "toolTurnPromptTokens": {
+      "old": 9133,
+      "new": 6016,
+      "reductionPercent": 34.1
+    }
+  },
+  "scenarios": {
+    "A_current_production_config": {
+      "duration_s": 16.01,
+      "f0_st_std": 3.74,
+      "f0_st_range": 9.49,
+      "f0_micro_mean": 0.6,
+      "speech_rms_variation_db": 7.33,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2510.55,
+      "words_per_min_speech": 184.7,
+      "first_audio_ms": 1437.5,
+      "samples": 2,
+      "items": [
+        {
+          "name": "v2-a-iapetus-oldprompt-longintro-en",
+          "locale": "en",
+          "duration_s": 13.83,
+          "first_audio_ms": 1369,
+          "f0_st_std": 4.002,
+          "f0_micro_mean": 0.627,
+          "speech_rms_variation_db": 9.06,
+          "spectral_centroid_hz": 2334.2,
+          "words_per_min_speech": 172.3,
+          "sample_rate": 24000,
+          "transcript": "Hi there! I'm Nupa, Nour's independent AI portfolio assistant. This is a live, interactive experience where you can navigate freely, ask questions, or interrupt at any point. What brings you to Nour's work today?"
+        },
+        {
+          "name": "v2-a-iapetus-oldprompt-longintro-fr",
+          "locale": "fr",
+          "duration_s": 18.19,
+          "first_audio_ms": 1506,
+          "f0_st_std": 3.474,
+          "f0_micro_mean": 0.582,
+          "speech_rms_variation_db": 5.59,
+          "spectral_centroid_hz": 2686.9,
+          "words_per_min_speech": 197.1,
+          "sample_rate": 24000,
+          "transcript": "Bonjour ! Je suis Nupa, l'assistant IA d\u00e9di\u00e9 \u00e0 la pr\u00e9sentation du travail de Nour. C'est une exp\u00e9rience interactive et sur mesure, alors sentez-vous libre de m'interrompre, de poser des questions ou de naviguer par vous-m\u00eame \u00e0 tout moment. Qu'est-ce qui vous am\u00e8ne ici aujourd'hui ou qu'aimeriez-vous explorer en premier ?"
+        }
+      ]
+    },
+    "B_sadachbia_short_intro": {
+      "duration_s": 7.43,
+      "f0_st_std": 4.89,
+      "f0_st_range": 12.27,
+      "f0_micro_mean": 0.93,
+      "speech_rms_variation_db": 8.97,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2388.03,
+      "words_per_min_speech": 206.18,
+      "first_audio_ms": 1410.5,
+      "samples": 4,
+      "items": [
+        {
+          "name": "v2-b-sadachbia-oldprompt-shortintro-en",
+          "locale": "en",
+          "duration_s": 7.73,
+          "first_audio_ms": 1113,
+          "f0_st_std": 6.438,
+          "f0_micro_mean": 0.734,
+          "speech_rms_variation_db": 10.23,
+          "spectral_centroid_hz": 2250.1,
+          "words_per_min_speech": 195.0,
+          "sample_rate": 24000,
+          "transcript": "I'm Nupa, an independent AI portfolio assistant designed to help you explore Nour's work. What brought you to his portfolio today?"
+        },
+        {
+          "name": "v2-b-sadachbia-oldprompt-shortintro-en-2",
+          "locale": "en",
+          "duration_s": 6.4,
+          "first_audio_ms": 1375,
+          "f0_st_std": 4.865,
+          "f0_micro_mean": 0.979,
+          "speech_rms_variation_db": 8.95,
+          "spectral_centroid_hz": 2189.7,
+          "words_per_min_speech": 189.0,
+          "sample_rate": 24000,
+          "transcript": "Hi, I'm Nupa, Nour's independent AI portfolio assistant. What sparked your interest in his work today?"
+        },
+        {
+          "name": "v2-b-sadachbia-oldprompt-shortintro-fr",
+          "locale": "fr",
+          "duration_s": 8.86,
+          "first_audio_ms": 1435,
+          "f0_st_std": 4.262,
+          "f0_micro_mean": 0.866,
+          "speech_rms_variation_db": 7.62,
+          "spectral_centroid_hz": 2463.5,
+          "words_per_min_speech": 215.4,
+          "sample_rate": 24000,
+          "transcript": "Je suis Nupa, l'assistant IA ind\u00e9pendant du portfolio de Nour Chkair. Qu'est-ce qui vous int\u00e9resse le plus dans son travail ou son parcours professionnel en ce moment?"
+        },
+        {
+          "name": "v2-b-sadachbia-oldprompt-shortintro-fr-2",
+          "locale": "fr",
+          "duration_s": 6.72,
+          "first_audio_ms": 1719,
+          "f0_st_std": 3.999,
+          "f0_micro_mean": 1.138,
+          "speech_rms_variation_db": 9.1,
+          "spectral_centroid_hz": 2648.8,
+          "words_per_min_speech": 225.3,
+          "sample_rate": 24000,
+          "transcript": "Je suis Nupa, l'assistant IA ind\u00e9pendant du portfolio de Nour. Qu'est-ce qui vous am\u00e8ne \u00e0 explorer son travail et son parcours aujourd'hui?"
+        }
+      ]
+    },
+    "C_sadachbia_optimized_prompt": {
+      "duration_s": 6.58,
+      "f0_st_std": 4.82,
+      "f0_st_range": 12.47,
+      "f0_micro_mean": 0.78,
+      "speech_rms_variation_db": 9.16,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2417.45,
+      "words_per_min_speech": 202.77,
+      "first_audio_ms": 1322.75,
+      "samples": 4,
+      "items": [
+        {
+          "name": "v2-c-sadachbia-newprompt-shortintro-en",
+          "locale": "en",
+          "duration_s": 8.08,
+          "first_audio_ms": 1444,
+          "f0_st_std": 5.432,
+          "f0_micro_mean": 0.943,
+          "speech_rms_variation_db": 10.69,
+          "spectral_centroid_hz": 2315.6,
+          "words_per_min_speech": 193.0,
+          "sample_rate": 24000,
+          "transcript": "I'm Nupa, Nour's portfolio assistant, helping people explore his work across sales and applied AI. What brought you to his portfolio today?"
+        },
+        {
+          "name": "v2-c-sadachbia-newprompt-shortintro-en-2",
+          "locale": "en",
+          "duration_s": 5.36,
+          "first_audio_ms": 1222,
+          "f0_st_std": 4.529,
+          "f0_micro_mean": 0.618,
+          "speech_rms_variation_db": 8.48,
+          "spectral_centroid_hz": 2386.8,
+          "words_per_min_speech": 185.7,
+          "sample_rate": 24000,
+          "transcript": "I'm Nupa, Nour's portfolio assistant. What specifically brought you to his work today?"
+        },
+        {
+          "name": "v2-c-sadachbia-newprompt-shortintro-fr",
+          "locale": "fr",
+          "duration_s": 5.94,
+          "first_audio_ms": 1480,
+          "f0_st_std": 4.471,
+          "f0_micro_mean": 0.719,
+          "speech_rms_variation_db": 9.14,
+          "spectral_centroid_hz": 2570.6,
+          "words_per_min_speech": 203.2,
+          "sample_rate": 24000,
+          "transcript": "Je suis Nupa, l'assistant de portfolio de Nour. Qu'est-ce qui vous am\u00e8ne \u00e0 explorer son travail aujourd'hui ?"
+        },
+        {
+          "name": "v2-c-sadachbia-newprompt-shortintro-fr-2",
+          "locale": "fr",
+          "duration_s": 6.93,
+          "first_audio_ms": 1145,
+          "f0_st_std": 4.828,
+          "f0_micro_mean": 0.854,
+          "speech_rms_variation_db": 8.35,
+          "spectral_centroid_hz": 2396.8,
+          "words_per_min_speech": 229.2,
+          "sample_rate": 24000,
+          "transcript": "Je m'appelle Nupa, l'assistant de portfolio de Nour, et je suis curieux de savoir ce qui vous am\u00e8ne \u00e0 explorer son travail aujourd'hui."
+        }
+      ]
+    },
+    "D_optimized_prompt_pipeline": {
+      "duration_s": 6.92,
+      "f0_st_std": 4.91,
+      "f0_st_range": 12.66,
+      "f0_micro_mean": 0.83,
+      "speech_rms_variation_db": 9.36,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2939.65,
+      "words_per_min_speech": 201.15,
+      "first_audio_ms": null,
+      "samples": 2,
+      "items": [
+        {
+          "name": "v2-d-sadachbia-newprompt-pipeline-en-48k",
+          "locale": "en",
+          "duration_s": 7.97,
+          "first_audio_ms": null,
+          "f0_st_std": 5.429,
+          "f0_micro_mean": 0.942,
+          "speech_rms_variation_db": 10.54,
+          "spectral_centroid_hz": 2784.8,
+          "words_per_min_speech": 194.1,
+          "sample_rate": 48000,
+          "transcript": "I'm Nupa, Nour's portfolio assistant, helping people explore his work across sales and applied AI. What brought you to his portfolio today?"
+        },
+        {
+          "name": "v2-d-sadachbia-newprompt-pipeline-fr-48k",
+          "locale": "fr",
+          "duration_s": 5.874,
+          "first_audio_ms": null,
+          "f0_st_std": 4.388,
+          "f0_micro_mean": 0.711,
+          "speech_rms_variation_db": 8.18,
+          "spectral_centroid_hz": 3094.5,
+          "words_per_min_speech": 208.2,
+          "sample_rate": 48000,
+          "transcript": "Je suis Nupa, l'assistant de portfolio de Nour. Qu'est-ce qui vous am\u00e8ne \u00e0 explorer son travail aujourd'hui ?"
+        }
+      ]
+    }
+  },
+  "toolComparison": [
+    {
+      "scenario": "A current config",
+      "name": "v2-a-iapetus-oldprompt-tool-en",
+      "duration_s": 19.16,
+      "toolCalls": [
+        {
+          "name": "presentProject",
+          "args": {
+            "includeFlow": true,
+            "projectId": "acquisition"
+          },
+          "id": "call_6634964842251512191"
+        },
+        {
+          "name": "traceWorkflow",
+          "args": {
+            "mode": "sequence",
+            "projectId": "acquisition"
+          },
+          "id": "call_6577204772523051695"
+        }
+      ],
+      "transcript": "I'll show you the Customer Acquisition system Nour built for H2Ops. It's designed to bridge the gap between initial prospect interest and actual sales meetings.The problem Nour solved here was that generic outreach usually fails to connect with prospects, while the sales team desperately needs replies and bookings."
+    },
+    {
+      "scenario": "C optimized prompt",
+      "name": "v2-c-sadachbia-newprompt-tool-en",
+      "duration_s": 18.75,
+      "toolCalls": [
+        {
+          "name": "presentProject",
+          "args": {
+            "projectId": "acquisition"
+          },
+          "id": "call_6877185870760068240"
+        }
+      ],
+      "transcript": "The H2Ops customer acquisition system is the most direct example. The core problem was that generic outreach just wasn't connecting with prospects, making it hard for them to see the value being offered. Nour structured the commercial logic and built parts of the follow-up engine to connect demo engagement directly to the next sales step."
+    },
+    {
+      "scenario": "C optimized prompt",
+      "name": "v2-c-sadachbia-newprompt-tool-fr",
+      "duration_s": 21.03,
+      "toolCalls": [
+        {
+          "name": "presentProject",
+          "args": {
+            "projectId": "acquisition"
+          },
+          "id": "call_7748818858524528264"
+        }
+      ],
+      "transcript": "Le projet Customer Acquisition chez H2Ops est tout indiqu\u00e9. Il s'agit d'un syst\u00e8me con\u00e7u pour automatiser la recherche et le suivi, transformant les interactions brutes en opportunit\u00e9s de vente. Nour s'est concentr\u00e9 sur la logique commerciale et le moteur de d\u00e9monstration pour rendre les \u00e9changes avec les clients plus pertinents et rapides."
+    }
+  ],
+  "directApiEstimatedUsd": 0.0994,
+  "directApiSamples": 13,
+  "verification": {
+    "portfolioValidator": "270/270",
+    "legalValidator": "79/79",
+    "aiNourTests": "76/76",
+    "workletBrowserLoad": "passed",
+    "resamplerToneTest": "1kHz preserved; 12kHz attenuated",
+    "playbackOfflineTest": "passed",
+    "pipelineRender": "C audio rendered through new playAudio scheduling; pitch/energy preserved",
+    "realDevices": "not yet tested",
+    "localEndToEnd": "passed (Sadachbia, compact prompt, AudioWorklet, live token/turn, no console errors)",
+    "localEndToEndEvidence": "results/nupa-voice-local-e2e.json",
+    "localInterruption": "passed (stopped previous response, answered Safiy, opened project, no console errors)",
+    "localInterruptionEvidence": "results/nupa-voice-local-interruption.json",
+    "pronunciationCaveat": "Synthetic \u201cSafiy\u201d was transcribed as \u201cSafi I\u201d; real-voice pronunciation still needs testing."
+  },
+  "acousticVsSubjective": {
+    "acoustic": "YIN F0, semitone variance, frame-to-frame pitch movement, RMS variation, pause ratio, spectral centroid, chunk/first-audio timing.",
+    "subjective": "Pending Nour listening. Rate naturalness, warmth, expressiveness, trust, pronunciation, French register, perceived latency and presentation feel separately."
+  },
+  "preliminarySubjective": [
+    "A retains the live/interactive/personalized disclaimer and sounds like a guided product tour.",
+    "B and C open like a person and ask one genuine question; C is shorter and more consistent across repeats.",
+    "C French uses vous and avoids the capability list.",
+    "D is the same C performance through the new pipeline; listening is required to judge the 60ms lead and fades.",
+    "These are transcript-only observations, not a listening score."
+  ],
+  "codeChanges": [
+    "LIVE_VOICE Sadachbia (single config switch)",
+    "short natural tour/text opening",
+    "structured live prompt with compact grounding",
+    "AudioWorklet 16kHz resampler with anti-alias FIR",
+    "filtered ScriptProcessor fallback",
+    "provider mime rate/channel parsing",
+    "adaptive playback lead and gain ramps",
+    "AudioContext visibility/focus/device recovery"
+  ],
+  "caveats": [
+    "One or two generation samples per scenario and language; directional, not statistical.",
+    "D is an OfflineAudioContext 48kHz render of the C audio through the new playAudio scheduling; it tests pipeline scheduling/resampling, not real network jitter or Bluetooth.",
+    "The production token endpoint still uses Iapetus until the source configuration is deployed with approval.",
+    "Direct provider spend is separate from the app ledger."
+  ]
+}

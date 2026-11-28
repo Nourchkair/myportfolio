@@ -1,9 +1,11 @@
 # Nupa voice audit samples
 
-Open [`index.html`](index.html) in a browser to listen and filter the 50 clips.
+Open [`index.html`](index.html) for the original 50-clip audit, or [`refinement.html`](refinement.html) for the four-configuration refinement validation.
 
 - `index.html` — players, filters and objective metrics.
 - `analysis.json` / `analysis.csv` — YIN pitch, energy, pause, centroid and chunk-timing metrics.
+- `refinement.html` — A/B/C/D players, prompt/token comparison, tool-decision comparison and a subjective scorecard.
+- `direct/v2-*` — refinement captures and the 48kHz pipeline render.
 - `direct/` — direct Gemini Live captures; WAVs are local and intentionally **not committed** (about 22 MB).
 - Root `puck-en.wav` and `voice-default-C.UTF-8.wav` — production app captures; both actually used **Iapetus** because the app token locks the voice. The `puck-en` filename records the requested override, not the actual voice. Both are local/untracked.
 
