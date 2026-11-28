@@ -43,7 +43,7 @@ function start() {
       '--var', 'BETA_ACCESS_REQUIRED:false',
       '--var', 'TEXT_PROVIDER:mock',
       '--var', 'LIVE_PROVIDER:mock',
-      '--var', 'DAILY_SPEND_CAP_USD_MICROS:1000000',
+      '--var', 'DAILY_SPEND_CAP_USD_MICROS:3000000',
       '--var', 'CUMULATIVE_SPEND_CAP_USD_MICROS:7000000',
       '--var', 'LIVE_SESSION_SECONDS:60',
       '--var', 'LIVE_TOKEN_RESERVATION_USD_MICROS:1000',
@@ -58,7 +58,8 @@ function start() {
       '--var', 'GOOGLE_CLIENT_SECRET:invalid',
       '--var', 'GOOGLE_REFRESH_TOKEN:invalid',
       '--var', 'GOOGLE_CRM_SPREADSHEET_ID:invalid',
-      '--var', 'GOOGLE_CALENDAR_ID:invalid'
+      '--var', 'GOOGLE_CALENDAR_ID:invalid',
+      '--var', 'BACKUP_ENCRYPTION_KEY:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA='
     ], { cwd: root, stdio: ['ignore', 'pipe', 'pipe'] });
     let log = '';
     child.stdout.on('data', (chunk) => { log += chunk.toString(); });
@@ -171,7 +172,7 @@ async function main() {
     const adminNoAuth = await call('/api/admin/status');
     const admin = await call('/api/admin/status', { admin: true });
     check('admin remains authenticated', adminNoAuth.status === 401 && admin.status === 200 && admin.body.ok === true, { noAuth: adminNoAuth.status, auth: admin.status });
-    check('admin exposes public mode, paid-tier estimate and concurrency limits', admin.body.security?.publicAccess === true && admin.body.costs?.internalEstimateOnly === true && admin.body.limits?.maxConcurrentLiveSessions === 2 && admin.body.budget?.dailyCapUsdMicros === 1000000, { security: admin.body.security, costs: admin.body.costs, limits: admin.body.limits, budget: admin.body.budget });
+    check('admin exposes public mode, paid-tier estimate and concurrency limits', admin.body.security?.publicAccess === true && admin.body.costs?.internalEstimateOnly === true && admin.body.limits?.maxConcurrentLiveSessions === 2 && admin.body.budget?.dailyCapUsdMicros === 3000000, { security: admin.body.security, costs: admin.body.costs, limits: admin.body.limits, budget: admin.body.budget });
 
     const extraChats = [];
     for (let index = 0; index < 3; index++) {

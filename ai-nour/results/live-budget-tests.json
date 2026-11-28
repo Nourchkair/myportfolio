@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-27T20:47:53.656Z",
+  "generatedAt": "2026-11-28T00:38:09.450Z",
   "mode": "mock-live/no-usage-reported",
   "passed": 9,
   "failed": 0,
@@ -18,7 +18,7 @@
       "pass": true,
       "detail": {
         "sessionSeconds": 300,
-        "expiresAt": "2026-11-27T20:57:53.633Z"
+        "expiresAt": "2026-11-28T00:48:09.424Z"
       }
     },
     {
@@ -134,7 +134,7 @@
       "detail": {
         "details": {
           "scope": "daily",
-          "resetsAt": 1795824000000
+          "resetsAt": 1795910400000
         }
       }
     }

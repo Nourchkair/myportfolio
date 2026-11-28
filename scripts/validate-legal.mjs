@@ -76,7 +76,7 @@ check('existing-session consent endpoint', read('ai-nour/src/routes/session.js')
 check('server-side consent enforcement', read('ai-nour/src/sessions/manager.js').includes('config.publicAccess') && read('ai-nour/src/services/conversation.js').includes('config.publicAccess'));
 check('server-issued owner endpoint', read('ai-nour/src/routes/session.js').includes("'/api/owner'") && read('ai-nour/src/auth/secure.js').includes('generateOwnerToken'));
 check('no web research surface', !/webResearch|WEB_RESEARCH_ENABLED|googleSearch/i.test(read('ai-nour/src/tools/registry.js') + read('ai-nour/src/services/conversation.js') + read('ai-nour/src/config.js')));
-check('production daily cap is $1', /DAILY_SPEND_CAP_USD_MICROS = "1000000"/.test(read('ai-nour/wrangler.production.toml')) && /textReservationUsdMicros/.test(read('ai-nour/src/config.js')));
+check('production daily cap is $3', /DAILY_SPEND_CAP_USD_MICROS = "3000000"/.test(read('ai-nour/wrangler.production.toml')) && /textReservationUsdMicros/.test(read('ai-nour/src/config.js')));
 check('voice concurrency leases and release endpoint', fs.existsSync(path.join(root, 'ai-nour/migrations/0008_live_session_leases.sql')) && read('ai-nour/src/routes/session.js').includes("'/api/live/end'") && read('ai-nour/src/services/conversation.js').includes('acquireLiveSessionLease'));
 check('conservative Flash-Lite text rates', /TEXT_INPUT_USD_PER_MILLION = "0.30"/.test(read('ai-nour/wrangler.production.toml')) && /TEXT_OUTPUT_USD_PER_MILLION = "2.50"/.test(read('ai-nour/wrangler.production.toml')));
 check('five-minute production default', /LIVE_SESSION_SECONDS = "300"/.test(read('ai-nour/wrangler.production.toml')));

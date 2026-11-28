@@ -22,7 +22,7 @@ Status: **deployed publicly on 27 November 2026.** Worker `78ea8cea-d0b3-4a6e-a5
 The opening greeting now offers two optional paths without blocking entry:
 
 - **Explore independently** — immediately completes the intro and leaves the portfolio in its normal state.
-- **Explore with Nupa** — available on the public portfolio; it completes the intro and enters the portfolio without opening the chat panel. The Nupa pill opens chat or voice on demand. On first use it shows the short “Meet Nupa.” / “Let’s explore” consent panel. No beta key is required.
+- **Explore with Nupa** — available on the public portfolio; on first use it shows the short “Meet Nupa.” / “Let’s explore” consent panel, then a separate microphone-consent panel. “Allow microphone and start” begins a live spoken tour and opens Customer Acquisition directly in presentation mode without opening the chat panel. “Use text chat instead” opens chat. No beta key is required.
 
 If no choice is made, the intro continues automatically into independent browsing. The portfolio never requires an AI selection, and the assistant remains available from the pill later. The first Nupa choice shows a concise paid-processing/retention/admin disclosure with inline Terms and Privacy links and no checkbox. “Let’s explore” records consent; microphone consent remains separate and appears only when voice is activated.
 
@@ -116,13 +116,13 @@ Local regression:
 - Portfolio validation: **261**
 - Legal validator: **72/72**
 
-Nupa opening experience (`results/nupa-v3-opening-browser.json`): **21/21** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, public Nupa path, centered “Meet Nupa.” consent panel outside the chat with blurred portfolio background, “Let’s explore” action, no checkbox, paid-Gemini/retention/admin disclosure, legal links, no automatic chat panel after choosing Nupa, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
+Nupa opening experience (`results/nupa-v3-opening-browser.json`): **21/21** — two English panel cards inside the intro, explicit choice before entry, no auto-close, cards below the greeting, independent default, public Nupa path, centered “Meet Nupa.” consent panel outside the chat with blurred portfolio background, “Let’s explore” action, no checkbox, paid-Gemini/retention/admin disclosure, legal links, a separate bilingual microphone-consent panel, voice-tour entry without opening chat, French consent and French companion UI with English opening cards, and an EN/FR consent-modal language toggle.
 
 Nupa browser presentation run (`results/nupa-v3-presentation-browser.json`): **22/22**
 
-Production opening cards and consent (`results/nupa-production-intro.json`): **11/11** — two English panel cards inside the intro with no foreground-depth occlusion and improved contrast, no auto-close, cards below the greeting, independent entry, centered English/French “Meet Nupa.” consent panel outside the chat with blurred background, “Let’s explore” acceptance with no checkbox, and independent entry that never opens the Nupa panel. Production rerun is pending the approved deployment.
+Production opening cards and consent (`results/nupa-production-intro.json`): **11/11** — two English panel cards inside the intro with no foreground-depth occlusion and improved contrast, no auto-close, cards below the greeting, independent entry, centered English/French “Meet Nupa.” consent panel outside the chat with blurred background, “Let’s explore” acceptance with no checkbox, a separate voice-tour microphone panel, and independent entry that never opens the Nupa panel.
 
-Public default entry (`results/nupa-production-public-default.json`): **4/4** — Nupa appears on the normal portfolio URL without a query parameter. The new v1.4 flow shows “Meet Nupa.” only when Nupa is chosen, and “Let’s explore” enters the portfolio without opening chat. Public-controls validation: **23/23**.
+Public default entry (`results/nupa-production-public-default.json`): **4/4** — Nupa appears on the normal portfolio URL without a query parameter. The new flow shows “Meet Nupa.” only when Nupa is chosen, then the voice-tour microphone panel; “Allow microphone and start” opens presentation mode directly. Public-controls validation: **23/23**.
 
 - Approved target registry on home, project deck and flow.
 - Multiple simultaneous highlights.

@@ -166,27 +166,41 @@ await ready.evaluate((key) => {
 await ready.reload({ ignoreCache: true });
 await ready.waitForSelector('#introChoices [data-explore="ai"]:not([hidden])', { timeout: 20000 });
 await ready.locator('[data-explore="ai"]').click();
-await ready.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'), { timeout: 30000 });
-await ready.waitForTimeout(600);
+await ready.waitForSelector('#ainourTour:not([hidden])', { timeout: 30000 });
+await ready.waitForTimeout(400);
 const aiExplore = await ready.evaluate(() => ({
   assistantMessages: [...document.querySelectorAll('.ainour-msg.assistant')].map((message) => message.innerText),
   panelHidden: document.querySelector('#ainourPanel')?.hidden,
-  bodyVisible: !document.querySelector('#ainourBody').hidden,
+  bodyHidden: document.querySelector('#ainourBody')?.hidden,
   consentHidden: document.querySelector('#ainourConsent')?.hidden,
   gateHidden: document.querySelector('#ainourGate')?.hidden,
-  toast: document.querySelector('#toast')?.innerText,
-  unread: document.querySelector('#ainourPill')?.dataset.unread
+  title: document.querySelector('#ainourTourTitle')?.innerText.trim(),
+  copy: document.querySelector('#ainourTourCopy')?.innerText.trim(),
+  start: document.querySelector('#ainourTourStart')?.innerText.trim(),
+  text: document.querySelector('#ainourTourText')?.innerText.trim(),
+  dismiss: document.querySelector('#ainourTourDismiss')?.innerText.trim(),
+  links: [...document.querySelectorAll('#ainourTourLegal a')].map((link) => link.getAttribute('href'))
 }));
-check('AI choice enters the portfolio without opening the chat panel', aiExplore.panelHidden === true && aiExplore.consentHidden === true && aiExplore.gateHidden === true && aiExplore.assistantMessages.length === 0 && /Nupa is ready/i.test(aiExplore.toast) && aiExplore.unread === 'true', aiExplore);
-await ready.locator('[data-ainour="mode-text"]').click();
+check('AI choice opens the voice-tour panel without opening chat', aiExplore.panelHidden === true && aiExplore.bodyHidden === true && aiExplore.consentHidden === true && aiExplore.gateHidden === true && aiExplore.assistantMessages.length === 0 && aiExplore.title === 'Explore with Nupa.' && /microphone/i.test(aiExplore.copy) && /Google Gemini/i.test(aiExplore.copy) && /7 days/i.test(aiExplore.copy) && aiExplore.start === 'Allow microphone and start' && aiExplore.text === 'Use text chat instead' && aiExplore.dismiss === 'Not now' && aiExplore.links.includes('/privacy/') && aiExplore.links.includes('/terms/'), aiExplore);
+await ready.locator('#ainourTourText').click();
 await ready.waitForSelector('#ainourBody:not([hidden])', { timeout: 30000 });
 await ready.waitForTimeout(500);
 const aiPanel = await ready.evaluate(() => ({
   panelHidden: document.querySelector('#ainourPanel')?.hidden,
   bodyVisible: !document.querySelector('#ainourBody').hidden,
-  consentHidden: document.querySelector('#ainourConsent')?.hidden
+  consentHidden: document.querySelector('#ainourConsent')?.hidden,
+  tourHidden: document.querySelector('#ainourTour')?.hidden
 }));
-check('the Nupa pill opens the chat panel on demand', aiPanel.panelHidden === false && aiPanel.bodyVisible === true && aiPanel.consentHidden === true, aiPanel);
+check('Use text chat opens the Nupa panel on demand', aiPanel.panelHidden === false && aiPanel.bodyVisible === true && aiPanel.consentHidden === true && aiPanel.tourHidden === true, aiPanel);
+await ready.evaluate(async () => { window.__guidedTourStarted = await window.AINourPrototype.startGuidedPresentation(); });
+await ready.waitForTimeout(3500);
+const guided = await ready.evaluate(() => ({
+  started: window.__guidedTourStarted,
+  hash: location.hash,
+  barVisible: Boolean(document.querySelector('.ai-pres-bar')) && !document.querySelector('.ai-pres-bar').hidden,
+  barText: document.querySelector('.ai-pres-bar')?.innerText.trim()
+}));
+check('guided presentation mode opens Customer Acquisition directly', guided.started === true && /acquisition/i.test(guided.hash) && guided.barVisible === true, guided);
 await ready.evaluate(() => document.querySelector('[data-ainour="locale"]').click());
 await ready.waitForTimeout(150);
 const french = await ready.evaluate(() => ({

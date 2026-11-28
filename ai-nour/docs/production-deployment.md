@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production deployment
 
-Status: **Nupa v1.4 is deployed publicly. Legal v1.4 and consent `2026-11-27-v1.4` are live, no beta key is required, web research is removed, the simplified “Meet Nupa.” onboarding is live, and the approved $1.00 daily / $7.00 cumulative caps are enforced. Worker `78ea8cea-d0b3-4a6e-a523-29d0f386806c`; Pages `b1e253eb-2490-4c14-90f6-b14dfb07fa7f`. External writes, Resend and the private admin remain restricted.**
+Status: **Nupa v1.4 is deployed publicly. Legal v1.4 and consent `2026-11-27-v1.4` are live, no beta key is required, web research is removed, the simplified “Meet Nupa.” onboarding is live, and the approved $3.00 daily / $7.00 cumulative caps are enforced. Worker `78ea8cea-d0b3-4a6e-a523-29d0f386806c`; Pages `b1e253eb-2490-4c14-90f6-b14dfb07fa7f`. External writes, Resend and the private admin remain restricted.**
 
 ## 1. Live endpoints
 
@@ -18,7 +18,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 
 - Nupa is publicly available in beta to visitors aged 18 and older.
 - No account or beta key is required.
-- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” enters the portfolio without opening the chat panel; chat and voice open from the Nupa pill on demand.
+- The simplified “Meet Nupa.” consent records 18+, Terms and Privacy acceptance before processing. “Explore with Nupa” then shows a separate microphone-consent panel and starts a live spoken tour with Customer Acquisition opened directly in presentation mode; the chat panel is not opened. “Use text chat instead” opens chat.
 - Legacy beta keys and tester records remain in D1 for historical/admin purposes only; they are no longer checked for access.
 - Anonymous owner credentials are server-issued; per-visitor and global API/chat/Live/tool limits, concurrent voice leases, spending caps, tool allowlists and the admin bearer-token boundary remain in force.
 - Cloudflare Free edge rate limiting is active: rule **Nupa API edge rate limit**, hostname `api.nourchkair.com`, path starts with `/api/`, excluding `/api/health`; **30 requests per 10 seconds per IP**, action **Block** for 10 seconds. Cloudflare Free provides one rate limiting rule; managed WAF rules are a paid-plan feature, so application validation and the free rule provide the edge layer.
@@ -28,7 +28,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | Resource | Value |
 | --- | --- |
 | Worker | `ai-nour-production` |
-| Worker version | `78ea8cea-d0b3-4a6e-a523-29d0f386806c` (v1.4 public beta, $1 daily cap) |
+| Worker version | `78ea8cea-d0b3-4a6e-a523-29d0f386806c` (v1.4 public beta, $3 daily cap) |
 | Custom domain | `api.nourchkair.com` |
 | D1 database | `ai-nour-production` |
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
@@ -64,7 +64,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 - Nupa requires one combined **18+ eligibility and Terms/Privacy acceptance** before processing. There is no separate age checkbox, date-of-birth collection, identity check or age pop-up. The portfolio remains available to everyone without accepting the AI terms.
 - Separate microphone consent is requested per tab. Contact and appointment workflows retain contextual consent checks.
 - Existing sessions created under any prior consent version must acknowledge `2026-11-27-v1.4` before reading, chat, Live voice or tools. Enforcement applies in public mode, not only when a beta key is required.
-- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$1.00**; the cumulative cap is **$7.00**. Production still has the temporary $3.00 daily cap until the approved release. Iapetus is the voice. Admin can restore up to 600 seconds.
+- Live sessions default to **300 seconds** (5 minutes), with a **$0.125** reservation. The approved daily cap is **$3.00**; the cumulative cap is **$7.00**. Iapetus is the voice. Admin can restore up to 600 seconds.
 - Voice errors distinguish daily budget (local reset time), cumulative exhaustion, microphone permission, missing device, rate limit, disabled voice, provider failure, network failure and session expiry. No raw provider or financial details are shown.
 - Data/retention audit: `docs/legal-data-audit.md`.
 
@@ -74,7 +74,7 @@ No Resend key is installed. No permanent Google, Gemini or admin credential is s
 - Live production: legal version **1.4** and consent **`2026-11-27-v1.4`**; existing sessions must re-accept.
 - Public access is enabled: `BETA_ACCESS_REQUIRED=false`, `PUBLIC_ACCESS=true`; no beta key is requested.
 - Worker `f5e81237-f8e1-41a1-9b7b-151225d05381` and Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) are live.
-- The live daily spending cap is **$1.00**; the cumulative cap is **$7.00**.
+- The live daily spending cap is **$3.00**; the cumulative cap is **$7.00**.
 - D1 `0006_nupa_persona.sql` was applied; it was a no-op against the custom persona. The reviewed persona migration set the production instruction to 3,986 characters.
 - Internal identifiers are intentionally unchanged: `ai-nour/`, `ainour:*`, `/api/*`, Worker/D1 names, environment variables, secrets, OAuth clients, Drive folder names and the `ainour_beta_` key prefix.
 
@@ -126,7 +126,7 @@ Production ledger before the paid-tier verification calls:
 - Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
 - Current internal estimate at deployment validation: **$1.695858 USD today / $2.592721 cumulative**
 - Held reservations: **$0** before the paid Live test
-- Daily cap: **$1.00 USD** (live); cumulative cap **$7.00 USD**
+- Daily cap: **$3.00 USD** (live); cumulative cap **$7.00 USD**
 - Cumulative cap: **$7.00 USD**
 - Live default: **300 seconds / $0.125 reservation**; 600-second maximum remains available in admin
 - Fixed monthly infrastructure: **$0**
@@ -135,7 +135,7 @@ Production ledger before the paid-tier verification calls:
 
 These are internal token-based estimates, not confirmed Google invoices. The Gemini API key cannot read the project, billing tier, credit balance or invoices, so those figures remain user-provided. Text requests hold a $0.02 atomic reservation while in flight. Live holds an atomic session reservation; each reported turn is charged at actual token-estimated usage, capped by the reservation remainder, and `/api/live/end` releases the hold. A session that ends with no reported usage is charged the reservation conservatively; an expired unreported reservation is settled to the unreserved remainder. The old Live code charged the full $0.125 reservation instead of reported token usage, so the ledger overstates the two paid Live tests; the token-level estimate for the first test is $0.006611, not $0.125. The ledger is intentionally left intact as a conservative audit record.
 
-**Deployment timing:** the current internal daily estimate ($1.695858) is above the $1.00 daily cap, so AI requests are paused until the next UTC daily reset. This is the accepted temporary pause; the portfolio remains fully available and independent browsing was verified. The cumulative remaining estimate is $4.407279.
+**Deployment timing:** the current internal daily estimate ($1.695858) is below the $3.00 daily cap, so AI remains available. The cumulative remaining estimate is $4.407279.
 
 **Rate review (27 November 2026):** `gemini-3.8-live` matches Google's published paid rates: $0.75 text input, $3.00 audio input, $12.00 audio output per 1M tokens. The `gemini-flash-lite-latest` alias is not documented on Google's pricing page. Google publishes $0.10/$0.40 for 2.5 Flash-Lite, $0.25/$1.50 for 3.1 Flash-Lite and $0.30/$2.50 for 3.5 Flash-Lite. The application now uses the highest current Flash-Lite rates ($0.30 input/$2.50 output) as a conservative ceiling, so the internal ledger may overstate text cost if the alias resolves to an older generation. Review these rates whenever the alias changes or a pinned model is adopted.
 
@@ -164,7 +164,7 @@ This was tested in production, including recovery.
 - Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The v1.4 Pages deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
-- Daily cap: the pending release restores `DAILY_SPEND_CAP_USD_MICROS = "1000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 1000000` if a stored $3.00 control exists. Cumulative cap remains $7.00.
+- Daily cap: the release uses `DAILY_SPEND_CAP_USD_MICROS = "3000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 3000000` if a lower stored control exists. Cumulative cap remains $7.00.
 - Safe notes: rolling back the Worker does not revert the production `persona_instruction` control; restore it separately if a full conversational rollback is intended. Full details are in `ai-nour/.wrangler/nupa-release-rollback-20261127/ROLLBACK.md`.
 - Do **not** roll back to `f2841548-3f7f-46f9-8d5a-d784ef9b2f6b`; that temporary version enabled CRM writes.
 
@@ -193,7 +193,7 @@ For the static site, redeploy the prior commit with `npm run deploy` from the re
 3. Roll back the Worker to `f5e81237-f8e1-41a1-9b7b-151225d05381` with `npx wrangler rollback`.
 4. Keep D1 migrations `0007`/`0008`; do not drop the new tables. The old Worker ignores them.
 5. Restore legal/consent v1.3 only as part of the same Worker+Pages rollback.
-6. Re-run production preflight against the rolled-back release; expect the $3 daily cap and v1.3 consent.
+6. Re-run production preflight against the rolled-back release; expect the prior daily cap and v1.3 consent.
 
 ## 10. Deployment commands
 

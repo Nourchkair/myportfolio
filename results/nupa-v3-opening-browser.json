@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-11-27T20:48:38.730Z",
-  "passed": 21,
+  "generatedAt": "2026-11-28T00:34:54.884Z",
+  "passed": 22,
   "failed": 0,
-  "total": 21,
+  "total": 22,
   "checks": [
     {
       "name": "plain portfolio defaults to independent exploration",
@@ -174,7 +174,7 @@
           "age18": true,
           "terms": true,
           "privacy": true,
-          "acceptedAt": "2026-11-27T20:48:32.438Z"
+          "acceptedAt": "2026-11-28T00:34:45.682Z"
         },
         "gateVisible": true,
         "consentHidden": true
@@ -191,25 +191,43 @@
       }
     },
     {
-      "name": "AI choice enters the portfolio without opening the chat panel",
+      "name": "AI choice opens the voice-tour panel without opening chat",
       "pass": true,
       "detail": {
         "assistantMessages": [],
         "panelHidden": true,
-        "bodyVisible": true,
+        "bodyHidden": true,
         "consentHidden": true,
         "gateHidden": true,
-        "toast": "NUPA IS READY. OPEN THE NUPA PANEL FOR A GUIDED TOUR, OR TURN ON VOICE.",
-        "unread": "true"
+        "title": "Explore with Nupa.",
+        "copy": "Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.",
+        "start": "Allow microphone and start",
+        "text": "Use text chat instead",
+        "dismiss": "Not now",
+        "links": [
+          "/privacy/",
+          "/terms/"
+        ]
       }
     },
     {
-      "name": "the Nupa pill opens the chat panel on demand",
+      "name": "Use text chat opens the Nupa panel on demand",
       "pass": true,
       "detail": {
         "panelHidden": false,
         "bodyVisible": true,
-        "consentHidden": true
+        "consentHidden": true,
+        "tourHidden": true
+      }
+    },
+    {
+      "name": "guided presentation mode opens Customer Acquisition directly",
+      "pass": true,
+      "detail": {
+        "started": true,
+        "hash": "#/projects/acquisition/flow/demo",
+        "barVisible": true,
+        "barText": "NUPA\nCustomer Acquisition\n5 / 9\n\u2039\nPause\n\u203a\nEnd"
       }
     },
     {

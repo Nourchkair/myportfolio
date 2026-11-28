@@ -52,7 +52,7 @@ const sessionId = session.body.session?.id;
 const adminStatus = await request('/api/admin/status', { headers: { authorization: `Bearer ${admin.ADMIN_TOKEN}` } });
 check('production admin bearer works', adminStatus.status === 200 && adminStatus.body.ok === true, { status: adminStatus.status, environment: adminStatus.body.environment, version: adminStatus.body.version });
 check('production public access is enabled', adminStatus.body.security?.publicAccess === true && adminStatus.body.security?.betaAccessRequired === false, { security: adminStatus.body.security });
-check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 1_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
+check('spending caps are production values', adminStatus.body.budget?.dailyCapUsdMicros === 3_000_000 && adminStatus.body.budget?.cumulativeCapUsdMicros === 7_000_000, { budget: adminStatus.body.budget });
 check('Google integrations are configured', adminStatus.body.google?.configured === true && adminStatus.body.google?.spreadsheet === true && adminStatus.body.google?.calendar === true, { google: adminStatus.body.google });
 check('external writes remain disabled', adminStatus.body.flags?.google_writes_enabled === false, { google_writes_enabled: adminStatus.body.flags?.google_writes_enabled });
 check('Resend remains disabled', adminStatus.body.email?.sendEnabled === false, { email: adminStatus.body.email });

@@ -5,7 +5,7 @@ const DEFAULTS = {
   textModel: 'gemini-flash-lite-latest',
   liveModel: 'gemini-3.8-live',
   liveVoice: 'Iapetus',
-  dailyCapUsdMicros: 1_000_000,
+  dailyCapUsdMicros: 3_000_000,
   cumulativeCapUsdMicros: 7_000_000,
   // gemini-flash-lite-latest may resolve to any current Flash-Lite generation.
   // Use the highest current published Flash-Lite paid rates as a conservative ceiling.

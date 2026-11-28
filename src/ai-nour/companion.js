@@ -187,7 +187,7 @@ function mountCss() {
   if (document.querySelector('link[data-ainour-css]')) return;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
-  link.href = new URL('./companion.css?v=16', import.meta.url).href;
+  link.href = new URL('./companion.css?v=17', import.meta.url).href;
   link.dataset.ainourCss = '1';
   document.head.appendChild(link);
 }
@@ -279,6 +279,25 @@ function consentMarkup() {
   `;
 }
 
+function tourMarkup() {
+  return `
+    <section class="ainour-consent-modal ainour-tour-modal" role="dialog" aria-modal="true" aria-labelledby="ainourTourTitle" aria-describedby="ainourTourCopy ainourTourLegal">
+      <div class="ainour-consent-head">
+        <p class="ainour-consent-kicker" id="ainourTourKicker">Voice tour</p>
+        <button class="ainour-consent-locale" id="ainourTourLocale" type="button" aria-label="Switch language">EN</button>
+      </div>
+      <h2 class="ainour-consent-welcome" id="ainourTourTitle">Explore with Nupa.</h2>
+      <p class="ainour-consent-lede" id="ainourTourLede">Let Nupa guide you through Nour’s work in a live, spoken presentation.</p>
+      <p class="ainour-consent-disclosure" id="ainourTourCopy">Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.</p>
+      <p class="ainour-consent-accept" id="ainourTourLegal">By starting the voice tour, you allow microphone access for this tab. You can stop at any time. <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a></p>
+      <button id="ainourTourStart" type="button" aria-describedby="ainourTourCopy ainourTourLegal">Allow microphone and start</button>
+      <button id="ainourTourText" class="ainour-consent-dismiss" type="button">Use text chat instead</button>
+      <button id="ainourTourDismiss" class="ainour-consent-dismiss" type="button">Not now</button>
+      <p id="ainourTourError" role="status" aria-live="polite" class="ainour-form-error"></p>
+    </section>
+  `;
+}
+
 function mount() {
   if (mounted) return;
   mounted = true;
@@ -315,6 +334,13 @@ function mount() {
   consent.innerHTML = consentMarkup();
   document.body.appendChild(consent);
 
+  const tour = document.createElement('div');
+  tour.className = 'ainour-consent-overlay';
+  tour.id = 'ainourTour';
+  tour.hidden = true;
+  tour.innerHTML = tourMarkup();
+  document.body.appendChild(tour);
+
   els = {
     pill,
     pillText: pill.querySelector('[data-ainour="mode-text"]'),
@@ -341,6 +367,17 @@ function mount() {
     consentBtn: consent.querySelector('#ainourConsentBtn'),
     consentDismiss: consent.querySelector('#ainourConsentDismiss'),
     consentError: consent.querySelector('#ainourConsentError'),
+    tour,
+    tourKicker: tour.querySelector('#ainourTourKicker'),
+    tourLocale: tour.querySelector('#ainourTourLocale'),
+    tourTitle: tour.querySelector('#ainourTourTitle'),
+    tourLede: tour.querySelector('#ainourTourLede'),
+    tourCopy: tour.querySelector('#ainourTourCopy'),
+    tourLegal: tour.querySelector('#ainourTourLegal'),
+    tourStart: tour.querySelector('#ainourTourStart'),
+    tourText: tour.querySelector('#ainourTourText'),
+    tourDismiss: tour.querySelector('#ainourTourDismiss'),
+    tourError: tour.querySelector('#ainourTourError'),
     micConsent: panel.querySelector('#ainourMicConsent'),
     micCopy: panel.querySelector('#ainourMicCopy'),
     micAllow: panel.querySelector('#ainourMicAllow'),
@@ -410,9 +447,21 @@ function mount() {
         localStorage.removeItem(STORE.session);
       }
     }
-    if (intent === 'explore') await enterExplore();
+    if (intent === 'explore') await prepareExploreTour();
     else if (intent === 'voice') await startVoice();
     else await openPanel();
+  });
+  els.tourLocale.addEventListener('click', () => toggleLocale());
+  els.tourStart.addEventListener('click', () => { void startVoiceTour(); });
+  els.tourText.addEventListener('click', () => {
+    hideTourPanel();
+    void openPanel();
+  });
+  els.tourDismiss.addEventListener('click', () => {
+    hideTourPanel();
+    state.exploreRequested = false;
+    state.unread = true;
+    updatePill();
   });
   els.micAllow.addEventListener('click', () => resolveMicConsent(true));
   els.micCancel.addEventListener('click', () => resolveMicConsent(false));
@@ -485,6 +534,7 @@ function mount() {
       voiceView: () => openPanel(),
       startVoice,
       stopVoice,
+      startGuidedPresentation,
       runActions: (actions) => runActions(actions),
       setVoiceState: (value) => setState(value),
       demoVoice: (userText, assistantText) => {
@@ -703,6 +753,35 @@ function updateLegalCopy() {
       ? 'Explorons : confirmer avoir 18 ans ou plus et accepter les Conditions d’utilisation et la Politique de confidentialité'
       : 'Let’s explore: confirm you are 18 or older and agree to the Terms of Use and Privacy Policy');
   }
+  if (els.tourKicker) els.tourKicker.textContent = fr ? 'Visite vocale' : 'Voice tour';
+  if (els.tourLocale) {
+    els.tourLocale.textContent = fr ? 'FR' : 'EN';
+    els.tourLocale.setAttribute('aria-label', fr ? 'Changer de langue' : 'Switch language');
+  }
+  if (els.tourTitle) els.tourTitle.textContent = fr ? 'Explorez avec Nupa.' : 'Explore with Nupa.';
+  if (els.tourLede) {
+    els.tourLede.textContent = fr
+      ? 'Laissez Nupa vous guider à travers le travail de Nour dans une présentation vocale en direct.'
+      : 'Let Nupa guide you through Nour’s work in a live, spoken presentation.';
+  }
+  if (els.tourCopy) {
+    els.tourCopy.textContent = fr
+      ? 'Nupa utilisera votre microphone et transmettra l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours après la dernière activité et peuvent être consultées par l’administrateur du site pour le soutien et la sécurité. Ne communiquez pas de renseignements personnels, sensibles ou confidentiels.'
+      : 'Nupa will use your microphone and stream audio to Google Gemini for real-time processing. Transcripts are kept for up to 7 days after the last activity and can be reviewed by the site administrator for support and security. Do not share personal, sensitive or confidential information.';
+  }
+  if (els.tourLegal) {
+    els.tourLegal.innerHTML = fr
+      ? 'En démarrant la visite vocale, vous autorisez l’accès au microphone pour cet onglet. Vous pouvez arrêter en tout temps. <a href="/privacy/" target="_blank" rel="noopener">Politique de confidentialité</a> · <a href="/terms/" target="_blank" rel="noopener">Conditions d’utilisation</a>'
+      : 'By starting the voice tour, you allow microphone access for this tab. You can stop at any time. <a href="/privacy/" target="_blank" rel="noopener">Privacy Policy</a> · <a href="/terms/" target="_blank" rel="noopener">Terms of Use</a>';
+  }
+  if (els.tourStart) {
+    els.tourStart.textContent = fr ? 'Autoriser le microphone et démarrer' : 'Allow microphone and start';
+    els.tourStart.setAttribute('aria-label', fr
+      ? 'Autoriser le microphone et démarrer la visite vocale de Nupa'
+      : 'Allow microphone and start the Nupa voice tour');
+  }
+  if (els.tourText) els.tourText.textContent = fr ? 'Utiliser le clavardage texte' : 'Use text chat instead';
+  if (els.tourDismiss) els.tourDismiss.textContent = fr ? 'Pas maintenant' : 'Not now';
   if (els.micCopy) {
     els.micCopy.textContent = fr
       ? 'La voix de Nupa utilise votre microphone et transmet l’audio à Google Gemini pour un traitement en temps réel. Les transcriptions sont conservées jusqu’à 7 jours après la dernière activité. Ne communiquez pas de renseignements personnels ou sensibles.'
@@ -720,6 +799,7 @@ function updateLegalCopy() {
 function showGate(message = '') {
   if (!els.gate) return;
   updateLegalCopy();
+  if (els.tour) els.tour.hidden = true;
   els.gate.hidden = false;
   els.consent.hidden = true;
   els.body.hidden = true;
@@ -1003,7 +1083,10 @@ async function openPanel() {
   updatePill();
   if (!PUBLIC_ACCESS && !state.key) showGate();
   else if (!state.ready) await init();
-  if (state.ready) setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
+  if (state.ready) {
+    showBody();
+    setTimeout(() => els.input?.focus({ preventScroll: true }), 60);
+  }
   updateContext();
   clampPanel();
   startExploreIntroIfNeeded();
@@ -1326,10 +1409,26 @@ function openExplore() {
     showConsent('explore');
     return;
   }
-  void enterExplore();
+  void prepareExploreTour();
 }
 
-async function enterExplore() {
+function showTourPanel() {
+  if (!els.tour) return;
+  updateLegalCopy();
+  els.panel.hidden = true;
+  els.consent.hidden = true;
+  els.gate.hidden = true;
+  els.body.hidden = true;
+  els.tour.hidden = false;
+  els.tourError.textContent = '';
+  setTimeout(() => els.tourStart?.focus({ preventScroll: true }), 40);
+}
+
+function hideTourPanel() {
+  if (els.tour) els.tour.hidden = true;
+}
+
+async function prepareExploreTour() {
   state.consentIntent = 'panel';
   state.exploreIntroStarted = true;
   if (!PUBLIC_ACCESS && !state.key) {
@@ -1339,16 +1438,20 @@ async function enterExplore() {
   const ready = await init({ silent: true });
   state.exploreRequested = false;
   if (!ready) return;
-  state.unread = true;
-  updatePill();
-  const fr = state.locale === 'fr';
-  notify(fr
-    ? 'Nupa est prêt. Ouvrez le panneau Nupa pour une visite guidée ou activez la voix.'
-    : 'Nupa is ready. Open the Nupa panel for a guided tour, or turn on voice.');
-  if (els.pill) {
-    els.pill.classList.add('is-cue');
-    setTimeout(() => els.pill?.classList.remove('is-cue'), 4200);
-  }
+  showTourPanel();
+}
+
+async function startVoiceTour() {
+  if (!els.tourStart) return;
+  els.tourError.textContent = '';
+  sessionStorage.setItem(MIC_CONSENT_STORE, '1');
+  hideTourPanel();
+  const started = await startVoice({ openPanel: false, skipMicConsent: true, tour: true });
+  if (started) return;
+  showTourPanel();
+  els.tourError.textContent = state.voiceError || (state.locale === 'fr'
+    ? 'La visite vocale n’a pas pu démarrer. Autorisez le microphone ou utilisez le clavardage texte.'
+    : 'The voice tour could not start. Allow microphone access or use text chat.');
 }
 
 function startExploreIntroIfNeeded() {
@@ -1847,6 +1950,10 @@ async function persistVoiceTurn() {
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
+  voice.tourPrompt = '';
+  voice.tourFollowPrompt = '';
+  voice.tourPromptSent = false;
+  voice.tourPresentationStarted = false;
 }
 
 function pausePresentationForVoiceEnd() {
@@ -1889,28 +1996,34 @@ async function handleLiveTool(toolCall) {
   voice.session?.sendToolResponse({ functionResponses: responses });
 }
 
-async function startVoice() {
+async function startVoice({ openPanel: shouldOpenPanel = true, skipMicConsent = false, tour = false } = {}) {
   if (voiceIsActive()) {
-    openPanel();
-    return;
+    if (shouldOpenPanel) openPanel();
+    return true;
   }
   if (!state.consent) {
-    showConsent('voice');
-    return;
+    showConsent(tour ? 'explore' : 'voice');
+    return false;
   }
   if (state.aiPausedUntil && Date.now() < state.aiPausedUntil) {
-    openPanel();
+    if (shouldOpenPanel) openPanel();
     addMessage('system', state.aiPauseMessage || friendlyAiMessage({ code: 'UNAVAILABLE' }));
-    return;
+    return false;
   }
   if (!state.ready) {
-    await openPanel();
-    if (!state.ready) return;
+    if (shouldOpenPanel) {
+      await openPanel();
+    } else {
+      const ready = await init({ silent: true });
+      if (!ready) return false;
+    }
+    if (!state.ready) return false;
   }
-  openPanel();
-  if (sessionStorage.getItem(MIC_CONSENT_STORE) !== '1') {
+  if (shouldOpenPanel) openPanel();
+  else if (els.panel) els.panel.hidden = true;
+  if (!skipMicConsent && sessionStorage.getItem(MIC_CONSENT_STORE) !== '1') {
     const allowed = await showMicConsent();
-    if (!allowed) return;
+    if (!allowed) return false;
     sessionStorage.setItem(MIC_CONSENT_STORE, '1');
   }
   clearVoiceError();
@@ -1922,6 +2035,18 @@ async function startVoice() {
   voice.assistantText = '';
   voice.userDraftId = null;
   voice.assistantDraftId = null;
+  voice.tourPromptSent = false;
+  voice.tourPresentationStarted = false;
+  voice.tourPrompt = tour
+    ? (state.locale === 'fr'
+      ? "Commence maintenant la visite guidée. Le projet Customer Acquisition s’ouvre pour vous. Décrivez l’étape actuelle, puis poursuivez les étapes clés une à une avec les outils de présentation. Parlez naturellement et brièvement en français. Ne me demandez pas ce que je veux explorer et n’attendez pas ma permission à chaque étape."
+      : "Begin the guided presentation now. The Customer Acquisition project is being opened for you. Narrate the current step, then continue through the key steps one at a time using the presentation tools. Speak naturally and concisely in English. Do not ask me what to explore first, and do not wait for permission before each step.")
+    : '';
+  voice.tourFollowPrompt = tour
+    ? (state.locale === 'fr'
+      ? "Le projet Customer Acquisition est déjà ouvert et le mode présentation a démarré. Décrivez l’étape actuelle, puis poursuivez les étapes clés une à une avec les outils de présentation. Ne redémarrez pas la présentation, ne me demandez pas ce que je veux explorer et n’attendez pas ma permission à chaque étape. Parlez naturellement et brièvement en français."
+      : "The Customer Acquisition project is already open and presentation mode has started. Narrate the current step, then continue through the key steps one at a time using the presentation tools. Do not restart the presentation, do not ask me what to explore, and do not wait for permission before each step. Speak naturally and concisely in English.")
+    : '';
   try {
     const token = await api('/api/live/token', {
       method: 'POST',
@@ -1944,7 +2069,7 @@ async function startVoice() {
       callbacks: {
         onopen: () => { setState('listening'); lastLiveContext = ''; sendLiveContextUpdate(); },
         onmessage: async (message) => {
-          if (message.setupComplete) setState('listening');
+          if (message.setupComplete) { setState('listening'); void sendTourPromptIfNeeded(); }
           const activity = message.voiceActivity?.voiceActivityType || message.voiceActivity?.type;
           if (activity === 'START_OF_SPEECH') setState('listening');
           else if (activity === 'END_OF_SPEECH') setState('processing');
@@ -2030,16 +2155,55 @@ async function startVoice() {
     silent.connect(voice.inputContext.destination);
     startOrbAnimation();
     setState('listening');
+    return true;
   } catch (error) {
     await stopVoice();
     if (error?.code === 'CONSENT_REQUIRED') {
       state.sessionConsentRequired = true;
       showConsent();
-      return;
+      return false;
     }
     setState('error');
     showVoiceError(voiceErrorMessage(error));
+    if (els.panel?.hidden) notify(state.voiceError);
     setTimeout(() => { if (state.voice === 'error') setState('idle'); }, 7000);
+    return false;
+  }
+}
+
+async function startGuidedPresentation() {
+  if (!state.sessionId) return false;
+  try {
+    const result = await api('/api/tools/execute', {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionId: state.sessionId,
+        name: 'presentProject',
+        args: { projectId: 'acquisition', includeFlow: true, startNodeId: 'demo' },
+        portfolioContext: portfolioContext()
+      })
+    });
+    if (!result.ok) return false;
+    const actions = (result.actions || [result.action]).filter(Boolean);
+    if (!actions.length) return false;
+    await runActions(actions);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function sendTourPromptIfNeeded() {
+  if (!voice.active || !voice.tourPrompt || voice.tourPromptSent) return;
+  voice.tourPromptSent = true;
+  let prompt = voice.tourPrompt;
+  if (!voice.tourPresentationStarted) {
+    voice.tourPresentationStarted = true;
+    const started = await startGuidedPresentation();
+    if (started && voice.tourFollowPrompt) prompt = voice.tourFollowPrompt;
+  }
+  if (voice.active && voice.session) {
+    voice.session.sendClientContent({ turns: prompt, turnComplete: true });
   }
 }
 
@@ -2058,6 +2222,10 @@ async function stopVoice() {
   finalizeVoiceDrafts();
   voice.userText = '';
   voice.assistantText = '';
+  voice.tourPrompt = '';
+  voice.tourFollowPrompt = '';
+  voice.tourPromptSent = false;
+  voice.tourPresentationStarted = false;
   if (state.sessionId) {
     void api('/api/live/end', {
       method: 'POST',

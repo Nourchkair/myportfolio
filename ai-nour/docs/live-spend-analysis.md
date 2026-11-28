@@ -46,7 +46,7 @@ Using the configured rates and 25 input-audio tokens/second:
 | Text/system/input overhead | ~2,000 | $0.75 | ~$0.0015 |
 | **Total per 10-minute session** | | | **~$0.2265** |
 
-The **$0.25 reservation is larger than the modeled 10-minute maximum**. Under the approved $1.00 daily cap, reservations limit concurrent or sequential sessions; the 12-token/day limit and concurrent voice caps also govern exposure. The temporary $3.00 production cap is restored to $1.00 in the pending release. The reservation remains conservative if the session is shorter or the model uses less output.
+The **$0.25 reservation is larger than the modeled 10-minute maximum**. Under the approved $3.00 daily cap, reservations limit concurrent or sequential sessions; the 12-token/day limit and concurrent voice caps also govern exposure. The reservation remains conservative if the session is shorter or the model uses less output.
 
 ## Abandoned and unreported connections
 

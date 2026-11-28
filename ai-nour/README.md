@@ -32,7 +32,7 @@ Mock Worker key: `phase2-test-key`. Real Worker: `ainour-api=http://127.0.0.1:87
 https://nourchkair.com/
 ```
 
-Nupa is enabled by default on the public portfolio. No key is required. “Explore with Nupa” enters the portfolio without opening the chat panel; the Nupa pill opens chat or voice on demand. Legacy beta keys remain in the admin only for historical/administrative record keeping and are no longer checked.
+Nupa is enabled by default on the public portfolio. No key is required. “Explore with Nupa” opens a microphone-consent panel and starts a live spoken portfolio tour without opening the chat panel; “Use text chat instead” opens the chat panel. Legacy beta keys remain in the admin only for historical/administrative record keeping and are no longer checked.
 
 ### Admin
 

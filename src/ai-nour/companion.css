@@ -305,7 +305,8 @@ body[data-mode="index"] .ainour-pill {
 }
 .ainour-consent-dismiss:hover,
 .ainour-consent-dismiss:focus-visible { color: #fff; outline: none; }
-#ainourConsentBtn {
+#ainourConsentBtn,
+#ainourTourStart {
   width: 100%;
   min-height: 40px;
   height: auto;
@@ -330,6 +331,7 @@ body[data-mode="index"] .ainour-pill {
   animation: ainour-consent-fade .25s ease both;
 }
 .ainour-consent-overlay[hidden] { display: none; }
+.ainour-tour-modal { width: min(600px, 100%); }
 .ainour-consent-modal {
   width: min(520px, 100%);
   max-height: min(86vh, 640px);
@@ -381,7 +383,8 @@ body[data-mode="index"] .ainour-pill {
 }
 .ainour-consent-dismiss:hover,
 .ainour-consent-dismiss:focus-visible { color: #fff; outline: none; }
-#ainourConsentBtn {
+#ainourConsentBtn,
+#ainourTourStart {
   margin-top: 14px;
   min-height: 44px;
   font-size: 14px;
@@ -393,7 +396,9 @@ body[data-mode="index"] .ainour-pill {
   box-shadow: 0 10px 30px rgba(0,0,0,.25);
 }
 .ainour-consent-modal #ainourConsentBtn:hover,
-.ainour-consent-modal #ainourConsentBtn:focus-visible {
+.ainour-consent-modal #ainourConsentBtn:focus-visible,
+.ainour-consent-modal #ainourTourStart:hover,
+.ainour-consent-modal #ainourTourStart:focus-visible {
   background: linear-gradient(135deg, #ffe3c1, #f7c78f);
   color: #1a120b;
   outline: none;
