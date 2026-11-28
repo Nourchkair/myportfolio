@@ -1,0 +1,103 @@
+{
+  "generatedAt": "2026-11-28T06:09:05.216Z",
+  "outName": "voice-default-C.UTF-8",
+  "requestedVoice": "Iapetus",
+  "actualVoice": "Iapetus",
+  "requestedModel": "gemini-3.8-live",
+  "tokenModel": "gemini-3.8-live",
+  "lang": "C.UTF-8",
+  "prompt": "Introduce yourself naturally as Nupa in two or three sentences, and briefly explain what you help a visitor discover in Nour's portfolio. Speak like a real conversation, not like an announcer or a script. Do not start a visual presentation yet.",
+  "wav": "/Users/nourchkair/.local/share/opencode/worktree/f0d7f8/swift-forest/results/audio-samples/voice-default-C.UTF-8.wav",
+  "audioSeconds": 16.34,
+  "chunkCount": 49,
+  "firstAudioAtMs": 1650,
+  "wallMs": 19019,
+  "chunkArrivalGapsMs": [
+    6,
+    16,
+    104,
+    2,
+    29,
+    131,
+    2,
+    4,
+    94,
+    17,
+    31,
+    103,
+    4,
+    27,
+    0,
+    114,
+    2,
+    15,
+    124,
+    2,
+    24,
+    161,
+    2,
+    2,
+    145,
+    2,
+    76,
+    13,
+    12,
+    152,
+    1,
+    0,
+    87,
+    3,
+    26,
+    190,
+    1,
+    0,
+    68,
+    1,
+    39,
+    118,
+    1,
+    29,
+    68,
+    48,
+    33,
+    13
+  ],
+  "events": [
+    {
+      "at": 128,
+      "event": "open"
+    },
+    {
+      "at": 360,
+      "event": "setup"
+    },
+    {
+      "at": 18010,
+      "event": "turnComplete"
+    }
+  ],
+  "transcript": "Hi, I'm Nupa, Nour's independent AI portfolio assistant. I'm here to help you explore his work at the intersection of business strategy, sales, and applied AI. Feel free to ask about his specific projects, his career journey, or how he tackles complex commercial problems.",
+  "usage": {
+    "promptTokenCount": 8351,
+    "responseTokenCount": 409,
+    "totalTokenCount": 8760,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 7072
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 160
+      }
+    ],
+    "responseTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 409
+      }
+    ],
+    "thoughtsTokenCount": 285
+  },
+  "reservationUsdMicros": 125000
+}

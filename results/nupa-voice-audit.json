@@ -1,0 +1,721 @@
+{
+  "generatedAt": "2026-11-28T06:45:12.409425+00:00",
+  "status": "investigation only; no production voice, model, prompt or deployment change",
+  "production": {
+    "model": "gemini-3.8-live",
+    "voice": "Iapetus",
+    "pagesDeployment": "d84f8883-dce2-4c6a-a55b-10815b6f6979",
+    "sourceCommit": "4195355",
+    "dailyCapUsdMicros": 3000000,
+    "cumulativeCapUsdMicros": 7000000
+  },
+  "budget": {
+    "appLedgerAtStart": {
+      "dailyUsdMicros": 636037,
+      "cumulativeUsdMicros": 3228758,
+      "cumulativeRemainingUsdMicros": 3771242
+    },
+    "appLedgerAfterAudit": {
+      "asOf": "2026-11-28T06:42:18Z",
+      "dailyUsdMicros": 1263273,
+      "cumulativeUsdMicros": 3855994,
+      "cumulativeRemainingUsdMicros": 3144006
+    },
+    "appLedgerIncreaseUsdMicros": 627236,
+    "appReservationSettlementUsdMicros": 125000,
+    "directApiEstimatedUsd": 0.3132,
+    "note": "The app ledger charges the full $0.125 Live reservation when no /api/live/turn usage is reported. The increase is conservative and overstates actual provider usage."
+  },
+  "scope": {
+    "models": [
+      "gemini-3.8-live",
+      "gemini-2.5-flash-native-audio-preview-12-2025"
+    ],
+    "voices": [
+      "Iapetus",
+      "Achird",
+      "Puck",
+      "Zubenelgenubi",
+      "Algieba",
+      "Sulafat",
+      "Sadachbia"
+    ],
+    "locales": [
+      "en",
+      "fr"
+    ],
+    "promptVariants": [
+      "neutral intro",
+      "current reconstructed system prompt",
+      "current + delivery tail",
+      "short prompt + grounding",
+      "short prompt only",
+      "current long tour opening",
+      "short tour opening",
+      "refined tour opening",
+      "affective + proactive (2.5 only)",
+      "temperature 1.2 (3.8 only)"
+    ],
+    "samples": 50,
+    "directApiEstimatedUsd": 0.3132,
+    "notes": "Direct API key testing bypassed the app token voice lock. App-level samples used the production token endpoint."
+  },
+  "modelComparison": {
+    "iapetusNeutral": {
+      "gemini-3.8-live": {
+        "duration_s": 11.47,
+        "f0_st_std": 3.47,
+        "f0_st_range": 9.12,
+        "f0_micro_mean": 0.57,
+        "speech_rms_variation_db": 7.3,
+        "pause_ratio": 0.17,
+        "spectral_centroid_hz": 2411.35,
+        "words_per_min_speech": 202.25,
+        "first_audio_ms": 1272,
+        "chunk_ms_mean": 370.15,
+        "chunk_count": 31,
+        "samples": 2
+      },
+      "gemini-2.5-native": {
+        "duration_s": 10.24,
+        "f0_st_std": 5.3,
+        "f0_st_range": 14.87,
+        "f0_micro_mean": 1.11,
+        "speech_rms_variation_db": 7.92,
+        "pause_ratio": 0.15,
+        "spectral_centroid_hz": 2478.6,
+        "words_per_min_speech": 206.2,
+        "first_audio_ms": 4110,
+        "chunk_ms_mean": 44.0,
+        "chunk_count": 233,
+        "samples": 2
+      }
+    },
+    "iapetusCurrentPrompt": {
+      "gemini-3.8-live": {
+        "duration_s": 14.91,
+        "f0_st_std": 3.5,
+        "f0_st_range": 8.74,
+        "f0_micro_mean": 0.58,
+        "speech_rms_variation_db": 5.42,
+        "pause_ratio": 0.19,
+        "spectral_centroid_hz": 2248.25,
+        "words_per_min_speech": 209.55,
+        "first_audio_ms": 1353,
+        "chunk_ms_mean": 335.45,
+        "chunk_count": 44.5,
+        "samples": 2
+      },
+      "gemini-2.5-native": {
+        "duration_s": 17.64,
+        "f0_st_std": 4.82,
+        "f0_st_range": 12.47,
+        "f0_micro_mean": 1.21,
+        "speech_rms_variation_db": 7.21,
+        "pause_ratio": 0.14,
+        "spectral_centroid_hz": 2733.2,
+        "words_per_min_speech": 186.8,
+        "first_audio_ms": 4903.5,
+        "chunk_ms_mean": 42.2,
+        "chunk_count": 418,
+        "samples": 2
+      }
+    },
+    "iapetusTourLong": {
+      "gemini-3.8-live": {
+        "duration_s": 18.58,
+        "f0_st_std": 4.47,
+        "f0_st_range": 12.03,
+        "f0_micro_mean": 0.68,
+        "speech_rms_variation_db": 7.78,
+        "pause_ratio": 0.13,
+        "spectral_centroid_hz": 2319.55,
+        "words_per_min_speech": 176.75,
+        "first_audio_ms": 1782.5,
+        "chunk_ms_mean": 357.5,
+        "chunk_count": 52,
+        "samples": 2
+      },
+      "gemini-2.5-native": {
+        "duration_s": 14.04,
+        "f0_st_std": 5.58,
+        "f0_st_range": 15.98,
+        "f0_micro_mean": 1.53,
+        "speech_rms_variation_db": 7.63,
+        "pause_ratio": 0.14,
+        "spectral_centroid_hz": 2382.3,
+        "words_per_min_speech": 183.2,
+        "first_audio_ms": 6182,
+        "chunk_ms_mean": 42.8,
+        "chunk_count": 328,
+        "samples": 1
+      }
+    },
+    "iapetusTourShort": {
+      "gemini-3.8-live": {
+        "duration_s": 7.87,
+        "f0_st_std": 4.38,
+        "f0_st_range": 11.41,
+        "f0_micro_mean": 0.7,
+        "speech_rms_variation_db": 9.12,
+        "pause_ratio": 0.14,
+        "spectral_centroid_hz": 2280.0,
+        "words_per_min_speech": 179.8,
+        "first_audio_ms": 1397.5,
+        "chunk_ms_mean": 349.2,
+        "chunk_count": 22.5,
+        "samples": 2
+      },
+      "gemini-2.5-native": {
+        "duration_s": 7.88,
+        "f0_st_std": 5.95,
+        "f0_st_range": 15.46,
+        "f0_micro_mean": 1.72,
+        "speech_rms_variation_db": 10.58,
+        "pause_ratio": 0.17,
+        "spectral_centroid_hz": 2494.6,
+        "words_per_min_speech": 173.3,
+        "first_audio_ms": 5141,
+        "chunk_ms_mean": 45.3,
+        "chunk_count": 174,
+        "samples": 1
+      }
+    },
+    "affective2_5": {
+      "neutral": {
+        "duration_s": 10.24,
+        "f0_st_std": 5.3,
+        "f0_st_range": 14.87,
+        "f0_micro_mean": 1.11,
+        "speech_rms_variation_db": 7.92,
+        "pause_ratio": 0.15,
+        "spectral_centroid_hz": 2478.6,
+        "words_per_min_speech": 206.2,
+        "first_audio_ms": 4110,
+        "chunk_ms_mean": 44.0,
+        "chunk_count": 233,
+        "samples": 2
+      },
+      "affective": {
+        "duration_s": 9.62,
+        "f0_st_std": 4.73,
+        "f0_st_range": 11.9,
+        "f0_micro_mean": 1.21,
+        "speech_rms_variation_db": 7.72,
+        "pause_ratio": 0.16,
+        "spectral_centroid_hz": 2513.7,
+        "words_per_min_speech": 208.4,
+        "first_audio_ms": 3365.5,
+        "chunk_ms_mean": 44.25,
+        "chunk_count": 217.5,
+        "samples": 2
+      }
+    },
+    "notes": [
+      "2.5 Native has consistently wider pitch movement: neutral 5.30 vs 3.47 semitones, current prompt 4.82 vs 3.50, tour-long 5.58 vs 3.78, tour-short 5.95 vs 4.54.",
+      "Frame-to-frame pitch movement is also more than double on 2.5: 1.27–1.72 semitones vs 0.60–0.99 on 3.8. This is a closer proxy for moment-to-moment liveliness than overall range.",
+      "2.5 Native first audio is 2.8–4.0s slower in like-for-like captures: neutral 4.1s vs 1.3s; current prompt 4.9s vs 1.4s; tour-long 6.2s vs 2.2s; tour-short 5.1s vs 1.4s.",
+      "2.5 Native streams ~44ms chunks vs ~350ms on 3.8 Live. More granular, but more messages and more scheduling overhead.",
+      "2.5 Native peaks at 0 dBFS in several samples; 20 clipped samples total across the 2.5 set. Add headroom or a soft limiter before playback.",
+      "Affective dialogue on 2.5 did not consistently increase measured pitch/energy variation in the one EN/FR pair. Subjective listening is required."
+    ]
+  },
+  "voiceRanking": [
+    {
+      "voice": "Zubenelgenubi",
+      "duration_s": 11.68,
+      "f0_st_std": 4.74,
+      "f0_st_range": 12.95,
+      "f0_micro_mean": 0.61,
+      "speech_rms_variation_db": 10.01,
+      "pause_ratio": 0.19,
+      "spectral_centroid_hz": 2208.2,
+      "words_per_min_speech": 215.3,
+      "first_audio_ms": 1216.5,
+      "chunk_ms_mean": 338.45,
+      "chunk_count": 34.5,
+      "samples": 2
+    },
+    {
+      "voice": "Sadachbia",
+      "duration_s": 11.13,
+      "f0_st_std": 4.45,
+      "f0_st_range": 11.21,
+      "f0_micro_mean": 0.94,
+      "speech_rms_variation_db": 9.87,
+      "pause_ratio": 0.18,
+      "spectral_centroid_hz": 2687.55,
+      "words_per_min_speech": 223.25,
+      "first_audio_ms": 1356.5,
+      "chunk_ms_mean": 353.35,
+      "chunk_count": 31.5,
+      "samples": 2
+    },
+    {
+      "voice": "Algieba",
+      "duration_s": 11.25,
+      "f0_st_std": 4.33,
+      "f0_st_range": 11.87,
+      "f0_micro_mean": 0.8,
+      "speech_rms_variation_db": 9.84,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2829.6,
+      "words_per_min_speech": 203.35,
+      "first_audio_ms": 1368,
+      "chunk_ms_mean": 371.65,
+      "chunk_count": 30.5,
+      "samples": 2
+    },
+    {
+      "voice": "Achird",
+      "duration_s": 11.59,
+      "f0_st_std": 4.05,
+      "f0_st_range": 10.31,
+      "f0_micro_mean": 0.67,
+      "speech_rms_variation_db": 7.74,
+      "pause_ratio": 0.18,
+      "spectral_centroid_hz": 2291.65,
+      "words_per_min_speech": 218.5,
+      "first_audio_ms": 1293.5,
+      "chunk_ms_mean": 368.5,
+      "chunk_count": 31.5,
+      "samples": 2
+    },
+    {
+      "voice": "Sulafat",
+      "duration_s": 13.53,
+      "f0_st_std": 3.96,
+      "f0_st_range": 10.78,
+      "f0_micro_mean": 0.75,
+      "speech_rms_variation_db": 9.12,
+      "pause_ratio": 0.14,
+      "spectral_centroid_hz": 2879.4,
+      "words_per_min_speech": 193.0,
+      "first_audio_ms": 1110,
+      "chunk_ms_mean": 360.35,
+      "chunk_count": 37.5,
+      "samples": 2
+    },
+    {
+      "voice": "Puck",
+      "duration_s": 10.96,
+      "f0_st_std": 3.48,
+      "f0_st_range": 7.78,
+      "f0_micro_mean": 0.91,
+      "speech_rms_variation_db": 7.85,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2492.4,
+      "words_per_min_speech": 205.5,
+      "first_audio_ms": 1399,
+      "chunk_ms_mean": 359.25,
+      "chunk_count": 30.5,
+      "samples": 2
+    },
+    {
+      "voice": "Iapetus",
+      "duration_s": 11.47,
+      "f0_st_std": 3.47,
+      "f0_st_range": 9.12,
+      "f0_micro_mean": 0.57,
+      "speech_rms_variation_db": 7.3,
+      "pause_ratio": 0.17,
+      "spectral_centroid_hz": 2411.35,
+      "words_per_min_speech": 202.25,
+      "first_audio_ms": 1272,
+      "chunk_ms_mean": 370.15,
+      "chunk_count": 31,
+      "samples": 2
+    }
+  ],
+  "shortOpeningByVoice": [
+    {
+      "name": "38-achird-en-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Achird",
+      "locale": "en",
+      "duration_s": 6.14,
+      "f0_st_std": 4.293,
+      "f0_st_range": 11.412,
+      "speech_rms_variation_db": 9.37,
+      "spectral_centroid_hz": 1972.6,
+      "first_audio_ms": 1626,
+      "transcript": "I’m Nupa, Nour's independent AI portfolio assistant. What brought you to explore Nour’s work today?"
+    },
+    {
+      "name": "38-algieba-en-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Algieba",
+      "locale": "en",
+      "duration_s": 7.17,
+      "f0_st_std": 3.531,
+      "f0_st_range": 9.552,
+      "speech_rms_variation_db": 10.18,
+      "spectral_centroid_hz": 2691.6,
+      "first_audio_ms": 1113,
+      "transcript": "I'm Nupa, Nour's portfolio assistant, and I'm curious what specific aspect of his work brought you here today?"
+    },
+    {
+      "name": "38-algieba-fr-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Algieba",
+      "locale": "fr",
+      "duration_s": 12.12,
+      "f0_st_std": 4.519,
+      "f0_st_range": 11.373,
+      "speech_rms_variation_db": 7.58,
+      "spectral_centroid_hz": 2797.6,
+      "first_audio_ms": 1624,
+      "transcript": "Bonjour, je suis Nupa, l'assistant IA indépendant ? qui vous guide dans le portfolio de Nour Chkair. Dites-moi, qu'est-ce qui vous amène à explorer son travail en stratégie commerciale et en intelligence artificielle aujourd'hui ?"
+    },
+    {
+      "name": "25-iapetus-en-tourshort",
+      "model": "gemini-2.5-flash-native-audio-preview-12-2025",
+      "voice": "Iapetus",
+      "locale": "en",
+      "duration_s": 7.88,
+      "f0_st_std": 5.95,
+      "f0_st_range": 15.458,
+      "speech_rms_variation_db": 10.58,
+      "spectral_centroid_hz": 2494.6,
+      "first_audio_ms": 5141,
+      "transcript": "Hello! I'm Nupa, Nour's unique portfolio assistant. What specific challenge or interest brought you to explore Nour's portfolio today?"
+    },
+    {
+      "name": "38-iapetus-en-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Iapetus",
+      "locale": "en",
+      "duration_s": 7.15,
+      "f0_st_std": 4.545,
+      "f0_st_range": 11.782,
+      "speech_rms_variation_db": 11.21,
+      "spectral_centroid_hz": 2172.5,
+      "first_audio_ms": 1371,
+      "transcript": "Hi, I'm Nupa, Nour's independent AI portfolio assistant. What brought you by to explore Nour's work today?"
+    },
+    {
+      "name": "38-iapetus-fr-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Iapetus",
+      "locale": "fr",
+      "duration_s": 8.59,
+      "f0_st_std": 4.217,
+      "f0_st_range": 11.03,
+      "speech_rms_variation_db": 7.03,
+      "spectral_centroid_hz": 2387.5,
+      "first_audio_ms": 1424,
+      "transcript": "Je suis Nupa, l'assistant IA indépendant du portfolio de Nour. Qu'est-ce qui vous amène à explorer le parcours et les projets de Nour aujourd'hui ?"
+    },
+    {
+      "name": "38-sadachbia-en-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Sadachbia",
+      "locale": "en",
+      "duration_s": 9.05,
+      "f0_st_std": 5.238,
+      "f0_st_range": 14.813,
+      "speech_rms_variation_db": 8.04,
+      "spectral_centroid_hz": 2209.0,
+      "first_audio_ms": 1228,
+      "transcript": "I'm Nupa, Nour's independent AI portfolio assistant, and I'm here to help you explore his work and the ideas driving it. What brings you to Nour's portfolio today?"
+    },
+    {
+      "name": "38-sadachbia-fr-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Sadachbia",
+      "locale": "fr",
+      "duration_s": 7.68,
+      "f0_st_std": 5.236,
+      "f0_st_range": 14.485,
+      "speech_rms_variation_db": 9.08,
+      "spectral_centroid_hz": 2913.6,
+      "first_audio_ms": 1580,
+      "transcript": "Je suis Nupa, l'assistant IA indépendant du portfolio de Nour Chkair, et je suis curieux de savoir ce qui a attiré votre attention sur son travail aujourd'hui."
+    },
+    {
+      "name": "38-zubenelgenubi-en-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Zubenelgenubi",
+      "locale": "en",
+      "duration_s": 8.06,
+      "f0_st_std": 5.607,
+      "f0_st_range": 14.871,
+      "speech_rms_variation_db": 9.55,
+      "spectral_centroid_hz": 2060.8,
+      "first_audio_ms": 1520,
+      "transcript": "I'm Nupa, Nour's independent AI portfolio assistant, and I'm here to help you explore his work and perspective. What brings you to his portfolio today?"
+    },
+    {
+      "name": "38-zubenelgenubi-fr-tourshort",
+      "model": "gemini-3.8-live",
+      "voice": "Zubenelgenubi",
+      "locale": "fr",
+      "duration_s": 8.92,
+      "f0_st_std": 3.75,
+      "f0_st_range": 9.172,
+      "speech_rms_variation_db": 7.87,
+      "spectral_centroid_hz": 2064.3,
+      "first_audio_ms": 1377,
+      "transcript": "Bonjour, je m'appelle Nupa et je suis l'assistant IA indépendant du portfolio de Nour. Qu'est-ce qui vous amène à vous intéresser à son travail et à son parcours aujourd'hui ?"
+    }
+  ],
+  "promptExperiments": {
+    "currentSystemVsNeutral": {
+      "neutral": {
+        "duration_s": 11.47,
+        "f0_st_std": 3.47,
+        "f0_st_range": 9.12,
+        "f0_micro_mean": 0.57,
+        "speech_rms_variation_db": 7.3,
+        "pause_ratio": 0.17,
+        "spectral_centroid_hz": 2411.35,
+        "words_per_min_speech": 202.25,
+        "first_audio_ms": 1272,
+        "chunk_ms_mean": 370.15,
+        "chunk_count": 31,
+        "samples": 2
+      },
+      "currentPrompt": {
+        "duration_s": 14.91,
+        "f0_st_std": 3.5,
+        "f0_st_range": 8.74,
+        "f0_micro_mean": 0.58,
+        "speech_rms_variation_db": 5.42,
+        "pause_ratio": 0.19,
+        "spectral_centroid_hz": 2248.25,
+        "words_per_min_speech": 209.55,
+        "first_audio_ms": 1353,
+        "chunk_ms_mean": 335.45,
+        "chunk_count": 44.5,
+        "samples": 2
+      },
+      "notes": [
+        "The current prompt makes the opening ~30% longer (14.9s vs 11.5s), reduces energy variation (5.42 dB vs 7.30 dB) and slightly reduces frame-to-frame pitch movement (0.603 vs 0.648 semitones) without increasing overall pitch variation.",
+        "The current prompt produced one incorrect self-reference: 'your independent AI-powered portfolio guide' instead of Nour's assistant."
+      ]
+    },
+    "tourOpening": {
+      "long": {
+        "duration_s": 18.58,
+        "f0_st_std": 4.47,
+        "f0_st_range": 12.03,
+        "f0_micro_mean": 0.68,
+        "speech_rms_variation_db": 7.78,
+        "pause_ratio": 0.13,
+        "spectral_centroid_hz": 2319.55,
+        "words_per_min_speech": 176.75,
+        "first_audio_ms": 1782.5,
+        "chunk_ms_mean": 357.5,
+        "chunk_count": 52,
+        "samples": 2
+      },
+      "short": {
+        "duration_s": 7.87,
+        "f0_st_std": 4.38,
+        "f0_st_range": 11.41,
+        "f0_micro_mean": 0.7,
+        "speech_rms_variation_db": 9.12,
+        "pause_ratio": 0.14,
+        "spectral_centroid_hz": 2280.0,
+        "words_per_min_speech": 179.8,
+        "first_audio_ms": 1397.5,
+        "chunk_ms_mean": 349.2,
+        "chunk_count": 22.5,
+        "samples": 2
+      },
+      "refinedSadachbia": {
+        "duration_s": 6.35,
+        "f0_st_std": 4.63,
+        "f0_st_range": 11.64,
+        "f0_micro_mean": 0.76,
+        "speech_rms_variation_db": 9.16,
+        "pause_ratio": 0.15,
+        "spectral_centroid_hz": 2390.45,
+        "words_per_min_speech": 209.85,
+        "first_audio_ms": 1389,
+        "chunk_ms_mean": 352.45,
+        "chunk_count": 18,
+        "samples": 2
+      },
+      "notes": [
+        "Long tour opening: 18.6s average, 4.8 disclaimer terms per 100 words. Transcripts reproduce 'live, interactive, personalized', 'interrupt', 'navigate' and 'stop at any time' almost verbatim.",
+        "The short opening also raises frame-to-frame pitch movement on Iapetus from 0.596 to 0.782 semitones (+31%).",
+        "Short tour opening: 7.9s average, zero disclaimer terms. Refined Sadachbia opening: 6.4s average, 4.63 semitones, zero disclaimer terms.",
+        "The same long/short effect appears on Iapetus and Sadachbia, so it is a prompt effect, not a voice effect."
+      ]
+    },
+    "deliveryTail": {
+      "currentPlusTail": {
+        "duration_s": 21.12,
+        "f0_st_std": 3.48,
+        "f0_st_range": 9.07,
+        "f0_micro_mean": 0.61,
+        "speech_rms_variation_db": 6.59,
+        "pause_ratio": 0.17,
+        "spectral_centroid_hz": 2470.55,
+        "words_per_min_speech": 194.1,
+        "first_audio_ms": 1671,
+        "chunk_ms_mean": 346.7,
+        "chunk_count": 61,
+        "samples": 2
+      },
+      "notes": [
+        "Appending a delivery block to the 30k-character prompt did not consistently improve prosody and made responses longer (20.8s EN / 21.5s FR). Trimming the opening is more effective than adding another rule."
+      ]
+    },
+    "shortPromptGrounded": {
+      "duration_s": 17.55,
+      "f0_st_std": 3.66,
+      "f0_st_range": 9.4,
+      "f0_micro_mean": 0.66,
+      "speech_rms_variation_db": 6.5,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2574.35,
+      "words_per_min_speech": 203.45,
+      "first_audio_ms": 1687.5,
+      "chunk_ms_mean": 340.6,
+      "chunk_count": 51.5,
+      "samples": 2
+    },
+    "shortPromptOnly": {
+      "duration_s": 13.16,
+      "f0_st_std": 3.79,
+      "f0_st_range": 10.31,
+      "f0_micro_mean": 0.79,
+      "speech_rms_variation_db": 10.03,
+      "pause_ratio": 0.16,
+      "spectral_centroid_hz": 2985.1,
+      "words_per_min_speech": 178.7,
+      "first_audio_ms": 1410,
+      "chunk_ms_mean": 355.7,
+      "chunk_count": 37,
+      "samples": 1
+    }
+  },
+  "pipeline": {
+    "primaryCause": false,
+    "evidence": [
+      "App-level Iapetus samples: pitch variation 3.50–3.53 semitones, first audio 1.30–1.65s. Direct 3.8 Iapetus: 3.47 neutral / 3.50 current, first audio 1.27–1.35s. Playback preserves the flat prosody rather than creating it.",
+      "App chunk arrival gaps reached 159ms (Puck) and 190ms (Iapetus); scheduled underruns were zero in the measured runs because the previous chunk covered the gap.",
+      "Direct 3.8 chunks average ~350ms; 2.5 chunks average ~44ms. One direct 3.8 sample had a 2ms scheduled gap; no overlap or clipping in 3.8.",
+      "Output PCM is 24 kHz, mono, 16-bit; base64 decoding is correct on little-endian browsers. No pitch/speed shift measured."
+    ],
+    "issues": [
+      {
+        "id": "resampling",
+        "severity": "medium",
+        "detail": "downsampleTo16k uses naive decimation without an anti-alias low-pass filter. Mic audio above 8kHz folds back into the speech band, degrading ASR/VAD.",
+        "fix": "Use an AudioWorklet resampler or a low-pass filter plus interpolation; test on 44.1k and 48k devices."
+      },
+      {
+        "id": "script-processor",
+        "severity": "medium",
+        "detail": "createScriptProcessor(4096) is deprecated and adds ~85ms input buffering at 48kHz, plus processing latency.",
+        "fix": "Move mic capture to AudioWorklet with 128–256 frame blocks; keep a small ring buffer."
+      },
+      {
+        "id": "jitter-buffer",
+        "severity": "medium",
+        "detail": "playAudio schedules each chunk at nextPlayTime with no jitter buffer or crossfade. A late chunk resets playback to now, creating an audible gap/click. Fine on the test network, fragile on mobile/Bluetooth.",
+        "fix": "Keep 150–300ms of lead, crossfade 5–10ms at chunk boundaries, and avoid resetting the clock for small lateness."
+      },
+      {
+        "id": "hardcoded-24k",
+        "severity": "low",
+        "detail": "playAudio hardcodes 24000 when creating buffers and ignores inlineData.mimeType. Correct for current Gemini output, but breaks silently if the provider changes rate.",
+        "fix": "Parse the mimeType rate and validate 16-bit alignment."
+      },
+      {
+        "id": "interrupt-fade",
+        "severity": "low",
+        "detail": "stopPlayback stops sources immediately with no gain ramp; interruption can click.",
+        "fix": "Ramp gain to zero over 20–30ms before stopping."
+      },
+      {
+        "id": "background-bluetooth",
+        "severity": "medium",
+        "detail": "No AudioContext.resume() on visibility/user gesture, no device-change handling, and a forced 24kHz output context. Bluetooth headsets may switch to HFP and resample to 8/16kHz.",
+        "fix": "Resume on gesture/visibility; use the device default rate and a worklet ring buffer; test iOS/Safari, Chrome/Android and Bluetooth."
+      },
+      {
+        "id": "clipping",
+        "severity": "low",
+        "detail": "2.5 Native output reached 0 dBFS with 20 clipped samples across the set; 3.8 peaked around -2.3 dBFS average.",
+        "fix": "Apply -3dB safety gain or a soft limiter in the output path."
+      }
+    ]
+  },
+  "configuration": {
+    "current": {
+      "responseModalities": [
+        "AUDIO"
+      ],
+      "speechConfig": "voiceName only; no languageCode",
+      "systemInstruction": "~30.2k characters reconstructed (~4.3k words); ~16.7k characters grounding",
+      "tools": "portfolio, knowledge and presentation function declarations",
+      "transcriptions": "input and output enabled",
+      "vad": "automatic defaults; not configured",
+      "temperatureTopP": "not set",
+      "proactivity": "3.8 permanently enabled; 2.5 configurable",
+      "affectiveDialog": "3.8 removed/unsupported; 2.5 supported",
+      "thinkingLevel": "3.8 unsupported; omitted",
+      "languageCode": "omitted; native audio auto-selects language"
+    },
+    "supportedLevers": [
+      "realtimeInputConfig.automaticActivityDetection: start/end sensitivity, prefixPaddingMs, silenceDurationMs (documented for Live).",
+      "generationConfig temperature/topP/topK: accepted by the SDK and by 3.8 in two test samples; effect on voice prosody was small and noisy (5.57/5.32 vs 5.24 semitones). Do not treat as a primary fix.",
+      "proactivity and enableAffectiveDialog only on 2.5; do not send them to 3.8.",
+      "speechConfig voiceName is the strongest supported voice lever."
+    ],
+    "notSupportedOrNotRecommended": [
+      "enableAffectiveDialog on 3.8 (removed).",
+      "thinkingLevel on 3.8 (unsupported).",
+      "languageCode for native audio (auto language selection).",
+      "TTS-specific controls presented as Live controls."
+    ]
+  },
+  "recommendations": [
+    {
+      "priority": 1,
+      "change": "Test Sadachbia as the production voice on 3.8 Live, with Zubenelgenubi as the English alternative and Achird as the warmer/darker alternative.",
+      "evidence": "Sadachbia: 4.63 semitones with the refined opening (5.24 with the slightly longer short opening), in both EN and FR; frame-to-frame movement 0.83–0.99; first audio ~1.4s. Iapetus: 3.47 / 0.60. Zubenelgenubi EN 5.61 but FR 3.75 and lower micro-movement. Achird has the lowest centroid (warmest) but lower variation."
+    },
+    {
+      "priority": 2,
+      "change": "Replace the long tour opening with the refined 1–2 sentence opening.",
+      "evidence": "Opening length 18.6s -> 6.4s; disclaimer terms 4.8 per 100 words -> 0; same 3.8 model. Transcripts become 'Hi, I'm Nupa… What brings you to Nour's work today?' instead of listing interrupt/navigate/stop."
+    },
+    {
+      "priority": 3,
+      "change": "Trim and deduplicate the live system prompt after the opening fix: keep identity, grounding, safety and a compact delivery block; move presentation protocol to a tour-start context message.",
+      "evidence": "~30k characters and ~30 rules; identity, scope, grounding and question rules are duplicated. Tail-only addition did not fix prosody."
+    },
+    {
+      "priority": 4,
+      "change": "Do not switch permanently to 2.5 Native without approval. If pursued, run a side-by-side tool-calling/presentation test and accept the 3–5s first-audio latency.",
+      "evidence": "2.5 is more expressive (5.30 vs 3.47 neutral) but first audio 4.1s vs 1.3s; preview model with an uncertain retirement path; 2.5 output clips at 0 dBFS."
+    },
+    {
+      "priority": 5,
+      "change": "Harden the audio pipeline: AudioWorklet mic capture with proper resampling, 150–300ms output jitter buffer, crossfades, gain ramp on interrupt, -3dB safety gain, resume/device-change handling.",
+      "evidence": "Naive decimation, ScriptProcessor, no jitter buffer, forced 24k output, no background recovery; measured app gaps up to 190ms but zero underruns on this network."
+    }
+  ],
+  "artifacts": {
+    "index": "results/audio-samples/index.html",
+    "analysisJson": "results/audio-samples/analysis.json",
+    "analysisCsv": "results/audio-samples/analysis.csv",
+    "report": "results/nupa-voice-audit.md",
+    "promptProposal": "results/nupa-voice-prompt-proposal.md",
+    "captureHarness": "ai-nour/.wrangler/direct-voice-sample.mjs",
+    "analyzer": "scripts/analyze-audio-samples.py"
+  },
+  "caveats": [
+    "Objective metrics are proxies. Perceived warmth, gender, humour and trust require listening.",
+    "Current system prompt is reconstructed from source; the live token response omits systemInstruction, and DB persona/knowledge overrides may differ.",
+    "Each model/voice cell has one or two samples; treat differences as directional, not statistically stable.",
+    "App-level samples used the production token endpoint and are Iapetus only; the client voice override did not take effect.",
+    "Direct API spend is outside the app ledger (~$0.31 estimated); the app caps and ledger were not changed.",
+    "2.5 Native is a preview model; availability and behavior may change."
+  ]
+}

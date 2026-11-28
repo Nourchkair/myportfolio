@@ -124,7 +124,7 @@ Production ledger before the paid-tier verification calls:
 - Today: **$1.445858 USD** (read at report time)
 - Paid text test: **+$0.000717** internal estimate at the rates then configured
 - Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
-- Current internal estimate: **$0.636037 USD today / $3.228758 cumulative** (after home/About acceptance)
+- Current internal estimate: **$1.263273 USD today / $3.855994 cumulative** as of 2026-11-28T06:42Z (after the voice audit; includes conservative $0.125 Live reservation settlements). Cumulative remaining: **$3.144006**. Direct voice-audit API spend is outside this ledger (~$0.31 estimated).
 - Held reservations: **$0** before the paid Live test
 - Daily cap: **$3.00 USD** (live); cumulative cap **$7.00 USD**
 - Cumulative cap: **$7.00 USD**
@@ -135,7 +135,16 @@ Production ledger before the paid-tier verification calls:
 
 These are internal token-based estimates, not confirmed Google invoices. The Gemini API key cannot read the project, billing tier, credit balance or invoices, so those figures remain user-provided. Text requests hold a $0.02 atomic reservation while in flight. Live holds an atomic session reservation; each reported turn is charged at actual token-estimated usage, capped by the reservation remainder, and `/api/live/end` releases the hold. A session that ends with no reported usage is charged the reservation conservatively; an expired unreported reservation is settled to the unreserved remainder. The old Live code charged the full $0.125 reservation instead of reported token usage, so the ledger overstates the two paid Live tests; the token-level estimate for the first test is $0.006611, not $0.125. The ledger is intentionally left intact as a conservative audit record.
 
-**Deployment timing:** the current internal daily estimate is $0.131611 against the $3.00 daily cap, so AI is available. The cumulative remaining estimate is $4.275668.
+### Voice audit (investigation only, no production change)
+
+- Report: `results/nupa-voice-audit.md`
+- Sample index: `results/audio-samples/index.html`
+- Prompt proposal: `results/nupa-voice-prompt-proposal.md`
+- Current production remains `gemini-3.8-live` + `Iapetus`.
+- Main finding: the flat/robotic impression comes primarily from the voice choice and the long scripted opening, with 3.8 Live itself less micro-expressive than 2.5 Native. Playback preserves the raw Gemini prosody and is not the primary cause.
+- Recommended test (not applied): keep 3.8 Live, try `Sadachbia` (or `Achird`/`Zubenelgenubi`) and replace the long opening with the refined 1–2 sentence opening.
+
+**Deployment timing:** the latest internal ledger snapshot is $1.263273 today / $3.855994 cumulative, with $3.144006 cumulative remaining; AI is available.
 
 **Rate review (27 November 2026):** `gemini-3.8-live` matches Google's published paid rates: $0.75 text input, $3.00 audio input, $12.00 audio output per 1M tokens. The `gemini-flash-lite-latest` alias is not documented on Google's pricing page. Google publishes $0.10/$0.40 for 2.5 Flash-Lite, $0.25/$1.50 for 3.1 Flash-Lite and $0.30/$2.50 for 3.5 Flash-Lite. The application now uses the highest current Flash-Lite rates ($0.30 input/$2.50 output) as a conservative ceiling, so the internal ledger may overstate text cost if the alias resolves to an older generation. Review these rates whenever the alias changes or a pinned model is adopted.
 

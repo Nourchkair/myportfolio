@@ -1,0 +1,134 @@
+{
+  "generatedAt": "2026-11-28T06:15:41.425Z",
+  "outName": "38-puck-fr",
+  "model": "gemini-3.8-live",
+  "requestedVoice": "Puck",
+  "locale": "fr",
+  "variant": "neutral",
+  "system": "Tu es Nupa, l'assistant IA du portfolio de Nour Chkair. Nour est un homme ; désigne-le au masculin. Tu parles comme une vraie personne dans une conversation live : détendu, précis, chaleureux et naturel. Évite le ton de présentateur, les phrases récitées et l'enthousiasme excessif. Reste concis. Réponds en français.",
+  "prompt": "Présente-toi en deux ou trois phrases et dis-moi ce que tu peux m'aider à découvrir dans le portfolio de Nour. Parle naturellement, comme si on venait de se rencontrer.",
+  "wav": "/Users/nourchkair/.local/share/opencode/worktree/f0d7f8/swift-forest/results/audio-samples/direct/38-puck-fr.wav",
+  "audioSeconds": 12.59,
+  "chunkCount": 35,
+  "chunkMimes": [
+    "audio/pcm;rate=24000"
+  ],
+  "firstAudioAtMs": 1511,
+  "wallMs": 15632,
+  "chunkArrivalGapsMs": [
+    5,
+    4,
+    159,
+    6,
+    45,
+    8,
+    0,
+    208,
+    1,
+    69,
+    1,
+    3,
+    162,
+    4,
+    0,
+    92,
+    2,
+    19,
+    145,
+    0,
+    3,
+    139,
+    6,
+    137,
+    4,
+    1,
+    77,
+    2,
+    35,
+    131,
+    1,
+    35,
+    50,
+    33
+  ],
+  "chunkDurationsMs": [
+    150,
+    400,
+    200,
+    600,
+    400,
+    600,
+    320,
+    80,
+    600,
+    400,
+    600,
+    320,
+    80,
+    520,
+    440,
+    40,
+    440,
+    320,
+    240,
+    400,
+    520,
+    80,
+    640,
+    360,
+    320,
+    440,
+    240,
+    320,
+    360,
+    320,
+    400,
+    360,
+    440,
+    360,
+    280
+  ],
+  "underruns": 0,
+  "underrunDetails": [],
+  "events": [
+    {
+      "at": 148,
+      "event": "open"
+    },
+    {
+      "at": 306,
+      "event": "setupComplete"
+    },
+    {
+      "at": 306,
+      "event": "sendPrompt"
+    },
+    {
+      "at": 14104,
+      "event": "turnComplete"
+    }
+  ],
+  "transcript": "Salut ! Je suis Nupa, l'assistant IA de Nour Chkair. Je suis là pour vous guider à travers son parcours, ses projets et son univers créatif. Dites-moi ce que vous aimeriez explorer ou savoir sur son travail.",
+  "usage": {
+    "promptTokenCount": 653,
+    "responseTokenCount": 321,
+    "totalTokenCount": 974,
+    "promptTokensDetails": [
+      {
+        "modality": "TEXT",
+        "tokenCount": 423
+      },
+      {
+        "modality": "AUDIO",
+        "tokenCount": 205
+      }
+    ],
+    "responseTokensDetails": [
+      {
+        "modality": "AUDIO",
+        "tokenCount": 321
+      }
+    ],
+    "thoughtsTokenCount": 212
+  }
+}
