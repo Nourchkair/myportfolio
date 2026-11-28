@@ -186,7 +186,7 @@ Approved by Nour on **27 November 2026** with these amendments:
 
 ## 10. Nupa identity and public access (version 1.3)
 
-**Status:** v1.4 deployed publicly on 27 November 2026. Legal version 1.4 and consent `2026-11-27-v1.4` are live, public access requires no beta key, and the production persona is Nupa. Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe`; Pages `b0065dbd-6f52-4b8f-86bc-e5fa49ead239`.
+**Status:** v1.4 deployed publicly on 27 November 2026. Legal version 1.4 and consent `2026-11-27-v1.4` are live, public access requires no beta key, and the production persona is Nupa. Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe`; Pages `ba62a481-ca9b-40c4-8e2f-20536a844c8f`.
 
 **Public-access approval:** Nour approved removing the beta-key gate and enabling public Nupa access on 27 November 2026.
 

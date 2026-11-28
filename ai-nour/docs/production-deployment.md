@@ -1,6 +1,6 @@
 # Nupa (formerly AI Nour) production deployment
 
-Status: **Nupa v1.4 is deployed publicly. Legal v1.4 and consent `2026-11-27-v1.4` are live, no beta key is required, web research is removed, the simplified “Meet Nupa.” onboarding is live, and the approved $3.00 daily / $7.00 cumulative caps are enforced. Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe`; Pages `b0065dbd-6f52-4b8f-86bc-e5fa49ead239`. External writes, Resend and the private admin remain restricted.**
+Status: **Nupa v1.4 is deployed publicly. Legal v1.4 and consent `2026-11-27-v1.4` are live, no beta key is required, web research is removed, the simplified “Meet Nupa.” onboarding is live, and the approved $3.00 daily / $7.00 cumulative caps are enforced. Worker `00fb071e-77f7-4192-a46e-d09b9fd796fe`; Pages `ba62a481-ca9b-40c4-8e2f-20536a844c8f`. External writes, Resend and the private admin remain restricted.**
 
 ## 1. Live endpoints
 
@@ -34,7 +34,7 @@ Nupa is enabled by default on the public portfolio. No beta key or account is re
 | D1 ID | `a1fa8975-2a79-4b56-b96e-ecf814eeaa02` |
 | D1 region | ENAM |
 | Pages project | `nourchkair` |
-| Latest Pages deployment | `b0065dbd-6f52-4b8f-86bc-e5fa49ead239` / `https://b0065dbd.nourchkair.pages.dev` (source `ebd174f`) |
+| Latest Pages deployment | `ba62a481-ca9b-40c4-8e2f-20536a844c8f` / `https://ba62a481.nourchkair.pages.dev` (source `93b7c3b`) |
 
 Development and production are isolated: local D1, local Worker, and local admin remain separate from the production D1 and Worker.
 
@@ -124,7 +124,7 @@ Production ledger before the paid-tier verification calls:
 - Today: **$1.445858 USD** (read at report time)
 - Paid text test: **+$0.000717** internal estimate at the rates then configured
 - Paid Live tests: **+$0.250000** from two reservations settled at the old full-reservation policy
-- Current internal estimate: **$0.131611 USD today / $2.724332 cumulative** (after voice-tour acceptance)
+- Current internal estimate: **$0.508847 USD today / $3.101568 cumulative** (after dynamic voice-tour acceptance)
 - Held reservations: **$0** before the paid Live test
 - Daily cap: **$3.00 USD** (live); cumulative cap **$7.00 USD**
 - Cumulative cap: **$7.00 USD**
@@ -162,7 +162,7 @@ This was tested in production, including recovery.
 - Previous legal/voice release: `6df5e7b6-e447-49f9-804c-5ba6ab114719`
 - Previous V2 Worker: `6dfcd430-e175-4f70-842a-076516c921bb`
 - Previous pre-V2 Worker: `5596ba7b-c4a9-4256-8eea-aa46dd9f4735`
-- Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The current v1.4 Pages deployment is `b0065dbd-6f52-4b8f-86bc-e5fa49ead239` (source `ebd174f`); the prior v1.4 deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
+- Static/legal rollback: Pages deployment `848ef7e8-13bf-4682-9c72-45abb73f2367` (source `b1de5b2`) is the last v1.3 public build. The current v1.4 Pages deployment is `ba62a481-ca9b-40c4-8e2f-20536a844c8f` (source `93b7c3b`); the prior dynamic-tour deployment is `38bee3fa-b743-4f5a-89be-9409cffa5b55` (source `21139d6`), and the first v1.4 deployment is `b1e253eb-2490-4c14-90f6-b14dfb07fa7f` (source `c7406a7`).
 - Persona rollback: the pre-release persona (3,606 chars, SHA-256 `40070f3c6118bee8b67e0a3e05c3300083da05ce150d7d0008c023066fcae160`) is saved in `ai-nour/.wrangler/nupa-release-rollback-20261127/persona-before.txt`; restore it with `PATCH /api/admin/persona`.
 - D1 `0006_nupa_persona.sql` is data-only and was a no-op against the custom persona; no reverse schema migration is required.
 - Daily cap: the release uses `DAILY_SPEND_CAP_USD_MICROS = "3000000"`. After deployment, PATCH `/api/admin/limits` with `dailyCapUsdMicros: 3000000` if a lower stored control exists. Cumulative cap remains $7.00.
@@ -243,7 +243,8 @@ npm run deploy
 | Production public preflight | 17/17 | `results/nupa-production-public-preflight.json` |
 | Production opening cards and consent (previous flow) | 12/12 | `results/nupa-production-intro.json` |
 | Production opening + voice-tour panel | 5/5 | `results/nupa-production-opening.json` |
-| Production voice tour → presentation | 5/5 | `results/nupa-production-voice-tour.json` |
+| Production dynamic voice tour entry | 5/5 | `results/nupa-production-dynamic-tour.json` |
+| Production model chooses dynamic direction after visitor intent | passed | `results/nupa-dynamic-tour-intent.json` |
 | Public default entry and no-key conversation | 4/4 | `results/nupa-production-public-default.json` |
 | Production Nupa API/identity | 21/21 | `results/nupa-production-api.json` |
 | Production Nupa browser | 16/17 | `results/nupa-production-browser.json` |

@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-11-28T00:54:37.767Z",
-  "passed": 3,
-  "failed": 2,
+  "generatedAt": "2026-11-28T00:56:12.750Z",
+  "passed": 5,
+  "failed": 0,
   "total": 5,
   "checks": [
     {
@@ -13,9 +13,11 @@
         "panelHidden": true,
         "barVisible": false,
         "projectOpen": false,
-        "voiceState": "listening",
+        "voiceState": "speaking",
         "voiceError": "",
-        "assistant": [],
+        "assistant": [
+          "Hi there, I\u2019m Nupa, your independent AI portfolio assistant. This is a live, interactive, and personalized experience designed to adapt to what you're interested in, so please feel free to interrupt, ask questions, or explore on your own at any time. What brings you to the portfolio today?"
+        ],
         "consent": "2026-11-27-v1.4"
       }
     },
@@ -28,24 +30,26 @@
         "panelHidden": true,
         "barVisible": false,
         "projectOpen": false,
-        "voiceState": "listening",
+        "voiceState": "speaking",
         "voiceError": "",
-        "assistant": [],
+        "assistant": [
+          "Hi there, I\u2019m Nupa, your independent AI portfolio assistant. This is a live, interactive, and personalized experience designed to adapt to what you're interested in, so please feel free to interrupt, ask questions, or explore on your own at any time. What brings you to the portfolio today?"
+        ],
         "consent": "2026-11-27-v1.4"
       }
     },
     {
       "name": "Nupa introduces itself and asks one natural question",
-      "pass": false,
+      "pass": true,
       "detail": {
-        "intro": ""
+        "intro": "Hi there, I\u2019m Nupa, your independent AI portfolio assistant. This is a live, interactive, and personalized experience designed to adapt to what you're interested in, so please feel free to interrupt, ask questions, or explore on your own at any time. What brings you to the portfolio today?"
       }
     },
     {
       "name": "Nupa mentions interruption, independent navigation or stopping",
-      "pass": false,
+      "pass": true,
       "detail": {
-        "intro": ""
+        "intro": "Hi there, I\u2019m Nupa, your independent AI portfolio assistant. This is a live, interactive, and personalized experience designed to adapt to what you're interested in, so please feel free to interrupt, ask questions, or explore on your own at any time. What brings you to the portfolio today?"
       }
     },
     {
